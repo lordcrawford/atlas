@@ -1,9 +1,17 @@
 # Worldview
 
-An interactive dashboard on how six small nations are adopting and governing AI: **Singapore, Estonia, the UAE, Rwanda, Uruguay and Malta**.
+An interactive dashboard on how **25 small nations** (all under 15M people) are adopting and governing AI.
 
-- **Overview**: AI-readiness heatmap (Oxford Insights 2025 pillar scores), generative-AI usage (Microsoft AI Diffusion), UAE vs Singapore usage trend, a 2017–2026 milestone timeline, and an at-a-glance comparison table.
-- **Nation pages**: summary, stat tiles (World Bank, Oxford, Microsoft), readiness profile against the six-nation median, sourced policy and governance facts filterable by topic, recent news, and what to watch.
+- **Europe:** Estonia, Malta, Denmark, Finland, Norway, Ireland, Luxembourg, Iceland, Lithuania, Slovenia, Cyprus, Switzerland
+- **Middle East:** UAE, Qatar, Bahrain, Jordan
+- **Asia-Pacific:** Singapore, New Zealand, Bhutan
+- **Africa:** Rwanda, Mauritius, Benin
+- **Americas:** Uruguay, Costa Rica, Jamaica
+
+The first six (Singapore, Estonia, UAE, Rwanda, Uruguay, Malta) have deeper profiles.
+
+- **Overview**: an interactive world map (colour by readiness rank or AI use, region filters that zoom the map), AI-readiness heatmap (Oxford Insights 2025 pillar scores), generative-AI usage (Microsoft AI Diffusion), UAE vs Singapore usage trend, a 2017–2026 milestone timeline, and an at-a-glance comparison table.
+- **Nation pages**: summary, stat tiles (World Bank, Oxford, Microsoft), readiness profile against the median of all 25, a locator map, sourced policy and governance facts filterable by topic, recent news, and what to watch.
 - **News**: every development, newest first, filterable by nation and verification level.
 - **Method**: how each claim was checked, corrections made, and limits.
 
@@ -26,12 +34,14 @@ Then open http://localhost:8765. Opening `index.html` directly also works.
 | `index.html` | Page shell |
 | `styles.css` | Styles with light and dark themes |
 | `app.js` | Rendering, routing, and the SVG charts (vanilla JS) |
-| `data/nations.js` | **All data**: facts, news, statistics and sources |
+| `data/nations.js` | Data for the first six nations, plus shared metadata and sources |
+| `data/nations-more.js` | Data for the other 19 nations |
+| `vendor/` | d3-geo, d3-array, topojson-client and world-atlas (Natural Earth 110m), bundled so the map works offline |
 | `METHODOLOGY.md` | Verification rules |
 
 ## Updating
 
-Edit `data/nations.js`. Each fact or news item looks like this:
+Edit `data/nations.js` or `data/nations-more.js`. Each nation needs `group` (region), `geo` ([lon, lat] of the capital) and `isoN` (ISO numeric code, used to match map shapes). Each fact or news item looks like this:
 
 ```js
 {

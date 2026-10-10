@@ -76,6 +76,7 @@ window.WORLDVIEW = {
     // ------------------------------------------------------------------ SINGAPORE
     {
       id: "sg",
+      group: "Asia-Pacific", geo: [103.82, 1.35], isoN: "702",
       glance: { firstStrategy: "2019", latestStrategy: "2023 (NAIS 2.0, refreshed May 2026)", newestBody: "National AI Council", newestBodyDate: "2026-02" },
       name: "Singapore",
       flag: "🇸🇬",
@@ -284,6 +285,7 @@ window.WORLDVIEW = {
     // ------------------------------------------------------------------ ESTONIA
     {
       id: "ee",
+      group: "Europe", geo: [24.75, 59.44], isoN: "233",
       glance: { firstStrategy: "2019", latestStrategy: "2026 (Eesti.ai programme)", newestBody: "Eesti.ai council", newestBodyDate: "2026-01-27" },
       name: "Estonia",
       flag: "🇪🇪",
@@ -474,6 +476,7 @@ window.WORLDVIEW = {
     // ------------------------------------------------------------------ UAE
     {
       id: "ae",
+      group: "Middle East", geo: [54.37, 24.45], isoN: "784",
       glance: { firstStrategy: "2017", latestStrategy: "2019 (National AI Strategy 2031)", newestBody: "AI & Data Authority", newestBodyDate: "2026-06-14" },
       name: "United Arab Emirates",
       flag: "🇦🇪",
@@ -640,6 +643,7 @@ window.WORLDVIEW = {
     // ------------------------------------------------------------------ RWANDA
     {
       id: "rw",
+      group: "Africa", geo: [30.06, -1.94], isoN: "646",
       glance: { firstStrategy: "2023", latestStrategy: "2023", newestBody: "National AI Agency", newestBodyDate: "2026-06-08" },
       name: "Rwanda",
       flag: "🇷🇼",
@@ -783,6 +787,7 @@ window.WORLDVIEW = {
     // ------------------------------------------------------------------ URUGUAY
     {
       id: "uy",
+      group: "Americas", geo: [-56.16, -34.9], isoN: "858",
       glance: { firstStrategy: "2019", latestStrategy: "2024 (Strategy 2024–2030)", newestBody: "Instituto Vidart (National AI Centre)", newestBodyDate: "2026-09-07" },
       name: "Uruguay",
       flag: "🇺🇾",
@@ -911,6 +916,7 @@ window.WORLDVIEW = {
     // ------------------------------------------------------------------ MALTA
     {
       id: "mt",
+      group: "Europe", geo: [14.51, 35.9], isoN: "470",
       glance: { firstStrategy: "2019", latestStrategy: "2025 (2025–2030 draft, consultation)", newestBody: "AI Governance Council", newestBodyDate: "2026-07-30" },
       name: "Malta",
       flag: "🇲🇹",

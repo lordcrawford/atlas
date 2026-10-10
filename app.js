@@ -1,4 +1,5 @@
-/* Worldview dashboard - vanilla JS, no build step. Data: data/nations.js */
+/* Worldview dashboard - vanilla JS, no build step.
+   Data: data/nations.js + data/nations-more.js. Map: vendor/ (d3-geo, topojson-client, world-atlas). */
 (function () {
   "use strict";
 
@@ -7,6 +8,7 @@
   const S = D.meta.sources;
   const PILLARS = D.meta.pillars;
   const OXFORD_TOTAL = 195;
+  const GROUPS = ["Europe", "Middle East", "Asia-Pacific", "Africa", "Americas"];
   const view = document.getElementById("view");
   const tip = document.getElementById("tooltip");
   const SVGNS = "http://www.w3.org/2000/svg";
@@ -17,6 +19,9 @@
     single: { icon: "!", label: "Single source", desc: "Only one source found. Treat with care" },
     dataset: { icon: "▦", label: "Dataset", desc: "Read directly from the publisher's dataset" },
   };
+
+  // Overview state (kept across navigation within a visit)
+  const state = { region: "All", colorBy: "rank", sortKey: "rank", sortDir: 1 };
 
   // ---------------------------------------------------------------- helpers
   function el(tag, attrs, ...kids) {
@@ -69,6 +74,7 @@
     try { return new URL(u).hostname.replace(/^www\./, ""); } catch { return u; }
   }
   const byId = (id) => N.find((n) => n.id === id);
+  const shortName = (n) => (n.name === "United Arab Emirates" ? "UAE" : n.name);
   const median = (arr) => {
     const a = [...arr].sort((x, y) => x - y);
     const m = a.length >> 1;
@@ -77,6 +83,8 @@
   const isDark = () =>
     document.documentElement.dataset.theme === "dark" ||
     (!document.documentElement.dataset.theme && matchMedia("(prefers-color-scheme: dark)").matches);
+  const inRegion = (n) => state.region === "All" || n.group === state.region;
+  const filtered = () => N.filter(inRegion);
 
   function badge(level, count) {
     const L = LEVELS[level];
@@ -118,6 +126,15 @@
     node.addEventListener("focus", (e) => showTip(e, content()));
     node.addEventListener("blur", hideTip);
   }
+  function nationTip(n) {
+    return [
+      el("div", { class: "tv" }, `${n.flag} ${n.name}`),
+      el("div", { class: "tl" }, `AI readiness #${n.oxford.rank} of ${OXFORD_TOTAL}`),
+      el("div", { class: "tl" }, n.msAdoption ? `Gen-AI use ${n.msAdoption.h2_2025}% (H2 2025)` : "Gen-AI use not reported"),
+      el("div", { class: "tl small" }, `First AI strategy: ${n.glance.firstStrategy}`),
+      el("div", { class: "tl small", style: "margin-top:4px" }, "Click to open profile"),
+    ];
+  }
 
   function tableToggle(container, buildTable) {
     let shown = null;
@@ -134,27 +151,183 @@
       el("tbody", {}, rows.map((r) => el("tr", {}, r.map((c, i) => el("td", { class: numCols.includes(i) ? "num" : null }, c ?? "—"))))));
   }
 
-  // ---------------------------------------------------------------- charts
+  // ---------------------------------------------------------------- color
   const RAMP = ["#cde2fb", "#b7d3f6", "#9ec5f4", "#86b6ef", "#6da7ec", "#5598e7", "#3987e5", "#2a78d6", "#256abf", "#1c5cab", "#184f95", "#104281", "#0d366b"];
-  function rampColor(score) {
-    // 25 -> lightest, 100 -> darkest. In dark mode the ramp flips so low values sit near the surface.
-    const t = Math.max(0, Math.min(1, (score - 25) / 75));
-    const idx = Math.round(t * (RAMP.length - 1));
+  function rampAt(t) {
+    // t in [0,1]: 0 = low (near the surface), 1 = high. Dark mode flips so low values recede into the dark surface.
+    const idx = Math.round(Math.max(0, Math.min(1, t)) * (RAMP.length - 1));
     return isDark() ? RAMP[RAMP.length - 1 - idx] : RAMP[idx];
   }
+  const rampColor = (score) => rampAt((score - 25) / 75);
   function inkOn(hex) {
     const c = hex.match(/\w\w/g).map((h) => parseInt(h, 16) / 255).map((v) => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4));
     const L = 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
     return L > 0.36 ? "#0b0b0b" : "#ffffff";
   }
+  const METRICS = {
+    rank: {
+      label: "AI readiness rank",
+      value: (n) => n.oxford.rank,
+      t: (n) => (110 - n.oxford.rank) / 103, // #7 -> ~1, #110 -> 0
+      lo: "#101", hi: "#7", loLabel: "Lower readiness", hiLabel: "Higher readiness",
+      source: "oxford",
+    },
+    use: {
+      label: "Gen-AI use (H2 2025)",
+      value: (n) => (n.msAdoption ? n.msAdoption.h2_2025 : null),
+      t: (n) => (n.msAdoption ? n.msAdoption.h2_2025 / 70 : null),
+      lo: "0%", hi: "70%", loLabel: "Lower use", hiLabel: "Higher use",
+      source: "msH2",
+    },
+  };
 
-  function readinessHeatmap() {
-    const rows = [...N].sort((a, b) => a.oxford.rank - b.oxford.rank)
-      .map((n) => ({ name: `${n.name}`, sub: `#${n.oxford.rank}`, scores: n.oxford.scores, id: n.id }));
+  // ---------------------------------------------------------------- map
+  let WORLD = null;
+  function worldFeatures() {
+    if (WORLD) return WORLD;
+    if (!window.WORLD_TOPO || !window.topojson || !window.d3) return null;
+    const fc = topojson.feature(WORLD_TOPO, WORLD_TOPO.objects.countries);
+    fc.features = fc.features.filter((f) => f.id !== "010"); // drop Antarctica
+    WORLD = fc;
+    return WORLD;
+  }
+
+  function worldMap() {
+    const world = worldFeatures();
+    const box = el("div", {});
+    if (!world) {
+      box.append(el("p", { class: "muted" }, "Map libraries failed to load. See the table below."));
+      return box;
+    }
+    const W = 960, H = 470;
+    const metric = METRICS[state.colorBy];
+    const shown = filtered();
+    const isoMap = new Map(N.map((n) => [n.isoN, n]));
+
+    // Fit: whole world for "All"; otherwise the selected nations' shapes plus padded capitals.
+    const proj = d3.geoNaturalEarth1();
+    if (state.region === "All") proj.fitExtent([[6, 6], [W - 6, H - 6]], world);
+    else {
+      const pad = 6;
+      const pts = shown.flatMap((n) => [[n.geo[0] - pad, n.geo[1] - pad], [n.geo[0] + pad, n.geo[1] + pad]]);
+      const feats = world.features.filter((f) => shown.some((n) => n.isoN === f.id));
+      proj.fitExtent([[30, 30], [W - 30, H - 30]], { type: "FeatureCollection", features: [...feats, { type: "Feature", geometry: { type: "MultiPoint", coordinates: pts } }] });
+    }
+    const path = d3.geoPath(proj);
+
+    const svg = s("svg", { viewBox: `0 0 ${W} ${H}`, width: W, role: "img", "aria-label": `World map of the ${shown.length} nations, coloured by ${metric.label}` });
+    const clipId = "mapclip";
+    svg.append(s("defs", {}, s("clipPath", { id: clipId }, s("rect", { x: 0, y: 0, width: W, height: H, rx: 8 }))));
+    const g = s("g", { "clip-path": `url(#${clipId})` });
+    g.append(s("rect", { x: 0, y: 0, width: W, height: H, fill: "var(--sea)" }));
+    if (state.region === "All") g.append(s("path", { d: path({ type: "Sphere" }), fill: "var(--sea)", stroke: "var(--grid)" }));
+
+    const colorFor = (n) => {
+      const t = metric.t(n);
+      return t == null ? "var(--na)" : rampAt(t);
+    };
+    for (const f of world.features) {
+      const d = path(f);
+      if (!d) continue;
+      const n = isoMap.get(f.id);
+      const active = n && inRegion(n);
+      const p = s("path", { d, fill: active ? colorFor(n) : "var(--land)", stroke: "var(--land-stroke)", "stroke-width": 0.6, "data-id": active ? n.id : null, class: active ? "map-nation" : null });
+      g.append(p);
+    }
+    // Markers so tiny states (Singapore, Malta, Bahrain, Mauritius, Luxembourg...) are visible.
+    const markers = [];
+    const placed = []; // label boxes already placed, for collision avoidance
+    const dots = shown.map((n) => proj(n.geo)).filter(Boolean);
+    const overlaps = (b) => placed.some((p) => b.x < p.x + p.w && b.x + b.w > p.x && b.y < p.y + p.h && b.y + b.h > p.y) ||
+      dots.some(([dx, dy]) => dx > b.x - 4 && dx < b.x + b.w + 4 && dy > b.y - 4 && dy < b.y + b.h + 4);
+    for (const n of shown) {
+      const xy = proj(n.geo);
+      if (!xy) continue;
+      const fill = colorFor(n);
+      const mg = s("g", { class: "map-marker", tabindex: "0", role: "link", "aria-label": `${n.name}: readiness rank ${n.oxford.rank}` });
+      mg.append(s("circle", { cx: xy[0], cy: xy[1], r: 6, fill, stroke: "var(--surface)", "stroke-width": 2 }));
+      if (state.region !== "All") {
+        const label = shortName(n), w = label.length * 7.2 + 4, h = 14;
+        const tries = [[10, -7], [-10 - w, -7], [-w / 2, -22], [-w / 2, 9], [10, -20], [10, 6], [-10 - w, -20], [-10 - w, 6]];
+        let box = null;
+        for (const [ox, oy] of tries) {
+          const b = { x: xy[0] + ox, y: xy[1] + oy, w, h };
+          if (!overlaps(b)) { box = b; break; }
+        }
+        if (!box) box = { x: xy[0] + 10, y: xy[1] - 7, w, h };
+        placed.push(box);
+        mg.append(s("text", { x: box.x + 2, y: box.y + 11, class: "map-label" }, label));
+      }
+      mg.addEventListener("focus", (e) => { setHover(n.id); showTip(e, nationTip(n)); });
+      mg.addEventListener("blur", () => { setHover(null); hideTip(); });
+      mg.addEventListener("keydown", (e) => { if (e.key === "Enter") location.hash = n.id; });
+      markers.push({ n, x: xy[0], y: xy[1], node: mg });
+      g.append(mg);
+    }
+    svg.append(g);
+
+    // Nearest-marker hover: in the world view, European markers sit close together.
+    let hovered = null;
+    function setHover(id) {
+      if (hovered === id) return;
+      hovered = id;
+      for (const m of markers) m.node.classList.toggle("is-hover", m.n.id === id);
+      svg.querySelectorAll(".map-nation").forEach((p) => p.classList.toggle("is-hover", p.dataset.id === id));
+    }
+    function pick(e) {
+      const r = svg.getBoundingClientRect();
+      const sx = W / r.width;
+      const px = (e.clientX - r.left) * sx, py = (e.clientY - r.top) * sx;
+      let best = null, bd = 16 * sx;
+      for (const m of markers) {
+        const d = Math.hypot(m.x - px, m.y - py);
+        if (d < bd) { bd = d; best = m.n; }
+      }
+      if (!best && e.target.dataset && e.target.dataset.id) best = byId(e.target.dataset.id);
+      return best;
+    }
+    svg.addEventListener("pointermove", (e) => {
+      const n = pick(e);
+      setHover(n ? n.id : null);
+      svg.style.cursor = n ? "pointer" : "default";
+      if (n) showTip(e, nationTip(n)); else hideTip();
+    });
+    svg.addEventListener("pointerleave", () => { setHover(null); hideTip(); });
+    svg.addEventListener("click", (e) => { const n = pick(e); if (n) location.hash = n.id; });
+
+    // Legend + controls
+    const ctrl = el("div", { class: "seg", role: "group", "aria-label": "Colour the map by" },
+      Object.entries(METRICS).map(([k, m]) =>
+        el("button", { type: "button", class: "seg-btn", "aria-pressed": String(state.colorBy === k), onclick: () => { state.colorBy = k; rerenderMap(); } }, m.label)));
+    const legend = el("div", { class: "legend map-legend" },
+      el("span", { style: "display:inline-flex;align-items:center;gap:6px;white-space:nowrap" },
+        `${metric.loLabel} ${metric.lo}`,
+        el("span", { style: "display:inline-flex;gap:2px" }, [0.05, 0.3, 0.55, 0.8, 1].map((t) => el("i", { style: `background:${rampAt(t)};width:22px;margin:0` }))),
+        `${metric.hi} ${metric.hiLabel}`),
+      state.colorBy === "use" ? el("span", {}, el("i", { style: "background:var(--na)" }), "Not reported") : null,
+      el("span", {}, el("i", { style: "background:var(--land)" }), "Not covered"));
+
+    box.append(
+      el("div", { class: "map-head" }, ctrl, legend),
+      el("div", { class: "chart map-wrap" }, svg));
+    box.append(el("div", { class: "chart-foot" },
+      tableToggle(box, () => table(["Nation", "Region", "Readiness rank", "Gen-AI use (H2 '25)"],
+        [...shown].sort((a, b) => a.oxford.rank - b.oxford.rank).map((n) => [n.name, n.group, `#${n.oxford.rank}`, n.msAdoption ? `${n.msAdoption.h2_2025}%` : "Not reported"]), [2, 3])),
+      el("span", { class: "muted small" }, " · Source:"), sourceChips([S[metric.source]]),
+      el("span", { class: "muted small" }, " · Boundaries: Natural Earth via world-atlas")));
+    return box;
+  }
+  let mapSlot = null;
+  function rerenderMap() { if (mapSlot) mapSlot.replaceChildren(worldMap()); }
+
+  // ---------------------------------------------------------------- charts
+  function readinessHeatmap(list) {
+    const rows = [...list].sort((a, b) => a.oxford.rank - b.oxford.rank)
+      .map((n) => ({ name: n.name, sub: `#${n.oxford.rank}`, scores: n.oxford.scores, id: n.id }));
     rows.push({ name: "United States", sub: "#1 · reference", scores: D.meta.usReference.scores, ref: true });
-    const labelW = 170, cellW = 96, cellH = 34, gap = 2, headH = 44;
-    const W = labelW + PILLARS.length * cellW, H = headH + rows.length * cellH + 8;
-    const svg = s("svg", { viewBox: `0 0 ${W} ${H}`, width: W, role: "img", "aria-label": "Heatmap of Oxford Insights 2025 pillar scores for six nations and the United States" });
+    const labelW = 190, cellW = 96, cellH = 32, gap = 2, headH = 44;
+    const W = labelW + PILLARS.length * cellW, H = headH + rows.length * cellH + 10;
+    const svg = s("svg", { viewBox: `0 0 ${W} ${H}`, width: W, role: "img", "aria-label": `Heatmap of Oxford Insights 2025 pillar scores for ${list.length} nations and the United States` });
     const headLines = [["Policy", "capacity"], ["AI", "infrastructure"], ["Governance", ""], ["Public sector", "adoption"], ["Development", "& diffusion"], ["Resilience", ""]];
     headLines.forEach((ls, i) => {
       const x = labelW + i * cellW + cellW / 2;
@@ -162,39 +335,38 @@
       if (ls[1]) svg.append(s("text", { x, y: 31, "text-anchor": "middle" }, ls[1]));
     });
     rows.forEach((r, ri) => {
-      const y = headH + ri * cellH + (r.ref ? 8 : 0);
-      svg.append(s("text", { x: 0, y: y + cellH / 2 + 4, class: r.ref ? "t-muted" : "t-ink" }, r.name));
+      const y = headH + ri * cellH + (r.ref ? 10 : 0);
+      const nameNode = s("text", { x: 0, y: y + cellH / 2 + 4, class: r.ref ? "t-muted" : "t-ink link-text" }, r.name);
+      if (r.id) nameNode.addEventListener("click", () => { location.hash = r.id; });
+      svg.append(nameNode);
       svg.append(s("text", { x: labelW - 12, y: y + cellH / 2 + 4, "text-anchor": "end", class: "t-muted" }, r.sub));
       r.scores.forEach((v, ci) => {
         const fill = rampColor(v);
         const x = labelW + ci * cellW;
-        const g = s("g", {});
         const rect = s("rect", { x: x + gap / 2, y: y + gap / 2, width: cellW - gap, height: cellH - gap, rx: 4, fill, class: "cell", opacity: r.ref ? 0.55 : 1 });
-        g.append(rect, s("text", { x: x + cellW / 2, y: y + cellH / 2 + 4, "text-anchor": "middle", style: `fill:${inkOn(fill)};font-variant-numeric:tabular-nums;pointer-events:none` }, v.toFixed(1)));
         hoverable(rect, () => [
           el("div", { class: "tv" }, v.toFixed(2)),
           el("div", { class: "tl" }, `${r.name} · ${PILLARS[ci]}`),
           el("div", { class: "tl small" }, "Score out of 100, Oxford Insights 2025"),
         ]);
-        svg.append(g);
+        svg.append(rect, s("text", { x: x + cellW / 2, y: y + cellH / 2 + 4, "text-anchor": "middle", style: `fill:${inkOn(fill)};font-variant-numeric:tabular-nums;pointer-events:none` }, v.toFixed(1)));
       });
     });
-    const wrap = el("div", { class: "chart wide" }, svg);
-    const box = el("div", {}, wrap);
-    const scale = el("div", { class: "legend" },
+    const box = el("div", {}, el("div", { class: "chart wide" }, svg));
+    box.append(el("div", { class: "legend" },
       el("span", { style: "display:inline-flex;align-items:center;gap:6px;white-space:nowrap" }, "Low",
         el("span", { style: "display:inline-flex;gap:2px" }, [30, 45, 60, 75, 90].map((v) => el("i", { style: `background:${rampColor(v)};width:22px;margin:0` }))),
-        "High · score out of 100"));
-    box.append(scale, el("div", { class: "chart-foot" },
-      tableToggle(box, () => table(["Country", "Rank", ...PILLARS], rows.map((r) => [r.name, r.sub, ...r.scores.map((v) => v.toFixed(2))]), [2, 3, 4, 5, 6, 7])),
-      el("span", { class: "muted small" }, " · "), el("span", { class: "muted small" }, "Source:"), sourceChips([S.oxford])));
+        "High · score out of 100")),
+      el("div", { class: "chart-foot" },
+        tableToggle(box, () => table(["Country", "Rank", ...PILLARS], rows.map((r) => [r.name, r.sub, ...r.scores.map((v) => v.toFixed(2))]), [2, 3, 4, 5, 6, 7])),
+        el("span", { class: "muted small" }, " · Source:"), sourceChips([S.oxford])));
     return box;
   }
 
-  function usageBars() {
-    const rows = [...N].map((n) => ({ n, v: n.msAdoption ? n.msAdoption.h2_2025 : null }))
+  function usageBars(list) {
+    const rows = [...list].map((n) => ({ n, v: n.msAdoption ? n.msAdoption.h2_2025 : null }))
       .sort((a, b) => (b.v ?? -1) - (a.v ?? -1));
-    const labelW = 150, barH = 22, rowH = 38, plotW = 300, top = 8, max = 80;
+    const labelW = 190, barH = 18, rowH = 30, plotW = 560, top = 8, max = 80;
     const W = labelW + plotW + 60, H = top + rows.length * rowH + 26;
     const x = (v) => labelW + (v / max) * plotW;
     const svg = s("svg", { viewBox: `0 0 ${W} ${H}`, width: W, role: "img", "aria-label": "Bar chart of generative AI user share, H2 2025" });
@@ -206,19 +378,19 @@
       const y = top + i * rowH + (rowH - barH) / 2;
       svg.append(s("text", { x: 0, y: y + barH / 2 + 4, class: "t-ink" }, `${n.flag} ${n.name}`));
       if (v == null) {
-        svg.append(s("text", { x: x(0) + 8, y: y + barH / 2 + 4, class: "t-muted" }, "Not reported (insufficient data)"));
+        svg.append(s("text", { x: x(0) + 8, y: y + barH / 2 + 4, class: "t-muted" }, "Not reported separately"));
         return;
       }
       const w = x(v) - x(0), r = Math.min(4, w / 2);
       const path = `M${x(0)},${y} h${w - r} a${r},${r} 0 0 1 ${r},${r} v${barH - 2 * r} a${r},${r} 0 0 1 -${r},${r} h-${w - r} Z`;
-      const bar = s("path", { d: path, fill: "var(--series-1)", class: "mark" });
-      const hit = s("rect", { x: x(0), y: y - 6, width: Math.max(w, 40) + 50, height: barH + 12, class: "hit" });
+      const hit = s("rect", { x: x(0), y: y - 5, width: Math.max(w, 40) + 50, height: barH + 10, class: "hit" });
       hoverable(hit, () => [
         el("div", { class: "tv" }, `${v.toFixed(1)}%`),
         el("div", { class: "tl" }, `${n.name}, H2 2025`),
         el("div", { class: "tl small" }, `H1 2025: ${n.msAdoption.h1_2025.toFixed(1)}%`),
       ]);
-      svg.append(bar, s("text", { x: x(v) + 6, y: y + barH / 2 + 4, class: "t-ink", style: "font-variant-numeric:tabular-nums" }, `${v.toFixed(1)}%`), hit);
+      svg.append(s("path", { d: path, fill: "var(--series-1)", class: "mark" }),
+        s("text", { x: x(v) + 6, y: y + barH / 2 + 4, class: "t-ink", style: "font-variant-numeric:tabular-nums" }, `${v.toFixed(1)}%`), hit);
     });
     const box = el("div", {}, el("div", { class: "chart" }, svg));
     box.append(el("div", { class: "chart-foot" },
@@ -233,7 +405,7 @@
       { n: byId("ae"), color: "var(--series-1)" },
       { n: byId("sg"), color: "var(--series-2)" },
     ];
-    const L = 40, R = 124, T = 14, B = 30, W = 520, H = 250, lo = 50, hi = 80;
+    const L = 40, R = 124, T = 14, B = 30, W = 620, H = 250, lo = 50, hi = 80;
     const x = (i) => L + (i / (periods.length - 1)) * (W - L - R);
     const y = (v) => T + (1 - (v - lo) / (hi - lo)) * (H - T - B);
     const svg = s("svg", { viewBox: `0 0 ${W} ${H}`, width: W, role: "img", "aria-label": "Line chart: UAE and Singapore AI user share, H1 2025 to Q2 2026" });
@@ -249,7 +421,7 @@
       svg.append(s("polyline", { points: pts.map((p) => p.join(",")).join(" "), fill: "none", stroke: color, "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round" }));
       pts.forEach(([px, py]) => svg.append(s("circle", { cx: px, cy: py, r: 4, fill: color, stroke: "var(--surface)", "stroke-width": 2 })));
       const last = pts[pts.length - 1];
-      svg.append(s("text", { x: last[0] + 10, y: last[1] + 4, class: "t-ink" }, `${n.name === "United Arab Emirates" ? "UAE" : n.name} ${n.msAdoption.q2_2026}%`));
+      svg.append(s("text", { x: last[0] + 10, y: last[1] + 4, class: "t-ink" }, `${shortName(n)} ${n.msAdoption.q2_2026}%`));
     });
     const hit = s("rect", { x: L - 20, y: T, width: W - L - R + 40, height: H - T - B, class: "hit", tabindex: "0" });
     let focusIdx = periods.length - 1;
@@ -286,35 +458,36 @@
     return box;
   }
 
-  function milestoneTimeline() {
+  function milestoneTimeline(list) {
     const y0 = 2017, y1 = 2027;
-    const labelW = 170, rowH = 40, T = 10, B = 26, plotW = 760;
-    const W = labelW + plotW + 16, H = T + N.length * rowH + B;
+    const labelW = 190, rowH = 34, T = 10, B = 26, plotW = 760;
+    const W = labelW + plotW + 16, H = T + list.length * rowH + B;
     const x = (v) => labelW + ((v - y0) / (y1 - y0)) * plotW;
-    const svg = s("svg", { viewBox: `0 0 ${W} ${H}`, width: W, role: "img", "aria-label": "Timeline of AI policy milestones by nation, 2017 to 2026" });
+    const svg = s("svg", { viewBox: `0 0 ${W} ${H}`, width: W, role: "img", "aria-label": `Timeline of AI policy milestones for ${list.length} nations, 2017 to 2026` });
     for (let yr = y0; yr <= y1; yr++) {
       svg.append(s("line", { x1: x(yr), x2: x(yr), y1: T, y2: H - B, class: "grid" }));
       if (yr < y1) svg.append(s("text", { x: x(yr + 0.5), y: H - 8, "text-anchor": "middle", class: "t-muted" }, String(yr)));
     }
-    N.forEach((n, i) => {
+    list.forEach((n, i) => {
       const cy = T + i * rowH + rowH / 2;
       svg.append(s("line", { x1: labelW, x2: labelW + plotW, y1: cy, y2: cy, class: "axis" }));
-      svg.append(s("text", { x: 0, y: cy + 4, class: "t-ink" }, `${n.flag} ${n.name}`));
+      const lab = s("text", { x: 0, y: cy + 4, class: "t-ink link-text" }, `${n.flag} ${n.name}`);
+      lab.addEventListener("click", () => { location.hash = n.id; });
+      svg.append(lab);
       const items = [...n.facts, ...n.news.filter((x) => !n.facts.some((f) => f.date === x.date))]
         .map((f) => ({ f, v: dateValue(f.date) })).filter((o) => o.v != null && o.v >= y0);
       items.forEach(({ f, v }) => {
         const cx = x(v + (String(f.date).length === 4 ? 0.5 : 0) + 1 / 24);
-        const g = s("g", {});
-        g.append(s("circle", { cx, cy, r: 5, fill: "var(--accent)", stroke: "var(--surface)", "stroke-width": 2, class: "mark" }));
+        svg.append(s("circle", { cx, cy, r: 5, fill: "var(--accent)", stroke: "var(--surface)", "stroke-width": 2, class: "mark" }));
         const hit = s("circle", { cx, cy, r: 12, class: "hit", style: "cursor:pointer" });
         hit.addEventListener("click", () => { location.hash = n.id; });
+        const txt = f.title || f.text;
         hoverable(hit, () => [
           el("div", { class: "tl small" }, `${n.name} · ${fmtDate(f.date)}`),
-          el("div", {}, (f.title || f.text).length > 170 ? (f.title || f.text).slice(0, 167) + "…" : (f.title || f.text)),
+          el("div", {}, txt.length > 170 ? txt.slice(0, 167) + "…" : txt),
           el("div", { style: "margin-top:6px" }, badge(f.level, f.sources.length)),
         ]);
-        g.append(hit);
-        svg.append(g);
+        svg.append(hit);
       });
     });
     return el("div", { class: "chart wide" }, svg);
@@ -325,7 +498,7 @@
     const labelW = 190, plotW = 440, rowH = 36, barH = 20, T = 6, B = 24;
     const W = labelW + plotW + 60, H = T + PILLARS.length * rowH + B;
     const x = (v) => labelW + (v / 100) * plotW;
-    const svg = s("svg", { viewBox: `0 0 ${W} ${H}`, width: W, role: "img", "aria-label": `${n.name} Oxford Insights pillar scores versus six-nation median` });
+    const svg = s("svg", { viewBox: `0 0 ${W} ${H}`, width: W, role: "img", "aria-label": `${n.name} Oxford Insights pillar scores versus the median of all ${N.length} nations` });
     for (let t = 0; t <= 100; t += 25) {
       svg.append(s("line", { x1: x(t), x2: x(t), y1: T, y2: H - B, class: t === 0 ? "axis" : "grid" }));
       svg.append(s("text", { x: x(t), y: H - 6, "text-anchor": "middle", class: "t-muted" }, String(t)));
@@ -333,7 +506,7 @@
     PILLARS.forEach((p, i) => {
       const v = n.oxford.scores[i];
       const y = T + i * rowH + (rowH - barH) / 2;
-      const w = x(v) - x(0), r = 4;
+      const w = Math.max(x(v) - x(0), 8), r = 4;
       svg.append(s("text", { x: 0, y: y + barH / 2 + 4, class: "t-ink" }, p));
       svg.append(s("path", { d: `M${x(0)},${y} h${w - r} a${r},${r} 0 0 1 ${r},${r} v${barH - 2 * r} a${r},${r} 0 0 1 -${r},${r} h-${w - r} Z`, fill: "var(--series-1)" }));
       svg.append(s("line", { x1: x(med[i]), x2: x(med[i]), y1: y - 4, y2: y + barH + 4, stroke: "var(--ink)", "stroke-width": 2, "stroke-linecap": "round" }));
@@ -342,19 +515,36 @@
       hoverable(hit, () => [
         el("div", { class: "tv" }, v.toFixed(2)),
         el("div", { class: "tl" }, `${n.name} · ${p}`),
-        el("div", { class: "tl small" }, `Six-nation median: ${med[i].toFixed(2)} · Difference: ${(v - med[i] >= 0 ? "+" : "") + (v - med[i]).toFixed(1)}`),
+        el("div", { class: "tl small" }, `Median of all ${N.length}: ${med[i].toFixed(2)} · Difference: ${(v - med[i] >= 0 ? "+" : "") + (v - med[i]).toFixed(1)}`),
       ]);
       svg.append(hit);
     });
     const box = el("div", {},
       el("div", { class: "legend" },
         el("span", {}, el("i", { style: "background:var(--series-1)" }), n.name),
-        el("span", {}, el("i", { style: "background:var(--ink);width:2px;height:12px" }), "Median of the six nations")),
+        el("span", {}, el("i", { style: "background:var(--ink);width:2px;height:12px" }), `Median of all ${N.length} nations`)),
       el("div", { class: "chart" }, svg));
     box.append(el("div", { class: "chart-foot" },
-      tableToggle(box, () => table(["Pillar", n.name, "Six-nation median"], PILLARS.map((p, i) => [p, n.oxford.scores[i].toFixed(2), med[i].toFixed(2)]), [1, 2])),
+      tableToggle(box, () => table(["Pillar", n.name, `Median of ${N.length}`], PILLARS.map((p, i) => [p, n.oxford.scores[i].toFixed(2), med[i].toFixed(2)]), [1, 2])),
       el("span", { class: "muted small" }, " · Source:"), sourceChips([S.oxford])));
     return box;
+  }
+
+  function locatorMap(n) {
+    const world = worldFeatures();
+    if (!world) return null;
+    const W = 320, H = 170;
+    const proj = d3.geoNaturalEarth1().fitExtent([[4, 4], [W - 4, H - 4]], world);
+    const path = d3.geoPath(proj);
+    const svg = s("svg", { viewBox: `0 0 ${W} ${H}`, width: W, role: "img", "aria-label": `Location of ${n.name}` });
+    svg.append(s("rect", { x: 0, y: 0, width: W, height: H, rx: 8, fill: "var(--sea)" }));
+    for (const f of world.features) {
+      const d = path(f);
+      if (d) svg.append(s("path", { d, fill: f.id === n.isoN ? "var(--accent)" : "var(--land)", stroke: "var(--land-stroke)", "stroke-width": 0.4 }));
+    }
+    const xy = proj(n.geo);
+    svg.append(s("circle", { cx: xy[0], cy: xy[1], r: 5, fill: "var(--accent)", stroke: "var(--surface)", "stroke-width": 2 }));
+    return el("div", { class: "locator" }, svg);
   }
 
   // ---------------------------------------------------------------- shared blocks
@@ -377,11 +567,18 @@
         el("div", { class: "fact-meta" }, badge(item.level, item.sources.length), sourceChips(item.sources)),
         item.note ? el("p", { class: "note" }, item.note) : null));
   }
-  function allClaims() {
-    return N.flatMap((n) => [...n.facts, ...n.news]);
-  }
+  const allClaims = () => N.flatMap((n) => [...n.facts, ...n.news]);
   function sectionHead(title, sub) {
     return el("div", { class: "section-head" }, el("h2", {}, title), sub ? el("p", {}, sub) : null);
+  }
+  function regionFilter(onChange) {
+    const row = el("div", { class: "filters", role: "group", "aria-label": "Filter by region" });
+    const draw = () => row.replaceChildren(...["All", ...GROUPS].map((g) => {
+      const count = g === "All" ? N.length : N.filter((n) => n.group === g).length;
+      return el("button", { class: "chip-btn", type: "button", "aria-pressed": String(state.region === g), onclick: () => { state.region = g; draw(); onChange(); } }, `${g === "All" ? "All nations" : g} · ${count}`);
+    }));
+    draw();
+    return row;
   }
 
   // ---------------------------------------------------------------- views
@@ -392,11 +589,11 @@
     const levels = ["verified", "corroborated", "single"];
     const levelColor = { verified: "var(--good)", corroborated: "var(--accent)", single: "var(--warning)" };
 
-    const hero = el("section", { class: "hero" },
+    const head = el("section", { class: "hero" },
       el("div", {},
-        el("h1", {}, "How six small nations are handling AI"),
+        el("h1", {}, `How ${N.length} small nations are handling AI`),
         el("p", { class: "lede" },
-          "Singapore, Estonia, the UAE, Rwanda, Uruguay and Malta each have under 15 million people, and each has taken a different path on AI: strategy, governance, institutions, adoption and investment. Every claim on this site links to the sources behind it.")),
+          `${N.length} countries with fewer than 15 million people each, across five regions, and the different paths each has taken on AI: strategy, governance, institutions, adoption and investment. Every claim links to the sources behind it.`)),
       el("div", { class: "card" },
         el("div", { class: "hero-figure" }, `${count("verified")} of ${claims.length}`),
         el("p", { class: "hero-cap" }, `claims confirmed by 3 or more independent sources (${srcCount} sources cited in total)`),
@@ -404,50 +601,83 @@
           levels.map((l) => el("span", { style: `flex:${count(l)};background:${levelColor[l]}`, title: `${LEVELS[l].label}: ${count(l)}` }))),
         el("div", { class: "legend" }, levels.map((l) => el("span", {}, el("i", { style: `background:${levelColor[l]}` }), `${LEVELS[l].icon} ${LEVELS[l].label} ${count(l)}`)))));
 
-    const cards = el("div", { class: "grid-3" }, N.map((n) =>
-      el("a", { class: "card nation-card", href: `#${n.id}` },
-        el("div", { class: "top" }, el("span", { class: "flag", "aria-hidden": "true" }, n.flag),
-          el("div", {}, el("h3", {}, n.name), el("div", { class: "region" }, n.region))),
-        el("p", { class: "stance" }, n.stance),
-        el("div", { class: "kpis" },
-          el("div", { class: "kpi" }, el("div", { class: "v" }, `#${n.oxford.rank}`), el("div", { class: "l" }, "AI readiness rank")),
-          el("div", { class: "kpi" }, el("div", { class: "v" }, n.msAdoption ? `${n.msAdoption.h2_2025}%` : "—"), el("div", { class: "l" }, "Use gen-AI (H2 '25)")),
-          el("div", { class: "kpi" }, el("div", { class: "v" }, compact(n.stats.population.v)), el("div", { class: "l" }, "Population"))))));
-
-    const compareRows = N.map((n) => [
-      el("a", { href: `#${n.id}` }, `${n.flag} ${n.name}`),
-      n.glance.firstStrategy,
-      n.glance.latestStrategy,
-      `${n.glance.newestBody} (${fmtDate(n.glance.newestBodyDate)})`,
-      `#${n.oxford.rank}`,
-      n.msAdoption ? `${n.msAdoption.h2_2025}%` : "n/a",
-      `${n.stats.internet.v.toFixed(0)}%`,
-    ]);
-
-    view.replaceChildren(
-      hero,
-      el("section", { class: "section" }, sectionHead("The six nations", "Pick a nation for its full profile, verified facts and news."), cards),
-      el("section", { class: "section" },
-        sectionHead("Government AI readiness, by pillar", `Oxford Insights 2025 index, ${OXFORD_TOTAL} countries ranked. The United States (#1) is shown for reference.`),
-        el("div", { class: "card" }, readinessHeatmap(),
-          el("p", { class: "note" }, "Oxford Insights corrected its December 2025 release. These are the validated January 2026 figures. The earlier version had Estonia at 19th and Uruguay at 52nd, and some third-party trackers still repeat those numbers."))),
-      el("section", { class: "section grid-2" },
-        el("div", {}, sectionHead("How many people use generative AI", "Share of working-age population (15–64), H2 2025."),
-          el("div", { class: "card" }, usageBars(),
-            el("p", { class: "note" }, "Microsoft's estimate comes from anonymised Microsoft telemetry adjusted for device share and population. It measures use, not enterprise deployment. Estonia and Malta are not reported individually. World averages: Global North 24.7%, Global South 14.1%."))),
-        el("div", {}, sectionHead("The two leaders keep pulling ahead", "UAE vs Singapore, latest four reporting periods."),
+    // Everything below the filter row re-renders against the chosen region.
+    const body = el("div", {});
+    const drawBody = () => {
+      hideTip();
+      const list = filtered();
+      mapSlot = el("div", {}, worldMap());
+      const cards = el("div", { class: "grid-4" }, [...list].sort((a, b) => a.oxford.rank - b.oxford.rank).map((n) =>
+        el("a", { class: "card nation-card", href: `#${n.id}` },
+          el("div", { class: "top" }, el("span", { class: "flag", "aria-hidden": "true" }, n.flag),
+            el("div", {}, el("h3", {}, n.name), el("div", { class: "region" }, n.region))),
+          el("p", { class: "stance" }, n.stance),
+          el("div", { class: "kpis" },
+            el("div", { class: "kpi" }, el("div", { class: "v" }, `#${n.oxford.rank}`), el("div", { class: "l" }, "Readiness")),
+            el("div", { class: "kpi" }, el("div", { class: "v" }, n.msAdoption ? `${n.msAdoption.h2_2025}%` : "—"), el("div", { class: "l" }, "Gen-AI use")),
+            el("div", { class: "kpi" }, el("div", { class: "v" }, compact(n.stats.population.v)), el("div", { class: "l" }, "People"))))));
+      const showTrend = list.some((n) => n.id === "ae" || n.id === "sg");
+      body.replaceChildren(
+        el("section", { class: "section" },
+          sectionHead("Where they are", "Hover a country or dot for its numbers, click to open its profile. Picking a region zooms in."),
+          el("div", { class: "card" }, mapSlot,
+            el("p", { class: "note" }, "At this scale Singapore, Malta, Bahrain and Mauritius are too small to draw as shapes, so every nation is also marked with a dot at its capital."))),
+        el("section", { class: "section" }, sectionHead(state.region === "All" ? "The nations" : `The nations · ${state.region}`, "Sorted by AI readiness rank."), cards),
+        el("section", { class: "section" },
+          sectionHead("Government AI readiness, by pillar", `Oxford Insights 2025 index (${OXFORD_TOTAL} countries ranked). The United States (#1) is shown for reference. Click a name to open its profile.`),
+          el("div", { class: "card" }, readinessHeatmap(list),
+            el("p", { class: "note" }, "Oxford Insights corrected its December 2025 release. These are the validated January 2026 figures. Some third-party trackers still repeat the earlier numbers."))),
+        el("section", { class: "section" },
+          sectionHead("How many people use generative AI", "Share of working-age population (15–64), H2 2025."),
+          el("div", { class: "card" }, usageBars(list),
+            el("p", { class: "note" }, "Microsoft's estimate comes from anonymised Microsoft telemetry adjusted for device share and population. It measures use, not enterprise deployment. Smaller states without their own figure are marked 'not reported'. World averages: Global North 24.7%, Global South 14.1%."))),
+        showTrend ? el("section", { class: "section" },
+          sectionHead("The two global leaders keep pulling ahead", "UAE vs Singapore, the world's #1 and #2 for AI use, over the latest four reporting periods."),
           el("div", { class: "card" }, leaderTrend(),
-            el("p", { class: "note" }, "Microsoft moved from half-year to quarterly reporting in 2026, so the periods are not evenly spaced in time. Q1 2026 figures come from WAM and Mappr coverage of Microsoft's report. Q2 2026 figures come from Microsoft directly.")))),
-      el("section", { class: "section" },
-        sectionHead("Milestones, 2017–2026", "Each dot is a sourced fact or news item. Hover for details, click to open the nation."),
-        el("div", { class: "card" }, milestoneTimeline())),
-      el("section", { class: "section" },
-        sectionHead("At a glance", null),
-        el("div", { class: "card compare" },
-          table(["Nation", "First AI strategy", "Latest strategy", "Newest AI body", "Readiness rank", "Gen-AI use (H2 '25)", "Internet users"],
-            compareRows, [4, 5, 6]),
-          sourceLine("oxford", "msH2", "wbNet"))),
-    );
+            el("p", { class: "note" }, "Microsoft moved from half-year to quarterly reporting in 2026, so the periods are not evenly spaced in time. Q1 2026 figures come from WAM and Mappr coverage of Microsoft's report. Q2 2026 figures come from Microsoft directly."))) : null,
+        el("section", { class: "section" },
+          sectionHead("Milestones, 2017–2026", "Each dot is a sourced fact or news item. Hover for details, click to open the nation."),
+          el("div", { class: "card" }, milestoneTimeline([...list].sort((a, b) => a.oxford.rank - b.oxford.rank)))),
+        el("section", { class: "section" },
+          sectionHead("At a glance", "Click a column header to sort."),
+          el("div", { class: "card compare" }, compareTable(list), sourceLine("oxford", "msH2", "wbNet"))),
+      );
+    };
+    view.replaceChildren(head,
+      el("div", { class: "section sticky-filters" }, regionFilter(drawBody)),
+      body);
+    drawBody();
+  }
+
+  function compareTable(list) {
+    const cols = [
+      { h: "Nation", key: "name", get: (n) => n.name, cell: (n) => el("a", { href: `#${n.id}` }, `${n.flag} ${n.name}`) },
+      { h: "Region", key: "group", get: (n) => n.group },
+      { h: "First AI strategy", key: "first", get: (n) => n.glance.firstStrategy },
+      { h: "Latest strategy", key: "latest", get: (n) => n.glance.latestStrategy },
+      { h: "Newest AI body", key: "body", get: (n) => n.glance.newestBodyDate || "", cell: (n) => (n.glance.newestBody === "—" ? "—" : `${n.glance.newestBody} (${fmtDate(n.glance.newestBodyDate)})`) },
+      { h: "Readiness rank", key: "rank", num: true, get: (n) => n.oxford.rank, cell: (n) => `#${n.oxford.rank}` },
+      { h: "Gen-AI use", key: "use", num: true, get: (n) => (n.msAdoption ? n.msAdoption.h2_2025 : -1), cell: (n) => (n.msAdoption ? `${n.msAdoption.h2_2025}%` : "n/a") },
+      { h: "Internet users", key: "net", num: true, get: (n) => n.stats.internet.v, cell: (n) => `${n.stats.internet.v.toFixed(0)}%` },
+    ];
+    const wrap = el("div", {});
+    const draw = () => {
+      const col = cols.find((c) => c.key === state.sortKey) || cols[5];
+      const rows = [...list].sort((a, b) => {
+        const x = col.get(a), y = col.get(b);
+        return (x < y ? -1 : x > y ? 1 : 0) * state.sortDir;
+      });
+      wrap.replaceChildren(el("table", { class: "data" },
+        el("thead", {}, el("tr", {}, cols.map((c) =>
+          el("th", { class: c.num ? "num" : null, "aria-sort": c.key === state.sortKey ? (state.sortDir > 0 ? "ascending" : "descending") : null },
+            el("button", { class: "th-btn", type: "button", onclick: () => {
+              if (state.sortKey === c.key) state.sortDir *= -1; else { state.sortKey = c.key; state.sortDir = c.key === "use" || c.key === "net" ? -1 : 1; }
+              draw();
+            } }, c.h, c.key === state.sortKey ? (state.sortDir > 0 ? " ↑" : " ↓") : ""))))),
+        el("tbody", {}, rows.map((n) => el("tr", {}, cols.map((c) => el("td", { class: c.num ? "num" : null }, c.cell ? c.cell(n) : c.get(n))))))));
+    };
+    draw();
+    return wrap;
   }
 
   function renderNation(n) {
@@ -470,15 +700,20 @@
         ? tile("Uses generative AI", `${(ms.q2_2026 ?? ms.h2_2025).toFixed(1)}%`, ms.q2_2026 ? `working-age, Q2 2026 · world #${ms.rankLatest}` : "working-age, H2 2025", ms.q2_2026 ? S.msQ2 : S.msH2)
         : tile("Uses generative AI", "—", "Not reported separately by Microsoft", S.msH2));
 
+    const ranked = [...N].sort((a, b) => a.oxford.rank - b.oxford.rank);
+    const pos = ranked.indexOf(n);
     view.replaceChildren(
-      el("section", { class: "country-head" },
-        el("span", { class: "flag", "aria-hidden": "true" }, n.flag),
-        el("div", {}, el("h1", {}, n.name), el("p", { class: "stance" }, `${n.region} · ${n.stance}`))),
+      el("section", { class: "country-top" },
+        el("div", { class: "country-head" },
+          el("span", { class: "flag", "aria-hidden": "true" }, n.flag),
+          el("div", {}, el("h1", {}, n.name), el("p", { class: "stance" }, `${n.region} · ${n.stance}`),
+            el("p", { class: "muted small", style: "margin-top:6px" }, `#${pos + 1} of ${N.length} nations here by readiness rank`))),
+        locatorMap(n)),
       el("p", { class: "summary" }, n.summary),
       el("p", { class: "muted small", style: "margin-top:6px" }, "This summary is an editorial synthesis of the sourced facts below."),
       el("section", { class: "section" }, tiles),
       el("section", { class: "section" },
-        sectionHead("Readiness profile", "Oxford Insights 2025 pillar scores vs the median of the six nations."),
+        sectionHead("Readiness profile", `Oxford Insights 2025 pillar scores vs the median of all ${N.length} nations.`),
         el("div", { class: "card" }, pillarBars(n))),
       el("section", { class: "section" },
         sectionHead("Policy & governance facts", `${n.facts.length} facts, each with its sources and verification level.`),
@@ -490,6 +725,9 @@
       el("section", { class: "section" },
         sectionHead("What to watch", null),
         el("div", { class: "card" }, el("ul", { class: "watch" }, n.watch.map((w) => el("li", {}, w))))),
+      el("nav", { class: "section pager", "aria-label": "Neighbouring nations by rank" },
+        pos > 0 ? el("a", { href: `#${ranked[pos - 1].id}` }, `← ${ranked[pos - 1].flag} ${ranked[pos - 1].name}`) : el("span", {}),
+        pos < ranked.length - 1 ? el("a", { href: `#${ranked[pos + 1].id}` }, `${ranked[pos + 1].flag} ${ranked[pos + 1].name} →`) : el("span", {})),
     );
   }
   function tile(label, value, sub, src) {
@@ -502,23 +740,25 @@
 
   function renderNews() {
     const items = N.flatMap((n) => n.news.map((x) => ({ x, n }))).sort((a, b) => (a.x.date < b.x.date ? 1 : -1));
-    let country = "all", level = "all";
+    let nation = "all", level = "all";
     const list = el("div", { class: "card" });
-    const row1 = el("div", { class: "filters", role: "group", "aria-label": "Filter by nation" });
     const row2 = el("div", { class: "filters", role: "group", "aria-label": "Filter by verification level" });
+    const select = el("select", { class: "select", "aria-label": "Filter by nation" });
     const draw = () => {
-      row1.replaceChildren(...[["all", "All nations"], ...N.map((n) => [n.id, `${n.flag} ${n.name}`])].map(([k, lab]) =>
-        el("button", { class: "chip-btn", type: "button", "aria-pressed": String(country === k), onclick: () => { country = k; draw(); } }, lab)));
-      row2.replaceChildren(...[["all", "Any verification"], ...Object.keys(LEVELS).filter((k) => k !== "dataset").map((k) => [k, `${LEVELS[k].icon} ${LEVELS[k].label}`])].map(([k, lab]) =>
+      const opts = [["all", "All nations in region"], ...N.filter(inRegion).sort((a, b) => a.name.localeCompare(b.name)).map((n) => [n.id, `${n.flag} ${n.name}`])];
+      if (!opts.some(([k]) => k === nation)) nation = "all";
+      select.replaceChildren(...opts.map(([k, lab]) => el("option", { value: k, selected: k === nation }, lab)));
+      row2.replaceChildren(...[["all", "Any verification"], ...["verified", "corroborated", "single"].map((k) => [k, `${LEVELS[k].icon} ${LEVELS[k].label}`])].map(([k, lab]) =>
         el("button", { class: "chip-btn", type: "button", "aria-pressed": String(level === k), onclick: () => { level = k; draw(); } }, lab)));
-      const shown = items.filter(({ x, n }) => (country === "all" || n.id === country) && (level === "all" || x.level === level));
+      const shown = items.filter(({ x, n }) => inRegion(n) && (nation === "all" || n.id === nation) && (level === "all" || x.level === level));
       list.replaceChildren(...(shown.length ? shown.map(({ x, n }) => newsItem(x, n, true)) : [el("p", { class: "muted" }, "No items match these filters.")]));
     };
+    select.addEventListener("change", () => { nation = select.value; draw(); });
     draw();
     view.replaceChildren(
       el("h1", {}, "News feed"),
-      el("p", { class: "summary ink2" }, `${items.length} developments across the six nations, newest first. Research cut-off ${fmtDate(D.meta.asOf)}.`),
-      el("section", { class: "section" }, row1, row2, list));
+      el("p", { class: "summary ink2" }, `${items.length} developments across ${N.length} nations, newest first. Research cut-off ${fmtDate(D.meta.asOf)}.`),
+      el("section", { class: "section" }, regionFilter(draw), el("div", { class: "filters" }, select), row2, list));
   }
 
   function renderMethod() {
@@ -526,40 +766,55 @@
     view.replaceChildren(el("article", { class: "method" },
       el("h1", {}, "Method & verification"),
       el("p", { class: "summary" }, "How the facts on this site were researched and checked, and what the badges mean."),
-      el("h2", {}, "Why these six nations"),
-      el("p", {}, "All six have under 15 million people and a visible national AI programme. Between them they span Asia, Europe, the Gulf, Africa and Latin America, so they show distinct approaches: state-led frameworks (Singapore), the digital state (Estonia), top-down investment (UAE), policy-first hub-building (Rwanda), rights-based governance (Uruguay) and an EU small-state 'launchpad' (Malta)."),
+      el("h2", {}, `Why these ${N.length} nations`),
+      el("p", {}, `Every nation here has under 15 million people and a visible national AI programme. Coverage spans Europe (${N.filter((n) => n.group === "Europe").length}), the Middle East (${N.filter((n) => n.group === "Middle East").length}), Asia-Pacific (${N.filter((n) => n.group === "Asia-Pacific").length}), Africa (${N.filter((n) => n.group === "Africa").length}) and the Americas (${N.filter((n) => n.group === "Americas").length}), from AI-readiness leaders (Singapore, #7) to early movers (Bhutan, #101). The first six (Singapore, Estonia, UAE, Rwanda, Uruguay, Malta) have deeper profiles. The other ${N.length - 6} were added later with 3–5 key facts each.`),
       el("h2", {}, "How each claim was checked"),
       el("ul", {},
         el("li", {}, "Each claim was searched independently and cross-checked against primary sources (government sites, official releases, the publishers' own reports) and independent coverage (news outlets, law firms, research bodies)."),
         el("li", {}, "A claim is marked ✓✓✓ Verified only when at least three independent sources agree on the substance, ✓✓ Corroborated with two, and ! Single source with one. Pages from the same organisation count as one source."),
         el("li", {}, "Where sources disagree (dates, counts, names), the claim gives the best-supported version and the disagreement is shown in a Note."),
-        el("li", {}, "Index figures (Oxford Insights, Microsoft, World Bank) were read directly from the publisher's own report, PDF table or API, not from secondary summaries. Several secondary sites still quote superseded figures."),
-        el("li", {}, "Every source link was tested to confirm it resolves. Some publishers (Bloomberg, gov.mt, uaecabinet.ae and others) block automated checks but open normally in a browser.")),
+        el("li", {}, "Index figures (Oxford Insights, Microsoft, World Bank) were read directly from the publisher's own report, PDF table or API, not from secondary summaries."),
+        el("li", {}, "Source links were tested to confirm they resolve. Some publishers block automated checks but open normally in a browser.")),
       el("h2", {}, "Corrections made during checking"),
       el("ul", {},
-        el("li", {}, "The UAE's AI & Data Authority was approved on 14 June 2026, not in September as one secondary summary implied."),
-        el("li", {}, "The UAE's AI strategy has two dates: launched October 2017, and the full National AI Strategy 2031 adopted by Cabinet in April 2019."),
-        el("li", {}, "Oxford Insights' December 2025 rankings contained errors. This site uses the validated January 2026 table (UAE 19th, not the 23rd some trackers report)."),
-        el("li", {}, "Estonia's AI Leap expansion to vocational schools, announced for September 2026, was later described only as 'being considered'."),
+        el("li", {}, "The UAE's AI & Data Authority was approved on 14 June 2026, not in September as one summary implied."),
+        el("li", {}, "The UAE's AI strategy has two dates: launched October 2017, and the full National AI Strategy 2031 adopted in April 2019."),
+        el("li", {}, "Oxford Insights' December 2025 rankings contained errors. This site uses the validated January 2026 table."),
+        el("li", {}, "Denmark's deepfake copyright bill was introduced in October 2026. Some sites wrongly report it as already passed."),
+        el("li", {}, "Luxembourg's AI Act bill (8476) is still pending. One database wrongly lists it as a 2024 law."),
         el("li", {}, "A claimed $17.5M Gates Foundation commitment to Rwanda's AI hub could not be confirmed and is not presented as fact.")),
       el("h2", {}, "Limits"),
       el("ul", {},
-        el("li", {}, `This is a snapshot as of ${fmtDate(D.meta.asOf)}. Things change quickly. The news feed does not update itself.`),
-        el("li", {}, "Country summaries and 'stance' lines are editorial synthesis, not quotations."),
-        el("li", {}, "Programme-reported figures (for example AI Leap teacher-usage rates) are the programmes' own numbers, not independent evaluations."),
+        el("li", {}, `This is a snapshot as of ${fmtDate(D.meta.asOf)}. The news feed does not update itself.`),
+        el("li", {}, "Summaries and 'stance' lines are editorial synthesis, not quotations."),
+        el("li", {}, "Programme-reported figures are the programmes' own numbers, not independent evaluations."),
+        el("li", {}, "Map boundaries come from Natural Earth (110m scale). They are approximate and don't imply any position on disputed borders."),
         el("li", {}, "Disclosure: this dashboard was compiled by Claude, an AI model made by Anthropic. Anthropic is party to agreements described here (Rwanda MOU, Estonia AI Leap talks). Those claims rely on both parties' public statements.")),
       el("h2", {}, "Tally"),
-      el("p", {}, `${claims.length} claims: ${claims.filter((c) => c.level === "verified").length} verified, ${claims.filter((c) => c.level === "corroborated").length} corroborated, ${claims.filter((c) => c.level === "single").length} single-source.`),
+      el("p", {}, `${claims.length} claims: ${claims.filter((c) => c.level === "verified").length} verified, ${claims.filter((c) => c.level === "corroborated").length} corroborated, ${claims.filter((c) => c.level === "single").length} single-source, ${claims.filter((c) => c.level === "dataset").length} read from a dataset.`),
     ));
   }
 
   // ---------------------------------------------------------------- routing
   const tabsEl = document.getElementById("tabs");
-  const routes = [["overview", "Overview"], ...N.map((n) => [n.id, `${n.flag} ${n.name === "United Arab Emirates" ? "UAE" : n.name}`]), ["news", "News"], ["method", "Method"]];
+  function renderTabs(key) {
+    const current = byId(key);
+    const picker = el("select", { class: "select nation-picker", "aria-label": "Go to a nation" },
+      el("option", { value: "", selected: !current }, `Nations (${N.length})`),
+      GROUPS.map((g) => el("optgroup", { label: g },
+        N.filter((n) => n.group === g).sort((a, b) => a.name.localeCompare(b.name)).map((n) =>
+          el("option", { value: n.id, selected: current === n }, `${n.flag} ${n.name}`)))));
+    picker.addEventListener("change", () => { if (picker.value) location.hash = picker.value; });
+    tabsEl.replaceChildren(
+      el("a", { class: "tab", href: "#overview", "aria-current": key === "overview" || (!current && key !== "news" && key !== "method") ? "page" : null }, "Overview"),
+      el("span", { class: "tab tab-picker", "aria-current": current ? "page" : null }, picker),
+      el("a", { class: "tab", href: "#news", "aria-current": key === "news" ? "page" : null }, "News"),
+      el("a", { class: "tab", href: "#method", "aria-current": key === "method" ? "page" : null }, "Method"));
+  }
   function route(keepScroll) {
     hideTip();
     const key = (location.hash || "#overview").slice(1);
-    tabsEl.replaceChildren(...routes.map(([k, lab]) => el("a", { class: "tab", href: `#${k}`, "aria-current": k === key ? "page" : null }, lab)));
+    renderTabs(key);
     const n = byId(key);
     if (n) { renderNation(n); document.title = `${n.name} — Worldview`; }
     else if (key === "news") { renderNews(); document.title = "News — Worldview"; }

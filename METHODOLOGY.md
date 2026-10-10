@@ -20,10 +20,13 @@ These were read from the publisher's own data, not from secondary summaries:
 
 ## Link check
 
-All 155+ source URLs were requested programmatically. Broken links (404) were replaced with verified alternatives. Some publishers (Bloomberg, gov.mt, uaecabinet.ae, MaltaToday, openai.com and others) block automated requests (403) but open normally in a browser.
+All ~340 source URLs were requested programmatically. Broken links (404) were replaced with verified alternatives. Some publishers (Bloomberg, gov.mt, uaecabinet.ae, MaltaToday, openai.com and others) block automated requests (403) but open normally in a browser.
 
 ## Corrections made during checking
 
+- Denmark's deepfake copyright bill was introduced in October 2026. Some sites report it as already law.
+- Luxembourg's AI Act bill 8476 is still pending. One database lists it as a 2024 law.
+- The UAE's 'first strategy' (Oct 2017) and its full National AI Strategy 2031 (Cabinet, Apr 2019) are separate steps.
 - The UAE AI & Data Authority was approved on **14 June 2026**, not September.
 - The UAE AI strategy was **launched in Oct 2017**, and the full **National AI Strategy 2031** was adopted by Cabinet in **Apr 2019**.
 - Estonia's AI Leap expansion to vocational schools, announced for Sep 2026, is now only "being considered".
@@ -31,6 +34,8 @@ All 155+ source URLs were requested programmatically. Broken links (404) were re
 
 ## Limits
 
+- The 19 nations added later have 3–5 key facts each, not full profiles.
+- Map boundaries are Natural Earth 110m. They are approximate and don't imply any position on disputed borders. Tiny states are shown as dots.
 - This is a snapshot as of 10 Oct 2026, and the news feed does not update itself.
 - Summaries and "stance" lines are editorial synthesis.
 - Programme-reported figures (e.g. AI Leap teacher usage) are not independent evaluations.
