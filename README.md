@@ -1,19 +1,18 @@
 # Worldview
 
-An interactive dashboard on how **25 small nations** (all under 15M people) are adopting and governing AI.
+An interactive dashboard on how **45 small nations** (all under 15M people) are adopting and governing AI.
 
-- **Europe:** Estonia, Malta, Denmark, Finland, Norway, Ireland, Luxembourg, Iceland, Lithuania, Slovenia, Cyprus, Switzerland
-- **Middle East:** UAE, Qatar, Bahrain, Jordan
-- **Asia-Pacific:** Singapore, New Zealand, Bhutan
-- **Africa:** Rwanda, Mauritius, Benin
-- **Americas:** Uruguay, Costa Rica, Jamaica
+- **Europe (incl. South Caucasus):** Estonia, Malta, Denmark, Finland, Norway, Ireland, Luxembourg, Iceland, Lithuania, Slovenia, Cyprus, Switzerland, Sweden, Austria, Portugal, Greece, Latvia, Albania, Georgia, Armenia
+- **Middle East:** UAE, Qatar, Bahrain, Jordan, Kuwait, Oman
+- **Asia-Pacific:** Singapore, New Zealand, Bhutan, Mongolia, Brunei
+- **Africa:** Rwanda, Mauritius, Benin, Tunisia, Botswana, Sierra Leone, Togo
+- **Americas:** Uruguay, Costa Rica, Jamaica, El Salvador, Panama, Paraguay, Dominican Republic
 
-The first six (Singapore, Estonia, UAE, Rwanda, Uruguay, Malta) have deeper profiles.
-
-- **Overview**: an interactive world map (colour by readiness rank or AI use, region filters that zoom the map), AI-readiness heatmap (Oxford Insights 2025 pillar scores), generative-AI usage (Microsoft AI Diffusion), UAE vs Singapore usage trend, a 2017–2026 milestone timeline, and an at-a-glance comparison table.
-- **Nation pages**: summary, stat tiles (World Bank, Oxford, Microsoft), readiness profile against the median of all 25, a locator map, sourced policy and governance facts filterable by topic, recent news, and what to watch.
-- **News**: every development, newest first, filterable by nation and verification level.
-- **Method**: how each claim was checked, corrections made, and limits.
+**Features**
+- **Overview:** highlights; a zoomable, draggable world map (colour by readiness or AI use, with region filters that zoom it); the readiness heatmap (Oxford Insights 2025); generative-AI use (Microsoft); AI talent (Stanford AI Index 2026); the UAE vs Singapore trend; milestones since 2024; and a sortable comparison table.
+- **Nation pages:** a zoomable locator map, stat tiles, the readiness profile against the median of all nations, facts newest first (with pre-2024 background behind a toggle), news since 2024, and what to watch.
+- **News:** every development since January 2024, newest first, filterable by region, nation and verification level.
+- **Method:** verification rules, the full audit, corrections, and limits.
 
 Research cut-off: **10 October 2026**.
 
@@ -35,7 +34,8 @@ Then open http://localhost:8765. Opening `index.html` directly also works.
 | `styles.css` | Styles with light and dark themes |
 | `app.js` | Rendering, routing, and the SVG charts (vanilla JS) |
 | `data/nations.js` | Data for the first six nations, plus shared metadata and sources |
-| `data/nations-more.js` | Data for the other 19 nations |
+| `data/nations-more.js` | Data for 19 more nations (added second) |
+| `data/nations-more2.js` | Data for 20 more nations (added third) |
 | `vendor/` | d3-geo, d3-array, topojson-client and world-atlas (Natural Earth 110m), bundled so the map works offline |
 | `METHODOLOGY.md` | Verification rules |
 

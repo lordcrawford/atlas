@@ -18,6 +18,16 @@ These were read from the publisher's own data, not from secondary summaries:
 - **Microsoft AI Diffusion**: the H2 2025 report appendix (PDF). Q1 2026 figures are from WAM and Mappr coverage. Q2 2026 figures are from Microsoft's 22 Sep 2026 release.
 - **World Bank WDI**: population, GDP per capita and internet use, pulled from the World Bank API.
 
+## Full audit (10 Oct 2026)
+
+Every claim on the site was re-checked after the build:
+
+1. All cited pages (~470) were fetched. A script extracted each claim's dates, numbers and names and tested whether every cited page contained them.
+2. Each mismatch was reviewed by hand against the closest passage on the page.
+3. Bot-blocked pages were opened in a browser where possible. Bot challenges (e.g. Bloomberg, gov.mt) were not bypassed, and readable independent sources replaced them.
+4. Details no readable source supported were removed, and badges were lowered where three independent confirmations could not be found.
+5. Articles that republish another outlet's text word for word count as one source.
+
 ## Link check
 
 All ~340 source URLs were requested programmatically. Broken links (404) were replaced with verified alternatives. Some publishers (Bloomberg, gov.mt, uaecabinet.ae, MaltaToday, openai.com and others) block automated requests (403) but open normally in a browser.

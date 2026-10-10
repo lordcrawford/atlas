@@ -55,6 +55,10 @@ window.WORLDVIEW = {
         t: "Middle East AI News - UAE retains top world AI use ranking",
         u: "https://www.middleeastainews.com/p/uae-retains-top-world-ai-use-ranking",
       },
+      aiIndex: {
+        t: "Stanford HAI - AI Index Report 2026, ch. 4.4 (LinkedIn AI talent data, Figs 4.4.21 & 4.4.23)",
+        u: "https://hai.stanford.edu/assets/files/ai_index_report_2026.pdf",
+      },
       wbPop: {
         t: "World Bank WDI - Population, total (SP.POP.TOTL)",
         u: "https://data.worldbank.org/indicator/SP.POP.TOTL",
@@ -67,6 +71,13 @@ window.WORLDVIEW = {
         t: "World Bank WDI - Individuals using the Internet, % of population (IT.NET.USER.ZS)",
         u: "https://data.worldbank.org/indicator/IT.NET.USER.ZS",
       },
+    },
+    // Stanford HAI AI Index Report 2026, LinkedIn data (Figures 4.4.21 and 4.4.23). Both charts show the top 15 economies only,
+    // so nations outside the top 15 have no value here (not zero).
+    aiIndex: {
+      talentConcentration: { sg: 1.82, lu: 1.6, ie: 1.31, ch: 1.25, fi: 1.23, ee: 1.15, lt: 1.1, cy: 0.95 },
+      netMigration: { lu: 5.23, ae: 4.4, ch: 1.72, sg: 1.36, at: 0.9, cy: 0.62, dk: 0.45 },
+      reference: { talentTop: ["Israel", 2.1], migrationUS: ["United States", 1.22] },
     },
     // Reference row for the readiness chart
     usReference: { name: "United States (rank 1)", scores: [92.5, 91.77, 82.5, 92.87, 88.16, 78.28] },

@@ -1013,7 +1013,7 @@ window.WORLDVIEW.nations.push(
     glance: { firstStrategy: "2023", latestStrategy: "2023 (SNIAM 2023–2027)", newestBody: "Ministry of Digital Transformation & Innovation", newestBodyDate: "2026-05-26" },
     stats: { population: { v: 14814460, year: 2025 }, gdpPerCapita: { v: 1658, year: 2025 }, internet: { v: 34.0, year: 2024 } },
     oxford: { rank: 90, scores: [61.0, 26.99, 61.25, 63.05, 26.89, 34.9] },
-    msAdoption: { h1_2025: 8.7, h2_2025: 9.3, q1_2026: null, q2_2026: null, rankLatest: null },
+    msAdoption: { h1_2025: 8.7, h2_2025: 9.3, q1_2026: null, q2_2026: null, rankLatest: null, regional: true },
     facts: [
       {
         topic: "Strategy", date: "2023-01-18",
