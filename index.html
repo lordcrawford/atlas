@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Worldview — AI in Small Nations</title>
+  <meta name="description" content="How six small nations are adopting and governing AI: analytics, verified facts with sources, and news." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <a class="brand" href="#overview">
+        <span class="brand-mark" aria-hidden="true">◐</span>
+        <span>Worldview</span>
+        <span class="brand-sub">AI in small nations</span>
+      </a>
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode">◑</button>
+    </div>
+    <nav class="wrap tabs" id="tabs" aria-label="Sections"></nav>
+  </header>
+
+  <main class="wrap" id="view" tabindex="-1"></main>
+
+  <footer class="wrap footer">
+    <p>Research cut-off <strong id="asOf"></strong>. Every claim links to its sources. The badge on each claim shows how many independent sources agree. See <a href="#method">Method</a>.</p>
+  </footer>
+
+  <div class="tooltip" id="tooltip" role="tooltip" hidden></div>
+
+  <script src="data/nations.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

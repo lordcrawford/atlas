@@ -1,0 +1,1083 @@
+// Worldview dataset: AI policy & governance in six small nations.
+// Research cut-off: 10 October 2026.
+//
+// Verification levels (see METHODOLOGY.md):
+//   "verified"     - 3+ independent sources agree on the claim
+//   "corroborated" - 2 independent sources agree
+//   "single"       - only 1 source found; shown with a warning, treat with care
+//   "dataset"      - a figure read directly from the publisher's own dataset/report
+//                    (World Bank, Oxford Insights, Microsoft); cross-checked where possible
+//
+// Every source below was opened or returned in search during research.
+// `note` records discrepancies between sources.
+
+window.WORLDVIEW = {
+  meta: {
+    asOf: "2026-10-10",
+    pillars: [
+      "Policy Capacity",
+      "AI Infrastructure",
+      "Governance",
+      "Public Sector Adoption",
+      "Development & Diffusion",
+      "Resilience",
+    ],
+    sources: {
+      oxford: {
+        t: "Oxford Insights - Government AI Readiness Index 2025 (validated Jan 2026 report, full rankings p.59-68)",
+        u: "https://oxfordinsights.com/wp-content/uploads/2026/01/2025-Government-AI-Readiness-Index-Report_01_26.pdf",
+      },
+      oxfordPage: {
+        t: "Oxford Insights - Government AI Readiness Index 2025 (index page)",
+        u: "https://oxfordinsights.com/ai-readiness/government-ai-readiness-index-2025/",
+      },
+      msH2: {
+        t: "Microsoft - Global AI Adoption in 2025: A Widening Digital Divide (H2 2025 report, appendix)",
+        u: "https://www.microsoft.com/en-us/research/wp-content/uploads/2026/01/Microsoft-AI-Diffusion-Report-2025-H2.pdf",
+      },
+      msBlog: {
+        t: "Microsoft On the Issues - Global AI adoption in 2025 (8 Jan 2026)",
+        u: "https://blogs.microsoft.com/on-the-issues/2026/01/08/global-ai-adoption-in-2025/",
+      },
+      msQ2: {
+        t: "Microsoft Source EMEA - New Microsoft data: AI adoption continues to rise (22 Sep 2026, Q2 2026 data)",
+        u: "https://news.microsoft.com/source/emea/2026/09/new-microsoft-data-ai-adoption-continues-to-rise-switzerland-remains-well-above-the-global-average/",
+      },
+      wamQ1: {
+        t: "WAM - Microsoft: UAE ranks first globally in AI adoption (Q1 2026)",
+        u: "https://www.wam.ae/en/article/c03y6ol-microsoft-uae-ranks-first-globally-adoption",
+      },
+      mapprQ1: {
+        t: "Mappr - AI Adoption by Country in 2026 (Q1 2026 table)",
+        u: "https://www.mappr.co/ai-adoption-by-country/",
+      },
+      meaiQ2: {
+        t: "Middle East AI News - UAE retains top world AI use ranking",
+        u: "https://www.middleeastainews.com/p/uae-retains-top-world-ai-use-ranking",
+      },
+      wbPop: {
+        t: "World Bank WDI - Population, total (SP.POP.TOTL)",
+        u: "https://data.worldbank.org/indicator/SP.POP.TOTL",
+      },
+      wbGdp: {
+        t: "World Bank WDI - GDP per capita, current US$ (NY.GDP.PCAP.CD)",
+        u: "https://data.worldbank.org/indicator/NY.GDP.PCAP.CD",
+      },
+      wbNet: {
+        t: "World Bank WDI - Individuals using the Internet, % of population (IT.NET.USER.ZS)",
+        u: "https://data.worldbank.org/indicator/IT.NET.USER.ZS",
+      },
+    },
+    // Reference row for the readiness chart
+    usReference: { name: "United States (rank 1)", scores: [92.5, 91.77, 82.5, 92.87, 88.16, 78.28] },
+  },
+
+  nations: [
+    // ------------------------------------------------------------------ SINGAPORE
+    {
+      id: "sg",
+      glance: { firstStrategy: "2019", latestStrategy: "2023 (NAIS 2.0, refreshed May 2026)", newestBody: "National AI Council", newestBodyDate: "2026-02" },
+      name: "Singapore",
+      flag: "🇸🇬",
+      region: "Southeast Asia",
+      stance: "State-led strategy, voluntary governance frameworks and testing tools",
+      summary:
+        "Singapore runs AI policy out of central government. It has published two national strategies (2019, 2023), has refreshed them repeatedly, and puts heavy public money into research and adoption. Its governance tools are model frameworks and open-source testing kits, not a single AI statute. In 2026 the Prime Minister took personal charge through a new National AI Council.",
+      stats: {
+        population: { v: 6111175, year: 2025 },
+        gdpPerCapita: { v: 98814, year: 2025 },
+        internet: { v: 94.4, year: 2024 },
+      },
+      oxford: { rank: 7, scores: [85.0, 74.46, 78.3, 92.5, 64.15, 76.42] },
+      msAdoption: { h1_2025: 58.6, h2_2025: 60.9, q1_2026: 63.4, q2_2026: 64.3, rankLatest: 2 },
+      facts: [
+        {
+          topic: "Strategy",
+          date: "2019",
+          text: "Singapore published its first National AI Strategy (NAIS) in 2019.",
+          level: "verified",
+          sources: [
+            { t: "MDDI - DPM Lawrence Wong speech launching NAIS 2.0 (4 Dec 2023)", u: "https://www.mddi.gov.sg/newsroom/041223/" },
+            { t: "MDDI - NAIS 2 to uplift Singapore's social and economic potential", u: "https://www.mddi.gov.sg/newsroom/04122023/" },
+            { t: "Smart Nation - National AI Strategy", u: "https://www.smartnation.gov.sg/initiatives/national-ai-strategy/" },
+          ],
+        },
+        {
+          topic: "Strategy",
+          date: "2023-12-04",
+          text: "NAIS 2.0 was launched on 4 December 2023 by then-Deputy Prime Minister Lawrence Wong at the inaugural Singapore Conference on AI. Its vision is \"AI for the Public Good, for Singapore and the World\".",
+          level: "verified",
+          sources: [
+            { t: "MDDI - Launch of Singapore's Second National AI Strategy", u: "https://www.mddi.gov.sg/newsroom/041223/" },
+            { t: "Rajah & Tann - Singapore Unveils National AI Strategy 2.0", u: "https://www.rajahtannasia.com/viewpoints/the-shape-of-things-to-come-singapore-unveils-national-ai-strategy-2-0/" },
+            { t: "Malay Mail - Singapore aims to become where world's best AI talents gather (4 Dec 2023)", u: "https://www.malaymail.com/news/singapore/2023/12/04/singapore-says-aiming-to-become-where-worlds-best-ai-talents-gather-under-renewed-adoption-strategy/105799" },
+          ],
+          note: "Official transcripts name the event both \"Singapore Conference on AI\" and \"Singapore Conference on AI for the Global Good\".",
+        },
+        {
+          topic: "Talent",
+          date: "2023-12-04",
+          text: "NAIS 2.0 set a goal of more than tripling the number of AI practitioners in Singapore to 15,000 within three to five years.",
+          level: "verified",
+          sources: [
+            { t: "MDDI - DPM Wong speech (\"more than triple ... to 15,000\")", u: "https://www.mddi.gov.sg/newsroom/041223/" },
+            { t: "EDB - Singapore updates AI strategy", u: "https://www.edb.gov.sg/en/business-insights/insights/singapore-updates-ai-strategy-with-aim-to-contribute-globally-valuable-breakthroughs.html" },
+            { t: "Business Today - Singapore To Triple AI Pool", u: "https://www.businesstoday.com.my/2023/12/04/singapore-to-triple-ai-pool-build-iconic-ai-site/" },
+            { t: "IT Brief - Singapore's plan to increase AI workforce", u: "https://itbrief.co.uk/story/singapore-s-plan-to-increase-ai-workforce-with-updated-national-ai-strategy" },
+          ],
+          note: "No official progress count toward the 15,000 target was found.",
+        },
+        {
+          topic: "Governance",
+          date: "2023-06-07",
+          text: "IMDA launched the AI Verify Foundation on 7 June 2023 to build open-source AI testing tools. Its founding premier members included IBM, Microsoft, Google, Red Hat and Salesforce.",
+          level: "verified",
+          sources: [
+            { t: "IMDA - Singapore launches AI Verify Foundation", u: "https://www.imda.gov.sg/resources/press-releases-factsheets-and-speeches/press-releases/2023/singapore-launches-ai-verify-foundation" },
+            { t: "PDPC - Launch of AI Verify Foundation", u: "https://www.pdpc.gov.sg/news-and-events/announcements/2023/06/launch-of-ai-verify-foundation-to-shape-the-future-of-ai-standards-through-collaboration" },
+            { t: "AAP / Cision release (7 Jun 2023)", u: "https://www.aap.com.au/aapreleases/cision20230607ae22224" },
+          ],
+        },
+        {
+          topic: "Governance",
+          date: "2024-05-30",
+          text: "IMDA and the AI Verify Foundation released the Model AI Governance Framework for Generative AI on 30 May 2024, after a public consultation from January to March 2024.",
+          level: "verified",
+          sources: [
+            { t: "Clyde & Co - Singapore's Model AI Governance Framework for Generative AI", u: "https://www.clydeco.com/en/insights/2024/05/singapore-s-model-ai-governance-framework-for-gene" },
+            { t: "Morgan Lewis - Singapore expands its AI governance approach", u: "https://www.morganlewis.com/pubs/2024/07/singapore-expands-its-ai-governance-approach-to-include-generative-ai" },
+            { t: "Privacy World - Singapore publishes generative AI model governance framework", u: "https://www.privacyworld.blog/2024/05/singapore-publishes-generative-ai-model-governance-framework/" },
+          ],
+        },
+        {
+          topic: "Governance",
+          date: "2026-01-22",
+          text: "On 22 January 2026, at the World Economic Forum in Davos, Singapore launched a Model AI Governance Framework for Agentic AI. It is voluntary best-practice guidance that keeps accountability with humans and asks organisations to bound agents' risk before deployment.",
+          level: "verified",
+          sources: [
+            { t: "CMS - Singapore Issues Global First Agentic AI Model Governance Framework at Davos", u: "https://cms.law/en/sgp/legal-updates/singapore-issues-global-first-agentic-ai-model-governance-framework-at-davos" },
+            { t: "Singapore Law Watch (Business Times) - framework to rein in risks of autonomous AI agents", u: "https://www.singaporelawwatch.sg/Headlines/singapore-unveils-new-framework-to-rein-in-risks-of-autonomous-ai-agents" },
+            { t: "Allen & Gledhill - Model AI Governance Framework for Agentic AI", u: "https://www.allenandgledhill.com/sg/publication/articles/32314/launches-new-model-ai-governance-framework-for-agentic-ai" },
+          ],
+        },
+        {
+          topic: "Funding",
+          date: "2026-01-24",
+          text: "Singapore is putting more than S$1 billion into public AI research and talent from 2025 to 2030 under the National AI R&D (NAIRD) Plan, announced at Singapore AI Research Week. An earlier tranche of over S$500 million covered 2019–2023.",
+          level: "verified",
+          sources: [
+            { t: "MDDI - Singapore invests over S$1 billion in National AI R&D Plan", u: "https://www.mddi.gov.sg/newsroom/singapore-invests-over-s-1-billion-in-national-ai-research-and-development-plan-to-strengthen-ai-research-capabilities-and-our-position-as-global-ai-hub/" },
+            { t: "JTC (Straits Times) - Singapore to invest $1 billion over 5 years", u: "https://www.jtc.gov.sg/about-jtc/news-and-stories/feature-stories/singapore-to-invest-$1-billion-over-5-years-to-boost-ai-public-research" },
+            { t: "Business Today - Singapore to invest more than S$1 billion in AI R&D", u: "https://www.businesstoday.com.my/2026/01/24/singapore-to-invest-more-than-s1-billion-in-ai-research-and-development/" },
+          ],
+        },
+        {
+          topic: "Institutions",
+          date: "2026-02-12",
+          text: "Budget 2026 created a National AI Council chaired by Prime Minister Lawrence Wong. It oversees four National AI Missions: advanced manufacturing, financial services, connectivity and healthcare.",
+          level: "verified",
+          sources: [
+            { t: "MDDI - Update to Singapore's National AI Strategy (factsheet)", u: "https://www.mddi.gov.sg/newsroom/update-to-singapore-s-national-ai-strategy--refreshed-priorities-to-harness-ai-for-the-public-good-factsheet/" },
+            { t: "TechNode Global - Singapore to set up National AI Council (12 Feb 2026)", u: "https://technode.global/2026/02/12/singapore-to-set-up-national-ai-council-budget-2026/" },
+            { t: "Crowdfund Insider - National AI Council chaired by PM Wong", u: "https://www.crowdfundinsider.com/2026/02/261984-singapore-to-form-national-ai-council-chaired-by-pm-wong/" },
+          ],
+        },
+        {
+          topic: "Incentives",
+          date: "2026-02-12",
+          text: "Budget 2026 added AI spending to the Enterprise Innovation Scheme: a 400% tax deduction on up to S$50,000 of qualifying AI spending per Year of Assessment, for YA 2027 and YA 2028. Unlike the scheme's other categories, AI spending cannot be converted to a cash payout.",
+          level: "verified",
+          sources: [
+            { t: "Ministry of Finance - Budget 2026 Annex C-1 (PDF)", u: "https://isomer-user-content.by.gov.sg/137/e8e0cd35-9515-4fbc-966a-5d21ebc3fd6a/fy2026_annexc1.pdf" },
+            { t: "Mondaq - Decoding Singapore Budget 2026: key tax measures", u: "https://www.mondaq.com/tax-authorities/1747428/decoding-singapore-budget-2026-spotlight-on-key-tax-measures" },
+            { t: "Vistra - Singapore Budget 2026 round-up", u: "https://www.vistra.com/insights/singapore-budget-2026-round-key-measures" },
+          ],
+        },
+        {
+          topic: "Strategy",
+          date: "2026-05-20",
+          text: "On 20 May 2026, at the ATxSummit, Minister Josephine Teo announced a refresh of NAIS. It sets 10 refreshed priorities across the strategy's enablers, organised around the four AI Missions.",
+          level: "corroborated",
+          sources: [
+            { t: "MDDI - Update to Singapore's National AI Strategy (factsheet)", u: "https://www.mddi.gov.sg/newsroom/update-to-singapore-s-national-ai-strategy--refreshed-priorities-to-harness-ai-for-the-public-good-factsheet/" },
+            { t: "MDDI - Opening address by Minister Josephine Teo at ATxSummit 2026", u: "https://www.mddi.gov.sg/newsroom/opening-address-by-minister-josephine-teo-at-atxsummit-2026/" },
+            { t: "EDB - Singapore AI round-up, April-June 2026", u: "https://www.edb.gov.sg/en/business-insights/insights/the-latest-in-singapores-ai-scene-that-businesses-should-know-a-round-up-from-april-to-june-2026.html" },
+          ],
+          note: "The exact 20 May date appears only on MDDI pages. EDB confirms the refresh and the four missions but gives no date.",
+        },
+      ],
+      news: [
+        {
+          date: "2026-09-30",
+          title: "Singapore records its first AI-linked personal data breach",
+          summary:
+            "Food retailer Bee Cheng Hiang used a generative-AI-written script to send bulk emails. The script left every address visible in each batch, exposing about 95,000 members' emails. The PDPC accepted a voluntary undertaking and classed the incident as human error, not an AI malfunction.",
+          level: "verified",
+          sources: [
+            { t: "Bloomberg - Singapore Records First AI-Linked Data Breach (30 Sep 2026)", u: "https://www.bloomberg.com/news/articles/2026-09-30/singapore-reports-first-data-breach-linked-to-ai-use-st" },
+            { t: "Mothership - Bee Cheng Hiang members data breach", u: "https://mothership.sg/2026/10/bee-cheng-hiang-members-data-breach-ai/" },
+            { t: "OECD.AI Incidents Monitor entry", u: "https://oecd.ai/en/incidents/2026-09-30-1509" },
+          ],
+          note: "Reported totals range from \"more than 95,000\" to 95,364.",
+        },
+        {
+          date: "2026-09-22",
+          title: "MAS: AI-assisted cyber risk is now banks' top worry",
+          summary:
+            "In the Monetary Authority of Singapore's Financial Stability Review, AI-assisted cyber and operational risk overtook geopolitics as the concern financial institutions cite most often. About 80% of chief risk officers named it, against 77% for geopolitical risk.",
+          level: "single",
+          sources: [
+            { t: "Bloomberg - AI, Cyber Emerge as Top Singapore Financials Concerns, MAS Says", u: "https://www.bloomberg.com/news/articles/2026-09-22/ai-cyber-emerge-as-top-singapore-financials-concerns-mas-says" },
+          ],
+        },
+        {
+          date: "2026-09-22",
+          title: "Singapore stays #2 worldwide for AI use (64.3%)",
+          summary:
+            "Microsoft's Q2 2026 AI Diffusion data puts generative-AI use among working-age Singaporeans at 64.3%, second only to the UAE.",
+          level: "verified",
+          sources: [
+            { t: "Microsoft Source EMEA (22 Sep 2026)", u: "https://news.microsoft.com/source/emea/2026/09/new-microsoft-data-ai-adoption-continues-to-rise-switzerland-remains-well-above-the-global-average/" },
+            { t: "MediaPost - Microsoft Tracks AI Adoption Rates", u: "https://www.mediapost.com/publications/article/418164/microsoft-tracks-ai-adoption-rates-us-ranking-s.html" },
+            { t: "Middle East AI News - UAE retains top world AI use ranking", u: "https://www.middleeastainews.com/p/uae-retains-top-world-ai-use-ranking" },
+          ],
+        },
+        {
+          date: "2026-05-20",
+          title: "NAIS refreshed around four national AI Missions",
+          summary: "Minister Josephine Teo announced 10 refreshed priorities at ATxSummit 2026, and the 'Placemaking' enabler was renamed 'Ecosystem Integration'.",
+          level: "corroborated",
+          sources: [
+            { t: "MDDI factsheet", u: "https://www.mddi.gov.sg/newsroom/update-to-singapore-s-national-ai-strategy--refreshed-priorities-to-harness-ai-for-the-public-good-factsheet/" },
+            { t: "EDB round-up, Apr-Jun 2026", u: "https://www.edb.gov.sg/en/business-insights/insights/the-latest-in-singapores-ai-scene-that-businesses-should-know-a-round-up-from-april-to-june-2026.html" },
+          ],
+        },
+        {
+          date: "2026-02-12",
+          title: "Budget 2026: PM to chair National AI Council; 400% AI tax deduction",
+          summary: "Budget 2026 created the National AI Council and four AI Missions, added an AI category to the Enterprise Innovation Scheme, and launched a 'Champions of AI' programme for firms pursuing end-to-end AI transformation.",
+          level: "verified",
+          sources: [
+            { t: "TechNode Global", u: "https://technode.global/2026/02/12/singapore-to-set-up-national-ai-council-budget-2026/" },
+            { t: "CNBC - Singapore launches AI support measures in 2026 Budget", u: "https://www.cnbc.com/2026/02/12/singapore-2026-budget-ai-measures-ai-support-workers-companies.html" },
+            { t: "MOF Budget 2026 Annex C-1", u: "https://isomer-user-content.by.gov.sg/137/e8e0cd35-9515-4fbc-966a-5d21ebc3fd6a/fy2026_annexc1.pdf" },
+          ],
+        },
+        {
+          date: "2026-01-22",
+          title: "World-first governance framework for agentic AI launched at Davos",
+          summary: "IMDA's framework covers bounding agent risk, human accountability, technical controls and transparency to end users.",
+          level: "verified",
+          sources: [
+            { t: "CMS", u: "https://cms.law/en/sgp/legal-updates/singapore-issues-global-first-agentic-ai-model-governance-framework-at-davos" },
+            { t: "Singapore Law Watch", u: "https://www.singaporelawwatch.sg/Headlines/singapore-unveils-new-framework-to-rein-in-risks-of-autonomous-ai-agents" },
+            { t: "Allen & Gledhill", u: "https://www.allenandgledhill.com/sg/publication/articles/32314/launches-new-model-ai-governance-framework-for-agentic-ai" },
+          ],
+        },
+      ],
+      watch: [
+        "Whether the 15,000 AI-practitioner target (set in Dec 2023, 3–5 year horizon) is met. No official count has been published.",
+        "How MAS and the PDPC respond to AI-linked incidents, now that the first breach is on record.",
+      ],
+    },
+
+    // ------------------------------------------------------------------ ESTONIA
+    {
+      id: "ee",
+      glance: { firstStrategy: "2019", latestStrategy: "2026 (Eesti.ai programme)", newestBody: "Eesti.ai council", newestBodyDate: "2026-01-27" },
+      name: "Estonia",
+      flag: "🇪🇪",
+      region: "Northern Europe (EU)",
+      stance: "Digital-state pioneer pushing AI adoption in schools and government; EU AI Act applies",
+      summary:
+        "Estonia treats AI as the next phase of its e-government model. It opened with a 2019 'Kratt' plan for public-sector AI, then launched AI Leap, among the first national programmes to put AI tools in every upper-secondary school. In 2026 the Prime Minister's Eesti.ai programme followed, aimed at raising productivity, and it includes a plan for digital identities for AI agents. As an EU member, Estonia is bound by the EU AI Act.",
+      stats: {
+        population: { v: 1366475, year: 2025 },
+        gdpPerCapita: { v: 34418, year: 2025 },
+        internet: { v: 92.2, year: 2024 },
+      },
+      oxford: { rank: 21, scores: [96.0, 54.29, 90.0, 99.63, 46.01, 64.38] },
+      msAdoption: null,
+      facts: [
+        {
+          topic: "Strategy",
+          date: "2019-07-25",
+          text: "Estonia's Cabinet adopted its first national AI strategy, the 'Kratt' plan (Kratikava), on 25 July 2019. It committed at least €10 million to implementation over 2019–2021.",
+          level: "verified",
+          sources: [
+            { t: "OECD.AI Policy Navigator - Kratikava 2019-2021", u: "https://oecd.ai/en/dashboards/policy-initiatives/http:%2F%2Faipo.oecd.org%2F2021-data-policyInitiatives-24257" },
+            { t: "Interesting Engineering - KrattAI: Estonia's National AI Strategy", u: "https://interestingengineering.com/innovation/krattai-estonias-national-artificial-intelligence-strategy" },
+            { t: "Regulations.ai - Estonia National AI Strategy (2019–2021)", u: "https://regulations.ai/regulations/RAI-EE-NA-ENAISXX-2019" },
+          ],
+          note: "'Kratt' is a creature from Estonian folklore, and the government uses the word for narrow AI applications.",
+        },
+        {
+          topic: "Public services",
+          date: "2019+",
+          text: "The Kratt programme produced Bürokratt, an AI-based virtual assistant that gives citizens access to government services across channels and devices.",
+          level: "corroborated",
+          sources: [
+            { t: "The Mandarin - Estonia's AI vision", u: "https://www.themandarin.com.au/239853-estonias-ai-vision-building-a-data-driven-society-and-government" },
+            { t: "MindTitan - AI use cases for government: how Estonia is leading", u: "https://mindtitan.com/resources/industry-use-cases/ai-use-cases-in-government/" },
+          ],
+        },
+        {
+          topic: "Education",
+          date: "2025-02-25",
+          text: "On 25 February 2025 Estonia announced AI Leap (TI-Hüpe), a national programme to give students and teachers free access to leading AI tools. President Alar Karis initiated it, and it is framed as the successor to the 1990s Tiger Leap programme that brought computers and the internet into schools.",
+          level: "verified",
+          sources: [
+            { t: "Ministry of Education and Research (hm.ee) - AI Leap announcement", u: "https://hm.ee/en/news/estonia-announces-groundbreaking-national-initiative-ai-leap-programme-bring-ai-tools-all" },
+            { t: "Euronews - Estonia announces AI initiative with OpenAI (25 Feb 2025)", u: "https://www.euronews.com/2025/02/25/estonia-announces-new-ai-initiative-with-openai-to-roll-out-chatbots-in-schools" },
+            { t: "e-Estonia - AI Leap programme to bring AI tools to all schools", u: "https://e-estonia.com/estonia-announces-a-groundbreaking-national-initiative-ai-leap-programme-to-bring-ai-tools-to-all-schools" },
+          ],
+        },
+        {
+          topic: "Education",
+          date: "2025-09-01",
+          text: "AI Leap began on 1 September 2025 with 20,000 students in grades 10–11 and 3,000 teachers. The government opened negotiations with OpenAI and Anthropic, and the student app is built on ChatGPT Edu.",
+          level: "verified",
+          sources: [
+            { t: "hm.ee - AI Leap announcement", u: "https://hm.ee/en/news/estonia-announces-groundbreaking-national-initiative-ai-leap-programme-bring-ai-tools-all" },
+            { t: "GovInsider - Estonia to roll out free AI tools for school students", u: "https://govinsider.asia/intl-en/article/estonia-to-roll-out-free-ai-tools-for-school-students-later-this-year" },
+            { t: "Estonian World - Estonia to give all schools free access to AI tools", u: "https://estonianworld.com/knowledge/estonia-to-give-all-schools-free-access-to-ai-tools/" },
+            { t: "GovInsider - Estonia exercises sovereignty in its ministry-led AI movement (ChatGPT Edu)", u: "https://govinsider.asia/intl-en/article/estonia-exercises-sovereignty-in-its-moe-led-ai-movement-for-schools" },
+          ],
+          note: "No public final contract detailing Anthropic's role was found. Teachers received paid ChatGPT or Gemini in August 2025.",
+        },
+        {
+          topic: "Education",
+          date: "2026-01",
+          text: "Students got the AI Leap learning app in late January 2026, months after teachers. The delay came because rules protecting minors' data had to be amended first, which happened in December 2025.",
+          level: "verified",
+          sources: [
+            { t: "TI-Hüpe - AI Leap's first year", u: "https://tihupe.ee/en/3385/" },
+            { t: "Apolitical - AI Leap case study", u: "https://apolitical.co/en/navigator/case-studies/ai-leap-estonia-s-nationwide-programme-to-rethink-education-in-the-age-of-ai" },
+            { t: "ERR News - students and the law delay the app", u: "https://news.err.ee/1609780941/students-may-not-be-interested-in-using-ai-developed-with-state-participation" },
+          ],
+        },
+        {
+          topic: "Education",
+          date: "2026-06-09",
+          text: "First-year results: 154 of Estonia's 156 upper-secondary schools took part, with about 5,000 teachers and 20,000 students. 94% of participating teachers used AI in their work and 63% redesigned their teaching. More than 12,000 students used the learning app, about 4,000 of them weekly.",
+          level: "corroborated",
+          sources: [
+            { t: "TI-Hüpe - AI Leap's first year (9 Jun 2026)", u: "https://tihupe.ee/en/3385/" },
+            { t: "Tom D'Accord (Substack) - AI Leap one year later", u: "https://tomdaccordai.substack.com/p/estonias-ai-leap-one-year-later-widespread" },
+          ],
+          note: "Teacher counts vary by source (4,700–5,000), and one analysis gives 95.9% teacher use instead of 94%. These are programme-reported numbers. Learning outcomes are still being studied by the University of Tartu with Stanford and OpenAI (~9,000 students), with analysis starting summer 2026.",
+        },
+        {
+          topic: "Economy",
+          date: "2026-01-27",
+          text: "Prime Minister Kristen Michal launched Eesti.ai on 27 January 2026. Its stated goals are to roughly double the value of Estonians' work by 2035 and to grow GDP by 25% in five years and 50% in ten. Bolt CEO Markus Villig chairs its council.",
+          level: "verified",
+          sources: [
+            { t: "Government Office (Riigikantselei) - Eesti.ai initiative", u: "https://riigikantselei.ee/en/supporting-government-and-prime-minister/eestiai-initiative" },
+            { t: "Valitsus.ee - Government launched the Eesti.ai initiative", u: "https://www.valitsus.ee/en/news/government-launched-eestiai-initiative-together-leading-entrepreneurs" },
+            { t: "e-Estonia - Eesti.ai launch", u: "https://e-estonia.com/estonia-ai-initiative-launch-eesti-ai/" },
+          ],
+          note: "These are government targets, not outcomes. Eesti.ai's team lead told ERR that 2026 is the launch phase and too early to measure impact.",
+        },
+        {
+          topic: "Economy",
+          date: "2026-04-08",
+          text: "On 8 April 2026 the Eesti.ai council approved 15 high-impact AI projects. Each must show measurable gains in time, cost or quality.",
+          level: "corroborated",
+          sources: [
+            { t: "Government Office - Eesti.ai initiative", u: "https://riigikantselei.ee/en/supporting-government-and-prime-minister/eestiai-initiative" },
+            { t: "Government Office - Michal: Estonia aims to become a world leader in the use of AI", u: "https://www.riigikantselei.ee/en/news/michal-estonia-aims-become-world-leader-use-artificial-intelligence" },
+          ],
+        },
+        {
+          topic: "Digital identity",
+          date: "2026-06-17",
+          text: "On 17 June 2026 the Eesti.ai advisory board agreed that Estonia will create digital identities for AI agents ('AI ID codes'), so that agents can act for people or companies within set limits in a verifiable, auditable way.",
+          level: "corroborated",
+          sources: [
+            { t: "Valitsus.ee - PM Michal: Estonia to become first country to create digital identities for AI agents", u: "https://www.valitsus.ee/en/news/prime-minister-michal-estonia-become-first-country-create-digital-identities-ai-agents" },
+            { t: "Global Government Forum - Estonia set to be first country to create digital identities for AI agents", u: "https://www.globalgovernmentforum.com/estonia-set-to-be-first-country-to-create-digital-identities-for-ai-agents/" },
+          ],
+        },
+        {
+          topic: "Skills",
+          date: "2026",
+          text: "The Government Office opened a €5 million procurement for AI-skills training, aiming to reach 100,000 working-age residents across 2026–2027.",
+          level: "corroborated",
+          sources: [
+            { t: "ERR News - Estonia launches €5 million Eesti.ai training procurement", u: "https://news.err.ee/1610088193/estonia-launches-5-million-eesti-ai-training-procurement" },
+            { t: "IES Lublin - Eesti.ai: the next stage in Estonia's digital transformation", u: "https://ies.lublin.pl/en/comments/eesti-ai-the-next-stage-in-estonias-digital-transformation/" },
+          ],
+        },
+        {
+          topic: "Regulation",
+          date: "2026",
+          text: "As an EU member, Estonia is bound by the EU AI Act. As of mid-2026, trackers report that its national market-surveillance authority had not yet been formally designated. The Consumer Protection and Technical Regulatory Authority (TTJA) is the expected candidate.",
+          level: "corroborated",
+          sources: [
+            { t: "AI Policy Tracker - Estonia", u: "https://aipolicytracker.org/jurisdictions/estonia" },
+            { t: "Praxikon - AI Act enforcement in Estonia", u: "https://www.praxikon.com/en/enforcement/estonia" },
+          ],
+          note: "Both sources are secondary compliance trackers, and the status may have changed. Check TTJA and the Ministry of Justice and Digital Affairs.",
+        },
+      ],
+      news: [
+        {
+          date: "2026-06-17",
+          title: "Estonia moves to give AI agents official digital IDs",
+          summary: "The Eesti.ai advisory board backed 'AI ID codes'. The PM said it must be clear 'who is acting on whose behalf with what rights'. An AI-literacy pilot ran 35 workshops in six cities for about 1,200 people.",
+          level: "corroborated",
+          sources: [
+            { t: "Valitsus.ee (17 Jun 2026)", u: "https://www.valitsus.ee/en/news/prime-minister-michal-estonia-become-first-country-create-digital-identities-ai-agents" },
+            { t: "Global Government Forum", u: "https://www.globalgovernmentforum.com/estonia-set-to-be-first-country-to-create-digital-identities-for-ai-agents/" },
+          ],
+        },
+        {
+          date: "2026-06-09",
+          title: "AI Leap year one: wide teacher uptake, learning impact still unknown",
+          summary: "154 of 156 upper-secondary schools took part, and 94% of teachers used AI. The programme expands to the whole upper-secondary level from fall 2026, and the ministry is considering vocational schools.",
+          level: "corroborated",
+          sources: [
+            { t: "TI-Hüpe", u: "https://tihupe.ee/en/3385/" },
+            { t: "Substack analysis", u: "https://tomdaccordai.substack.com/p/estonias-ai-leap-one-year-later-widespread" },
+          ],
+          note: "The original 2025 plan said vocational schools would join in September 2026. The June 2026 update says this is only 'being considered'.",
+        },
+        {
+          date: "2026-04-08",
+          title: "Eesti.ai council approves 15 flagship AI projects",
+          summary: "The projects aim to speed up AI adoption, and each must show measurable time, cost or quality gains.",
+          level: "corroborated",
+          sources: [
+            { t: "Government Office", u: "https://riigikantselei.ee/en/supporting-government-and-prime-minister/eestiai-initiative" },
+            { t: "Government Office news", u: "https://www.riigikantselei.ee/en/news/michal-estonia-aims-become-world-leader-use-artificial-intelligence" },
+          ],
+        },
+        {
+          date: "2026-01-27",
+          title: "PM Michal launches Eesti.ai with leading entrepreneurs",
+          summary: "A whole-of-economy AI adoption drive with a target of €20 billion in extra growth by 2035.",
+          level: "verified",
+          sources: [
+            { t: "Valitsus.ee", u: "https://www.valitsus.ee/en/news/government-launched-eestiai-initiative-together-leading-entrepreneurs" },
+            { t: "e-Estonia", u: "https://e-estonia.com/estonia-ai-initiative-launch-eesti-ai/" },
+            { t: "Invest in Estonia", u: "https://investinestonia.com/estonia-launches-bold-ai-initiative-to-double-productivity/" },
+          ],
+        },
+      ],
+      watch: [
+        "Results from the University of Tartu study on whether AI Leap improves student learning (analysis from summer 2026).",
+        "Formal designation of Estonia's EU AI Act market-surveillance authority.",
+      ],
+    },
+
+    // ------------------------------------------------------------------ UAE
+    {
+      id: "ae",
+      glance: { firstStrategy: "2017", latestStrategy: "2019 (National AI Strategy 2031)", newestBody: "AI & Data Authority", newestBodyDate: "2026-06-14" },
+      name: "United Arab Emirates",
+      flag: "🇦🇪",
+      region: "Middle East / Gulf",
+      stance: "Top-down national programme with world-leading usage and massive compute build-out",
+      summary:
+        "The UAE appointed the world's first AI minister in 2017. It pairs a 2031 national strategy with very large investment in compute (Stargate UAE) and US tech partnerships. It now leads the world in everyday AI use: Microsoft estimates 73% of working-age residents use generative AI. Governance is centralised: a 2024 ethics charter, AI-assisted lawmaking, and a new federal AI & Data Authority in 2026.",
+      stats: {
+        population: { v: 11513149, year: 2025 },
+        gdpPerCapita: { v: 50274, year: 2024 },
+        internet: { v: 100, year: 2024 },
+      },
+      oxford: { rank: 19, scores: [73.0, 73.77, 72.5, 97.27, 57.34, 43.15] },
+      msAdoption: { h1_2025: 59.4, h2_2025: 64.0, q1_2026: 70.1, q2_2026: 73.3, rankLatest: 1 },
+      facts: [
+        {
+          topic: "Institutions",
+          date: "2017-10-19",
+          text: "In October 2017 the UAE named Omar Sultan Al Olama, then 27, Minister of State for Artificial Intelligence. He was the first minister in the world with that title.",
+          level: "verified",
+          sources: [
+            { t: "Jerusalem Post - Minister for AI appointed in the UAE", u: "https://www.jpost.com/blogs/middleeasternet/minister-for-ai-appointed-in-the-uae-513517" },
+            { t: "Peter Fisk - UAE becomes first nation to appoint a Minister for AI", u: "https://www.peterfisk.com/?p=9933" },
+            { t: "Khaleej Times - (notes Al Olama became the world's first AI minister in 2017)", u: "https://www.khaleejtimes.com/uae/uae-authority-ai-data-digital-government" },
+          ],
+        },
+        {
+          topic: "Strategy",
+          date: "2019-04",
+          text: "The UAE launched its AI strategy in October 2017 under the Centennial 2071 vision. In April 2019 the Cabinet adopted the detailed National Artificial Intelligence Strategy 2031, an eight-objective plan to make the UAE a global AI leader by 2031.",
+          level: "verified",
+          sources: [
+            { t: "The National - UAE Cabinet approves national AI strategy (21 Apr 2019)", u: "https://thenational-the-national-prod.cdn.arcpublishing.com/uae/government/uae-cabinet-approves-national-artificial-intelligence-strategy-1.851964" },
+            { t: "UAE AI Office (ai.gov.ae) - UAE National Strategy for AI", u: "https://ai.gov.ae/?p=2362" },
+            { t: "Access Partnership - The UAE's bid to champion the AI revolution", u: "https://accesspartnership.com/leading-by-example-the-uaes-bid-to-champion-the-ai-revolution/" },
+          ],
+          note: "Sources sometimes conflate the October 2017 launch with the April 2019 Cabinet adoption of the full 2031 document. Both dates are correct for different steps.",
+        },
+        {
+          topic: "Investment",
+          date: "2024-04-16",
+          text: "On 16 April 2024 Microsoft announced a $1.5 billion minority investment in Abu Dhabi's G42, and Microsoft President Brad Smith joined G42's board. Both governments were consulted, and the deal included an intergovernmental assurance agreement on AI safety and security.",
+          level: "verified",
+          sources: [
+            { t: "WAM - Microsoft invests $1.5 billion in Abu Dhabi's G42", u: "https://wam.ae/en/article/13v9pmq-microsoft-invests-15-billion-abu-dhabi%E2%80%99s-g42" },
+            { t: "Kyodo / PR Wire release", u: "https://kyodonewsprwire.jp/release/202404169534" },
+            { t: "BreakingNews.ie - Microsoft invests $1.5bn in UAE-based AI firm G42", u: "https://breakingnews.ie/business/microsoft-invests-1-2bn-in-uae-based-ai-firm-g42-1614166.html" },
+          ],
+        },
+        {
+          topic: "Governance",
+          date: "2024-07",
+          text: "In July 2024 the UAE issued its Charter for the Development and Use of Artificial Intelligence, which sets out 12 principles including safety, human oversight, transparency, data privacy and avoiding algorithmic bias.",
+          level: "verified",
+          sources: [
+            { t: "UAE Government portal - The UAE Charter for the Development and Use of AI", u: "https://u.ae/en/about-the-uae/strategies-initiatives-and-awards/policies/Ai/The-UAE-Charter-for-the-Development-and-Use-of-Artificial-Intelligence" },
+            { t: "Pinsent Masons Out-Law - UAE launches AI charter", u: "https://www.pinsentmasons.com/out-law/news/uae-launches-ai-charter-with-focus-on-human-wellbeing" },
+            { t: "Securiti - UAE Charter for the Development and Use of AI", u: "https://securiti.ai/uae-charter-for-the-development-and-use-of-ai/" },
+          ],
+        },
+        {
+          topic: "Governance",
+          date: "2025-04-14",
+          text: "On 14 April 2025 the Cabinet approved a Regulatory Intelligence Office to run an AI system that maps federal and local laws against court rulings and services and proposes updates. Officials project it could make lawmaking up to 70% faster.",
+          level: "verified",
+          sources: [
+            { t: "UAE Cabinet - first integrated regulatory intelligence ecosystem", u: "https://uaecabinet.ae/en/news/uae-cabinet-chaired-by-mohammed-bin-rashid-approves-launch-of-first-integrated-regulatory-intelligence-ecosystem-in-uae-government" },
+            { t: "WAM - UAE Cabinet approves", u: "https://www.wam.ae/en/article/bj6abdw-uaecabinet-chaired-mohammed-bin-rashid-approves" },
+            { t: "Akin Gump - UAE set to use AI to write laws", u: "https://www.akingump.com/en/insights/ai-law-and-regulation-tracker/uae-set-to-use-ai-to-write-laws" },
+          ],
+          note: "The 70% figure is an official projection, not a measured result. No law drafted with the system has been publicly identified.",
+        },
+        {
+          topic: "Education",
+          date: "2025-05-04",
+          text: "AI became an official subject in UAE public schools from kindergarten to Grade 12, starting in the 2025–26 academic year. It was built with MBZUAI, Presight and AI71 and folded into the existing computing course.",
+          level: "verified",
+          sources: [
+            { t: "WAM - Ministry of Education introduces AI curriculum in public schools", u: "https://www.wam.ae/en/article/bji6z2n-ministry-education-introduces-curriculum-public" },
+            { t: "Gulf News - UAE schools to introduce AI curriculum in new academic year", u: "https://gulfnews.com/uae/education/uae-schools-to-introduce-ai-curriculum-in-new-academic-year-1.500242831" },
+            { t: "Education Middle East - UAE public schools to teach AI from KG to Grade 12", u: "https://educationmiddleeast.com/?p=10504" },
+          ],
+          note: "Student-reach estimates conflict, from about 300,000 to nearly 1 million.",
+        },
+        {
+          topic: "Compute",
+          date: "2025-05",
+          text: "Stargate UAE was announced in May 2025: a 1-gigawatt AI cluster inside a planned 5-gigawatt UAE–US AI Campus in Abu Dhabi. G42 is building it, OpenAI and Oracle will operate it, and NVIDIA, Cisco and SoftBank are partners. The first 200 MW is due in 2026.",
+          level: "verified",
+          sources: [
+            { t: "TechRepublic - OpenAI, UAE Launch Massive Stargate AI Data Center Project", u: "https://www.techrepublic.com/article/news-stargate-uae-openai-ai-data-center/" },
+            { t: "Gulf News - First phase of 200MW to complete by 2026", u: "https://gulfnews.com/business/markets/stargate-uae-first-phase-of-200mw-to-complete-by-2026-1.500310364" },
+            { t: "The Tech Capital - First 200MW will come online in 2026, says G42 chief", u: "https://thetechcapital.com/first-200mw-of-stargate-uae-will-come-online-in-2026-says-g42-chief/" },
+            { t: "Zawya - First 200 MW from UAE's Stargate AI campus to come online next year", u: "https://www.zawya.com/en/projects/construction/first-200-mw-from-uaes-stargate-ai-campus-to-come-online-next-year-vju9g7kf" },
+          ],
+          note: "As of this research date, no authoritative go-live announcement for the first 200 MW was found (the latest stated target was Q3 2026). Chip-count estimates in the press conflict widely.",
+        },
+        {
+          topic: "Institutions",
+          date: "2026-06-14",
+          text: "On 14 June 2026 Sheikh Mohammed bin Rashid approved a federal Artificial Intelligence and Data Authority, chaired by Omar Al Olama. It merges the AI Office, the UAE Data Office and the TDRA's digital-government arm into one body that reports to the Cabinet.",
+          level: "verified",
+          sources: [
+            { t: "WAM - Mohammed bin Rashid approves establishing AI and Data Authority", u: "https://www.wam.ae/en/article/c0pz7ku-mohammed-bin-rashid-approves-establishing" },
+            { t: "UAE Cabinet - announcement", u: "https://uaecabinet.ae/en/news/mohammed-bin-rashid-approves-establishing-artificial-intelligence-and-data-authority" },
+            { t: "Morgan Lewis - UAE establishes federal authority for AI and data", u: "https://www.morganlewis.com/pubs/2026/06/uae-establishes-federal-authority-for-artificial-intelligence-and-data" },
+            { t: "Global Government Forum", u: "https://www.globalgovernmentforum.com/uae-creates-dedicated-artificial-intelligence-and-data-authority-to-build-government-of-the-future/" },
+          ],
+          note: "Khaleej Times dates it 15 June. Official releases say 14 June. The name appears as both 'AI and Data Authority' and 'Federal Authority for AI and Data'.",
+        },
+      ],
+      news: [
+        {
+          date: "2026-09-22",
+          title: "UAE extends world lead in AI use to 73.3%",
+          summary: "Microsoft's Q2 2026 figures put working-age generative-AI use in the UAE at 73.3%, up from 70.1% in Q1. The global figure is 18.8%.",
+          level: "verified",
+          sources: [
+            { t: "Microsoft Source EMEA", u: "https://news.microsoft.com/source/emea/2026/09/new-microsoft-data-ai-adoption-continues-to-rise-switzerland-remains-well-above-the-global-average/" },
+            { t: "The National - UAE pulls ahead in global ranking on AI adoption", u: "https://www.thenationalnews.com/news/uae/2026/09/25/uae-pulls-ahead-in-global-ranking-on-ai-adoption/" },
+            { t: "Middle East AI News", u: "https://www.middleeastainews.com/p/uae-retains-top-world-ai-use-ranking" },
+          ],
+        },
+        {
+          date: "2026-06-14",
+          title: "New federal AI & Data Authority created, chaired by Omar Al Olama",
+          summary: "AI strategy, the national data office and digital government are combined under one Cabinet-level body built around 'agentic AI' government.",
+          level: "verified",
+          sources: [
+            { t: "WAM", u: "https://www.wam.ae/en/article/c0pz7ku-mohammed-bin-rashid-approves-establishing" },
+            { t: "Morgan Lewis", u: "https://www.morganlewis.com/pubs/2026/06/uae-establishes-federal-authority-for-artificial-intelligence-and-data" },
+            { t: "Khaleej Times", u: "https://www.khaleejtimes.com/uae/uae-authority-ai-data-digital-government" },
+          ],
+        },
+        {
+          date: "2026-05-08",
+          title: "UAE becomes first country above 70% AI usage",
+          summary: "Microsoft's Q1 2026 data put the UAE at 70.1%, with Singapore second at 63.4%.",
+          level: "verified",
+          sources: [
+            { t: "WAM", u: "https://www.wam.ae/en/article/c03y6ol-microsoft-uae-ranks-first-globally-adoption" },
+            { t: "Mappr", u: "https://www.mappr.co/ai-adoption-by-country/" },
+            { t: "Middle East AI News", u: "https://www.middleeastainews.com/p/uae-leads-the-world-in-ai-adoption" },
+          ],
+        },
+        {
+          date: "2025-10",
+          title: "Stargate UAE: first 200 MW targeted for 2026",
+          summary: "G42 told Reuters that 200 MW 'should come online next year'. Khazna later gave Q3 2026 as the target, with more than 5,000 workers on site.",
+          level: "verified",
+          sources: [
+            { t: "Zawya / Reuters", u: "https://www.zawya.com/en/projects/construction/first-200-mw-from-uaes-stargate-ai-campus-to-come-online-next-year-vju9g7kf" },
+            { t: "The National", u: "https://www.thenationalnews.com/business/2025/10/16/g42-unit-khazna-targets-full-build-out-of-1gw-stargate-uae-project-in-three-years/" },
+            { t: "Gulf News", u: "https://gulfnews.com/business/markets/stargate-uae-first-phase-of-200mw-to-complete-by-2026-1.500310364" },
+          ],
+        },
+      ],
+      watch: [
+        "Confirmation that Stargate UAE's first 200 MW is live (target was Q3 2026).",
+        "US export-control approvals for advanced NVIDIA chips to G42, flagged as uncertain in mid-2025 reporting.",
+      ],
+    },
+
+    // ------------------------------------------------------------------ RWANDA
+    {
+      id: "rw",
+      glance: { firstStrategy: "2023", latestStrategy: "2023", newestBody: "National AI Agency", newestBodyDate: "2026-06-08" },
+      name: "Rwanda",
+      flag: "🇷🇼",
+      region: "East Africa",
+      stance: "Policy-first African hub: early national policy, convening power, donor & lab partnerships",
+      summary:
+        "Rwanda was among the first African countries with a formal national AI policy (2023). It has made itself a convening hub for the continent: it hosted the 2025 Global AI Summit on Africa and the Africa Declaration on AI. Partnerships with the Gates Foundation and Anthropic fund much of the work. Readiness scores are moderate and AI use remains low (about 6% of working-age people), so 2026's new national AI agency is mostly about execution.",
+      stats: {
+        population: { v: 14569341, year: 2025 },
+        gdpPerCapita: { v: 1124, year: 2025 },
+        internet: { v: 31.7, year: 2024 },
+      },
+      oxford: { rank: 74, scores: [73.0, 33.92, 78.75, 53.62, 29.36, 55.62] },
+      msAdoption: { h1_2025: 6.0, h2_2025: 6.3, q1_2026: null, q2_2026: null, rankLatest: null },
+      facts: [
+        {
+          topic: "Strategy",
+          date: "2023-04-20",
+          text: "Rwanda's Cabinet approved the National AI Policy on 20 April 2023. The Ministry of ICT and Innovation (MINICT) developed it with RURA, GIZ FAIR Forward, C4IR Rwanda and The Future Society.",
+          level: "verified",
+          sources: [
+            { t: "Access Partnership - Rwandan government approves National AI Policy", u: "https://accesspartnership.com/access-alert-rwandan-government-approves-national-ai-policy" },
+            { t: "Regulations.ai - Rwanda National AI Policy", u: "https://regulations.ai/regulations/RAI-RW-NA-NATARIN-2023" },
+            { t: "KT Press - Cabinet approves new AI agency (recaps the April 2023 policy)", u: "https://www.ktpress.rw/2026/06/rwandas-ai-ambition-takes-shape-as-cabinet-approves-new-agency/" },
+            { t: "Digital Policy Alert - Adopted National AI Policy", u: "https://digitalpolicyalert.org/change/12087" },
+          ],
+        },
+        {
+          topic: "Strategy",
+          date: "2023",
+          text: "The policy's priorities include AI skills and literacy, compute infrastructure, a national data strategy, trustworthy public-sector adoption, private-sector growth, and research. ICT Minister Paula Ingabire has said 70% of the policy focuses on skills.",
+          level: "corroborated",
+          sources: [
+            { t: "Regulations.ai - Rwanda AI Regulation Overview", u: "https://regulations.ai/regulations/RAI-RW-NA-SUMMARY-2023" },
+            { t: "KT Press (Ingabire: 70% on skills)", u: "https://www.ktpress.rw/2026/06/rwandas-ai-ambition-takes-shape-as-cabinet-approves-new-agency/" },
+          ],
+        },
+        {
+          topic: "Diplomacy",
+          date: "2025-04-04",
+          text: "Kigali hosted the Global AI Summit on Africa on 3–4 April 2025. Delegates signed the Africa Declaration on AI, which proposes an Africa AI Council and a $60 billion Africa AI Fund drawing on public, private and philanthropic capital.",
+          level: "verified",
+          sources: [
+            { t: "AllAfrica - Kigali AI Summit Backs $60bn Fund", u: "https://allafrica.com/stories/202504140440.html" },
+            { t: "ITWeb Africa - Africa plans to establish a $60 billion AI fund", u: "https://itweb.africa/article/africa-plans-to-establish-a-60-billion-ai-fund/mQwkoq6Y3ezM3r9A" },
+            { t: "NextBillion - Historic declaration on AI launched at Global AI Summit on Africa", u: "https://nextbillion.net/news/historic-declaration-on-artificial-intelligence-launched-at-global-ai-summit-on-africa-to-drive-continental-governance-and-innovation" },
+            { t: "Oxford Insights 2025 report - notes Rwanda hosted the summit", u: "https://oxfordinsights.com/wp-content/uploads/2026/01/2025-Government-AI-Readiness-Index-Report_01_26.pdf" },
+          ],
+          note: "The fund is a proposal, not committed capital. Signatory counts vary by source (52 countries, 54 signatories, or all 55 AU states).",
+        },
+        {
+          topic: "Partnerships",
+          date: "2025-04-04",
+          text: "The Gates Foundation signed a three-year, $7.5 million MOU with Rwanda to set up the Rwanda AI Scaling Hub, hosted by C4IR Rwanda. It starts with health, agriculture and education.",
+          level: "verified",
+          sources: [
+            { t: "Devex - Gates Foundation to fund AI scaling hubs in Africa", u: "https://devex.com/news/gates-foundation-to-fund-ai-scaling-hubs-in-africa-109805" },
+            { t: "AfroTech - Gates Foundation donation to build Rwanda AI Scaling Hub", u: "https://afrotech.com/gates-foundation-donation-build-rwanda-ai-scaling-hub" },
+            { t: "The New Times - Projects funded by Bill Gates in Rwanda", u: "https://www.newtimes.co.rw/article/37606/news/rwanda/what-major-projects-are-funded-by-bill-gates-in-rwanda" },
+          ],
+          note: "One outlet reports a later increase to $17.5M. No Gates Foundation or ministry statement confirming it was found.",
+        },
+        {
+          topic: "Partnerships",
+          date: "2026-02-17",
+          text: "Rwanda and Anthropic signed a three-year MOU on 17 February 2026 covering health (including cervical-cancer elimination and malaria), education (2,000 Claude Pro licences for educators, from a fall 2025 agreement) and public-sector developer access.",
+          level: "verified",
+          sources: [
+            { t: "Anthropic - Anthropic and the Government of Rwanda MOU", u: "https://www.anthropic.com/news/anthropic-rwanda-mou" },
+            { t: "MINICT - Government of Rwanda and Anthropic strengthen partnership", u: "https://www.minict.gov.rw/news-detail/government-of-rwanda-and-anthropic-strengthen-partnership-to-advance-ai-for-health-education-and-the-public-sector" },
+            { t: "Citizen Digital - Rwanda signs deal with Anthropic", u: "https://citizen.digital/article/rwanda-signs-deal-with-anthropic-to-incorporate-ai-in-public-sector-systems-n377731" },
+          ],
+          note: "Anthropic (the maker of Claude, the model that compiled this dashboard) is a party to this agreement. The facts are taken from both parties' statements.",
+        },
+        {
+          topic: "Institutions",
+          date: "2026-06-08",
+          text: "On 8 June 2026 a Cabinet meeting chaired by President Paul Kagame approved a National Artificial Intelligence Agency. Its mandate is to speed up AI development, adoption, investment and governance, and it takes over from the AI office inside MINICT.",
+          level: "verified",
+          sources: [
+            { t: "KT Press - Rwanda's AI ambition takes shape as Cabinet approves new agency", u: "https://www.ktpress.rw/2026/06/rwandas-ai-ambition-takes-shape-as-cabinet-approves-new-agency/" },
+            { t: "iAfrica - Rwanda approves National AI Agency", u: "https://iafrica.com/rwanda-approves-national-ai-agency-becoming-first-african-country-with-dedicated-ai-institution/" },
+            { t: "Tech Review Africa - Rwanda moves to establish National AI Agency", u: "https://techreviewafrica.com/news/5859/rwanda-moves-to-establish-national-artificial-intelligence-agency-in-major-digital-economy-push" },
+          ],
+          note: "Its leadership, budget and legal establishment details had not been published in the sources reviewed.",
+        },
+      ],
+      news: [
+        {
+          date: "2026-07",
+          title: "Rwanda co-chairs Africa AI Council; convenes AI Partners Roundtable",
+          summary: "ICT Minister Paula Ingabire co-chaired the second Africa AI Council meeting under Smart Africa, which validated a two-year strategic plan. MINICT then convened partners around the new AI agency.",
+          level: "single",
+          sources: [
+            { t: "Tech Review Africa - Ingabire co-chairs Africa AI Council meeting", u: "https://techreviewafrica.com/news/6221/rwanda-ict-minister-paula-ingabire-co-chairs-africa-ai-council-meeting" },
+            { t: "Tech Review Africa - AI Partners Roundtable", u: "https://techreviewafrica.com/news/6425/rwanda-convenes-ai-partners-roundtable-to-accelerate-national-ai-adoption" },
+          ],
+          note: "Both items come from a single outlet.",
+        },
+        {
+          date: "2026-06-08",
+          title: "Cabinet approves a National AI Agency",
+          summary: "AI work moves from an office inside the ICT ministry to a dedicated agency. Commentators say delivery will matter more than the structure.",
+          level: "verified",
+          sources: [
+            { t: "KT Press", u: "https://www.ktpress.rw/2026/06/rwandas-ai-ambition-takes-shape-as-cabinet-approves-new-agency/" },
+            { t: "iAfrica", u: "https://iafrica.com/rwanda-approves-national-ai-agency-becoming-first-african-country-with-dedicated-ai-institution/" },
+            { t: "Africa Pulse - AI agency is timely, but delivery will matter most", u: "https://www.africapulse.com/2026/06/24/rwanda-rwandas-ai-agency-is-timely-but-delivery-will-matter-most/" },
+          ],
+        },
+        {
+          date: "2026-02-17",
+          title: "Three-year MOU with Anthropic for health, education and government",
+          summary: "This was Anthropic's first multi-sector government MOU in Africa. It builds on the November 2025 ALX education partnership.",
+          level: "verified",
+          sources: [
+            { t: "Anthropic", u: "https://www.anthropic.com/news/anthropic-rwanda-mou" },
+            { t: "MINICT", u: "https://www.minict.gov.rw/news-detail/government-of-rwanda-and-anthropic-strengthen-partnership-to-advance-ai-for-health-education-and-the-public-sector" },
+            { t: "Citizen Digital", u: "https://citizen.digital/article/rwanda-signs-deal-with-anthropic-to-incorporate-ai-in-public-sector-systems-n377731" },
+          ],
+        },
+        {
+          date: "2025-04-04",
+          title: "Kigali summit produces Africa Declaration on AI",
+          summary: "African leaders backed a proposed $60B Africa AI Fund and an Africa AI Council. The Gates Foundation committed $7.5M to a Rwanda AI Scaling Hub.",
+          level: "verified",
+          sources: [
+            { t: "AllAfrica", u: "https://allafrica.com/stories/202504140440.html" },
+            { t: "ITWeb Africa", u: "https://itweb.africa/article/africa-plans-to-establish-a-60-billion-ai-fund/mQwkoq6Y3ezM3r9A" },
+            { t: "Devex", u: "https://devex.com/news/gates-foundation-to-fund-ai-scaling-hubs-in-africa-109805" },
+          ],
+        },
+      ],
+      watch: [
+        "Who leads the new National AI Agency, and its budget.",
+        "Whether the proposed $60B Africa AI Fund turns into real commitments.",
+        "Generative-AI use is only about 6% of working-age people (Microsoft, H2 2025), and internet use is about 32%. Access is the binding constraint.",
+      ],
+    },
+
+    // ------------------------------------------------------------------ URUGUAY
+    {
+      id: "uy",
+      glance: { firstStrategy: "2019", latestStrategy: "2024 (Strategy 2024–2030)", newestBody: "Instituto Vidart (National AI Centre)", newestBodyDate: "2026-09-07" },
+      name: "Uruguay",
+      flag: "🇺🇾",
+      region: "South America",
+      stance: "Governance-first, rights-based strategy anchored in UNESCO/OECD principles; building national research capacity",
+      summary:
+        "Uruguay has the region's strongest digital-government record and was an early mover on public-sector AI, with an AGESIC strategy from 2019. Its 2024–2030 National AI Strategy rests on UNESCO and OECD principles. Through 2026 it moved from policy to capacity: an AI for Good Lab with Microsoft and a new national AI research centre funded by an IDB loan. It ranks third in Latin America's AI index.",
+      stats: {
+        population: { v: 3384688, year: 2025 },
+        gdpPerCapita: { v: 25216, year: 2025 },
+        internet: { v: 92.0, year: 2024 },
+      },
+      oxford: { rank: 55, scores: [61.5, 56.52, 84.5, 83.22, 31.19, 52.35] },
+      msAdoption: { h1_2025: 20.9, h2_2025: 22.5, q1_2026: null, q2_2026: null, rankLatest: null },
+      facts: [
+        {
+          topic: "Strategy",
+          date: "2019",
+          text: "AGESIC, Uruguay's e-government agency, developed an AI Strategy for Digital Government in 2019. It ran public consultations on nine general principles (April 2019) and on the strategy itself (May 2019).",
+          level: "corroborated",
+          sources: [
+            { t: "AGESIC - Consulta pública: IA para el Gobierno Digital (2 Apr 2019)", u: "https://www.gub.uy/agencia-gobierno-electronico-sociedad-informacion-conocimiento/comunicacion/noticias/consulta-publica-inteligencia-artificial-para-gobierno-digital-0" },
+            { t: "AGESIC - Estrategia IA (PDF, Spanish version)", u: "https://www.gub.uy/agencia-gobierno-electronico-sociedad-informacion-conocimiento/sites/agencia-gobierno-electronico-sociedad-informacion-conocimiento/files/documentos/publicaciones/Estrategia%20IA%20-%20versi%C3%B3n%20espa%C3%B1ol.pdf" },
+            { t: "AGESIC - Estrategia de IA para el Gobierno Digital", u: "https://www.gub.uy/agencia-gobierno-electronico-sociedad-informacion-conocimiento/comunicacion/publicaciones/estrategia-inteligencia-artificial-para-gobierno-digital/estrategia-0" },
+          ],
+          note: "All three are AGESIC's own documents. No formal adoption date was found.",
+        },
+        {
+          topic: "Strategy",
+          date: "2024-11-21",
+          text: "The National AI Strategy 2024–2030 was approved on 21 November 2024 by the Strategic Committee for the Public Sector on AI and Data, under Article 74 of Law No. 20.212. It has three axes (governance, capabilities, sustainable development), and more than 300 people from over 40 state bodies helped shape it.",
+          level: "verified",
+          sources: [
+            { t: "AGESIC (gub.uy) - Estrategia Nacional de IA 2024–2030", u: "https://www.gub.uy/agencia-gobierno-electronico-sociedad-informacion-conocimiento/comunicacion/publicaciones/estrategia-nacional-inteligencia-artificial-2024-2030" },
+            { t: "ECIJA - Uruguay aprueba la Estrategia Nacional de IA 2024-2030", u: "https://ecija.com/sala-de-prensa/uruguay-aprueba-la-estrategia-nacional-de-inteligencia-artificial-2024-2030" },
+            { t: "DPL News - Uruguay aprueba Estrategia Nacional de IA 2024-2030", u: "https://dplnews.com/?p=257341" },
+          ],
+          note: "Its principles build on UNESCO's Recommendation on the Ethics of AI and the OECD AI Recommendation. An opinion column notes the strategy has no dedicated budget line.",
+        },
+        {
+          topic: "Benchmark",
+          date: "2025-10-03",
+          text: "In the 2025 Latin American AI Index (ILIA), produced by ECLAC/CEPAL and Chile's CENIA and launched 3 October 2025, Uruguay ranked 3rd of 19 countries with 62.32 points, behind Chile (70.56) and Brazil (67.39). That puts it in the 'pioneer' tier, which requires a score above 60.",
+          level: "verified",
+          sources: [
+            { t: "El Observador - Uruguay, among the AI pioneers in Latin America (4 Oct 2025)", u: "https://www.elobservador.com.uy/ciencia-y-tecnologia/uruguay-los-pioneros-la-inteligencia-artificial-america-latina-n6019501" },
+            { t: "El Comercio - ILIA 2025: how is Latin America doing in AI?", u: "https://www.elcomercio.com/opinion/ilia-2025-como-esta-america-latina-marco-benalcazar-columnista/" },
+            { t: "Revista Mercado - The countries leading AI in Latin America", u: "https://revistamercado.do/technology/artificial-intelligence/los-paises-que-lideran-la-revolucion-de-la-ia-en-latinoamerica/" },
+            { t: "CEPAL - ILIA 2025 launch event", u: "https://www.cepal.org/es/eventos/lanzamiento-indice-latinoamericano-inteligencia-artificial-2025" },
+          ],
+          note: "The study flags a gap: Uruguay has no AI doctoral programmes.",
+        },
+        {
+          topic: "Partnerships",
+          date: "2026-03-11",
+          text: "On 11 March 2026 the government, LATU and Microsoft signed an agreement for an 'AI for Good Lab', billed as South America's first. It runs an initial three-year phase with about US$400,000 in public money and builds AI products for public institutions.",
+          level: "verified",
+          sources: [
+            { t: "MIEM (gub.uy) - Government and Microsoft launch AI for Good lab", u: "https://www.gub.uy/ministerio-industria-energia-mineria/comunicacion/noticias/gobierno-microsoft-lanzan-laboratorio-ia-para-bien" },
+            { t: "El Observador (12 Mar 2026)", u: "https://www.elobservador.com.uy/ciencia-y-tecnologia/uruguay-crea-microsoft-un-laboratorio-ia-aplicar-tecnologia-salud-ambiente-y-gestion-publica-n6037166" },
+            { t: "Montevideo Portal - Uruguay, LATU and Microsoft launch regional AI for Good lab", u: "https://www.montevideo.com.uy/Noticias/Uruguay-LATU-y-Microsoft-lanzaron-el-primer-laboratorio-regional-de-IA-para-el-bien--uc955637" },
+          ],
+        },
+        {
+          topic: "Research",
+          date: "2026-09-07",
+          text: "Uruguay launched its National AI Centre, the Instituto Vidart, on 7 September 2026 at LATU's innovation park. A US$10 million IDB loan funds it for 4.5 years. Executive director Diego Garagorry and scientific director Matías Di Martino lead it, with health, agriculture and education as first priorities.",
+          level: "verified",
+          sources: [
+            { t: "la diaria - Uruguay launches National AI Centre", u: "https://ladiaria.com.uy/futuro/articulo/2026/9/uruguay-lanza-centro-nacional-de-inteligencia-artificial-que-desarrollara-soluciones-en-salud-agro-y-educacion/" },
+            { t: "Presidencia (gub.uy) - AI in Uruguay: Vidart centre at LATU", u: "https://www.gub.uy/presidencia/comunicacion/noticias/inteligencia-artificial-uruguay-centro-vidart-latu" },
+            { t: "Uruguay Innova (gub.uy) - Instituto Vidart launched", u: "https://www.gub.uy/uruguay-innova/noticias/se-lanzo-el-instituto-vidart-el-centro-nacional-de-inteligencia-artificial" },
+            { t: "The Rio Times - Uruguay AI centre Instituto Vidart", u: "https://www.riotimesonline.com/uruguay-ai-centre-instituto-vidart-2026/" },
+          ],
+          note: "One government note says 'Tuesday the 7th', but 7 Sep 2026 was a Monday, as la diaria reports.",
+        },
+      ],
+      news: [
+        {
+          date: "2026-10-05",
+          title: "AI for Good Lab delivers 8 government AI projects in 6 months",
+          summary: "Three projects are complete and five finish in October, covering pest detection, document processing and public services. The target is 16 projects a year for three years.",
+          level: "single",
+          sources: [
+            { t: "la diaria (5 Oct 2026)", u: "https://ladiaria.com.uy/futuro/articulo/2026/10/gobierno-uruguayo-desarrolla-ocho-proyectos-de-inteligencia-artificial-para-mejorar-procesos-del-estado/" },
+          ],
+        },
+        {
+          date: "2026-09-07",
+          title: "National AI research centre 'Instituto Vidart' opens",
+          summary: "The centre is funded by an IDB loan. More than 80 meetings with over 200 people shaped its design, and research lines will be led by academics who keep their university ties.",
+          level: "verified",
+          sources: [
+            { t: "la diaria", u: "https://ladiaria.com.uy/futuro/articulo/2026/9/uruguay-lanza-centro-nacional-de-inteligencia-artificial-que-desarrollara-soluciones-en-salud-agro-y-educacion/" },
+            { t: "Uruguay Innova", u: "https://www.gub.uy/uruguay-innova/noticias/se-lanzo-el-instituto-vidart-el-centro-nacional-de-inteligencia-artificial" },
+            { t: "The Rio Times", u: "https://www.riotimesonline.com/uruguay-ai-centre-instituto-vidart-2026/" },
+          ],
+        },
+        {
+          date: "2026-06-14",
+          title: "Environment ministry to add AI to environmental controls",
+          summary: "Minister Edgardo Ortuño announced AI-assisted environmental monitoring alongside a push for a new environmental-crimes law.",
+          level: "single",
+          sources: [
+            { t: "MercoPress (14 Jun 2026)", u: "https://es.mercopress.com/2026/06/14/uruguay-sumara-ia-a-los-controles-ambientales-y-busca-una-nueva-ley-de-delitos-ambientales" },
+          ],
+        },
+        {
+          date: "2026-03-11",
+          title: "Uruguay and Microsoft sign 'AI for Good Lab' deal",
+          summary: "The lab is backed by Uruguay Innova, ANDE, ANII, AGESIC and Antel, and builds AI for the public sector.",
+          level: "verified",
+          sources: [
+            { t: "MIEM", u: "https://www.gub.uy/ministerio-industria-energia-mineria/comunicacion/noticias/gobierno-microsoft-lanzan-laboratorio-ia-para-bien" },
+            { t: "El Observador", u: "https://www.elobservador.com.uy/ciencia-y-tecnologia/uruguay-crea-microsoft-un-laboratorio-ia-aplicar-tecnologia-salud-ambiente-y-gestion-publica-n6037166" },
+            { t: "Montevideo Portal", u: "https://www.montevideo.com.uy/Noticias/Uruguay-LATU-y-Microsoft-lanzaron-el-primer-laboratorio-regional-de-IA-para-el-bien--uc955637" },
+          ],
+        },
+      ],
+      watch: [
+        "Whether a dedicated AI bill emerges. Current protections rest mainly on personal-data law (Law 18.331).",
+        "Debate over sovereign compute and the role of state telecom Antel in AI infrastructure.",
+      ],
+    },
+
+    // ------------------------------------------------------------------ MALTA
+    {
+      id: "mt",
+      glance: { firstStrategy: "2019", latestStrategy: "2025 (2025–2030 draft, consultation)", newestBody: "AI Governance Council", newestBodyDate: "2026-07-30" },
+      name: "Malta",
+      flag: "🇲🇹",
+      region: "Southern Europe (EU)",
+      stance: "Small-state 'AI launchpad': early strategy and certification, now mass AI literacy and EU AI Act enforcement",
+      summary:
+        "Malta was among the first EU states with an AI strategy (2019) and ran a voluntary AI certification scheme before the EU AI Act existed. Since 2025 it has designated its AI Act regulators and opened consultation on a realigned 2025–2030 strategy. It also made the most striking citizen-facing move of any country here: a national deal giving residents a free year of ChatGPT Plus once they complete an AI-literacy course.",
+      stats: {
+        population: { v: 579704, year: 2025 },
+        gdpPerCapita: { v: 47907, year: 2025 },
+        internet: { v: 93.9, year: 2024 },
+      },
+      oxford: { rank: 39, scores: [77.0, 52.25, 87.77, 66.58, 44.16, 65.19] },
+      msAdoption: null,
+      facts: [
+        {
+          topic: "Strategy",
+          date: "2019-10",
+          text: "In October 2019 Malta launched 'Malta – The Ultimate AI Launchpad: A Strategy and Vision for AI in Malta 2030'. It rests on three pillars (investment and start-ups, public-sector adoption, private-sector adoption) and three enablers, with 72 actions.",
+          level: "verified",
+          sources: [
+            { t: "MDIA - 2019 Strategy and Vision", u: "https://mdia.gov.mt/national-strategies/2019-strategy-and-vision/" },
+            { t: "Mondaq - Malta launches national AI strategy", u: "https://www.mondaq.com/technology/855144/malta-launches-national-artificial-intelligence-strategy" },
+            { t: "OECD.AI - The Ultimate AI Launchpad", u: "https://oecd.ai/en/dashboards/policy-initiatives/the-ultimate-ai-launchpad-a-strategy-and-vision-for-artificial-intelligence-in-malta-2030-2591" },
+          ],
+          note: "Progress figures differ by method. The OECD reports 54.2% of initiatives implemented and 25% in progress, while the MDIA and the PM say about 80% were executed.",
+        },
+        {
+          topic: "Certification",
+          date: "2019+",
+          text: "Malta runs a voluntary AI certification programme (the AI ITA scheme), administered by the Malta Digital Innovation Authority (MDIA). It predates the EU AI Act.",
+          level: "corroborated",
+          sources: [
+            { t: "RegulatoryAI.eu - The EU AI Act in Malta", u: "https://www.regulatoryai.eu/ai-act-malta/" },
+            { t: "OECD.AI - Malta Digital Innovation Authority", u: "https://oecd.ai/en/dashboards/policy-initiatives/malta-digital-innovation-authority-7991" },
+          ],
+        },
+        {
+          topic: "Regulation",
+          date: "2025",
+          text: "Under Legal Notice 226 of 2025, the MDIA is Malta's lead market-surveillance authority, single point of contact and regulatory-sandbox authority for the EU AI Act. Legal Notice 227 of 2025 makes the Information and Data Protection Commissioner (IDPC) a market-surveillance authority for certain high-risk uses, such as law enforcement.",
+          level: "verified",
+          sources: [
+            { t: "MDIA - Artificial Intelligence", u: "https://mdia.gov.mt/services/artificial-intelligence/" },
+            { t: "Legal 500 / Ganado - Malta's AI Act framework: new roles of MDIA and IDPC", u: "https://www.legal500.com/intelligence/malta/technology/malta's-ai-act-framework-the-new-roles-of-the-mdia-and-idpc" },
+            { t: "Mamo TCV - Malta's AI Act authority designations", u: "https://www.mamotcv.com/insights/ai-act-authority-designations/" },
+          ],
+          note: "Sources describe the exact scope of the IDPC's remit differently. The legal notices are authoritative.",
+        },
+        {
+          topic: "Strategy",
+          date: "2025-11",
+          text: "In November 2025 Prime Minister Robert Abela opened public consultation on a realigned National AI Strategy 2025–2030 at an open Cabinet meeting during Techxpo. The draft proposes 83 measures under three pillars, and consultation ran to February 2026.",
+          level: "verified",
+          sources: [
+            { t: "MaltaToday - Public consultation launched on updated national AI strategy", u: "https://www.maltatoday.com.mt/news/national/138304/public_consultation_launched_on_updated_national_ai_strategy" },
+            { t: "BusinessNow - Malta launches updated AI strategy at Techxpo 2025", u: "https://businessnow.mt/malta-launches-updated-national-ai-strategy-during-cabinet-meeting-at-techxpo-2025" },
+            { t: "Ganado - Legal 500 Country Guide 2026: AI, Malta (PDF)", u: "https://ganado.com/wp-content/uploads/2026/08/Legal-500-Country-Comparative-Guides-2026-Artificial-Intelligence-Malta.pdf" },
+            { t: "Malta Chamber - feedback on Updated National AI Strategy (12 Feb 2026)", u: "https://maltachamber.org.mt/wp-content/uploads/2026/02/20260212-Update-of-National-AI-Strategy-TMC-feedback.pdf" },
+          ],
+        },
+        {
+          topic: "Funding",
+          date: "2025-10",
+          text: "Malta's 2026 Budget includes a €100 million AI and digital fund.",
+          level: "corroborated",
+          sources: [
+            { t: "MaltaToday (PM: '2026 Budget includes a €100 million AI fund')", u: "https://www.maltatoday.com.mt/news/national/138304/public_consultation_launched_on_updated_national_ai_strategy" },
+            { t: "Newsbook ('€100 million budget pledge for digitalisation')", u: "https://newsbook.com.mt/en/openai-signs-deal-with-malta-to-give-every-citizen-free-chatgpt-plus-for-one-year/" },
+          ],
+          note: "Sources describe it as an 'AI fund' or as a digitalisation pledge. The Malta Chamber criticised the limited transparency on allocations.",
+        },
+        {
+          topic: "Diplomacy",
+          date: "2026-02-13",
+          text: "On 13 February 2026 Malta's application to join the Global Partnership on AI (GPAI) was formally accepted, as announced by Economy Minister Silvio Schembri.",
+          level: "corroborated",
+          sources: [
+            { t: "Gov.mt press release PR260241 (13 Feb 2026)", u: "https://www.gov.mt/en/Government/DOI/Press%20Releases/Pages/2026/02/13/PR260241en.aspx" },
+            { t: "MaltaInvest - Malta joins Global Partnership on AI", u: "https://maltainvest.mt/malta-joins-global-partnership-on-artificial-intelligence/" },
+          ],
+        },
+        {
+          topic: "Literacy",
+          date: "2026-05-16",
+          text: "On 16 May 2026 Malta and OpenAI announced a national deal: citizens and residents aged 14 and over who complete the roughly two-hour 'AI for Everyone' course get a free year of ChatGPT Plus, or Microsoft 365 Personal with Copilot. The MDIA built the course with the University of Malta.",
+          level: "verified",
+          sources: [
+            { t: "OpenAI - Malta ChatGPT Plus partnership", u: "https://openai.com/index/malta-chatgpt-plus-partnership" },
+            { t: "Newsbook - OpenAI signs deal with Malta (16 May 2026)", u: "https://newsbook.com.mt/en/openai-signs-deal-with-malta-to-give-every-citizen-free-chatgpt-plus-for-one-year/" },
+            { t: "The Next Web - OpenAI Malta ChatGPT Plus for citizens", u: "https://thenextweb.com/news/openai-malta-chatgpt-plus-free-citizens" },
+            { t: "TechRadar - OpenAI giving everyone in this country free ChatGPT Plus", u: "https://www.techradar.com/pro/openai-is-giving-everyone-in-this-country-free-access-to-chatgpt-plus-for-a-year" },
+          ],
+          note: "OpenAI says 'all Maltese citizens'. MDIA guidelines reportedly require a valid eID, with citizens abroad to follow. Long-term funding after year one has not been stated.",
+        },
+        {
+          topic: "Institutions",
+          date: "2026-07-30",
+          text: "On 30 July 2026 the government set up an Artificial Intelligence Governance Council within the Office of the Prime Minister to coordinate AI across the public administration and support EU AI Act compliance. Chief AI Officer Jonathan Gerada chairs it.",
+          level: "verified",
+          sources: [
+            { t: "Gov.mt press release PR261274 (30 Jul 2026)", u: "https://www.gov.mt/en/Government/DOI/Press%20Releases/Pages/2026/07/30/PR261274en.aspx" },
+            { t: "The Malta Independent - Government establishes AI Governance Council", u: "https://www.independent.com.mt/articles/2026-07-30/local-news/Government-establishes-Artificial-Intelligence-Governance-Council-6736291786" },
+            { t: "MaltaToday - Government sets up AI Governance Council", u: "https://www.maltatoday.com.mt/news/national/143529/government_sets_up_ai_governance_council" },
+            { t: "GovInsider - Malta forms AI Governance Council", u: "https://govinsider.asia/intl-en/article/malta-forms-ai-governance-council-to-put-people-at-the-centre-of-ai-adoption" },
+          ],
+        },
+      ],
+      news: [
+        {
+          date: "2026-10-07",
+          title: "Tax department to use AI to flag suspected evaders",
+          summary: "Finance Minister Clyde Caruana said AI will compare declared income with turnover and big purchases, and letters will go to 'a couple of hundred' people in the coming weeks.",
+          level: "single",
+          sources: [
+            { t: "Italpress / MNA (7 Oct 2026)", u: "https://www.italpress.com/malta-ai-to-be-used-to-trace-suspected-tax-evaders/" },
+          ],
+          note: "Single wire report (Italpress, carrying Malta's state news agency MNA). See the May 2025 item below for corroborated background.",
+        },
+        {
+          date: "2025-05-05",
+          title: "Finance minister credits AI tax system with €400M in extra revenue",
+          summary: "Clyde Caruana attributed €400 million of a €650 million rise in income-tax collections to the AI-powered tax-compliance system, which flags gaps between declared income and wealth.",
+          level: "corroborated",
+          sources: [
+            { t: "Italpress - Malta, AI-driven tax collection boosts government tax revenue", u: "https://www.italpress.com/?p=530167" },
+            { t: "SharedServicesLink - AI helps Malta recover €400 million in fight against tax evasion", u: "https://sharedserviceslink.com/news/ai-helps-malta-recover-400-million-in-fight-against-tax-evasion" },
+          ],
+          note: "This is the minister's attribution, not an independent audit.",
+        },
+        {
+          date: "2026-07-30",
+          title: "AI Governance Council set up under the Chief AI Officer",
+          summary: "The council is meant to cut fragmented and duplicate AI projects across the civil service, and was launched the same week EU AI Act transparency rules took effect.",
+          level: "verified",
+          sources: [
+            { t: "Malta Independent", u: "https://www.independent.com.mt/articles/2026-07-30/local-news/Government-establishes-Artificial-Intelligence-Governance-Council-6736291786" },
+            { t: "MaltaToday", u: "https://www.maltatoday.com.mt/news/national/143529/government_sets_up_ai_governance_council" },
+            { t: "GovInsider", u: "https://govinsider.asia/intl-en/article/malta-forms-ai-governance-council-to-put-people-at-the-centre-of-ai-adoption" },
+          ],
+        },
+        {
+          date: "2026-05-16",
+          title: "Malta signs world-first national ChatGPT Plus deal with OpenAI",
+          summary: "Residents who finish a short AI-literacy course get a year of ChatGPT Plus or Microsoft Copilot. OpenAI's George Osborne said 'Malta is leading Europe and the world'.",
+          level: "verified",
+          sources: [
+            { t: "OpenAI", u: "https://openai.com/index/malta-chatgpt-plus-partnership" },
+            { t: "Newsbook", u: "https://newsbook.com.mt/en/openai-signs-deal-with-malta-to-give-every-citizen-free-chatgpt-plus-for-one-year/" },
+            { t: "TechRadar", u: "https://www.techradar.com/pro/openai-is-giving-everyone-in-this-country-free-access-to-chatgpt-plus-for-a-year" },
+          ],
+        },
+        {
+          date: "2026-02-13",
+          title: "Malta accepted into the Global Partnership on AI",
+          summary: "The government framed membership as part of its responsible-AI governance credentials.",
+          level: "corroborated",
+          sources: [
+            { t: "Gov.mt", u: "https://www.gov.mt/en/Government/DOI/Press%20Releases/Pages/2026/02/13/PR260241en.aspx" },
+            { t: "MaltaInvest", u: "https://maltainvest.mt/malta-joins-global-partnership-on-artificial-intelligence/" },
+          ],
+        },
+      ],
+      watch: [
+        "The final text of the realigned 2025–2030 strategy and its consultation outcome report.",
+        "Who funds ChatGPT Plus access after the first year (around $240 per person a year at list price).",
+      ],
+    },
+  ],
+};
