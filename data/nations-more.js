@@ -88,7 +88,7 @@ window.WORLDVIEW.nations.push(
         text: "Finland's first AI strategy, 'Finland's Age of Artificial Intelligence' (Ministry of Economic Affairs and Employment, 2017), aimed to make Finland a leading country in applying AI. Follow-up reports came in 2018 and 2019.",
         level: "verified",
         sources: [
-          { t: "Finnish Government - Eight key actions for making Finland a top country in AI", u: "https://valtioneuvosto.fi/en/-/1410877/tyoryhmalta-kahdeksan-avainta-nain-teemme-suomesta-tekoalyn-huippumaan" },
+          { t: "European Commission (AI Watch, 2019) - Finland AI strategy country report (PDF)", u: "https://knowledge4policy.ec.europa.eu/sites/default/files/finland-ai-strategy-report.pdf" },
           { t: "EC AI Watch - Finland AI strategy report", u: "https://ai-watch.ec.europa.eu/countries/finland/finland-ai-strategy-report_en" },
           { t: "Digital Watch - Finland's Age of Artificial Intelligence", u: "https://dig.watch/resource/finlands-age-of-artificial-intelligence" },
         ],
@@ -102,6 +102,7 @@ window.WORLDVIEW.nations.push(
           { t: "Bird & Bird - AI Regulatory Horizon Tracker: Finland", u: "https://www.twobirds.com/en/capabilities/artificial-intelligence/ai-legal-services/ai-regulatory-horizon-tracker/finland" },
           { t: "Hannes Snellman - Government proposal on implementing the AI Act", u: "https://www.hannessnellman.com/news-and-views/blog/draft-government-proposal-on-the-implementation-of-eus-ai-act-published/" },
           { t: "VLO Law Firm - AI Regulation in Finland 2026", u: "https://vlolawfirm.com/trackers/ai-regulation-finland" },
+          { t: "ArtificialIntelligenceAct.eu - National implementation plans (Finland: Law 1377/2025, in force 1 Jan 2026)", u: "https://artificialintelligenceact.eu/national-implementation-plans/" },
         ],
       },
       {
@@ -117,9 +118,14 @@ window.WORLDVIEW.nations.push(
       },
       {
         topic: "Compute", date: "2025",
-        text: "The Finnish government is seeking to host one of the EU's planned AI gigafactories.",
-        level: "single",
-        sources: [{ t: "Finnish Government - Finland aims to host a European AI gigafactory", u: "https://valtioneuvosto.fi/en/-/finland-aims-to-host-a-european-ai-gigafactory-" }],
+        text: "In 2025 the government backed a Nokia-led consortium's expression of interest to host one of the EU's planned AI gigafactories in Finland, potentially alongside the LUMI AI Factory in Kajaani.",
+        level: "corroborated",
+        sources: [
+          { t: "Yle - Nokia-led bid for an AI gigafactory in Finland", u: "https://yle.fi/a/74-20171278" },
+          { t: "Latvian Ministry of Economics - Latvia and Finland could jointly propose AI gigaproject (notes Finland submitted two projects)", u: "https://www.em.gov.lv/en/article/latvia-and-finland-could-jointly-propose-ai-gigaproject-european-support-competition" },
+          { t: "Finnish Government - Finland supports Nokia-led consortium's expression of interest", u: "https://valtioneuvosto.fi/en/-/1410877/finland-supports-nokia-led-consortium-s-expression-of-interest-to-establish-ai-gigafactory-in-finland" },
+        ],
+        note: "No selection result had been announced at the research date.",
       },
     ],
     news: [
@@ -153,15 +159,15 @@ window.WORLDVIEW.nations.push(
         text: "Norway's National Strategy for Artificial Intelligence was presented on 14 January 2020 by the Ministry of Local Government and Modernisation, with a foreword by Digitalisation Minister Nikolai Astrup.",
         level: "verified",
         sources: [
-          { t: "Regjeringen - National Strategy for AI (PDF)", u: "https://www.regjeringen.no/contentassets/1febbbb2c4fd4b7d92c67ddd353b6ae8/en-gb/pdfs/ki-strategi_en.pdf" },
+          { t: "National Strategy for AI (2020), English PDF via OECD.AI", u: "https://wp.oecd.ai/app/uploads/2021/12/Norway_National_Strategy_for_Artificial_Intelligence_2020.pdf" },
           { t: "Telenor - Telenor sets a good example on AI upskilling", u: "https://www.telenor.com/media/newsroom/telenor-sets-a-good-example-on-ai-upskilling/" },
           { t: "EC AI Watch - Norway AI strategy report", u: "https://ai-watch.ec.europa.eu/countries/norway/norway-ai-strategy-report_en" },
         ],
       },
       {
         topic: "Funding", date: "2023-09",
-        text: "The government committed at least NOK 1 billion over five years to research on AI and digital technology, with the aim of setting up four to six AI research centres.",
-        level: "verified",
+        text: "The government committed at least NOK 1 billion over five years to research on AI and digital technology.",
+        level: "corroborated",
         sources: [
           { t: "Research Professional News - Norway sets aside more than 1bn kroner for AI research", u: "https://www.researchprofessionalnews.com/rr-news-europe-nordics-2023-9-norway-sets-aside-more-than-1bn-kroner-for-ai-research/" },
           { t: "Innovation News Network - AI research to increase in Norway", u: "https://www.innovationnewsnetwork.com/artificial-intelligence-research-increase-in-norway-one-billion-kroner-investment/37419/" },
@@ -174,7 +180,8 @@ window.WORLDVIEW.nations.push(
         text: "Norway's national digitalisation strategy (September 2024) aims to make it the world's most digitalised country by 2030, including building a national AI infrastructure.",
         level: "corroborated",
         sources: [
-          { t: "Computer Weekly - Norway bolsters digital transformation drive", u: "https://www.computerweekly.com/news/366584001/Norway-bolsters-digital-transformation-drive" },
+          { t: "Regjeringen - The Digital Norway of the Future, ch.1: the most digitalised country in the world", u: "https://www.regjeringen.no/en/documents/the-digital-norway-of-the-future/id3054645/?ch=2" },
+          { t: "Global Relay Intelligence - Norway aims to become the world's most digitized country", u: "https://www.grip.globalrelay.com/norway-aims-to-become-the-worlds-most-digitized-country/" },
           { t: "Regulations.ai - The Digital Norway of the Future", u: "https://regulations.ai/regulations/RAI-NO-NA-DNFNDXX-2024" },
         ],
       },
@@ -223,7 +230,7 @@ window.WORLDVIEW.nations.push(
         sources: [
           { t: "DETE - Refreshed National AI Strategy (6 Nov 2024)", u: "https://enterprise.gov.ie/en/news-and-events/department-news/2024/november/06112024.html" },
           { t: "Pinsent Masons - Ireland's national AI strategy refresh: the seven strands", u: "https://www.pinsentmasons.com/out-law/analysis/ireland-national-ai-strategy-refresh-the-seven-strands" },
-          { t: "Regulations.ai - Ireland AI strategy refresh (Nov 2024)", u: "https://regulations.ai/regulations/ireland-2024-11-ai-strategy-refresh" },
+          { t: "OECD - EU Coordinated Plan on AI progress, Ireland country note (Oct 2025)", u: "https://www.oecd.org/content/dam/oecd/en/publications/reports/2025/10/progress-in-implementing-the-european-union-coordinated-plan-on-artificial-intelligence-volume-1-country-notes_b0385317/ireland_ee8f30e0/8e29cd6c-en.pdf" },
         ],
       },
       {
@@ -292,6 +299,7 @@ window.WORLDVIEW.nations.push(
           { t: "Gouvernement.lu - Luxembourg's AI Strategy (PDF)", u: "https://gouvernement.lu/dam-assets/images-documents/actualites/2025/05/16-strategies-ai-donnees-quantum/2024115332-ministere-etat-strategy-ai-en-bat-acc-ua.pdf" },
           { t: "EU Digital Skills & Jobs - Luxembourg AI Strategy 2030", u: "https://digital-skills-jobs.europa.eu/en/initiatives/national-strategies/luxembourg-artificial-intelligence-strategy-2030" },
           { t: "Chambers - Artificial Intelligence 2026: Luxembourg", u: "https://practiceguides.chambers.com/practice-guides/artificial-intelligence-2026/luxembourg/trends-and-developments" },
+          { t: "20more.lu - MeluXina AI access guide 2026", u: "https://20more.lu/en/blog/luxembourg-ai-factory-meluxina-sme-access-guide-2026/" },
         ],
       },
       {
@@ -301,8 +309,9 @@ window.WORLDVIEW.nations.push(
         sources: [
           { t: "Luxembourg AI Factory - MeluXina-AI", u: "https://aifactory.lu/about/meluxina-ai" },
           { t: "Info-Lux - IA au Luxembourg : 112 M€", u: "https://www.info-lux.com/ia-luxembourg-frontaliers-entreprises/intelligence-artificielle/" },
+          { t: "Chambers - Artificial Intelligence 2026: Luxembourg", u: "https://practiceguides.chambers.com/practice-guides/artificial-intelligence-2026/luxembourg/trends-and-developments" },
         ],
-        note: "Reported GPU counts and go-live timing conflict (mid-2026 vs second half of 2026).",
+        note: "Reported GPU counts and go-live timing conflict. One source reports an €80M hardware contract signed on 22 July 2026 within the larger budget.",
       },
       {
         topic: "Regulation", date: "2024-12-23",
@@ -353,10 +362,10 @@ window.WORLDVIEW.nations.push(
       },
       {
         topic: "Strategy", date: "2021-04",
-        text: "Iceland's AI policy came from a committee appointed by the Prime Minister in 2020, which reported in April 2021. It gives special attention to Icelandic language technology.",
+        text: "Iceland's AI policy came from a five-person committee appointed by the Prime Minister's Office in October 2020, which reported in April 2021. It gives special attention to Icelandic language technology.",
         level: "corroborated",
         sources: [
-          { t: "Global Legal Post - AI law guide: Iceland", u: "https://www.globallegalpost.com/lawoverborders/artificial-intelligence-law-guide-1549732605/iceland-1721917497" },
+          { t: "IIIM - Iceland has a new AI policy (Apr 2021)", u: "https://www.iiim.is/2021/04/iceland-has-a-new-ai-policy/" },
           { t: "Regulations.ai - Iceland AI Policy (2021)", u: "https://regulations.ai/regulations/RAI-IS-NA-ICEARIN-2021" },
         ],
       },
@@ -405,12 +414,13 @@ window.WORLDVIEW.nations.push(
       {
         topic: "Strategy", date: "2026",
         text: "The Ministry of Economy and Innovation drew up National AI Strategic Guidelines for 2026–2035, built on four strands: people, infrastructure and data, society, and the economy. It estimates about €10 billion in added value over the decade.",
-        level: "corroborated",
+        level: "single",
         sources: [
           { t: "Ministry of Economy and Innovation - National AI Strategic Guidelines drawn up", u: "https://eimin.lrv.lt/en/structure-and-contacts/news-1/lithuania-strengthens-its-artificial-intelligence-ecosystem-national-ai-strategic-guidelines-drawn-up-fS7F" },
           { t: "EU Digital Skills & Jobs - Lithuania National AI Strategic Guidelines", u: "https://digital-skills-jobs.europa.eu/en/initiatives/national-strategies/lithuania-national-artificial-intelligence-strategic-guidelines" },
+          { t: "Ministry of Economy and Innovation - Guidelines 2026–2035 (PDF)", u: "https://eimin.lrv.lt/public/canonical/1780915035/6723/National%20Artificial%20Intelligence%20Strategic%20Guidelines%20of%20Lithuania%20for%202026%E2%80%932035_.pdf" },
         ],
-        note: "No formal government resolution adopting the guidelines was found. The €10bn figure is the ministry's own estimate.",
+        note: "Only the EU portal could be read during the audit. The ministry's pages block automated access, though search results quote them giving €10.1bn. No formal government resolution adopting the guidelines was found.",
       },
       {
         topic: "Language", date: "2024-08",
@@ -428,7 +438,10 @@ window.WORLDVIEW.nations.push(
         date: "2026", title: "Innovation Agency's AI sandbox adds specialised consultations",
         summary: "The sandbox offers AI Act guidance, testing and access to high-performance compute, with specialised consultations from early 2026.",
         level: "single",
-        sources: [{ t: "Lithuania.lt - Lithuania allocates funding for an AI regulatory sandbox", u: "https://lithuania.lt/news/business-and-innovations-in-lithuania/lithuania-allocates-funding-for-an-artificial-intelligence-regulatory-sandbox/" }],
+        sources: [
+          { t: "Walless - Regulatory AI sandbox in Lithuania: what businesses should know", u: "https://walless.com/news/regulatory-ai-sandbox-in-lithuania-what-businesses-working-with-ai-should-know/" },
+          { t: "Interreg Europe - AI regulatory sandbox in Lithuania (good practice)", u: "https://www.interregeurope.eu/good-practices/creation-implementation-of-artificial-intelligence-regulatory-sandbox-in-lithuania-0" },
+        ],
       },
     ],
     watch: ["The Innovation Agency's action plan to implement the 2026–2035 guidelines."],
@@ -440,7 +453,7 @@ window.WORLDVIEW.nations.push(
     stance: "Research-led: home of UNESCO's AI centre, new AI factory, enacted AI Act law",
     summary:
       "Slovenia hosts IRCAI, the world's first international AI research centre under UNESCO's auspices (2021). Its 2021–2025 national AI programme was budgeted at about €110 million. A national AI factory (SLAIF) launched in 2026 around a new supercomputer due in 2027. Its AI Act implementing law took effect in November 2025, with the communications regulator AKOS in the lead.",
-    glance: { firstStrategy: "2021", latestStrategy: "2021 (NpAI, extended to 2026)", newestBody: "Slovenian AI Factory (SLAIF)", newestBodyDate: "2026-02-09" },
+    glance: { firstStrategy: "2021", latestStrategy: "2021 (NpAI, extended to 2026)", newestBody: "Slovenian AI Factory (SLAIF)", newestBodyDate: "2026" },
     stats: { population: { v: 2130986, year: 2025 }, gdpPerCapita: { v: 37376, year: 2025 }, internet: { v: 90.8, year: 2024 } },
     oxford: { rank: 36, scores: [84.0, 57.98, 72.5, 76.44, 45.52, 60.99] },
     msAdoption: { h1_2025: 24.6, h2_2025: 26.5, q1_2026: null, q2_2026: null, rankLatest: null },
@@ -448,10 +461,10 @@ window.WORLDVIEW.nations.push(
       {
         topic: "Research", date: "2021-03-29",
         text: "On 29 March 2021, UNESCO's Director-General and Slovenia's President inaugurated IRCAI, the International Research Centre on AI, in Ljubljana. It is the first such centre under UNESCO's auspices and is hosted by the Jožef Stefan Institute.",
-        level: "verified",
+        level: "corroborated",
         sources: [
           { t: "UNESCO - Director-General and President of Slovenia inaugurate first research centre on AI", u: "https://www.unesco.org/en/articles/unesco-director-general-and-president-slovenia-inaugurate-first-research-centre-artificial" },
-          { t: "STA - UNESCO AI centre formally launched in Ljubljana", u: "https://znanost.sta.si/2884774/unesco-ai-centre-formally-launched-in-ljubljana" },
+          { t: "UNESCO - Agreement to establish IRCAI in Ljubljana signed", u: "https://en.unesco.org/news/agreement-establish-international-research-centre-artificial-intelligence-ljubljana-signed" },
           { t: "Gov.si - Hosting UNESCO's AI centre", u: "https://www.gov.si/en/news/2020-03-10-hosting-unescos-artificial-intelligence-centre-the-greatest-achievement-of-slovenian-science/" },
         ],
       },
@@ -476,19 +489,19 @@ window.WORLDVIEW.nations.push(
         ],
       },
       {
-        topic: "Compute", date: "2026-02-09",
-        text: "The Slovenian AI Factory (SLAIF), co-funded by EuroHPC and Slovenia, launched in Ljubljana on 9 February 2026. Its new supercomputer, due in early 2027, will replace Vega.",
+        topic: "Compute", date: "2026",
+        text: "The Slovenian AI Factory (SLAIF), co-funded by EuroHPC and Slovenia, was officially launched in Ljubljana in 2026. Its new supercomputer, due in early 2027, will replace Vega.",
         level: "corroborated",
         sources: [
           { t: "SLING - Slovenian AI Factory (SLAIF)", u: "https://www.sling.si/en/slaif/" },
           { t: "Gov.si - A new supercomputer and AI factory", u: "https://www.gov.si/en/news/2025-03-12-slovenia-among-the-digital-giants-a-new-supercomputer-and-ai-factory-to-boost-technological-power/" },
         ],
-        note: "The exact 9 Feb 2026 launch date appears in one source.",
+        note: "One search summary gives 9 February 2026 as the launch date, but none of the readable sources confirmed the day.",
       },
     ],
     news: [
       {
-        date: "2026-02-09", title: "Slovenian AI Factory officially launched",
+        date: "2026", title: "Slovenian AI Factory officially launched",
         summary: "A consortium of the Jožef Stefan Institute and the universities of Ljubljana and Maribor will run AI-optimised compute, housed at a hydroelectric site in Maribor.",
         level: "corroborated",
         sources: [
@@ -583,8 +596,8 @@ window.WORLDVIEW.nations.push(
         level: "verified",
         sources: [
           { t: "OFCOM (BAKOM) - AI guidelines", u: "https://www.bakom.admin.ch/en/ai-guidelines" },
-          { t: "SERI - Leitlinien KI (PDF)", u: "https://www.sbfi.admin.ch/dam/sbfi/en/dokumente/2021/05/leitlinien-ki.pdf.download.pdf/leitlinien-ki_de.pdf" },
-          { t: "OECD.AI - Guidelines on AI (Switzerland)", u: "https://oecd.ai/en/dashboards/policy-initiatives/guidelines-on-ai-3298" },
+          { t: "Regulations.ai - Switzerland AI Guidelines (2020)", u: "https://regulations.ai/regulations/RAI-CH-NA-GAIFAXX-2020" },
+          { t: "Holistic AI - Switzerland AI regulation", u: "https://holisticai.com/blog/switzerland-ai-regulation" },
         ],
       },
       {
@@ -594,7 +607,7 @@ window.WORLDVIEW.nations.push(
         sources: [
           { t: "Pestalozzi - Federal Council outlines a lean regulatory approach", u: "https://pestalozzilaw.com/en/insights/news/legal-insights/switzerland-sets-its-course-on-ai-legislation-federal-council-out-lines-a-lean-regulatory-approach/?simple_view=true" },
           { t: "Sidley - New pathway of regulating AI in Switzerland", u: "https://datamatters.sidley.com/2025/04/07/new-pathway-of-regulating-artificial-intelligence-in-switzerland-competitive-edge-or-challenge/" },
-          { t: "White & Case - AI Watch: Switzerland", u: "https://www.whitecase.com/insight-our-thinking/ai-watch-global-regulatory-tracker-switzerland" },
+          { t: "CMS Expert Guide - AI regulation in Switzerland", u: "https://cms.law/en/int/expert-guides/ai-regulation-scanner/switzerland" },
         ],
       },
       {
@@ -622,11 +635,11 @@ window.WORLDVIEW.nations.push(
     news: [
       {
         date: "2026", title: "Consultation draft on AI Convention ratification expected",
-        summary: "The draft is meant to set rules on transparency, data protection, non-discrimination and oversight. Commentators expect it to enter into force no earlier than 2028.",
+        summary: "The draft is meant to set rules on transparency, data protection, non-discrimination and oversight, with a dispatch to Parliament expected afterwards.",
         level: "corroborated",
         sources: [
           { t: "Swissinfo", u: "https://www.swissinfo.ch/eng/swiss-politics/federal-council-wants-to-adopt-ai-conventions-of-the-council-of-europe/88864836" },
-          { t: "Chambers - AI 2026: Switzerland", u: "https://practiceguides.chambers.com/practice-guides/artificial-intelligence-2026/switzerland" },
+          { t: "SIDD - AI regulation in Switzerland: 2026 status and outlook", u: "https://www.sidd.swiss/en/insights/ai-regulation-switzerland/" },
         ],
       },
     ],
@@ -821,15 +834,18 @@ window.WORLDVIEW.nations.push(
           { t: "DLA Piper - New Zealand's new strategic approach to AI", u: "https://www.dlapiper.com/en-us/insights/publications/2025/07/quick-on-the-uptake-new-zealand-s-new-strategic-approach-to-artificial-intelligence" },
           { t: "Global Government Forum - New Zealand launches its first national AI strategy", u: "https://www.globalgovernmentforum.com/new-zealand-launches-its-first-national-ai-strategy/" },
           { t: "Bell Gully - NZ's AI strategy: light-touch regulation", u: "https://www.bellgully.com/insights/nz-s-ai-strategy-light-touch-regulation-and-opportunities-for-businesses/" },
+          { t: "Nemko - New Zealand AI Strategy 2025", u: "https://digital.nemko.com/news/new-zealand-ai-strategy-2025" },
         ],
       },
       {
         topic: "Public sector", date: "2025-02",
-        text: "A non-binding Public Service AI Framework, introduced in February 2025, sets best-practice principles for government agencies using AI.",
+        text: "A non-binding Public Service AI Framework, published by the Government Chief Digital Officer in early 2025, sets five principles for government agencies using AI.",
         level: "corroborated",
         sources: [
           { t: "Digital.govt.nz - Artificial intelligence", u: "https://www.digital.govt.nz/standards-and-guidance/technology-and-architecture/artificial-intelligence" },
-          { t: "Lexology - New Zealand's Public Service AI Framework", u: "https://www.lexology.com/library/detail.aspx?g=2d22969a-bf2c-4a6e-82b2-c92a8235352d" },
+          { t: "DLA Piper - New Zealand's Public Service AI Framework (Feb 2025)", u: "https://www.dlapiper.com/en/insights/publications/2025/02/new-zealands-public-service-ai-framework-guiding-responsible-innovation" },
+          { t: "Russell McVeagh - Release of public sector AI framework", u: "https://russellmcveagh.com/insights-news/release-of-public-sector-ai-framework" },
+          { t: "Frank Group - How AI is reshaping public services in New Zealand", u: "https://frankgroup.co.nz/ai-transforming-work-in-public-sector" },
         ],
       },
     ],
@@ -839,9 +855,9 @@ window.WORLDVIEW.nations.push(
         summary: "It was released alongside responsible-AI guidance for businesses and supports the government's 'Going for Growth' agenda.",
         level: "verified",
         sources: [
-          { t: "MBIE", u: "https://www.mbie.govt.nz/about/news/artificial-intelligence-strategy-and-business-guidance-now-available" },
+          { t: "Nemko - New Zealand AI Strategy 2025", u: "https://digital.nemko.com/news/new-zealand-ai-strategy-2025" },
           { t: "Global Government Forum", u: "https://www.globalgovernmentforum.com/new-zealand-launches-its-first-national-ai-strategy/" },
-          { t: "MinterEllisonRuddWatts", u: "https://minterellison.co.nz/insights/new-zealand-s-approach-to-artificial-intelligence" },
+          { t: "Oxford Insights - GAIRI 2025 report (notes NZ's 'going for growth' ethos)", u: "https://oxfordinsights.com/wp-content/uploads/2026/01/2025-Government-AI-Readiness-Index-Report_01_26.pdf" },
         ],
       },
     ],
@@ -885,10 +901,11 @@ window.WORLDVIEW.nations.push(
         level: "verified",
         sources: [
           { t: "Newsfile - SATO signs LOI with Gelephu Mindfulness City Authority", u: "https://www.newsfilecorp.com/release/303913/SATO-Technologies-Signs-Letter-of-Intent-with-Bhutans-Gelephu-Mindfulness-City-Authority-to-Develop-a-HydroPowered-Sovereign-AI-Compute-Campus" },
-          { t: "DCD - Former cryptominer Sato inks preliminary agreement for Bhutan AI data center", u: "https://www.datacenterdynamics.com/en/news/former-cryptominer-sato-inks-preliminary-agreement-to-develop-ai-data-center-in-bhutan/" },
-          { t: "MarketScreener - SATO LOI", u: "https://www.marketscreener.com/news/sato-technologies-signs-letter-of-intent-with-gelephu-mindfulness-city-authority-to-develop-hydro-po-ce7f5edbda88f024" },
+          { t: "The Bhutanese - GMCA and SATO sign LoI for renewable-powered AI data centre campus", u: "https://thebhutanese.bt/gmca-and-sato-sign-loi-for-renewable-energy-powered-ai-data-center-campus/" },
+          { t: "Blockspace - SATO signs LOI for hydro-powered AI campus in Bhutan", u: "https://blockspace.media/insight/sato-bhutan-hydro-powered-ai-campus/" },
+          { t: "BTW Media - Sato plans AI data centre in Bhutan", u: "https://btw.media/en/sato-plans-ai-data-centre-in-bhutan" },
         ],
-        note: "DCD calculates that a full 500 MW build could use about 20% of Bhutan's generation. That is a trade-press estimate.",
+        note: "Sources differ on whether 100 MW is the headline target or the reserved amount. The authority says further technical, commercial and regulatory assessment is still required.",
       },
     ],
     news: [
@@ -898,8 +915,9 @@ window.WORLDVIEW.nations.push(
         level: "verified",
         sources: [
           { t: "Newsfile", u: "https://www.newsfilecorp.com/release/303913/SATO-Technologies-Signs-Letter-of-Intent-with-Bhutans-Gelephu-Mindfulness-City-Authority-to-Develop-a-HydroPowered-Sovereign-AI-Compute-Campus" },
-          { t: "DCD", u: "https://www.datacenterdynamics.com/en/news/former-cryptominer-sato-inks-preliminary-agreement-to-develop-ai-data-center-in-bhutan/" },
-          { t: "MarketScreener", u: "https://www.marketscreener.com/news/sato-technologies-signs-letter-of-intent-with-gelephu-mindfulness-city-authority-to-develop-hydro-po-ce7f5edbda88f024" },
+          { t: "The Bhutanese - GMCA and SATO sign LoI for renewable-powered AI data centre campus", u: "https://thebhutanese.bt/gmca-and-sato-sign-loi-for-renewable-energy-powered-ai-data-center-campus/" },
+          { t: "Blockspace - SATO signs LOI for hydro-powered AI campus in Bhutan", u: "https://blockspace.media/insight/sato-bhutan-hydro-powered-ai-campus/" },
+          { t: "BTW Media - Sato plans AI data centre in Bhutan", u: "https://btw.media/en/sato-plans-ai-data-centre-in-bhutan" },
         ],
       },
     ],
@@ -977,7 +995,7 @@ window.WORLDVIEW.nations.push(
         summary: "The approach is 'ethics first, law later': guidelines now, with a national AI guideline promised in the budget.",
         level: "verified",
         sources: [
-          { t: "UNDP", u: "https://www.undp.org/mauritius-seychelles/press-releases/mauritius-launches-national-ai-strategy-and-fair-guidelines-supported-undp" },
+          { t: "UNDP - Mauritius launches National AI Strategy and FAIR Guidelines", u: "https://www.undp.org/mauritius-seychelles/press-releases/mauritius-launches-national-ai-strategy-and-fair-guidelines-supported-undp" },
           { t: "TechCabal", u: "https://techcabal.com/2026/04/23/mauritius-new-ai-strategy-sets-a-new-bar-ethics-before-execution/" },
           { t: "Comsure", u: "https://www.comsuregroup.com/news/mauritius-launches-national-ai-strategy-and-fair-rules-ethics-first-law-later/" },
         ],
@@ -1004,7 +1022,8 @@ window.WORLDVIEW.nations.push(
         sources: [
           { t: "Ecofin - Benin approves a national AI strategy", u: "https://www.ecofinagency.com/telecom/2401-44198-benin-approves-a-national-artificial-intelligence-strategy" },
           { t: "OECD.AI - National AI and Big Data Strategy 2023–2027", u: "https://oecd.ai/en/dashboards/policy-initiatives/national-artificial-intelligence-and-big-data-strategy-2023-2027" },
-          { t: "E-karangé - Benin adopts a national strategy", u: "https://ekarange.com/en/artificial-intelligence-and-big-data-benin-adopts-a-national-strategy/" },
+          { t: "Digital Watch - SNIAM of Benin", u: "https://dig.watch/resource/the-national-strategy-for-artificial-intelligence-and-big-data-sniam-of-benin" },
+          { t: "Government of Benin - National AI and Big Data Strategy (PDF)", u: "https://innovation.gouv.bj/assets/documents/national-artificial-intelligence-and-big-data-strategy-1682673348.pdf" },
         ],
         note: "Budget conversions vary (about US$7.8M).",
       },
@@ -1071,7 +1090,7 @@ window.WORLDVIEW.nations.push(
         date: "2026-03", title: "AI management-system standard adopted nationally",
         summary: "Costa Rica formalised INTE/ISO/IEC 42001:2026, its adaptation of the international AI management-system standard.",
         level: "single",
-        sources: [{ t: "Regulations.ai - Costa Rica overview", u: "https://regulations.ai/regulations/RAI-CR-NA-SUMMARY-2026" }],
+        sources: [{ t: "INPLP - Legal update on privacy and AI: Costa Rica", u: "https://inplp.com/latest-news/article/legal-update-on-privacy-and-artificial-intelligence-costa-rica/" }],
       },
     ],
     watch: ["Whether any AI bill is called for debate by the executive."],
