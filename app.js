@@ -997,17 +997,57 @@
 
   // ---------------------------------------------------------------- routing
   const tabsEl = document.getElementById("tabs");
+  // Nations menu: a button that opens a searchable panel grouped by region (a native <select> sizes itself
+  // to its longest option, which left a wide gap in the nav).
+  let menuCleanup = null;
+  function nationMenu(current) {
+    const wrap = el("div", { class: "tab tab-menu", "aria-current": current ? "page" : null });
+    const btn = el("button", { type: "button", class: "tab-menu-btn", "aria-haspopup": "true", "aria-expanded": "false" },
+      current ? `${current.flag} ${shortName(current)}` : "Nations", el("span", { class: "caret", "aria-hidden": "true" }, "▾"));
+    const panel = el("div", { class: "nav-panel", hidden: true, role: "dialog", "aria-label": "Choose a nation" });
+    const search = el("input", { type: "search", class: "nav-search", placeholder: `Search ${N.length} nations…`, "aria-label": "Search nations" });
+    const lists = el("div", { class: "nav-groups" });
+    const draw = (q = "") => {
+      const qq = q.trim().toLowerCase();
+      lists.replaceChildren(...GROUPS.map((g) => {
+        const items = N.filter((n) => n.group === g && (!qq || n.name.toLowerCase().includes(qq) || n.region.toLowerCase().includes(qq)))
+          .sort((x, y) => x.name.localeCompare(y.name));
+        if (!items.length) return null;
+        return el("div", { class: "nav-group" }, el("div", { class: "nav-group-h" }, `${g} · ${items.length}`),
+          items.map((n) => el("a", { href: `#${n.id}`, class: "nav-item" + (n === current ? " is-current" : "") }, `${n.flag} ${n.name}`)));
+      }).filter(Boolean));
+      if (!lists.children.length) lists.append(el("p", { class: "muted small" }, "No nation matches."));
+    };
+    const close = () => { panel.hidden = true; btn.setAttribute("aria-expanded", "false"); };
+    const open = () => {
+      panel.hidden = false; btn.setAttribute("aria-expanded", "true"); search.value = ""; draw();
+      // Keep the panel inside the viewport.
+      panel.style.left = ""; const r = panel.getBoundingClientRect(), pad = 16;
+      if (innerWidth > 760 && r.right > innerWidth - pad) panel.style.left = `${Math.max(pad - wrap.getBoundingClientRect().left, -(r.right - (innerWidth - pad)))}px`;
+      search.focus();
+    };
+    btn.addEventListener("click", (e) => { e.stopPropagation(); panel.hidden ? open() : close(); });
+    search.addEventListener("input", () => draw(search.value));
+    search.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") { const first = lists.querySelector(".nav-item"); if (first) location.hash = first.getAttribute("href"); }
+    });
+    panel.addEventListener("click", (e) => { if (e.target.closest(".nav-item")) close(); });
+    const onDoc = (e) => { if (!wrap.contains(e.target)) close(); };
+    const onKey = (e) => { if (e.key === "Escape" && !panel.hidden) { close(); btn.focus(); } };
+    if (menuCleanup) menuCleanup();
+    document.addEventListener("click", onDoc);
+    document.addEventListener("keydown", onKey);
+    menuCleanup = () => { document.removeEventListener("click", onDoc); document.removeEventListener("keydown", onKey); };
+    panel.append(search, lists);
+    wrap.append(btn, panel);
+    return wrap;
+  }
   function renderTabs(key) {
     const current = byId(key);
-    const picker = el("select", { class: "select nation-picker", "aria-label": "Go to a nation" },
-      el("option", { value: "", selected: !current }, `Nations (${N.length})`),
-      GROUPS.map((g) => el("optgroup", { label: g },
-        N.filter((n) => n.group === g).sort((a, b) => a.name.localeCompare(b.name)).map((n) =>
-          el("option", { value: n.id, selected: current === n }, `${n.flag} ${n.name}`)))));
-    picker.addEventListener("change", () => { if (picker.value) location.hash = picker.value; });
+    const isOverview = key === "overview" || (!current && key !== "news" && key !== "method");
     tabsEl.replaceChildren(
-      el("a", { class: "tab", href: "#overview", "aria-current": key === "overview" || (!current && key !== "news" && key !== "method") ? "page" : null }, "Overview"),
-      el("span", { class: "tab tab-picker", "aria-current": current ? "page" : null }, picker),
+      el("a", { class: "tab", href: "#overview", "aria-current": isOverview ? "page" : null }, "Overview"),
+      nationMenu(current),
       el("a", { class: "tab", href: "#news", "aria-current": key === "news" ? "page" : null }, "News"),
       el("a", { class: "tab", href: "#method", "aria-current": key === "method" ? "page" : null }, "Method"));
   }
