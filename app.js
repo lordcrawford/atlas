@@ -481,7 +481,7 @@
       hoverable(hit, () => [
         el("div", { class: "tv" }, `${v.toFixed(1)}%`),
         el("div", { class: "tl" }, `${n.name}, H2 2025${reg ? " · regional estimate" : ""}`),
-        el("div", { class: "tl small" }, reg ? "Microsoft reports one shared figure for several West African countries." : `H1 2025: ${n.msAdoption.h1_2025.toFixed(1)}%`),
+        el("div", { class: "tl small" }, reg ? `Microsoft reports one shared figure for several countries in ${n.msAdoption.regionLabel || "West Africa"}.` : `H1 2025: ${n.msAdoption.h1_2025.toFixed(1)}%`),
       ]);
       svg.append(s("path", { d: path, fill: reg ? "url(#hatch)" : "var(--series-1)", stroke: reg ? "var(--series-1)" : null, "stroke-width": reg ? 1 : null, class: "mark" }),
         s("text", { x: x(v) + 6, y: y + barH / 2 + 4, class: reg ? "t-muted" : "t-ink", style: "font-variant-numeric:tabular-nums" }, `${v.toFixed(1)}%${reg ? " · regional est." : ""}`), hit);
@@ -878,7 +878,7 @@
       ms
         ? tile("Uses generative AI", `${(ms.q2_2026 ?? ms.h2_2025).toFixed(1)}%`, ms.q2_2026 ? `working-age, Q2 2026 · world #${ms.rankLatest}` : "working-age, H2 2025", ms.q2_2026 ? S.msQ2 : S.msH2)
         : tile("Uses generative AI", "—", "Not reported separately by Microsoft", S.msH2));
-    if (ms && ms.regional) tiles.lastChild.querySelector(".s").textContent = "West Africa regional estimate, H2 2025";
+    if (ms && ms.regional) tiles.lastChild.querySelector(".s").textContent = `${ms.regionLabel || "West Africa"} regional estimate, H2 2025`;
 
     const ranked = [...N].sort((a, b) => a.oxford.rank - b.oxford.rank);
     const pos = ranked.indexOf(n);
@@ -978,7 +978,7 @@
         el("li", {}, "Removed: the Stargate UAE '5,000 workers' figure, MAS's '80% of risk officers' figure, Omar Al Olama's age, Norway's '4–6 research centres', a 2028 Swiss date, Slovenia's exact AI-factory launch day, El Salvador's '2031' target year, and Kuwait's unconfirmed '2025–2028' strategy dates."),
         el("li", {}, "Fixed: the UAE AI & Data Authority date (14 June 2026), the UAE strategy's two dates (2017 launch, 2019 adoption), and Finland's gigafactory claim (now the documented Nokia-led bid)."),
         el("li", {}, "Fixed: readiness scores for 13 newly added nations were corrected to match Oxford Insights' table exactly."),
-        el("li", {}, "Flagged: Microsoft's figure for Benin, Sierra Leone and Togo (9.3%) is a shared West Africa estimate, not a national measurement."),
+        el("li", {}, "Flagged: Microsoft's figures for Benin, Sierra Leone, Togo, Liberia and Mauritania (9.3%) and for Guyana (9.0%, shared with Suriname, Venezuela and French Guiana) are regional estimates, not national measurements."),
         el("li", {}, "Replaced about 50 dead, empty or bot-blocked source links with readable sources that confirm the claim."),
         el("li", {}, "Oxford Insights' December 2025 rankings contained errors. This site uses the validated January 2026 table.")),
       el("h2", {}, "What's shown"),

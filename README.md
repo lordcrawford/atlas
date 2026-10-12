@@ -1,12 +1,12 @@
 # Worldview
 
-An interactive dashboard on how **45 small nations** (all under 15M people) are adopting and governing AI.
+An interactive dashboard on how **70 small nations** (all under 15M people) are adopting and governing AI.
 
-- **Europe (incl. South Caucasus):** Estonia, Malta, Denmark, Finland, Norway, Ireland, Luxembourg, Iceland, Lithuania, Slovenia, Cyprus, Switzerland, Sweden, Austria, Portugal, Greece, Latvia, Albania, Georgia, Armenia
-- **Middle East:** UAE, Qatar, Bahrain, Jordan, Kuwait, Oman
-- **Asia-Pacific:** Singapore, New Zealand, Bhutan, Mongolia, Brunei
-- **Africa:** Rwanda, Mauritius, Benin, Tunisia, Botswana, Sierra Leone, Togo
-- **Americas:** Uruguay, Costa Rica, Jamaica, El Salvador, Panama, Paraguay, Dominican Republic
+- **Europe (incl. South Caucasus):** Estonia, Malta, Denmark, Finland, Norway, Ireland, Luxembourg, Iceland, Lithuania, Slovenia, Cyprus, Switzerland, Sweden, Austria, Portugal, Greece, Latvia, Albania, Georgia, Armenia, Belgium, Czechia, Hungary, Croatia, Slovakia, Bulgaria, Serbia, Montenegro, Azerbaijan
+- **Middle East:** UAE, Qatar, Bahrain, Jordan, Kuwait, Oman, Lebanon
+- **Asia-Pacific (incl. Central Asia):** Singapore, New Zealand, Bhutan, Mongolia, Brunei, Kyrgyzstan, Laos, Fiji, Maldives
+- **Africa:** Rwanda, Mauritius, Benin, Tunisia, Botswana, Sierra Leone, Togo, Namibia, Cabo Verde, Seychelles, Gambia, Liberia, Mauritania
+- **Americas:** Uruguay, Costa Rica, Jamaica, El Salvador, Panama, Paraguay, Dominican Republic, Honduras, Trinidad and Tobago, Barbados, Bahamas, Guyana
 
 **Features**
 - **Overview:** highlights; a zoomable, draggable world map (colour by readiness or AI use, with region filters that zoom it); the readiness heatmap (Oxford Insights 2025); generative-AI use (Microsoft); AI talent (Stanford AI Index 2026); the UAE vs Singapore trend; milestones since 2024; and a sortable comparison table.
@@ -14,7 +14,7 @@ An interactive dashboard on how **45 small nations** (all under 15M people) are 
 - **News:** every development since January 2024, newest first, filterable by region, nation and verification level.
 - **Method:** verification rules, the full audit, corrections, and limits.
 
-Research cut-off: **10 October 2026**.
+Research cut-off: **10 October 2026** (12 October for the 25 nations added last).
 
 ## Run it
 
@@ -36,12 +36,13 @@ Then open http://localhost:8765. Opening `index.html` directly also works.
 | `data/nations.js` | Data for the first six nations, plus shared metadata and sources |
 | `data/nations-more.js` | Data for 19 more nations (added second) |
 | `data/nations-more2.js` | Data for 20 more nations (added third) |
+| `data/nations-more3.js` | Data for 25 more nations (added fourth) |
 | `vendor/` | d3-geo, d3-array, topojson-client and world-atlas (Natural Earth 110m), bundled so the map works offline |
 | `METHODOLOGY.md` | Verification rules |
 
 ## Updating
 
-Edit `data/nations.js` or `data/nations-more.js`. Each nation needs `group` (region), `geo` ([lon, lat] of the capital) and `isoN` (ISO numeric code, used to match map shapes). Each fact or news item looks like this:
+Edit the matching file in `data/`. Each nation needs `group` (region), `geo` ([lon, lat] of the capital) and `isoN` (ISO numeric code, used to match map shapes). Each fact or news item looks like this:
 
 ```js
 {
