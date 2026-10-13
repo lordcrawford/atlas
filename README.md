@@ -1,11 +1,11 @@
 # Worldview
 
-An interactive dashboard on how **70 small nations** (all under 15M people) are adopting and governing AI.
+An interactive dashboard on how **76 small nations** (all under 15M people) are adopting and governing AI.
 
 - **Europe (incl. South Caucasus):** Estonia, Malta, Denmark, Finland, Norway, Ireland, Luxembourg, Iceland, Lithuania, Slovenia, Cyprus, Switzerland, Sweden, Austria, Portugal, Greece, Latvia, Albania, Georgia, Armenia, Belgium, Czechia, Hungary, Croatia, Slovakia, Bulgaria, Serbia, Montenegro, Azerbaijan
 - **Middle East:** UAE, Qatar, Bahrain, Jordan, Kuwait, Oman, Lebanon
 - **Asia-Pacific (incl. Central Asia):** Singapore, New Zealand, Bhutan, Mongolia, Brunei, Kyrgyzstan, Laos, Fiji, Maldives
-- **Africa:** Rwanda, Mauritius, Benin, Tunisia, Botswana, Sierra Leone, Togo, Namibia, Cabo Verde, Seychelles, Gambia, Liberia, Mauritania
+- **Africa:** Rwanda, Mauritius, Benin, Tunisia, Botswana, Sierra Leone, Togo, Namibia, Cabo Verde, Seychelles, Gambia, Liberia, Mauritania, Libya, Congo, Gabon, Djibouti, Eswatini, Lesotho
 - **Americas:** Uruguay, Costa Rica, Jamaica, El Salvador, Panama, Paraguay, Dominican Republic, Honduras, Trinidad and Tobago, Barbados, Bahamas, Guyana
 
 **Features**
@@ -14,7 +14,7 @@ An interactive dashboard on how **70 small nations** (all under 15M people) are 
 - **News:** every development since January 2024, newest first, filterable by region, nation and verification level.
 - **Method:** verification rules, the full audit, corrections, and limits.
 
-Research cut-off: **10 October 2026** (12 October for the 25 nations added last).
+Research cut-off: **10 October 2026** (12–13 October for the 31 nations added last).
 
 ## Run it
 
@@ -37,6 +37,7 @@ Then open http://localhost:8765. Opening `index.html` directly also works.
 | `data/nations-more.js` | Data for 19 more nations (added second) |
 | `data/nations-more2.js` | Data for 20 more nations (added third) |
 | `data/nations-more3.js` | Data for 25 more nations (added fourth) |
+| `data/nations-more4.js` | Data for 6 more African nations (added fifth) |
 | `vendor/` | d3-geo, d3-array, topojson-client and world-atlas (Natural Earth 110m), bundled so the map works offline |
 | `METHODOLOGY.md` | Verification rules |
 

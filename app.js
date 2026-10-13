@@ -978,7 +978,7 @@
         el("li", {}, "Removed: the Stargate UAE '5,000 workers' figure, MAS's '80% of risk officers' figure, Omar Al Olama's age, Norway's '4–6 research centres', a 2028 Swiss date, Slovenia's exact AI-factory launch day, El Salvador's '2031' target year, and Kuwait's unconfirmed '2025–2028' strategy dates."),
         el("li", {}, "Fixed: the UAE AI & Data Authority date (14 June 2026), the UAE strategy's two dates (2017 launch, 2019 adoption), and Finland's gigafactory claim (now the documented Nokia-led bid)."),
         el("li", {}, "Fixed: readiness scores for 13 newly added nations were corrected to match Oxford Insights' table exactly."),
-        el("li", {}, "Flagged: Microsoft's figures for Benin, Sierra Leone, Togo, Liberia and Mauritania (9.3%) and for Guyana (9.0%, shared with Suriname, Venezuela and French Guiana) are regional estimates, not national measurements."),
+        el("li", {}, "Flagged: Microsoft's figures for Benin, Sierra Leone, Togo, Liberia and Mauritania (9.3%) for Guyana (9.0%, shared with Suriname, Venezuela and French Guiana) and for Congo (7.8%, shared with Cameroon, Chad, the Central African Republic and DR Congo) are regional estimates, not national measurements."),
         el("li", {}, "Replaced about 50 dead, empty or bot-blocked source links with readable sources that confirm the claim."),
         el("li", {}, "Oxford Insights' December 2025 rankings contained errors. This site uses the validated January 2026 table.")),
       el("h2", {}, "What's shown"),
