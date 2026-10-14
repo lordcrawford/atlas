@@ -38,9 +38,8 @@ window.WORLDVIEW.nations.push(
       {
         topic: "Regulation", date: "2025",
         text: "Denmark applies the EU AI Act. The Agency for Digital Government is the coordinating national authority, with the Data Protection Agency and sector supervisors covering their own fields.",
-        level: "corroborated",
+        level: "single",
         sources: [
-          { t: "AI Policy Tracker - Denmark", u: "https://aipolicytracker.org/jurisdictions/denmark" },
           { t: "Bird & Bird - AI Regulatory Horizon Tracker: Denmark", u: "https://www.twobirds.com/en/capabilities/artificial-intelligence/ai-legal-services/ai-regulatory-horizon-tracker/denmark" },
         ],
         note: "The sources disagree on the national supplementing law. One cites Act No. 467 of 14 May 2025 as in force. Bird & Bird reports that a later replacement bill was halted by the Danish election.",
@@ -132,11 +131,10 @@ window.WORLDVIEW.nations.push(
       {
         date: "2026-01-01", title: "National AI Act enforcement law takes effect",
         summary: "Finland now has a working AI Act enforcement system: Traficom coordinates, more than half a dozen sector supervisors share the work, and a sanctions board can fine up to the EU maximums.",
-        level: "verified",
+        level: "corroborated",
         sources: [
           { t: "Bird & Bird", u: "https://www.twobirds.com/en/capabilities/artificial-intelligence/ai-legal-services/ai-regulatory-horizon-tracker/finland" },
           { t: "VLO Law Firm", u: "https://vlolawfirm.com/trackers/ai-regulation-finland" },
-          { t: "Regulations.ai - Finland overview", u: "https://regulations.ai/regulations/RAI-FI-NA-SUMMARY-2026" },
         ],
       },
     ],
@@ -178,20 +176,18 @@ window.WORLDVIEW.nations.push(
       {
         topic: "Strategy", date: "2024-09-26",
         text: "Norway's national digitalisation strategy (September 2024) aims to make it the world's most digitalised country by 2030, including building a national AI infrastructure.",
-        level: "corroborated",
+        level: "single",
         sources: [
           { t: "Regjeringen - The Digital Norway of the Future, ch.1: the most digitalised country in the world", u: "https://www.regjeringen.no/en/documents/the-digital-norway-of-the-future/id3054645/?ch=2" },
           { t: "Global Relay Intelligence - Norway aims to become the world's most digitized country", u: "https://www.grip.globalrelay.com/norway-aims-to-become-the-worlds-most-digitized-country/" },
-          { t: "Regulations.ai - The Digital Norway of the Future", u: "https://regulations.ai/regulations/RAI-NO-NA-DNFNDXX-2024" },
         ],
       },
       {
         topic: "Regulation", date: "2025",
-        text: "Norway is implementing the EU AI Act through the EEA, but it is not yet Norwegian law. Nkom (the communications authority) will coordinate and serve as single point of contact. The draft law's public consultation closed on 30 September 2025.",
-        level: "corroborated",
+        text: "Norway is implementing the EU AI Act through the EEA, but it is not yet Norwegian law. Nkom (the communications authority) will coordinate and serve as single point of contact. A draft law was put out for public consultation on 30 June 2025.",
+        level: "single",
         sources: [
           { t: "Haavind - Artificial Intelligence Act (Tech Insight)", u: "https://haavind.no/techinsight/tech-insight/artificial-intelligence-act/" },
-          { t: "Regulations.ai - Norway AI Act", u: "https://regulations.ai/regulations/norway-ai-act-2026" },
         ],
         note: "Sources give different dates for entry into force, ranging from summer 2026 to not before August 2027.",
       },
@@ -284,11 +280,10 @@ window.WORLDVIEW.nations.push(
       {
         topic: "Strategy", date: "2019-05-24",
         text: "Luxembourg's first national AI strategy, 'Artificial Intelligence: a strategic vision for Luxembourg', was presented on 24 May 2019 by Prime Minister Xavier Bettel and Deputy PM Étienne Schneider. It called itself a 'living document' to be updated over time.",
-        level: "verified",
+        level: "corroborated",
         sources: [
           { t: "Digital Luxembourg - Government defines its strategic vision for AI", u: "https://digital-luxembourg.public.lu/news/national-ai-vision-prioritizes-people" },
           { t: "Chronicle.lu - AI, digitisation strategies unveiled", u: "https://chronicle.lu/category/innovation/29342-ai-digitisation-strategies-unveiled" },
-          { t: "Regulations.ai - Luxembourg AI Strategic Vision (2019)", u: "https://regulations.ai/regulations/RAI-LU-NA-AISVLXX-2019" },
         ],
       },
       {
@@ -344,8 +339,8 @@ window.WORLDVIEW.nations.push(
     id: "is", name: "Iceland", flag: "🇮🇸", region: "Northern Europe (EEA)", group: "Europe", geo: [-21.94, 64.15], isoN: "352",
     stance: "Language-first: making sure AI speaks Icelandic",
     summary:
-      "With fewer than 400,000 people, Iceland's central AI worry is language. After investing more than ISK 2 billion in Icelandic language technology, it partnered with OpenAI on GPT-4's Icelandic. Its 2021 AI policy and a 2024–2026 action plan focus on society, education, public administration and health. Like Norway, it follows the EU AI Act through the EEA.",
-    glance: { firstStrategy: "2021", latestStrategy: "2024 (AI action plan 2024–2026)", newestBody: "—", newestBodyDate: "" },
+      "With fewer than 400,000 people, Iceland's central AI worry is language. After investing more than ISK 2 billion in Icelandic language technology, it partnered with OpenAI on GPT-4's Icelandic. It adopted a national AI policy in 2021. Like Norway, it follows the EU AI Act through the EEA.",
+    glance: { firstStrategy: "2021", latestStrategy: "2021 (AI policy)", newestBody: "—", newestBodyDate: "" },
     stats: { population: { v: 392404, year: 2025 }, gdpPerCapita: { v: 98323, year: 2025 }, internet: { v: 98.2, year: 2024 } },
     oxford: { rank: 44, scores: [77.0, 58.43, 65.27, 66.61, 43.0, 76.53] },
     msAdoption: null,
@@ -363,20 +358,10 @@ window.WORLDVIEW.nations.push(
       {
         topic: "Strategy", date: "2021-04",
         text: "Iceland's AI policy came from a five-person committee appointed by the Prime Minister's Office in October 2020, which reported in April 2021. It gives special attention to Icelandic language technology.",
-        level: "corroborated",
-        sources: [
-          { t: "IIIM - Iceland has a new AI policy (Apr 2021)", u: "https://www.iiim.is/2021/04/iceland-has-a-new-ai-policy/" },
-          { t: "Regulations.ai - Iceland AI Policy (2021)", u: "https://regulations.ai/regulations/RAI-IS-NA-ICEARIN-2021" },
-        ],
-      },
-      {
-        topic: "Strategy", date: "2024",
-        text: "A 2024–2026 AI action plan sets out measures across AI for society, competitiveness, education, public administration and healthcare.",
         level: "single",
         sources: [
-          { t: "Regulations.ai - Iceland AI Action Plan 2024-2026", u: "https://regulations.ai/regulations/iceland-2024-ai-action-plan" },
+          { t: "IIIM - Iceland has a new AI policy (Apr 2021)", u: "https://www.iiim.is/2021/04/iceland-has-a-new-ai-policy/" },
         ],
-        note: "Secondary sources disagree on the plan's years and number of measures. Check government.is for the authoritative text.",
       },
     ],
     news: [
@@ -395,21 +380,21 @@ window.WORLDVIEW.nations.push(
     id: "lt", name: "Lithuania", flag: "🇱🇹", region: "Northern Europe (EU)", group: "Europe", geo: [25.28, 54.69], isoN: "440",
     stance: "Fast AI Act implementer with an early sandbox and home-grown Lithuanian language models",
     summary:
-      "Lithuania was among the first EU states to designate its AI Act regulator, the Communications Regulatory Authority (RRT), in January 2025. It also runs an early regulatory sandbox. Open Lithuanian-language models are coming from industry, universities and the state. New 2026–2035 strategic guidelines aim to move from scattered projects to nationwide AI deployment.",
-    glance: { firstStrategy: "2019", latestStrategy: "2026 (Strategic Guidelines 2026–2035)", newestBody: "RRT (AI Act authority)", newestBodyDate: "2025-01" },
+      "Lithuania's Seimas approved amendments making the Communications Regulatory Authority (RRT) its AI Act regulator. It also runs an early regulatory sandbox. Open Lithuanian-language models are coming from industry, universities and the state. New 2026–2035 strategic guidelines aim to move from scattered projects to nationwide AI deployment.",
+    glance: { firstStrategy: "2019", latestStrategy: "2026 (Strategic Guidelines 2026–2035)", newestBody: "RRT (AI Act authority)", newestBodyDate: "2025" },
     stats: { population: { v: 2888774, year: 2025 }, gdpPerCapita: { v: 32959, year: 2025 }, internet: { v: 89.2, year: 2024 } },
     oxford: { rank: 29, scores: [80.5, 55.11, 91.67, 84.3, 45.56, 57.02] },
     msAdoption: { h1_2025: 21.0, h2_2025: 22.4, q1_2026: null, q2_2026: null, rankLatest: null },
     facts: [
       {
-        topic: "Regulation", date: "2025-01",
-        text: "In January 2025 the Seimas amended national law to name the Communications Regulatory Authority (RRT) as Lithuania's AI Act market-surveillance authority and single point of contact, and the Innovation Agency as notifying authority.",
-        level: "verified",
+        topic: "Regulation", date: "2025",
+        text: "The Seimas approved amendments making the Communications Regulatory Authority (RRT) Lithuania's AI Act market-surveillance authority and single point of contact, with the Innovation Agency as notifying authority.",
+        level: "single",
         sources: [
-          { t: "RegulatoryAI.eu - The EU AI Act in Lithuania", u: "https://www.regulatoryai.eu/ai-act-lithuania/" },
-          { t: "Regulations.ai - Lithuania AI Act implementation (XV-106)", u: "https://regulations.ai/regulations/RAI-LT-NA-AISSMXX-2025" },
-          { t: "Confir - EU AI Act in Lithuania", u: "https://confir.eu/eu-ai-act/lithuania" },
+          { t: "The Baltic Times - Lithuania takes to AI regulation, aims to become regional leader", u: "https://www.baltictimes.com/lithuania_takes_to_ai_regulation__aims_to_become_regional_leader" },
+          { t: "Ministry of the Economy and Innovation - Seimas approves amendments to accelerate AI development", u: "https://eimin.lrv.lt/en/structure-and-contacts/news-1/seimas-approves-amendments-to-accelerate-the-development-of-artificial-intelligence-in-lithuania/" },
         ],
+        note: "The Baltic Times describes the planned roles; the ministry's page on the Seimas vote blocks automated reading and could not be checked, so this rests on one readable source.",
       },
       {
         topic: "Strategy", date: "2026",
@@ -452,12 +437,22 @@ window.WORLDVIEW.nations.push(
     id: "si", name: "Slovenia", flag: "🇸🇮", region: "Central Europe (EU)", group: "Europe", geo: [14.51, 46.06], isoN: "705",
     stance: "Research-led: home of UNESCO's AI centre, new AI factory, enacted AI Act law",
     summary:
-      "Slovenia hosts IRCAI, the world's first international AI research centre under UNESCO's auspices (2021). Its 2021–2025 national AI programme was budgeted at about €110 million. A national AI factory (SLAIF) launched in 2026 around a new supercomputer due in 2027. Its AI Act implementing law took effect in November 2025, with the communications regulator AKOS in the lead.",
-    glance: { firstStrategy: "2021", latestStrategy: "2021 (NpAI, extended to 2026)", newestBody: "Slovenian AI Factory (SLAIF)", newestBodyDate: "2026" },
+      "Slovenia hosts IRCAI, the world's first international AI research centre under UNESCO's auspices (2021). Its 2021–2025 national AI programme was budgeted at about €110 million. A national AI factory (SLAIF) launched in 2026 around a new supercomputer due in 2027. Its AI Act implementing law took effect in November 2025, with the communications regulator AKOS in the lead. In March 2026 the government adopted a National AI Strategy to 2030.",
+    glance: { firstStrategy: "2021", latestStrategy: "2026 (NsUI 2030)", newestBody: "Slovenian AI Factory (SLAIF)", newestBodyDate: "2026" },
     stats: { population: { v: 2130986, year: 2025 }, gdpPerCapita: { v: 37376, year: 2025 }, internet: { v: 90.8, year: 2024 } },
     oxford: { rank: 36, scores: [84.0, 57.98, 72.5, 76.44, 45.52, 60.99] },
     msAdoption: { h1_2025: 24.6, h2_2025: 26.5, q1_2026: null, q2_2026: null, rankLatest: null },
     facts: [
+      {
+        topic: "Strategy", date: "2026-03-05",
+        text: "On 5 March 2026 the government adopted the National Strategy for AI until 2030 (NsUI 2030). It sets five strategic goals, including sovereign AI, wider AI use in the economy and public sector, and safe and responsible use. The digital transformation ministry has nine months to prepare an action plan with measures, a timetable and funding.",
+        level: "corroborated",
+        sources: [
+          { t: "Gov.si - 193rd regular session of the Government (5 Mar 2026)", u: "https://www.gov.si/en/news/2026-03-05-193rd-regular-session-of-the-government-of-the-republic-of-slovenia/" },
+          { t: "ICE (Italian Trade Agency) - Slovenia approves national AI strategy to 2030 (11 Mar 2026)", u: "https://www.ice.it/it/news/notizie-dal-mondo/300687" },
+        ],
+        note: "Added in the 14 Oct 2026 re-audit; the page previously listed this strategy as unconfirmed.",
+      },
       {
         topic: "Research", date: "2021-03-29",
         text: "On 29 March 2021, UNESCO's Director-General and Slovenia's President inaugurated IRCAI, the International Research Centre on AI, in Ljubljana. It is the first such centre under UNESCO's auspices and is hosted by the Jožef Stefan Institute.",
@@ -501,6 +496,15 @@ window.WORLDVIEW.nations.push(
     ],
     news: [
       {
+        date: "2026-03-05", title: "Slovenia adopts National AI Strategy to 2030",
+        summary: "NsUI 2030 succeeds the earlier national AI programme and sets five goals, from sovereign AI to safe and responsible use; an action plan is due within nine months.",
+        level: "corroborated",
+        sources: [
+          { t: "Gov.si", u: "https://www.gov.si/en/news/2026-03-05-193rd-regular-session-of-the-government-of-the-republic-of-slovenia/" },
+          { t: "ICE (Italian Trade Agency)", u: "https://www.ice.it/it/news/notizie-dal-mondo/300687" },
+        ],
+      },
+      {
         date: "2026", title: "Slovenian AI Factory officially launched",
         summary: "A consortium of the Jožef Stefan Institute and the universities of Ljubljana and Maribor will run AI-optimised compute, housed at a hydroelectric site in Maribor.",
         level: "corroborated",
@@ -510,7 +514,7 @@ window.WORLDVIEW.nations.push(
         ],
       },
     ],
-    watch: ["A successor national AI strategy to 2030. One secondary source reports adoption in March 2026, unconfirmed."],
+    watch: ["The NsUI 2030 action plan, due within nine months of the March 2026 adoption."],
   },
 
   // ------------------------------------------------------------------ CYPRUS
@@ -527,11 +531,10 @@ window.WORLDVIEW.nations.push(
       {
         topic: "Strategy", date: "2020-01",
         text: "The Council of Ministers approved Cyprus's first national AI strategy in January 2020. It has five priorities: talent, business competitiveness, public services, national data spaces, and ethical, reliable AI.",
-        level: "verified",
+        level: "corroborated",
         sources: [
           { t: "EC AI Watch - Cyprus AI strategy report", u: "https://ai-watch.ec.europa.eu/countries/cyprus/cyprus-ai-strategy-report_en" },
           { t: "Legal 500 - Artificial intelligence in Cyprus", u: "https://www.legal500.com/intelligence/cyprus/technology/artificial-intelligence-in-cyprus" },
-          { t: "Regulations.ai - Cyprus National AI Strategy (2020)", u: "https://regulations.ai/regulations/RAI-CY-NA-NAISAXX-2020" },
         ],
       },
       {
@@ -546,10 +549,9 @@ window.WORLDVIEW.nations.push(
       {
         topic: "Regulation", date: "2025-01",
         text: "Cyprus named its EU AI Act authorities in January 2025. The Commissioner of Communications is notifying authority, main market-surveillance authority and single point of contact, and the data-protection commissioner covers prohibited practices and certain high-risk areas.",
-        level: "verified",
+        level: "corroborated",
         sources: [
           { t: "Gov.cy (Deputy Ministry of Research, Innovation and Digital Policy) - AI Act page", u: "https://www.gov.cy/dmrid/en/uncategorized/regulation-eu-2024-1689-establishing-harmonised-rules-on-artificial-intelligence-ai-act/" },
-          { t: "Regulations.ai - Cyprus AI Act governance framework", u: "https://regulations.ai/regulations/cyprus-2024-11-ai-act-implementation-framework" },
           { t: "ArtificialIntelligenceAct.eu - National implementation plans", u: "https://artificialintelligenceact.eu/national-implementation-plans/" },
         ],
       },
@@ -569,10 +571,9 @@ window.WORLDVIEW.nations.push(
       {
         date: "2026-08-07", title: "Draft AI strategy criticised for vague timelines",
         summary: "Commentators in Cyprus Mail say the strategy's institutions are well designed but its milestones are broad and overlapping.",
-        level: "corroborated",
+        level: "single",
         sources: [
           { t: "Cyprus Mail", u: "https://cyprus-mail.com/2026/08/07/pros-and-cons-of-cyprus-national-ai-strategy" },
-          { t: "Panis Newsletter", u: "https://panisnews.substack.com/p/panis-newsletter-23-pros-and-cons" },
         ],
       },
     ],
@@ -593,11 +594,9 @@ window.WORLDVIEW.nations.push(
       {
         topic: "Governance", date: "2020-11-25",
         text: "In November 2020 the Federal Council adopted seven Guidelines on AI for the federal administration, covering human-centred design, transparency, accountability, safety and more. They do not bind the private sector.",
-        level: "verified",
+        level: "single",
         sources: [
           { t: "OFCOM (BAKOM) - AI guidelines", u: "https://www.bakom.admin.ch/en/ai-guidelines" },
-          { t: "Regulations.ai - Switzerland AI Guidelines (2020)", u: "https://regulations.ai/regulations/RAI-CH-NA-GAIFAXX-2020" },
-          { t: "Holistic AI - Switzerland AI regulation", u: "https://holisticai.com/blog/switzerland-ai-regulation" },
         ],
       },
       {
@@ -611,13 +610,12 @@ window.WORLDVIEW.nations.push(
         ],
       },
       {
-        topic: "Treaties", date: "2025-03-27",
-        text: "Switzerland signed the Council of Europe AI Convention on 27 March 2025. The consultation draft of the laws needed to ratify it was due by the end of 2026.",
-        level: "verified",
+        topic: "Treaties", date: "2025-02-12",
+        text: "In February 2025 the Federal Council decided to bring the Council of Europe AI Convention into Swiss law, with any legal changes kept as sector-specific as possible. A consultation draft of the necessary laws was due by the end of 2026.",
+        level: "corroborated",
         sources: [
           { t: "Swissinfo - Swiss government wants to adopt Council of Europe AI conventions", u: "https://www.swissinfo.ch/eng/swiss-politics/federal-council-wants-to-adopt-ai-conventions-of-the-council-of-europe/88864836" },
           { t: "Grant Thornton - Federal Council wants to ratify the AI Convention", u: "https://www.grantthornton.ch/en/insights/federal-council-ai-convention-finance-challenges/" },
-          { t: "Regulations.ai - Switzerland AI Convention ratification", u: "https://regulations.ai/regulations/RAI-CH-NA-FCDRCXX-2025" },
         ],
         note: "One unverified blog says the draft has slipped to early 2027.",
       },
@@ -660,11 +658,10 @@ window.WORLDVIEW.nations.push(
       {
         topic: "Strategy", date: "2019",
         text: "Qatar launched its National AI Strategy at QITCOM 2019. It was based on a blueprint from the Qatar Computing Research Institute (part of HBKU) and tied to Qatar National Vision 2030.",
-        level: "verified",
+        level: "corroborated",
         sources: [
           { t: "Gulf Times - Qatar launches strategy to tap AI for future", u: "https://www.gulf-times.com/story/645930/Qatar-launches-strategy-to-tap-AI-for-future" },
           { t: "QCRI - National AI Strategy for Qatar (PDF)", u: "https://qcai-blog.qcri.org/wp-content/uploads/2020/04/QCRI-Artificial-Intelligence-Strategy-2019-ENG.pdf" },
-          { t: "Regulations.ai - Qatar National AI Strategy (2019)", u: "https://regulations.ai/regulations/RAI-QA-NA-QNAISXX-2019" },
         ],
         note: "Sources list the six pillars differently. Gulf Times: talent, data access, employment, wealth creation, 'AI+X', ethics.",
       },
@@ -724,20 +721,18 @@ window.WORLDVIEW.nations.push(
       {
         topic: "Regulation", date: "2024-04-28",
         text: "On 28 April 2024 the Shura Council unanimously approved a 38-article AI Regulation Law. Penalties include prison and fines of up to BD 2,000, and it proposes an AI oversight unit and licensing.",
-        level: "verified",
+        level: "corroborated",
         sources: [
           { t: "Gulf Daily News - New law to regulate use of AI approved", u: "https://www.gdnonline.com/Details/1310840/New-law-to-regulate-use-of-AI-approved" },
           { t: "Inc. Arabia - Bahrain approves comprehensive AI regulation law", u: "https://en.incarabia.com/bahrain-approves-comprehensive-ai-regulation-law-652890.html" },
-          { t: "Regulations.ai - Bahrain Shura Council AI Regulation Law", u: "https://regulations.ai/regulations/RAI-BH-NA-BSCAXXX-2024" },
         ],
       },
       {
         topic: "Regulation", date: "2025",
         text: "The bill has not been enacted. The government has argued that existing law already covers many of its provisions and has flagged undefined terms.",
-        level: "corroborated",
+        level: "single",
         sources: [
           { t: "News of Bahrain - AI Regulation Bill faces pushback", u: "https://www.newsofbahrain.com/bahrain/105401.html" },
-          { t: "AI regulation in Bahrain tracker (2026)", u: "https://anuragverma.co/worldwatch/bahrain/ai" },
         ],
       },
       {
@@ -949,12 +944,11 @@ window.WORLDVIEW.nations.push(
       {
         topic: "Strategy", date: "2026-04-09",
         text: "Mauritius launched its National AI Strategy 2025–2029, 'AI for Mauritius' (AIM), together with the FAIR ethics guidelines, in April 2026. Cabinet had adopted them in February 2026, and UNDP provided support. The strategy sets six priorities, including trusted AI governance and public services.",
-        level: "verified",
+        level: "corroborated",
         sources: [
           { t: "UNDP - Mauritius launches National AI Strategy and FAIR Guidelines", u: "https://www.undp.org/mauritius-seychelles/press-releases/mauritius-launches-national-ai-strategy-and-fair-guidelines-supported-undp" },
           { t: "TechCabal - Mauritius' new AI strategy sets a new bar (23 Apr 2026)", u: "https://techcabal.com/2026/04/23/mauritius-new-ai-strategy-sets-a-new-bar-ethics-before-execution/" },
           { t: "Ecofin - Mauritius launches AI strategy", u: "https://www.ecofinagency.com/news-digital/1304-54615-mauritius-launches-ai-strategy-targets-hub-role-for-small-island-states" },
-          { t: "Comsure - Mauritius launches National AI Strategy and FAIR rules", u: "https://www.comsuregroup.com/news/mauritius-launches-national-ai-strategy-and-fair-rules-ethics-first-law-later/" },
         ],
         note: "Sources disagree on whether the FAIR guidelines bind high-risk sectors. Comsure quotes the text as non-binding. Launch date reported as 9 or 10 April.",
       },
@@ -993,11 +987,10 @@ window.WORLDVIEW.nations.push(
       {
         date: "2026-04-09", title: "AI strategy and FAIR ethics guidelines launched",
         summary: "The approach is 'ethics first, law later': guidelines now, with a national AI guideline promised in the budget.",
-        level: "verified",
+        level: "corroborated",
         sources: [
           { t: "UNDP - Mauritius launches National AI Strategy and FAIR Guidelines", u: "https://www.undp.org/mauritius-seychelles/press-releases/mauritius-launches-national-ai-strategy-and-fair-guidelines-supported-undp" },
           { t: "TechCabal", u: "https://techcabal.com/2026/04/23/mauritius-new-ai-strategy-sets-a-new-bar-ethics-before-execution/" },
-          { t: "Comsure", u: "https://www.comsuregroup.com/news/mauritius-launches-national-ai-strategy-and-fair-rules-ethics-first-law-later/" },
         ],
       },
     ],
@@ -1077,11 +1070,9 @@ window.WORLDVIEW.nations.push(
       {
         topic: "Regulation", date: "2026",
         text: "Costa Rica has no AI-specific law. Bills including 23.771, which follows the EU's risk-based approach, as well as 23.919 and 24.484, were pending, and none had been approved.",
-        level: "verified",
+        level: "single",
         sources: [
-          { t: "Observatorio IA Costa Rica - Legislación", u: "https://www.observatorioia.org/es/legislacion/" },
           { t: "INPLP - Legal update on privacy and AI: Costa Rica", u: "https://inplp.com/latest-news/article/legal-update-on-privacy-and-artificial-intelligence-costa-rica/" },
-          { t: "Regulations.ai - Costa Rica AI governance overview (Bill 23.771)", u: "https://regulations.ai/regulations/RAI-CR-NA-SUMMARY-2026" },
         ],
       },
     ],

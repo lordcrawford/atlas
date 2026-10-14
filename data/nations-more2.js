@@ -9,10 +9,10 @@
     // ------------------------------------------------------------------ SWEDEN
     {
       id: "se", name: "Sweden", flag: "🇸🇪", region: "Northern Europe (EU)", group: "Europe", geo: [18.07, 59.33], isoN: "752",
-      stance: "Commission-led catch-up: a 2026 strategy aiming for the global top ten, with PTS leading AI Act supervision",
+      stance: "Commission-led catch-up: a 2026 strategy aiming for the global top ten, with PTS proposed to lead AI Act supervision",
       summary:
-        "Sweden had a short AI 'national approach' from 2018 but was widely seen as falling behind. A government AI Commission delivered a roadmap of 75 proposals, and in February 2026 the government published a national AI strategy that aims to put Sweden among the world's top ten AI nations. In June 2026 it named interim AI Act authorities, with the telecoms regulator PTS as the contact point.",
-      glance: { firstStrategy: "2018", latestStrategy: "2026 (National AI Strategy)", newestBody: "PTS as interim AI Act contact point", newestBodyDate: "2026-06-12" },
+        "Sweden had a short AI 'national approach' from 2018 but was widely seen as falling behind. A government AI Commission delivered a roadmap of 75 proposals, and in February 2026 the government published a national AI strategy that aims to put Sweden among the world's top ten AI nations. In October 2025 a government inquiry proposed AI Act legislation with the telecoms regulator PTS as the main market-surveillance authority.",
+      glance: { firstStrategy: "2018", latestStrategy: "2026 (National AI Strategy)", newestBody: "PTS proposed as main AI Act authority", newestBodyDate: "2025-10-06" },
       stats: { population: { v: 10596620, year: 2025 }, gdpPerCapita: { v: 63133, year: 2025 }, internet: { v: 95.8, year: 2025 } },
       oxford: { rank: 23, scores: [89.04, 67.49, 81.52, 73.81, 57.03, 61.17] },
       msAdoption: { h1_2025: 31.2, h2_2025: 33.3, q1_2026: null, q2_2026: null, rankLatest: null },
@@ -20,20 +20,18 @@
         {
           topic: "Strategy", date: "2018-05",
           text: "Sweden's first AI policy, the 'National approach to artificial intelligence', was published in May 2018. It covers education, research, innovation and use, and frameworks and infrastructure.",
-          level: "verified",
+          level: "corroborated",
           sources: [
             S("Government of Sweden - National approach to AI (2018, PDF via OECD.AI)", "https://wp.oecd.ai/app/uploads/2021/12/Sweden_National_Approach_to_Artificial_Intelligence_2018.pdf"),
             S("EC AI Watch - Sweden AI strategy report", "https://ai-watch.ec.europa.eu/countries/sweden/sweden-ai-strategy-report_en"),
-            S("Regulations.ai - Sweden National AI Strategy (2018)", "https://regulations.ai/regulations/RAI-SE-NA-NAAINXX-2018"),
           ],
         },
         {
           topic: "Strategy", date: "2026-02-25",
           text: "Sweden published a national AI strategy and action plan in February 2026, aiming to be among the world's top ten nations in AI.",
-          level: "corroborated",
+          level: "single",
           sources: [
             S("Government.se - Sweden's AI Strategy (Feb 2026)", "https://www.government.se/information-material/2026/02/swedens-ai-strategy/"),
-            S("Regulations.ai - Sweden National AI Strategy 2026", "https://regulations.ai/regulations/RAI-SE-NA-STRATEG-2026"),
           ],
         },
         {
@@ -47,12 +45,11 @@
           note: "The report was delivered in November 2024 and published as SOU 2025:12.",
         },
         {
-          topic: "Regulation", date: "2026-06-12",
-          text: "On 12 June 2026 the government named five interim AI Act authorities until 31 December 2026: PTS, IMY (data protection), Finansinspektionen, the Medical Products Agency and Swedac. PTS is the common contact point.",
-          level: "corroborated",
+          topic: "Regulation", date: "2025-10-06",
+          text: "On 6 October 2025 a government inquiry report (SOU 2025:101) proposed Swedish legislation to complement the AI Act. It would make the Post and Telecom Authority (PTS) the main market-surveillance authority, with 11 market-surveillance and 2 notifying authorities in total.",
+          level: "single",
           sources: [
             S("Bird & Bird - AI Regulatory Horizon Tracker: Sweden", "https://www.twobirds.com/en/capabilities/artificial-intelligence/ai-legal-services/ai-regulatory-horizon-tracker/sweden"),
-            S("Praxikon - AI Act enforcement in Sweden", "https://www.praxikon.com/en/enforcement/sweden"),
             S("Snellman - Sweden proposes national AI legislation to supplement the EU AI Act", "https://digitalcompliance.snellman.com/sweden-proposes-national-ai-legislation-to-supplement-the-eu-ai-act/"),
           ],
           note: "This is an interim arrangement pending national legislation.",
@@ -62,22 +59,21 @@
         {
           date: "2026-02-25", title: "Sweden publishes national AI strategy",
           summary: "The strategy and action plan set a goal of a top-ten global position in AI. Most measures were already adopted in 2025 in response to the AI Commission.",
-          level: "corroborated",
+          level: "single",
           sources: [
             S("Government.se", "https://www.government.se/information-material/2026/02/swedens-ai-strategy/"),
-            S("Regulations.ai", "https://regulations.ai/regulations/RAI-SE-NA-STRATEG-2026"),
           ],
         },
       ],
-      watch: ["Passage of Sweden's national AI Act implementing law (interim authorities run to 31 Dec 2026)."],
+      watch: ["Passage of Sweden's national AI Act implementing law."],
     },
 
     // ------------------------------------------------------------------ AUSTRIA
     {
       id: "at", name: "Austria", flag: "🇦🇹", region: "Central Europe (EU)", group: "Europe", geo: [16.37, 48.21], isoN: "040",
-      stance: "Strategy since 2021 and an early AI Service Desk, but formal AI Act authorities still pending",
+      stance: "Strategy since 2021 and an early AI Service Desk at the regulator RTR",
       summary:
-        "Austria's AI strategy, 'AIM AT 2030', dates from 2021, with a 2024 implementation plan across twelve ministries. It set up an AI Service Desk at the regulator RTR as an information hub and planned to turn it into a full AI authority. As of 2026, trackers reported Austria had not completed its formal AI Act authority designations.",
+        "Austria's AI strategy, 'AIM AT 2030', dates from 2021, with a 2024 implementation plan across twelve ministries. It set up an AI Service Desk at the regulator RTR as an information hub and planned to turn it into a full AI authority.",
       glance: { firstStrategy: "2021", latestStrategy: "2021 (AIM AT 2030)", newestBody: "RTR AI Service Desk", newestBodyDate: "2024" },
       stats: { population: { v: 9208163, year: 2025 }, gdpPerCapita: { v: 62930, year: 2025 }, internet: { v: 91.9, year: 2025 } },
       oxford: { rank: 20, scores: [66.0, 61.39, 87.0, 81.6, 58.06, 79.69] },
@@ -86,39 +82,28 @@
         {
           topic: "Strategy", date: "2021",
           text: "Austria's national AI strategy, 'Artificial Intelligence Mission Austria 2030' (AIM AT 2030), was published in 2021. It sets three goals: human-centred AI for the common good, Austria as a research location, and competitiveness.",
-          level: "verified",
+          level: "corroborated",
           sources: [
             S("Digital Watch - Austria's AI Mission 2030", "https://dig.watch/resource/austrias-artificial-intelligence-mission-2030-aim-at-2030"),
-            S("Regulations.ai - Austria National AI Strategy", "https://regulations.ai/regulations/RAI-AT-NA-AIMA2XX-2021"),
             S("EU Digital Skills & Jobs - Austria AIM AT 2030", "https://digital-skills-jobs.europa.eu/en/initiatives/national-strategies/austria-artificial-intelligence-mission-2030-aim-2030"),
           ],
         },
         {
           topic: "Institutions", date: "2024",
           text: "An AI Service Desk at the regulator RTR acts as a public contact point and information hub supporting implementation of the EU AI Act. It is advised by an AI Advisory Board.",
-          level: "corroborated",
+          level: "single",
           sources: [
             S("RTR - AI Service Desk", "https://www.rtr.at/rtr/service/ki-servicestelle/KI-Servicestelle.en.html"),
-            S("Regulations.ai - KI-Servicestelle established at RTR", "https://regulations.ai/regulations/RAI-AT-NA-KASOEXX-2024"),
           ],
           note: "The government's plan is to upgrade it into a full AI authority. Some third-party sites already describe RTR as the enforcement authority, which official sources do not confirm.",
-        },
-        {
-          topic: "Regulation", date: "2026",
-          text: "Trackers report that Austria had not completed its formal AI Act authority designations as of 2026, after missing the August 2025 deadline.",
-          level: "corroborated",
-          sources: [
-            S("Confir - EU AI Act in Austria", "https://confir.eu/eu-ai-act/austria"),
-            S("AI regulation in Austria tracker (2026)", "https://anuragverma.co/worldwatch/austria/ai"),
-          ],
         },
       ],
       news: [
         {
           date: "2026", title: "AI Act authority designation still pending",
           summary: "Austria relies on RTR's Service Desk for guidance while the formal market-surveillance setup is worked out.",
-          level: "corroborated",
-          sources: [S("Confir", "https://confir.eu/eu-ai-act/austria"), S("VLO Law Firm - AI Regulation in Austria 2026", "https://vlolawfirm.com/trackers/ai-regulation-austria")],
+          level: "single",
+          sources: [ S("VLO Law Firm - AI Regulation in Austria 2026", "https://vlolawfirm.com/trackers/ai-regulation-austria")],
         },
       ],
       watch: ["Formal designation of Austria's AI Act authorities and the planned upgrade of the RTR Service Desk."],
@@ -169,9 +154,8 @@
         {
           topic: "Regulation", date: "2025-09",
           text: "The government chose ANACOM, the communications regulator, as Portugal's EU AI Act market-surveillance authority and single point of contact.",
-          level: "verified",
+          level: "corroborated",
           sources: [
-            S("RegulatoryAI.eu - The EU AI Act in Portugal", "https://www.regulatoryai.eu/ai-act-portugal/"),
             S("Andersen - AI Act: ANACOM assumes supervision in Portugal", "https://pt.andersen.com/ai-act-anacom-assume-supervisao-em-portugal/"),
             S("CMS - AI regulation in Portugal", "https://cms.law/en/int/expert-guides/ai-regulation-scanner/portugal"),
           ],
@@ -198,7 +182,7 @@
       id: "gr", name: "Greece", flag: "🇬🇷", region: "Southern Europe (EU)", group: "Europe", geo: [23.73, 37.98], isoN: "300",
       stance: "Partnership-driven: OpenAI in schools, an EU AI Factory, and a new national supercomputer",
       summary:
-        "Greece signed one of the first national education deals with OpenAI in 2025, bringing ChatGPT Edu into secondary schools. It hosts 'Pharos', one of the EU's first seven AI Factories, which runs on the new Daedalus national supercomputer.",
+        "Greece signed one of the first national education deals with OpenAI in 2025, bringing ChatGPT Edu into secondary schools. It hosts 'Pharos', one of the EU's first seven AI Factories, built around the new Daedalus national supercomputer.",
       glance: { firstStrategy: "2024", latestStrategy: "2024 (AI Blueprint)", newestBody: "Pharos AI Factory", newestBodyDate: "2024-12" },
       stats: { population: { v: 10413962, year: 2025 }, gdpPerCapita: { v: 26948, year: 2025 }, internet: { v: 86.3, year: 2024 } },
       oxford: { rank: 42, scores: [76.5, 52.39, 75.53, 78.76, 41.5, 62.47] },
@@ -246,7 +230,7 @@
           ],
         },
       ],
-      watch: ["Daedalus supercomputer go-live (reported as early 2026)."],
+      watch: ["Daedalus entering full service: it was benchmarked in June 2026 (31st on the TOP500) and its operator expects it to open to researchers during 2026."],
     },
 
     // ------------------------------------------------------------------ LATVIA
@@ -263,10 +247,9 @@
         {
           topic: "Strategy", date: "2020-02-04",
           text: "On 4 February 2020 Latvia adopted the report 'On the Development of Artificial Intelligence Solutions', its first government AI policy document, prepared by VARAM.",
-          level: "verified",
+          level: "corroborated",
           sources: [
             S("VARAM - Minister Pūce: AI solutions should boost economic productivity", "https://www.varam.gov.lv/en/article/minister-puce-artificial-intelligence-solutions-should-be-used-boost-economic-productivity"),
-            S("Regulations.ai - Latvia AI Development Report (2020)", "https://regulations.ai/regulations/RAI-LV-NA-IRDAIXX-2020"),
             S("EC AI Watch - Latvia AI strategy report", "https://ai-watch.ec.europa.eu/countries/latvia-0/latvia-ai-strategy-report_en"),
           ],
         },
@@ -283,10 +266,9 @@
         {
           topic: "Regulation", date: "2025-02",
           text: "VARAM, the Ministry of Smart Administration and Regional Development, leads coordination of Latvia's EU AI Act implementation.",
-          level: "corroborated",
+          level: "single",
           sources: [
             S("VARAM - Government examines implementation plan for the AI Act", "https://www.varam.gov.lv/en/article/latvia-takes-step-towards-safe-and-responsible-artificial-intelligence-government-examines-implementation-plan-ai-act"),
-            S("Licentium - Latvia AI regulation", "https://www.licentium.io/ai-hub/latvia"),
           ],
         },
       ],
@@ -383,7 +365,7 @@
       news: [
         {
           date: "2026-10", title: "Georgia developing a national AI strategy",
-          summary: "Strategy work follows the 2025 readiness assessment. No draft had been published.",
+          summary: "A report on EU–Georgia research ties said Georgia is developing a national AI strategy while seeking closer European links.",
           level: "single",
           sources: [S("Georgia Today", "https://georgiatoday.ge/eu-georgia-collaboration-is-a-win-win-for-ai-research-and-innovation/")],
         },
@@ -461,10 +443,9 @@
         },
         {
           topic: "Regulation", date: "2026",
-          text: "Kuwait has no dedicated AI law or AI regulator. AI is covered by existing rules such as CITRA's 2024 Data Privacy Protection Regulation.",
-          level: "corroborated",
+          text: "Kuwait has no dedicated AI law or AI regulator. AI is covered by existing rules such as CITRA's Data Privacy Protection Regulation.",
+          level: "single",
           sources: [
-            S("Levellers - AI regulation in Kuwait", "https://www.levellers.ai/what-is/ai-regulation-kuwait"),
             S("GLA & Company", "https://www.glaco.com/blog/kuwaits-ai-revolution-law-cloud-and-cybersecurity-at-the-core-of-digital-transformation/"),
           ],
         },
@@ -533,10 +514,9 @@
         {
           topic: "Strategy", date: "2025-02",
           text: "Mongolia's Ministry of Digital Development, Innovation and Communications worked with UNDP in 2025 to develop a national strategy for AI and big data, starting with a readiness assessment.",
-          level: "corroborated",
+          level: "single",
           sources: [
             S("Montsame - Mongolian Government developing a national strategy for AI and big data", "https://montsame.mn/en/read/361946"),
-            S("Levellers - AI regulation in Mongolia", "https://www.levellers.ai/what-is/ai-regulation-mongolia"),
           ],
         },
         {
@@ -616,11 +596,10 @@
       facts: [
         {
           topic: "Strategy", date: "2021",
-          text: "Tunisia's National AI Strategy and Roadmap covered 2021–2025. Trackers now list it as past its period, with no successor found.",
-          level: "corroborated",
+          text: "Tunisia's national AI Roadmap, a non-binding plan, ran from 2021 to 2025. OECD.AI lists it as complete.",
+          level: "single",
           sources: [
-            S("Regulations.ai - Tunisia National AI Strategy (2021-2025)", "https://regulations.ai/regulations/RAI-TN-NA-NASR2XX-2021"),
-            S("GISWatch - Tunisia", "https://giswatch.org/node/6192"),
+            S("OECD.AI Policy Navigator - Tunisia AI Roadmap (2021–2025)", "https://oecd.ai/en/dashboards/policy-initiatives/tunisia-ai-roadmap-1825"),
           ],
         },
         {
@@ -649,7 +628,7 @@
       id: "bw", name: "Botswana", flag: "🇧🇼", region: "Southern Africa", group: "Africa", geo: [25.91, -24.65], isoN: "072",
       stance: "Policy in final drafting after a UNESCO readiness assessment",
       summary:
-        "Botswana has been finalising its first National AI Policy after a UNESCO readiness assessment, but none had been published by mid-2026. There is no AI-specific law, so the Data Protection Act is the main legal instrument covering AI.",
+        "Botswana has been finalising its first National AI Policy after a UNESCO readiness assessment, but none had been published by mid-2026.",
       glance: { firstStrategy: "—", latestStrategy: "Draft National AI Policy (2025–26)", newestBody: "—", newestBodyDate: "" },
       stats: { population: { v: 2562122, year: 2025 }, gdpPerCapita: { v: 7778, year: 2025 }, internet: { v: 57.5, year: 2024 } },
       oxford: { rank: 109, scores: [19.5, 40.13, 60.63, 39.11, 27.83, 32.04] },
@@ -658,17 +637,10 @@
         {
           topic: "Strategy", date: "2025-08",
           text: "In August 2025 the government said it was finalising a National AI Policy following a UNESCO AI readiness assessment.",
-          level: "corroborated",
+          level: "single",
           sources: [
             S("Daily News (Botswana Government) - AI Policy in final stage", "https://dailynews.gov.bw/news-detail/88106"),
-            S("AI regulation in Botswana tracker (2026)", "https://anuragverma.co/worldwatch/botswana/ai"),
           ],
-        },
-        {
-          topic: "Regulation", date: "2026",
-          text: "Botswana had no AI-specific law as of 2026. The Data Protection Act, with its impact-assessment and automated-decision rules, is the main instrument that applies.",
-          level: "single",
-          sources: [S("AI regulation in Botswana tracker (2026)", "https://anuragverma.co/worldwatch/botswana/ai")],
         },
       ],
       news: [
@@ -799,10 +771,9 @@
         {
           topic: "Strategy", date: "2026-05-15",
           text: "ANIA published a National AI Strategy on 15 May 2026. The government says it aims for AI to contribute to 20% of GDP.",
-          level: "corroborated",
+          level: "single",
           sources: [
             S("El Salvador in English - El Salvador unveils 2026 National AI Strategy", "https://elsalvadorinenglish.com/2026/05/15/el-salvador-unveils-2026-national-ai-strategy-a-new-blueprint-for-global-sovereign-ai/"),
-            S("Tim Muth - AI in El Salvador (critical analysis)", "https://timmuth.substack.com/p/ai-in-el-salvador"),
           ],
           note: "The 20% target is the government's claim, and no independent assessment was found.",
         },
@@ -811,10 +782,9 @@
         {
           date: "2026-05-15", title: "National AI Strategy published",
           summary: "It is built around innovation, sovereignty, human potential and 'abundance', with a deliberately minimal regulatory posture.",
-          level: "corroborated",
+          level: "single",
           sources: [
             S("El Salvador in English", "https://elsalvadorinenglish.com/2026/05/15/el-salvador-unveils-2026-national-ai-strategy-a-new-blueprint-for-global-sovereign-ai/"),
-            S("Tim Muth", "https://timmuth.substack.com/p/ai-in-el-salvador"),
           ],
         },
       ],
@@ -826,18 +796,20 @@
       id: "pa", name: "Panama", flag: "🇵🇦", region: "Central America", group: "Americas", geo: [-79.52, 8.98], isoN: "591",
       stance: "Strategy approved and a first AI bill through the legislature in 2026",
       summary:
-        "Panama approved a National AI Strategy by Cabinet resolution in August 2026, built on governance, talent, infrastructure and ethics. In the same month the National Assembly passed a bill on 'adaptive governance' of AI, which was awaiting the President's signature.",
-      glance: { firstStrategy: "2026", latestStrategy: "2026 (Resolution 89-26)", newestBody: "—", newestBodyDate: "" },
+        "Panama's Cabinet approved a National AI Strategy on 11 August 2026. In the same month the National Assembly passed a bill on 'adaptive governance' of AI, which was awaiting the President's signature.",
+      glance: { firstStrategy: "2026", latestStrategy: "2026 (approved by Cabinet)", newestBody: "—", newestBodyDate: "" },
       stats: { population: { v: 4571189, year: 2025 }, gdpPerCapita: { v: 19790, year: 2025 }, internet: { v: 72.8, year: 2024 } },
       oxford: { rank: 102, scores: [23.0, 53.03, 41.75, 61.33, 20.84, 30.73] },
       msAdoption: { h1_2025: 20.3, h2_2025: 21.5, q1_2026: null, q2_2026: null, rankLatest: null },
       facts: [
         {
-          topic: "Strategy", date: "2026-08-12",
-          text: "The Cabinet Council approved Panama's National AI Strategy by Resolution No. 89-26 in August 2026. It has four pillars: governance, talent, infrastructure and ethics.",
+          topic: "Strategy", date: "2026-08-11",
+          text: "Panama's Cabinet Council approved the National AI Strategy on 11 August 2026, alongside a national strategy for microelectronics and semiconductors.",
           level: "single",
-          sources: [S("GMA Labs - Panama National AI Strategy approved (Resolution 89-26)", "https://www.gmalabs.com/post/panama-national-ai-strategy-approved-resolution-89-26")],
-          note: "Another source dates a first strategy launch to July 2025, so it may have been launched in 2025 and formally adopted in 2026.",
+          sources: [
+            S("News in America (PDCC) - Panama aims to become Latin America's digital canal for AI", "https://newsinamerica.com/pdcc/boletin/2026/panama-busca-convertirse-en-el-canal-digital-de-la-inteligencia-artificial-en-america-latina/"),
+          ],
+          note: "An earlier version gave a resolution number and four pillars from a vendor blog; neither could be confirmed, so both were removed.",
         },
         {
           topic: "Regulation", date: "2026-08-19",
@@ -875,16 +847,14 @@
           sources: [
             S("MITIC - Alianza con Taiwán abre camino al desarrollo de la IA en Paraguay", "https://mitic.gov.py/alianza-con-taiwan-abre-camino-al-desarrollo-de-la-ia-en-paraguay/"),
             S("Diario HOY - MITIC liderará fase piloto del plan de IA junto a Taiwán", "https://www.hoy.com.py/nacionales/2026/05/20/mitic-liderara-fase-piloto-del-ambicioso-plan-de-ia-junto-a-taiwan"),
-            S("Mucho Texto - Paraguay tiene más GPU que estrategia", "https://muchotexto.net/articulos/2026/07/16/ia-soberana-paraguay/"),
           ],
           note: "One international outlet reported US$200M. The US$300M figure is from official communications.",
         },
         {
           topic: "Strategy", date: "2026-07",
           text: "Paraguay has a ministry AI roadmap but no formally approved national AI strategy.",
-          level: "corroborated",
+          level: "single",
           sources: [
-            S("Mucho Texto - Paraguay tiene más GPU que estrategia", "https://muchotexto.net/articulos/2026/07/16/ia-soberana-paraguay/"),
             S("Agencia IP - MITIC presenta avances del país en IA", "https://www.ip.gov.py/ip/2026/06/26/mitic-presenta-avances-del-pais-en-inteligencia-artificial-en-cumbre-regional-sobre-etica-de-la-ia/"),
           ],
         },

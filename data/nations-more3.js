@@ -41,11 +41,8 @@
         {
           topic: "Regulation", date: "2025-01-31",
           text: "A Government Declaration of 31 January 2025 named the telecoms regulator BIPT as Belgium's main AI Act market-surveillance authority. Belgium missed the EU's August 2025 deadline for formal designations, and BIPT's role was still government policy, not statute, in 2026.",
-          level: "verified",
+          level: "single",
           sources: [
-            S("Glacis - EU AI Act in Belgium (reviewed Aug 2026)", "https://www.glacis.io/guide-eu-ai-act-belgium"),
-            S("RegulatoryAI.eu - The EU AI Act in Belgium (2026)", "https://www.regulatoryai.eu/ai-act-belgium/"),
-            S("Confir - EU AI Act in Belgium (May 2026)", "https://confir.eu/eu-ai-act/belgium"),
             S("Technology's Legal Edge - State of the Act (Nov 2025)", "https://www.technologyslegaledge.com/2025/11/state-of-the-act-eu-ai-act-implementation-in-key-member-states/"),
           ],
         },
@@ -80,8 +77,8 @@
       id: "cz", name: "Czechia", flag: "🇨🇿", region: "Central Europe (EU)", group: "Europe", geo: [14.42, 50.08], isoN: "203",
       stance: "Strategy-led: NAIS 2030 since 2024 and an AI Factory in Ostrava, with its AI Act law still before Parliament",
       summary:
-        "Czechia published its first National AI Strategy in May 2019 and replaced it with NAIS 2030 in July 2024. On 28 May 2025 the government approved a minimal draft law to implement the EU AI Act, making the Czech Telecommunication Office (ČTÚ) the main market-surveillance authority; it still needs Parliament's approval. In October 2025 the EU selected a Czech AI Factory, led from Ostrava, which launched in May 2026.",
-      glance: { firstStrategy: "2019", latestStrategy: "2024 (NAIS 2030)", newestBody: "ČTÚ proposed as lead AI Act authority", newestBodyDate: "2025-05-28" },
+        "Czechia published its first National AI Strategy in May 2019 and replaced it with NAIS 2030 in July 2024. A minimal draft law to implement the EU AI Act would make the Czech Telecommunication Office (ČTÚ) the main market-surveillance authority; it still needs Parliament's approval. In October 2025 the EU selected a Czech AI Factory, led from Ostrava, which launched in May 2026.",
+      glance: { firstStrategy: "2019", latestStrategy: "2024 (NAIS 2030)", newestBody: "ČTÚ proposed as lead AI Act authority", newestBodyDate: "2025" },
       stats: { population: { v: 10886878, year: 2025 }, gdpPerCapita: { v: 35917, year: 2025 }, internet: { v: 87.7, year: 2024 } },
       oxford: { rank: 32, scores: [81.0, 58.61, 74.14, 69.33, 54.04, 67.74] },
       msAdoption: { h1_2025: 26.0, h2_2025: 27.8, q1_2026: null, q2_2026: null, rankLatest: null },
@@ -91,41 +88,34 @@
           text: "In October 2025 the EuroHPC Joint Undertaking selected the Czech AI Factory (CZAI), led by VSB – Technical University of Ostrava with the IT4Innovations supercomputing centre. It was officially launched in Ostrava on 12 May 2026.",
           level: "verified",
           sources: [
-            S("CzechTrade - Czech Republic to establish national AI factory and supercomputer", "https://www.czechtradeoffices.com/us/news/czech-republic-to-establish-national-ai-factory-and-supercomputer"),
             S("Radio Prague International - Czechia to build AI factory and supercomputer in Ostrava", "https://english.radio.cz/node/8865429"),
             S("EuroHPC JU - Czechia", "https://www.eurohpc-ju.europa.eu/czechia_en"),
             S("CIIRC CTU - Czech AI Factory launches", "https://www.ciirc.cvut.cz/en/czech-ai-factory-launches-czech-republic-offers-its-own-ai-services-and-supercomputing-capacity/"),
           ],
         },
         {
-          topic: "Regulation", date: "2025-05-28",
-          text: "On 28 May 2025 the government approved a minimal draft act implementing the EU AI Act. It names the Czech Telecommunication Office (ČTÚ) as the main market-surveillance authority and single point of contact, with the data protection office and the central bank in their fields. Parliament had not yet adopted it.",
-          level: "verified",
+          topic: "Regulation", date: "2025",
+          text: "A minimal draft act implementing the EU AI Act would make the Czech Telecommunication Office (ČTÚ) the main market-surveillance authority and single point of contact, with the data protection office and the central bank in their fields. Adoption was expected in 2026.",
+          level: "corroborated",
           sources: [
-            S("Anurag Verma WorldWatch - AI regulation in Czechia (2026)", "https://anuragverma.co/worldwatch/czechia/ai"),
-            S("Regulations.ai - Czech Republic AI Implementation Act", "https://regulations.ai/regulations/RAI-CZ-NA-DAIEAXX-2025"),
             S("CMS - AI regulation scanner: Czech Republic", "https://cms.law/en/int/expert-guides/ai-regulation-scanner/czech-republic"),
             S("Dostupný advokát - The Czech draft law on AI", "https://dostupnyadvokat.cz/en/blog/the-czech-draft-law-on-artificial-intelligence-ai-what-will-it-bring-and-how-to-prepare-for-it"),
           ],
         },
         {
           topic: "Strategy", date: "2024-07",
-          text: "In July 2024 the government approved the National AI Strategy of the Czech Republic 2030 (NAIS 2030), replacing the 2019 strategy.",
-          level: "verified",
+          text: "In July 2024 the government approved the National AI Strategy of the Czech Republic 2030 (NAIS 2030), drafted by the Ministry of Industry and Trade, setting priorities to 2030 across seven areas.",
+          level: "single",
           sources: [
-            S("AI Policy Tracker - Czechia", "https://aipolicytracker.org/jurisdictions/czechia"),
-            S("Anurag Verma WorldWatch - AI regulation in Czechia (2026)", "https://anuragverma.co/worldwatch/czechia/ai"),
-            S("Regulations.ai - Czech Republic AI regulation overview", "https://regulations.ai/regulations/czech-republic-summary"),
+            S("CzechTrade - Government approved the National AI Strategy 2030 (26 Jul 2024)", "https://www.czechtradeoffices.com/qa/news/czechia-as-a-technological-leader-in-ai,-government-approved-the-national-ai-strategy-2030"),
           ],
         },
         {
           topic: "Strategy", date: "2019-05",
           text: "Czechia released its first National AI Strategy in May 2019, building on its Innovation Strategy 2019–2030.",
-          level: "verified",
+          level: "single",
           sources: [
             S("EC AI Watch - Czech Republic AI strategy report", "https://ai-watch.ec.europa.eu/countries/czech-republic/czech-republic-ai-strategy-report_en"),
-            S("AI Policy Tracker - Czechia", "https://aipolicytracker.org/jurisdictions/czechia"),
-            S("Presencis - Czechia national implementation", "https://presencis.com/regulations/eu-ai-act/national/cz/"),
           ],
         },
       ],
@@ -140,12 +130,12 @@
           ],
         },
         {
-          date: "2025-05-28", title: "Government approves draft AI Act implementing law",
+          date: "2025", title: "Draft AI Act implementing law names ČTÚ as lead regulator",
           summary: "The draft names ČTÚ as lead AI regulator and creates a legal basis for a regulatory sandbox. It awaits Parliament.",
           level: "corroborated",
           sources: [
-            S("Anurag Verma WorldWatch", "https://anuragverma.co/worldwatch/czechia/ai"),
-            S("Regulations.ai", "https://regulations.ai/regulations/RAI-CZ-NA-DAIEAXX-2025"),
+            S("CMS", "https://cms.law/en/int/expert-guides/ai-regulation-scanner/czech-republic"),
+            S("Dostupný advokát", "https://dostupnyadvokat.cz/en/blog/the-czech-draft-law-on-artificial-intelligence-ai-what-will-it-bring-and-how-to-prepare-for-it"),
           ],
         },
       ],
@@ -155,72 +145,52 @@
     // ------------------------------------------------------------------ HUNGARY
     {
       id: "hu", name: "Hungary", flag: "🇭🇺", region: "Central Europe (EU)", group: "Europe", geo: [19.04, 47.5], isoN: "348",
-      stance: "Early implementer: AI Act authorities set in law since December 2025, with supervision moved to the science minister in 2026",
+      stance: "Early implementer: AI Act authorities set in law since December 2025",
       summary:
-        "Hungary adopted a National AI Strategy for 2020–2030 in 2020. Act LXXV of 2025, which implements the EU AI Act, took effect on 1 December 2025, making Hungary one of the first member states with its AI Act authorities set in law. It also created a Hungarian AI Council to give strategic guidance. In August 2026 a government decree moved AI market surveillance to the Minister of Science and Technology.",
-      glance: { firstStrategy: "2020", latestStrategy: "2020 (National AI Strategy 2020–2030)", newestBody: "AI market surveillance moved to science minister", newestBodyDate: "2026-08-31" },
+        "Hungary adopted a National AI Strategy for 2020–2030 in 2020. Act LXXV of 2025, which implements the EU AI Act, took effect on 1 December 2025, making Hungary one of the first member states with its AI Act authorities set in law. It also created a Hungarian AI Council to give strategic guidance.",
+      glance: { firstStrategy: "2020", latestStrategy: "2020 (National AI Strategy 2020–2030)", newestBody: "Hungarian AI Council (Act LXXV of 2025)", newestBodyDate: "2025-12-01" },
       stats: { population: { v: 9514251, year: 2025 }, gdpPerCapita: { v: 25907, year: 2025 }, internet: { v: 93.8, year: 2024 } },
       oxford: { rank: 35, scores: [77.0, 56.02, 82.31, 82.61, 45.24, 54.17] },
       msAdoption: { h1_2025: 27.9, h2_2025: 29.8, q1_2026: null, q2_2026: null, rankLatest: null },
       facts: [
         {
-          topic: "Regulation", date: "2026-08-31",
-          text: "Government Decree 139/2026 (VIII.31.) transferred the role of AI market-surveillance authority to the Minister of Science and Technology.",
-          level: "single",
-          sources: [
-            S("GDPR blog (Hungary) - New set-up in the market surveillance of AI systems (2 Sep 2026)", "https://gdpr.blog.hu/2026/09/02/new_set-up_in_the_supervision_of_ai_systems_in_hungary"),
-          ],
-        },
-        {
           topic: "Regulation", date: "2025-12-01",
           text: "Act LXXV of 2025, implementing the EU AI Act, took effect on 1 December 2025. It sets up Hungary's market-surveillance and notification framework and a single point of contact, and creates the Hungarian Artificial Intelligence Council to give strategic guidance.",
-          level: "verified",
+          level: "corroborated",
           sources: [
             S("CADE - Hungary's AI implementation law enters into force", "https://cadeproject.org/updates/hungarys-ai-implementation-law-enters-into-force/"),
             S("Grant Thornton Hungary - New AI authorities on the horizon", "https://grantthornton.hu/en/news/what-should-we-do-about-ai-now-new-authorities-on-the-horizon"),
-            S("Regulations.ai - Hungary AI regulation overview", "https://regulations.ai/regulations/hungary-summary"),
-            S("Anurag Verma WorldWatch - AI regulation in Hungary (2026)", "https://anuragverma.co/worldwatch/hungary/ai"),
           ],
         },
         {
           topic: "Strategy", date: "2020-09",
-          text: "Hungary adopted its National AI Strategy 2020–2030 in 2020, by Government Resolution 1573/2020.",
-          level: "corroborated",
+          text: "In September 2020 the government published Hungary's National AI Strategy for 2020–2030.",
+          level: "single",
           sources: [
-            S("Regulations.ai - Hungary AI regulation overview", "https://regulations.ai/regulations/hungary-summary"),
             S("EC AI Watch - Hungary AI strategy report", "https://ai-watch.ec.europa.eu/countries/hungary/hungary-ai-strategy-report_en"),
           ],
         },
       ],
       news: [
         {
-          date: "2026-09-02", title: "AI market surveillance moves to science minister",
-          summary: "Government Decree 139/2026 (VIII.31.) reassigned Hungary's AI market-surveillance role to the Minister of Science and Technology.",
-          level: "single",
-          sources: [
-            S("GDPR blog (Hungary)", "https://gdpr.blog.hu/2026/09/02/new_set-up_in_the_supervision_of_ai_systems_in_hungary"),
-          ],
-        },
-        {
           date: "2025-12-01", title: "Hungary's AI Act implementation law takes effect",
           summary: "Act LXXV of 2025 set up national supervision, a single point of contact and the Hungarian AI Council.",
-          level: "verified",
+          level: "corroborated",
           sources: [
             S("CADE", "https://cadeproject.org/updates/hungarys-ai-implementation-law-enters-into-force/"),
             S("Grant Thornton Hungary", "https://grantthornton.hu/en/news/what-should-we-do-about-ai-now-new-authorities-on-the-horizon"),
-            S("Anurag Verma WorldWatch", "https://anuragverma.co/worldwatch/hungary/ai"),
           ],
         },
       ],
-      watch: ["How the science ministry runs AI market surveillance after the August 2026 change."],
+      watch: ["How the Hungarian AI Council and the designated authorities apply the AI Act in practice."],
     },
 
     // ------------------------------------------------------------------ CROATIA
     {
       id: "hr", name: "Croatia", flag: "🇭🇷", region: "Southern Europe (EU)", group: "Europe", geo: [15.98, 45.81], isoN: "191",
-      stance: "Late mover: no finalised AI strategy, a draft plan to 2032, and AI Act authorities not yet designated",
+      stance: "Late mover: no finalised AI strategy, with a plan to 2032 awaiting adoption",
       summary:
-        "Croatia has no finalised national AI strategy. Its AI policy runs through the Digital Croatia Strategy 2032 while the government drafts a National Plan for the Development of AI to 2032, with an action plan for 2026–2028. Croatia missed the EU's August 2025 deadline to name its AI Act market-surveillance authority, and none had been confirmed in law by mid-2026.",
+        "Croatia has no finalised national AI strategy. Its AI policy runs through the Digital Croatia Strategy 2032 while the government drafts a National Plan for the Development of AI to 2032, with an action plan for 2026–2028.",
       glance: { firstStrategy: "—", latestStrategy: "Draft National AI Plan to 2032", newestBody: "—", newestBodyDate: "" },
       stats: { population: { v: 3876200, year: 2025 }, gdpPerCapita: { v: 27104, year: 2025 }, internet: { v: 83.6, year: 2024 } },
       oxford: { rank: 72, scores: [34.5, 52.04, 70.64, 71.67, 29.92, 45.04] },
@@ -228,44 +198,23 @@
       facts: [
         {
           topic: "Strategy", date: "2026",
-          text: "The draft National Plan for the Development of AI runs to 2032, with an action plan for 2026–2028. More than 150 experts drafted it and it was expected to be adopted in 2026.",
+          text: "Croatia is preparing a National Plan for the Development of AI to 2032, with an action plan for 2026–2028. In 2026 Prime Minister Andrej Plenković said the government would adopt it soon.",
           level: "corroborated",
           sources: [
-            S("Regulations.ai - Croatia National AI Development Plan (draft)", "https://regulations.ai/regulations/RAI-HR-NA-NPZRUXX-2025"),
-            S("Licentium - Croatia AI regulation", "https://www.licentium.io/ai-hub/croatia"),
-            S("Anurag Verma WorldWatch - AI regulation in Croatia (2026)", "https://anuragverma.co/worldwatch/croatia/ai"),
-          ],
-        },
-        {
-          topic: "Regulation", date: "2025-08",
-          text: "Croatia missed the EU's 2 August 2025 deadline to name its AI Act market-surveillance authority, and none had been confirmed in law by mid-2026.",
-          level: "corroborated",
-          sources: [
-            S("Confir - EU AI Act in Croatia", "https://confir.eu/eu-ai-act/croatia"),
-            S("Regulation-AI.eu - Croatia national implementation (Aug 2026)", "https://www.regulation-ai.eu/en/national-implementation/croatia/"),
+            S("Ministry of Justice, Administration and Digital Transformation - StartAI workshop towards a strategic framework", "https://mpudt.gov.hr/news-25399/workshop-startai-a-step-towards-a-strategic-framework-held-in-zagreb/30131"),
+            S("HRT Glas Hrvatske - Croatia keeps pace with Europe on digitalization, PM tells council", "https://glashrvatske.hrt.hr/en/economy/croatia-keeps-pace-with-europe-on-digitalization-pm-tells-council-12559228"),
           ],
         },
         {
           topic: "Strategy", date: "2025-10",
           text: "An OECD country note in October 2025 found Croatia had no finalised, officially published national AI strategy and was relying on the Digital Croatia Strategy 2032.",
-          level: "verified",
+          level: "single",
           sources: [
             S("OECD - Croatia country note, EU Coordinated Plan on AI (Oct 2025, PDF)", "https://www.oecd.org/content/dam/oecd/en/publications/reports/2025/10/progress-in-implementing-the-european-union-coordinated-plan-on-artificial-intelligence-volume-1-country-notes_b0385317/croatia_5665ea22/38d8145c-en.pdf"),
-            S("Anurag Verma WorldWatch - AI regulation in Croatia (2026)", "https://anuragverma.co/worldwatch/croatia/ai"),
-            S("Regulations.ai - Croatia AI regulation overview", "https://regulations.ai/regulations/croatia-summary"),
           ],
         },
       ],
       news: [
-        {
-          date: "2025-08", title: "Croatia misses AI Act authority deadline",
-          summary: "Croatia did not name its market-surveillance authority by the EU's 2 August 2025 deadline; a national implementing law is still being drafted.",
-          level: "corroborated",
-          sources: [
-            S("Confir", "https://confir.eu/eu-ai-act/croatia"),
-            S("Regulation-AI.eu", "https://www.regulation-ai.eu/en/national-implementation/croatia/"),
-          ],
-        },
       ],
       watch: ["Adoption of the National AI Plan to 2032.", "Designation of Croatia's AI Act authorities."],
     },
@@ -275,8 +224,8 @@
       id: "sk", name: "Slovakia", flag: "🇸🇰", region: "Central Europe (EU)", group: "Europe", geo: [17.11, 48.15], isoN: "703",
       stance: "Building institutions: an AI plenipotentiary, a digital and AI council and the Perun supercomputer, while its AI Act law is finalised",
       summary:
-        "Slovakia's AI policy sits within its Digital Transformation Strategy 2030. A 2025 government decree created an advisory office to coordinate national AI policy, and in April 2026 a new Government Council for Digital Transformation and AI was set up. The national supercomputer Perun, suited to training AI models, went into full operation on 31 March 2026. A dedicated law on AI Act supervision was still going through the legislative process in 2026.",
-      glance: { firstStrategy: "2019 (Digital Transformation Strategy 2030)", latestStrategy: "2025 (AI Vision for Slovakia)", newestBody: "Government Council for Digital Transformation and AI", newestBodyDate: "2026-04" },
+        "Slovakia's AI policy sits within its Digital Transformation Strategy 2030. A 2025 government decree created an advisory office to coordinate national AI policy, and in 2026 a new Government Council for Digital Transformation and AI was set up. The national supercomputer Perun, suited to training AI models, went into full operation on 31 March 2026. A dedicated law on AI Act supervision was still going through the legislative process in 2026.",
+      glance: { firstStrategy: "2019 (Digital Transformation Strategy 2030)", latestStrategy: "2019 (Digital Transformation Strategy 2030)", newestBody: "Government Council for Digital Transformation and AI", newestBodyDate: "2026" },
       stats: { population: { v: 5413813, year: 2025 }, gdpPerCapita: { v: 28544, year: 2025 }, internet: { v: 89.8, year: 2024 } },
       oxford: { rank: 73, scores: [19.0, 55.8, 72.5, 62.12, 31.39, 46.62] },
       msAdoption: { h1_2025: 22.1, h2_2025: 23.8, q1_2026: null, q2_2026: null, rankLatest: null },
@@ -294,21 +243,19 @@
           note: "Sources give different performance figures (from 14.5 to over 25 petaflops), so none is quoted here.",
         },
         {
-          topic: "Institutions", date: "2026-04",
-          text: "In April 2026 the government set up a Government Council for Digital Transformation and AI, an advisory and coordinating body that replaced the earlier council for digitalising public administration.",
-          level: "corroborated",
+          topic: "Institutions", date: "2026",
+          text: "The government set up a Government Council for Digital Transformation and AI, an advisory and coordinating body.",
+          level: "single",
           sources: [
             S("Bird & Bird - AI Regulatory Horizon Tracker: Slovakia (Jul 2026)", "https://www.twobirds.com/en/capabilities/artificial-intelligence/ai-legal-services/ai-regulatory-horizon-tracker/slovakia"),
-            S("Straits Institute for Applied AI - Slovakia record", "https://www.straitsai.institute/state-of-applied-ai/slovakia"),
           ],
         },
         {
-          topic: "Institutions", date: "2025-07",
-          text: "A 2025 government decree (No. 368/2025, in force from July 2025) created an advisory office to coordinate national AI policy and represent Slovakia in EU and international AI forums.",
-          level: "corroborated",
+          topic: "Institutions", date: "2025",
+          text: "A 2025 government decree created an advisory office to coordinate national AI policy and represent Slovakia in EU and international AI forums.",
+          level: "single",
           sources: [
             S("Bird & Bird - AI Regulatory Horizon Tracker: Slovakia (Jul 2026)", "https://www.twobirds.com/en/capabilities/artificial-intelligence/ai-legal-services/ai-regulatory-horizon-tracker/slovakia"),
-            S("Regulations.ai - Slovakia AI regulation overview", "https://regulations.ai/regulations/RAI-SK-NA-SUMMARY-2026"),
           ],
         },
         {
@@ -319,23 +266,6 @@
             S("EC AI Watch - Slovakia AI strategy report", "https://ai-watch.ec.europa.eu/countries/slovakia/slovakia-ai-strategy-report_en"),
             S("OECD - Slovak Republic country note, EU Coordinated Plan on AI (Oct 2025, PDF)", "https://www.oecd.org/content/dam/oecd/en/publications/reports/2025/10/progress-in-implementing-the-european-union-coordinated-plan-on-artificial-intelligence-volume-1-country-notes_b0385317/slovak-republic_02443328/5b824a40-en.pdf"),
           ],
-        },
-        {
-          topic: "Strategy", date: "2025-12-18",
-          text: "In December 2025 the digital ministry (MIRRI) published an AI Vision for Slovakia, covering computing infrastructure, data, economic growth, fundamental rights, skills and international cooperation, ahead of a fuller national AI strategy due in 2026.",
-          level: "single",
-          sources: [
-            S("Straits Institute for Applied AI - Slovakia record (citing MIRRI)", "https://www.straitsai.institute/state-of-applied-ai/slovakia"),
-          ],
-        },
-        {
-          topic: "Regulation", date: "2026-08",
-          text: "In August 2026 the government approved a draft act naming the digital ministry (MIRRI) as the single contact point and central market-surveillance authority for AI, to take effect on 1 January 2027.",
-          level: "single",
-          sources: [
-            S("Straits Institute for Applied AI - Slovakia record (citing TASR)", "https://www.straitsai.institute/state-of-applied-ai/slovakia"),
-          ],
-          note: "Bird & Bird's tracker (July 2026) says Slovakia had no specific AI statute yet and that an earlier AI bill was folded into legislative process LP/2026/17.",
         },
       ],
       news: [
@@ -349,7 +279,7 @@
           ],
         },
       ],
-      watch: ["Parliament's handling of the AI supervision act (planned start 1 January 2027).", "The full National AI Strategy announced for 2026."],
+      watch: ["Parliament's handling of the AI supervision law (legislative process LP/2026/17)."],
     },
 
     // ------------------------------------------------------------------ BULGARIA
@@ -695,7 +625,7 @@
       id: "la", name: "Laos", flag: "🇱🇦", region: "Southeast Asia", group: "Asia-Pacific", geo: [102.63, 17.97], isoN: "418",
       stance: "Drafting: a first AI strategy for 2026–2035 under revision, shaped by a UNESCO ethics assessment",
       summary:
-        "Laos has no AI law or AI regulator. In January 2026 it presented a UNESCO AI ethics readiness assessment and said its first National AI Strategy would draw on the findings. In April 2026 the technology ministry launched LaoAI, a national AI assistant built into the government's G-Chat messaging platform. In September 2026 the government considered a draft National AI Strategy for 2026–2035 and sent it back for revision.",
+        "In January 2026 it presented a UNESCO AI ethics readiness assessment and said its first National AI Strategy would draw on the findings. In April 2026 the technology ministry launched LaoAI, a national AI assistant built into the government's G-Chat messaging platform. In September 2026 the government considered a draft National AI Strategy for 2026–2035 and sent it back for revision.",
       glance: { firstStrategy: "Draft (2026–2035)", latestStrategy: "Draft National AI Strategy 2026–2035", newestBody: "—", newestBodyDate: "" },
       stats: { population: { v: 7873046, year: 2025 }, gdpPerCapita: { v: 2325, year: 2025 }, internet: { v: 65.6, year: 2024 } },
       oxford: { rank: 125, scores: [19.5, 38.21, 45.17, 18.21, 20.94, 36.76] },
@@ -727,14 +657,6 @@
             S("KPL - Lao PDR sets course for National AI Strategy guided by UNESCO ethics framework", "https://kpl.gov.la/EN/detail.aspx?id=96675"),
             S("US-ASEAN Business Council - Laos advances AI governance (Mar 2026)", "https://www.usasean.org/article/laos-advances-ai-governance-and-national-health-ai-initiatives"),
             S("Laotian Times - Laos develops national AI strategy guided by UNESCO framework", "https://laotiantimes.com/2026/01/29/laos-develops-national-ai-strategy-guided-by-unesco-ethics-framework/"),
-          ],
-        },
-        {
-          topic: "Regulation", date: "2026",
-          text: "Laos has no dedicated AI law and no AI regulator; AI falls under general laws such as the 2017 Law on Electronic Data Protection.",
-          level: "single",
-          sources: [
-            S("Levellers - AI regulation in Laos", "https://www.levellers.ai/what-is/ai-regulation-laos"),
           ],
         },
       ],
@@ -805,7 +727,7 @@
       id: "mv", name: "Maldives", flag: "🇲🇻", region: "South Asia", group: "Asia-Pacific", geo: [73.51, 4.18], isoN: "462",
       stance: "Plan announced, not yet adopted: an AI masterplan since 2024, a UNESCO readiness baseline and a new national AI lab",
       summary:
-        "In October 2024 President Mohamed Muizzu, on the Cabinet's advice, ordered a national AI masterplan for economic development, including a legal framework for AI; it is still being drafted. In July 2025 the Maldives published a UNESCO AI Readiness Assessment. In May 2026 MindCo and the Bank of Maldives launched a National AI and Data Competency Center, the Maldives AI Lab.",
+        "In October 2024 President Mohamed Muizzu, on the Cabinet's advice, ordered a national AI masterplan for economic development, including a legal framework for AI; it is still being drafted. In mid-2025 the Maldives published a UNESCO AI Readiness Assessment. In May 2026 MindCo and the Bank of Maldives launched a National AI and Data Competency Center, the Maldives AI Lab.",
       glance: { firstStrategy: "Masterplan ordered 2024 (draft)", latestStrategy: "National AI Masterplan (draft)", newestBody: "Maldives AI Lab", newestBodyDate: "2026-05-18" },
       stats: { population: { v: 529676, year: 2025 }, gdpPerCapita: { v: 14615, year: 2025 }, internet: { v: 85.2, year: 2024 } },
       oxford: { rank: 143, scores: [8.0, 39.43, 22.43, 29.58, 18.83, 32.24] },
@@ -821,23 +743,21 @@
           ],
         },
         {
-          topic: "Readiness", date: "2025-07-31",
-          text: "The Maldives published its first national AI Readiness Assessment, produced with UNESCO, on 31 July 2025. It found gaps in fixed broadband, digital literacy outside Greater Malé and cybersecurity.",
-          level: "corroborated",
+          topic: "Readiness", date: "2025-08",
+          text: "In mid-2025 the Maldives published its first national AI Readiness Assessment, produced with UNESCO. It found gaps in fixed broadband, digital literacy outside Greater Malé and cybersecurity.",
+          level: "single",
           sources: [
-            S("Regulations.ai - Maldives AI regulation overview", "https://regulations.ai/regulations/maldives-summary"),
             S("Corporate Maldives - UNESCO report highlights gaps in Maldives' AI readiness", "https://corporatemaldives.com/unesco-report-highlights-opportunities-and-gaps-in-maldives-ai-readiness/"),
           ],
         },
         {
           topic: "Strategy", date: "2024-10",
           text: "In October 2024 President Muizzu, on the Cabinet's recommendation, ordered a masterplan for using AI in economic development. It is to include a legal framework for AI, with the homeland security and technology ministry and the economic development ministry leading.",
-          level: "verified",
+          level: "corroborated",
           sources: [
             S("PSM News - President Muizzu announces masterplan for AI", "https://psmnews.mv/en/145979"),
             S("Maldives Voice - Maldives to develop AI strategy for economic growth", "https://maldivesvoice.mv/1488"),
             S("Atoll Times - AI masterplan", "https://atolltimes.mv/post/business/10172"),
-            S("Regulations.ai - Maldives National AI Masterplan (draft)", "https://regulations.ai/regulations/RAI-MV-NA-NAM2XXX-2024"),
           ],
         },
       ],
@@ -949,9 +869,9 @@
     // ------------------------------------------------------------------ SEYCHELLES
     {
       id: "sc", name: "Seychelles", flag: "🇸🇨", region: "East Africa (Indian Ocean)", group: "Africa", geo: [55.45, -4.62], isoN: "690",
-      stance: "Schools first: a national AI-in-education framework, but no national AI strategy or law",
+      stance: "Schools first: a national AI-in-education framework for state schools",
       summary:
-        "Seychelles has no dedicated AI law or national AI strategy; AI falls under the Data Protection Act 2023 and other general laws, and the 2026 budget promised AI and data governance frameworks. In July 2026 Cabinet approved a National AI in Education Framework for 2026–2030, developed with World Bank support, which creates a steering committee to approve AI tools for schools.",
+        "In July 2026 Cabinet approved a National AI in Education Framework for 2026–2030, developed with World Bank support, which creates a steering committee to approve AI tools for schools.",
       glance: { firstStrategy: "—", latestStrategy: "2026 (AI in Education Framework 2026–2030)", newestBody: "National AI in Education Steering Committee", newestBodyDate: "2026-07" },
       stats: { population: { v: 122730, year: 2025 }, gdpPerCapita: { v: 19449, year: 2025 }, internet: { v: 87.8, year: 2024 } },
       oxford: { rank: 140, scores: [8.0, 43.75, 39.66, 26.98, 11.77, 25.67] },
@@ -966,14 +886,6 @@
             S("Seychelles Nation - Cabinet backs national AI framework for education (7 Aug 2026)", "https://nation.sc/articles/31810/cabinet-backs-national-artificial-intelligence-framework-for-education"),
           ],
         },
-        {
-          topic: "Regulation", date: "2026",
-          text: "Seychelles has no dedicated AI law or published national AI strategy. AI is governed through the Data Protection Act 2023 and other general laws, and Budget 2026 said the government would develop AI and data governance frameworks.",
-          level: "single",
-          sources: [
-            S("Levellers - AI regulation in Seychelles (reviewed Jun 2026)", "https://www.levellers.ai/what-is/ai-regulation-seychelles"),
-          ],
-        },
       ],
       news: [
         {
@@ -986,7 +898,7 @@
           ],
         },
       ],
-      watch: ["The AI and data governance frameworks promised in Budget 2026."],
+      watch: ["Whether a national AI strategy follows the schools framework."],
     },
 
     // ------------------------------------------------------------------ GAMBIA
@@ -1033,22 +945,14 @@
     // ------------------------------------------------------------------ LIBERIA
     {
       id: "lr", name: "Liberia", flag: "🇱🇷", region: "West Africa", group: "Africa", geo: [-10.8, 6.3], isoN: "430",
-      stance: "Early stage: talent programmes, with no AI law or strategy",
+      stance: "Early stage: building AI talent through a national challenge",
       summary:
-        "Liberia has no AI statute, AI regulator or binding AI rules, and its data protection bill is still pending. In August 2025 it launched a national Artificial Intelligence Challenge under President Joseph Boakai's patronage to build local AI talent.",
+        "In August 2025 it launched a national Artificial Intelligence Challenge under President Joseph Boakai's patronage to build local AI talent.",
       glance: { firstStrategy: "—", latestStrategy: "—", newestBody: "—", newestBodyDate: "" },
       stats: { population: { v: 5731206, year: 2025 }, gdpPerCapita: { v: 915, year: 2025 }, internet: { v: 32.2, year: 2024 } },
       oxford: { rank: 189, scores: [8.0, 27.05, 3.5, 24.92, 9.77, 13.85] },
       msAdoption: { h1_2025: 8.7, h2_2025: 9.3, q1_2026: null, q2_2026: null, rankLatest: null, regional: true, regionLabel: "West Africa" },
       facts: [
-        {
-          topic: "Regulation", date: "2026",
-          text: "Liberia has no statute defining AI, no AI regulator and no binding AI duties; its personal data protection bill is still pending in the Legislature.",
-          level: "single",
-          sources: [
-            S("Levellers - AI regulation in Liberia (reviewed Jun 2026)", "https://www.levellers.ai/what-is/ai-regulation-liberia"),
-          ],
-        },
         {
           topic: "Skills", date: "2025-08-07",
           text: "Liberia launched its 2025 Artificial Intelligence Challenge at the EJS Ministerial Complex in Monrovia, under the patronage of President Joseph Boakai and First Lady Kartumu Boakai, to build local AI talent.",
@@ -1068,7 +972,7 @@
           ],
         },
       ],
-      watch: ["Passage of the personal data protection bill, the likely base for AI rules."],
+      watch: ["A national AI policy or strategy."],
     },
 
     // ------------------------------------------------------------------ MAURITANIA
@@ -1117,9 +1021,9 @@
     // ------------------------------------------------------------------ HONDURAS
     {
       id: "hn", name: "Honduras", flag: "🇭🇳", region: "Central America", group: "Americas", geo: [-87.21, 14.07], isoN: "340",
-      stance: "No AI law or strategy; first steps through digital government and a bill on AI-enabled cyberbullying",
+      stance: "First steps through digital government and a bill on AI-enabled cyberbullying",
       summary:
-        "Honduras has no AI law, AI bill or AI regulator, and its data protection bill has been pending since 2018. In June 2026 President Nasry Asfura's government and the Inter-American Development Bank agreed to develop an AI tool to review government procedures and cut red tape. Congress is also set to debate a reform to criminalise AI-enabled cyberbullying in schools.",
+        "In June 2026 President Nasry Asfura's government and the Inter-American Development Bank agreed to develop an AI tool to review government procedures and cut red tape. Congress is also set to debate a reform to criminalise AI-enabled cyberbullying in schools.",
       glance: { firstStrategy: "—", latestStrategy: "—", newestBody: "—", newestBodyDate: "" },
       stats: { population: { v: 11005850, year: 2025 }, gdpPerCapita: { v: 3598, year: 2025 }, internet: { v: 58.6, year: 2024 } },
       oxford: { rank: 157, scores: [4.0, 36.49, 38.67, 18.23, 10.87, 21.85] },
@@ -1140,14 +1044,6 @@
           level: "single",
           sources: [
             S("El Heraldo - Buscan penalizar el ciberacoso con IA (3 Jun 2026)", "https://www.elheraldo.hn/honduras/congreso-nacional-busca-penalizar-ciberacoso-inteligencia-artificial-suplantacion-identidad-digital-GI30924516"),
-          ],
-        },
-        {
-          topic: "Regulation", date: "2026-06",
-          text: "As of June 2026 Honduras had no AI law, AI bill or AI regulator. A personal data protection bill drafted by the transparency institute (IAIP) has been pending in Congress since 2018.",
-          level: "single",
-          sources: [
-            S("Levellers - Regulación de la IA en Honduras (2026)", "https://www.levellers.ai/what-is/ai-regulation-honduras-es"),
           ],
         },
       ],
@@ -1256,9 +1152,9 @@
     // ------------------------------------------------------------------ BAHAMAS
     {
       id: "bs", name: "Bahamas", flag: "🇧🇸", region: "Caribbean", group: "Americas", geo: [-77.35, 25.05], isoN: "044",
-      stance: "Policy in preparation: an AI white paper for Cabinet and a GDPR-style data bill meant to cover AI",
+      stance: "Policy in preparation: an AI white paper for Cabinet and a labour-market skills push",
       summary:
-        "The Bahamas has no AI-specific law or regulator. In June 2025 the government said it was preparing an AI white paper and policy for Cabinet, aiming to be a first mover in the Caribbean. A draft Data Protection Bill, 2025, published for consultation, would replace the 2003 privacy law and also address AI.",
+        "In June 2025 the government said it was preparing an AI white paper and policy for Cabinet, aiming to be a first mover in the Caribbean. In June 2026 the labour minister set out a plan to build an AI-literate workforce with skills training and regulatory safeguards.",
       glance: { firstStrategy: "—", latestStrategy: "AI white paper in preparation", newestBody: "—", newestBodyDate: "" },
       stats: { population: { v: 403033, year: 2025 }, gdpPerCapita: { v: 39455, year: 2024 }, internet: { v: 92.5, year: 2024 } },
       oxford: { rank: 123, scores: [8.0, 40.26, 53.62, 42.14, 14.55, 23.19] },
@@ -1270,14 +1166,6 @@
           level: "single",
           sources: [
             S("The Tribune - Minister: Bahamas ready for AI age (10 Jun 2026)", "https://www.tribune242.com/news/2026/jun/10/minister-bahamas-ready-for-ai-age/"),
-          ],
-        },
-        {
-          topic: "Regulation", date: "2025",
-          text: "A draft Data Protection Bill, 2025, published for public consultation, would repeal the 2003 data protection act, draw heavily on the EU's GDPR and address AI. No AI-specific statute is in force.",
-          level: "single",
-          sources: [
-            S("Levellers - AI regulation in the Bahamas", "https://www.levellers.ai/what-is/ai-regulation-bahamas"),
           ],
         },
         {
@@ -1300,15 +1188,15 @@
           ],
         },
       ],
-      watch: ["Cabinet approval of the AI white paper.", "Passage of the Data Protection Bill."],
+      watch: ["Cabinet approval of the AI white paper."],
     },
 
     // ------------------------------------------------------------------ GUYANA
     {
       id: "gy", name: "Guyana", flag: "🇬🇾", region: "South America (Caribbean)", group: "Americas", geo: [-58.16, 6.8], isoN: "328",
-      stance: "Sector by sector: AI plans in health and policing, but no AI law or national strategy",
+      stance: "Sector by sector: AI plans in health and policing",
       summary:
-        "Guyana has no AI law, national AI strategy or AI bill; its Data Protection Act of 2023 is the main relevant law. Government AI work is happening sector by sector: in April 2026 the health minister set out plans for AI-supported predictive healthcare, and in May 2026 President Irfaan Ali announced a move to AI-powered, data-driven policing.",
+        "Government AI work in Guyana is happening sector by sector: in April 2026 the health minister set out plans for AI-supported predictive healthcare, and in May 2026 President Irfaan Ali announced a move to AI-powered, data-driven policing.",
       glance: { firstStrategy: "—", latestStrategy: "—", newestBody: "—", newestBodyDate: "" },
       stats: { population: { v: 835986, year: 2025 }, gdpPerCapita: { v: 32414, year: 2025 }, internet: { v: 83.0, year: 2024 } },
       oxford: { rank: 146, scores: [15.5, 35.62, 39.29, 19.69, 12.27, 31.02] },
@@ -1320,14 +1208,6 @@
           level: "single",
           sources: [
             S("Guyana Standard - Gov't integrates AI, decentralized command centers (22 May 2026)", "https://www.guyanastandard.com/2026/05/22/govt-integrates-ai-decentralized-command-centers-to-modernize-national-security/"),
-          ],
-        },
-        {
-          topic: "Regulation", date: "2026-05",
-          text: "As of May 2026 Guyana had no dedicated AI law, national AI strategy or AI bill; the main relevant law is the Data Protection Act 18 of 2023.",
-          level: "single",
-          sources: [
-            S("Anurag Verma WorldWatch - AI regulation in Guyana (2026)", "https://anuragverma.co/worldwatch/guyana/ai"),
           ],
         },
         {

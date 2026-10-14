@@ -10,6 +10,10 @@
 
 Pages from the same organisation count as **one** source. Primary sources (government releases, official documents, the publisher's own report) were preferred, then checked against independent coverage (news outlets, law firms, research bodies).
 
+## Which sources count
+
+Government and parliament sites, international organisations, established news outlets, law firms and recognised research bodies. Third-party AI-policy tracker sites (for example anuragverma.co, regulations.ai, levellers.ai, straitsai.institute, aipolicytracker.org), auto-generated regulation explainers, compliance-vendor blogs and personal blogs or newsletters are not used: they are not independent evidence, and several are projects much like this one.
+
 ## Index figures
 
 These were read from the publisher's own data, not from secondary summaries:
@@ -41,6 +45,14 @@ Six African nations (Libya, Congo, Gabon, Djibouti, Eswatini, Lesotho) were adde
 25 more nations were added through the same audit: 84 claims, each checked against its cited pages, with the ones the script could not confirm reviewed by hand. Four pages that block automated requests (two Antigua News Room articles and two UNDP pages) were read in a browser and are marked as such. Many of these states, especially microstates and Pacific and Caribbean islands, have little independent coverage, so a large share of their claims carry single-source badges. State media (for example in Belarus and Nicaragua) are flagged in notes.
 
 During this batch the overview's EU AI Act highlight was corrected. It had said Norway and Iceland were already bound through the EEA; the Act is still under scrutiny for incorporation into the EEA Agreement, so the highlight now counts EU members only and lists the EEA states as pending.
+
+## Second audit (14 Oct 2026)
+
+- Every cited link (about 730) was fetched again and every claim re-checked against its pages; mismatches were reviewed by hand.
+- Every Oxford Insights rank and pillar score, Microsoft usage figure, World Bank statistic and Stanford AI Index talent figure was re-checked against the dataset. All 101 nations matched.
+- Tracker, vendor-explainer and personal-blog sources were removed. 65 claims kept other credible sources (badges recalculated), about 10 were re-sourced, and 28, mostly "country X has no AI law" statements only trackers supported, were deleted. Summaries were edited to match.
+- Corrected: Panama (strategy approved by Cabinet on 11 August 2026; an unverified resolution number removed), Sweden (an October 2025 inquiry proposing PTS as lead authority, not June 2026 interim authorities), Slovenia (National AI Strategy to 2030 adopted 5 March 2026), Greece (Daedalus not yet in full service), Georgia (news summary), and a Singapore MAS item whose cited OECD page no longer exists.
+- Removed as unconfirmable without trackers: Hungary's 2026 decree moving AI supervision, Croatia's missed AI Act deadline, Malta's "72 actions", and several exact dates and decree numbers (Czechia, Slovakia, Congo, Maldives).
 
 ## Link check
 

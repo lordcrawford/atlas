@@ -412,8 +412,8 @@
   function rerenderMap() { if (mapSlot) mapSlot.replaceChildren(worldMap()); }
 
   // ---------------------------------------------------------------- charts
-  function readinessHeatmap(list) {
-    const rows = [...list].sort((a, b) => a.oxford.rank - b.oxford.rank)
+  function readinessHeatmap(list, limit = Infinity) {
+    const rows = [...list].sort((a, b) => a.oxford.rank - b.oxford.rank).slice(0, limit)
       .map((n) => ({ name: n.name, sub: `#${n.oxford.rank}`, scores: n.oxford.scores, id: n.id }));
     rows.push({ name: "United States", sub: "#1 · reference", scores: D.meta.usReference.scores, ref: true });
     const labelW = 190, cellW = 96, cellH = 32, gap = 2, headH = 44;
@@ -454,9 +454,9 @@
     return box;
   }
 
-  function usageBars(list) {
+  function usageBars(list, limit = Infinity) {
     const rows = [...list].map((n) => ({ n, v: n.msAdoption ? n.msAdoption.h2_2025 : null }))
-      .sort((a, b) => (b.v ?? -1) - (a.v ?? -1));
+      .sort((a, b) => (b.v ?? -1) - (a.v ?? -1)).slice(0, limit);
     const labelW = 190, barH = 18, rowH = 30, plotW = 560, top = 8, max = 80;
     const W = labelW + plotW + 60, H = top + rows.length * rowH + 26;
     const x = (v) => labelW + (v / max) * plotW;
@@ -552,7 +552,8 @@
     return box;
   }
 
-  function milestoneTimeline(list) {
+  function milestoneTimeline(list, limit = Infinity) {
+    list = list.slice(0, limit);
     const y0 = RECENT_FROM, y1 = 2027;
     const labelW = 190, rowH = 34, T = 10, B = 26, plotW = 760;
     const W = labelW + plotW + 16, H = T + list.length * rowH + B;
@@ -689,6 +690,57 @@
     return row;
   }
 
+  // Long rankings open on their top rows, with a toggle to reveal the rest.
+  function expandable(build, total, { limit = 12, hint = "" } = {}) {
+    const box = el("div", { class: "expandable" });
+    const collapsible = total > limit + 3;
+    let open = !collapsible;
+    const draw = () => {
+      box.replaceChildren(build(open ? Infinity : limit));
+      if (!collapsible) return;
+      box.append(el("div", { class: "show-more-row" },
+        open ? null : el("span", { class: "show-more-hint" }, `Showing the top ${limit} of ${total}${hint ? ` ${hint}` : ""}.`),
+        el("button", { class: "show-more", type: "button", "aria-expanded": String(open), onclick: () => {
+          open = !open; draw();
+          if (!open) box.scrollIntoView({ block: "nearest" });
+        } }, open ? "Show fewer" : `Show all ${total} nations`)));
+    };
+    draw();
+    return box;
+  }
+
+  // Compact, searchable list of every nation, grouped by region.
+  function nationDirectory(list) {
+    const groups = state.region === "All" ? GROUPS : [state.region];
+    const input = el("input", { type: "search", class: "dir-search", placeholder: `Search ${list.length} nations`, "aria-label": "Search nations by name or region" });
+    const cols = el("div", { class: "dir-cols" });
+    const narrow = matchMedia("(max-width: 520px)").matches;
+    const draw = () => {
+      const q = input.value.trim().toLowerCase();
+      const blocks = groups.map((g) => {
+        const items = list.filter((n) => n.group === g && (!q || n.name.toLowerCase().includes(q) || n.region.toLowerCase().includes(q)))
+          .sort((a, b) => a.oxford.rank - b.oxford.rank);
+        if (!items.length) return null;
+        // On phones each region folds away until tapped (or matched by a search).
+        const open = !narrow || !!q || groups.length === 1;
+        return el("details", { class: "dir-group", open },
+          el("summary", { class: "dir-h" }, g, el("span", {}, String(items.length))),
+          el("ul", {}, items.map((n) => el("li", {},
+            el("a", { class: "dir-item", href: `#${n.id}`, title: n.stance },
+              el("span", { class: "flag", "aria-hidden": "true" }, n.flag),
+              el("span", { class: "dir-name" }, n.name),
+              el("span", { class: "dir-rank", title: "AI readiness rank (Oxford Insights 2025)" }, `#${n.oxford.rank}`))))));
+      }).filter(Boolean);
+      cols.replaceChildren(...(blocks.length ? blocks : [el("p", { class: "muted" }, `No nation matches "${input.value}".`)]));
+    };
+    input.addEventListener("input", draw);
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") { const a = cols.querySelector("a"); if (a) location.hash = a.getAttribute("href"); }
+    });
+    draw();
+    return el("div", { class: "card dir" }, input, cols);
+  }
+
   // ---------------------------------------------------------------- views
   function renderOverview() {
     const claims = allClaims();
@@ -715,29 +767,20 @@
       hideTip();
       const list = filtered();
       mapSlot = el("div", {}, worldMap());
-      const cards = el("div", { class: "grid-4" }, [...list].sort((a, b) => a.oxford.rank - b.oxford.rank).map((n) =>
-        el("a", { class: "card nation-card", href: `#${n.id}` },
-          el("div", { class: "top" }, el("span", { class: "flag", "aria-hidden": "true" }, n.flag),
-            el("div", {}, el("h3", {}, n.name), el("div", { class: "region" }, n.region))),
-          el("p", { class: "stance" }, n.stance),
-          el("div", { class: "kpis" },
-            el("div", { class: "kpi" }, el("div", { class: "v" }, `#${n.oxford.rank}`), el("div", { class: "l" }, "Readiness")),
-            el("div", { class: "kpi" }, el("div", { class: "v" }, n.msAdoption ? `${n.msAdoption.h2_2025}%` : "—"), el("div", { class: "l" }, "Gen-AI use")),
-            el("div", { class: "kpi" }, el("div", { class: "v" }, compact(n.stats.population.v)), el("div", { class: "l" }, "People"))))));
       const showTrend = list.some((n) => n.id === "ae" || n.id === "sg");
       body.replaceChildren(...[
         el("section", { class: "section" },
           sectionHead("Where they are", "Hover a country or dot for its numbers, click to open its profile. Picking a region zooms in."),
           el("div", { class: "card" }, mapSlot,
             el("p", { class: "note" }, "At this scale Singapore, Malta, Bahrain and Mauritius are too small to draw as shapes, so every nation is also marked with a dot at its capital."))),
-        el("section", { class: "section" }, sectionHead(state.region === "All" ? "The nations" : `The nations · ${state.region}`, "Sorted by AI readiness rank."), cards),
+        el("section", { class: "section" }, sectionHead(state.region === "All" ? "The nations" : `The nations · ${state.region}`, "Grouped by region and sorted by AI readiness rank (#). Search or click a name to open its profile."), nationDirectory(list)),
         el("section", { class: "section" },
           sectionHead("Government AI readiness, by pillar", `Oxford Insights 2025 index (${OXFORD_TOTAL} countries ranked). The United States (#1) is shown for reference. Click a name to open its profile.`),
-          el("div", { class: "card" }, readinessHeatmap(list),
+          el("div", { class: "card" }, expandable((k) => readinessHeatmap(list, k), list.length, { hint: "by readiness rank" }),
             el("p", { class: "note" }, "Oxford Insights corrected its December 2025 release. These are the validated January 2026 figures. Some third-party trackers still repeat the earlier numbers."))),
         el("section", { class: "section" },
           sectionHead("How many people use generative AI", "Share of working-age population (15–64), H2 2025."),
-          el("div", { class: "card" }, usageBars(list),
+          el("div", { class: "card" }, expandable((k) => usageBars(list, k), list.length, { hint: "by AI use" }),
             el("p", { class: "note" }, "Microsoft's estimate comes from anonymised Microsoft telemetry adjusted for device share and population. It measures use, not enterprise deployment. Smaller states without their own figure are marked 'not reported'. World averages: Global North 24.7%, Global South 14.1%."))),
         el("section", { class: "section" },
           sectionHead("Where AI talent is going", "LinkedIn data from the Stanford AI Index 2026. Only the top 15 economies are published, so most nations here have no value."),
@@ -748,10 +791,10 @@
             el("p", { class: "note" }, "Microsoft moved from half-year to quarterly reporting in 2026, so the periods are not evenly spaced in time. Q1 2026 figures come from WAM and Mappr coverage of Microsoft's report. Q2 2026 figures come from Microsoft directly."))) : null,
         el("section", { class: "section" },
           sectionHead("Milestones since 2024", "Each dot is a sourced fact or news item. Hover for details, click a dot or name to open the nation."),
-          el("div", { class: "card" }, milestoneTimeline([...list].sort((a, b) => a.oxford.rank - b.oxford.rank)))),
+          el("div", { class: "card" }, expandable((k) => milestoneTimeline([...list].sort((a, b) => a.oxford.rank - b.oxford.rank), k), list.length, { hint: "by readiness rank" }))),
         el("section", { class: "section" },
-          sectionHead("At a glance", "Click a column header to sort."),
-          el("div", { class: "card compare" }, compareTable(list), sourceLine("oxford", "msH2", "wbNet"))),
+          sectionHead("At a glance", "Click a column header to sort; the top rows follow the sort."),
+          el("div", { class: "card compare" }, expandable((k) => compareTable(list, k), list.length, { limit: 10, hint: "in this sort order" }), sourceLine("oxford", "msH2", "wbNet"))),
       ].filter(Boolean));
     };
     view.replaceChildren(head,
@@ -816,7 +859,7 @@
       el("div", { class: "chart-foot" }, el("span", { class: "muted small" }, "Source:"), sourceChips([S.aiIndex])));
   }
 
-  function compareTable(list) {
+  function compareTable(list, limit = Infinity) {
     const cols = [
       { h: "Nation", key: "name", get: (n) => n.name, cell: (n) => el("a", { href: `#${n.id}` }, `${n.flag} ${n.name}`) },
       { h: "Region", key: "group", get: (n) => n.group },
@@ -833,7 +876,7 @@
       const rows = [...list].sort((a, b) => {
         const x = col.get(a), y = col.get(b);
         return (x < y ? -1 : x > y ? 1 : 0) * state.sortDir;
-      });
+      }).slice(0, limit);
       wrap.replaceChildren(el("table", { class: "data" },
         el("thead", {}, el("tr", {}, cols.map((c) =>
           el("th", { class: c.num ? "num" : null, "aria-sort": c.key === state.sortKey ? (state.sortDir > 0 ? "ascending" : "descending") : null },
@@ -965,6 +1008,7 @@
       el("ul", {},
         el("li", {}, "Each claim was researched across multiple searches and cross-checked against primary sources (government sites, official releases, the publishers' own reports) and independent coverage."),
         el("li", {}, "A claim is ✓✓✓ Verified only when at least three independent sources confirm it, ✓✓ Corroborated with two, and ! Single source with one. Pages from the same organisation, or articles that republish another outlet's text word for word, count as one source."),
+        el("li", {}, "Which sources count: government and parliament sites, international organisations, established news outlets, law firms and recognised research bodies. Third-party AI-policy tracker sites, auto-generated regulation explainers, compliance-vendor blogs and personal blogs are not used, because they are not independent evidence."),
         el("li", {}, "Where sources disagree (dates, counts, names), the claim gives the best-supported version and the disagreement is shown in a Note."),
         el("li", {}, "Index figures (Oxford Insights, Microsoft, World Bank, Stanford AI Index) were read directly from the publisher's own report, PDF table or API.")),
       el("h2", {}, "The full audit (10 October 2026)"),
@@ -974,6 +1018,12 @@
         el("li", {}, "Every mismatch was reviewed by hand against the most relevant passage of the page."),
         el("li", {}, "Pages that block automated access were opened in a browser where possible. Pages behind bot challenges (for example Bloomberg and gov.mt) were not bypassed. Readable independent coverage was found to replace them."),
         el("li", {}, "Where no readable source could confirm a detail, the detail was removed or the badge was lowered.")),
+      el("h2", {}, "Second audit (14 October 2026)"),
+      el("ul", {},
+        el("li", {}, "Every cited link was fetched again, and every readiness score, Microsoft usage figure, World Bank statistic and AI Index talent figure was re-checked against its dataset. All matched."),
+        el("li", {}, "Sources from AI-policy tracker sites, vendor explainers and personal blogs were removed. Claims that still had credible sources kept them, with badges recalculated. About ten were re-sourced to government, news or international-organisation pages, and 28, mostly 'country X has no AI law' statements that only trackers supported, were deleted."),
+        el("li", {}, "Corrected: Panama's strategy approval (Cabinet, 11 August 2026; an unverified resolution number was removed), Sweden's AI Act plan (an October 2025 inquiry naming PTS, not June 2026 interim authorities), Slovenia's National AI Strategy to 2030 (adopted 5 March 2026), and a Singapore MAS item whose main source had disappeared."),
+        el("li", {}, "Details found only in removed sources were cut, including Hungary's 2026 decree on AI supervision, Croatia's missed AI Act deadline, and several exact dates and document numbers.")),
       el("h2", {}, "Corrections made"),
       el("ul", {},
         el("li", {}, "Removed: the Stargate UAE '5,000 workers' figure, MAS's '80% of risk officers' figure, Omar Al Olama's age, Norway's '4–6 research centres', a 2028 Swiss date, Slovenia's exact AI-factory launch day, El Salvador's '2031' target year, and Kuwait's unconfirmed '2025–2028' strategy dates."),

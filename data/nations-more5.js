@@ -29,19 +29,17 @@
         {
           topic: "Regulation", date: "2025",
           text: "Bosnia and Herzegovina has no dedicated AI law. The main AI-relevant law is the Law on Personal Data Protection adopted in early 2025, which is largely aligned with the EU's GDPR.",
-          level: "verified",
+          level: "corroborated",
           sources: [
             S("CMS - AI regulation scanner: Bosnia and Herzegovina", "https://cms.law/en/int/expert-guides/ai-regulation-scanner/bosnia-and-herzegovina"),
             S("Western Balkans Info Hub - AI governance and ethics in Bosnia and Herzegovina (PDF)", "https://www.westernbalkans-infohub.eu/wp-content/uploads/2025/11/Artificial-Intelligence-Governance-and-Ethics-in-Bosnia-and-Herzegovina.pdf"),
-            S("Levellers - AI regulation in Bosnia and Herzegovina", "https://www.levellers.ai/what-is/ai-regulation-bosnia-and-herzegovina"),
           ],
         },
         {
           topic: "Strategy", date: "2026-05",
           text: "As of May 2026 there was no formally adopted national AI strategy at state level. AI is mentioned only briefly in the 2021–2027 Development Strategy of the Federation of Bosnia and Herzegovina.",
-          level: "corroborated",
+          level: "single",
           sources: [
-            S("Anurag Verma WorldWatch - AI regulation in Bosnia and Herzegovina (2026)", "https://anuragverma.co/worldwatch/bosnia/ai"),
             S("CMS - AI regulation scanner: Bosnia and Herzegovina", "https://cms.law/en/int/expert-guides/ai-regulation-scanner/bosnia-and-herzegovina"),
           ],
         },
@@ -82,9 +80,8 @@
         {
           topic: "Strategy", date: "2026",
           text: "North Macedonia has no standalone AI law, AI regulator or adopted national AI strategy. Work on a strategy began in 2021 but stalled; AI is instead a pillar of the SMART/MK 2030 ICT strategy.",
-          level: "verified",
+          level: "corroborated",
           sources: [
-            S("Levellers - AI regulation in North Macedonia", "https://www.levellers.ai/what-is/ai-regulation-north-macedonia"),
             S("Schoenherr - AI regulation and development in North Macedonia", "https://www.schoenherr.eu/content/the-status-and-future-prospects-of-ai-regulation-and-development-in-north-macedonia"),
             S("China-CEE Institute - North Macedonia monthly briefing on AI (Jul 2026)", "https://china-cee.eu/2026/07/15/north-macedonia-monthly-briefing-entering-the-ai-economy-from-the-periphery-ai-infrastructure-digital-sovereignty-and-the-risk-of-digital-extractivism/"),
           ],
@@ -223,16 +220,15 @@
           text: "On 14 April 2026 the government adopted a non-binding AI strategy for the public administration (KI-Strategie der Liechtensteinischen Landesverwaltung), covering the government's own use of AI.",
           level: "single",
           sources: [
-            S("Anurag Verma WorldWatch - AI regulation in Liechtenstein (2026)", "https://anuragverma.co/worldwatch/liechtenstein/ai"),
+            S("Innovando - Liechtenstein's government adopts AI strategy for the public administration", "https://en.innovando.news/Liechtenstein-to-bring-to-the-public-machine/"),
           ],
         },
         {
           topic: "Regulation", date: "2026",
           text: "The EU AI Act is marked as EEA-relevant but is still under scrutiny for incorporation into the EEA Agreement, so it does not yet apply in Liechtenstein. Liechtenstein, Norway and Iceland take part in EU AI Board meetings as observers.",
-          level: "corroborated",
+          level: "single",
           sources: [
             S("Future of Life Institute - Overview of AI Act national implementation plans", "https://artificialintelligenceact.eu/national-implementation-plans/"),
-            S("Anurag Verma WorldWatch - AI regulation in Liechtenstein (2026)", "https://anuragverma.co/worldwatch/liechtenstein/ai"),
           ],
         },
       ],
@@ -242,7 +238,7 @@
           summary: "The non-binding strategy guides how the state administration uses AI.",
           level: "single",
           sources: [
-            S("Anurag Verma WorldWatch", "https://anuragverma.co/worldwatch/liechtenstein/ai"),
+            S("Innovando", "https://en.innovando.news/Liechtenstein-to-bring-to-the-public-machine/"),
           ],
         },
       ],
@@ -252,10 +248,10 @@
     // ------------------------------------------------------------------ ANDORRA
     {
       id: "ad", name: "Andorra", flag: "🇦🇩", region: "Southern Europe", group: "Europe", geo: [1.52, 42.51], isoN: "020",
-      stance: "Soft law: a voluntary AI ethics code, a Council of Europe AI treaty signature and plans for an AI assistant for all civil servants",
+      stance: "Treaty first: an early signatory of the Council of Europe AI convention, with an AI assistant planned for all civil servants",
       summary:
-        "Andorra has no AI law. It adopted a voluntary Andorran Code of Ethics for AI in February 2024 and signed the Council of Europe Framework Convention on AI in September 2024; data protection law covers most AI uses. In April 2026 the digital minister said an AI tool for all public administration staff is planned by 2027.",
-      glance: { firstStrategy: "2024 (Code of Ethics for AI)", latestStrategy: "2024 (Code of Ethics for AI)", newestBody: "—", newestBodyDate: "" },
+        "Andorra was among the first signatories of the Council of Europe Framework Convention on AI in September 2024. In April 2026 the digital minister said an AI tool for all public administration staff is planned by 2027.",
+      glance: { firstStrategy: "—", latestStrategy: "—", newestBody: "—", newestBodyDate: "" },
       stats: { population: { v: 82904, year: 2025 }, gdpPerCapita: { v: 54292, year: 2025 }, internet: { v: 94.4, year: 2024 } },
       oxford: { rank: 92, scores: [31.0, 47.96, 54.27, 25.75, 37.69, 49.92] },
       msAdoption: null,
@@ -270,21 +266,12 @@
         },
         {
           topic: "Regulation", date: "2024-09-05",
-          text: "Andorra signed the Council of Europe Framework Convention on AI on 5 September 2024. It has no dedicated AI law; AI is governed mainly through data protection law.",
-          level: "corroborated",
+          text: "Andorra was among the first signatories of the Council of Europe Framework Convention on AI when it opened for signature on 5 September 2024.",
+          level: "single",
           sources: [
-            S("Anurag Verma WorldWatch - AI regulation in Andorra (2026)", "https://anuragverma.co/worldwatch/andorra/ai"),
-            S("Levellers - AI regulation in Andorra", "https://www.levellers.ai/what-is/ai-regulation-andorra"),
+            S("Council of Europe - Council of Europe opens first ever global treaty on AI for signature", "https://www.coe.int/en/web/portal/-/council-of-europe-opens-first-ever-global-treaty-on-ai-for-signature"),
           ],
-        },
-        {
-          topic: "Ethics", date: "2024-02",
-          text: "In February 2024 the government adopted a voluntary Andorran Code of Ethics for AI.",
-          level: "corroborated",
-          sources: [
-            S("Anurag Verma WorldWatch - AI regulation in Andorra (2026)", "https://anuragverma.co/worldwatch/andorra/ai"),
-            S("Levellers - AI regulation in Andorra", "https://www.levellers.ai/what-is/ai-regulation-andorra"),
-          ],
+          note: "Read in a browser; the page blocks automated requests.",
         },
       ],
       news: [
@@ -305,7 +292,7 @@
       id: "mc", name: "Monaco", flag: "🇲🇨", region: "Southern Europe", group: "Europe", geo: [7.42, 43.74], isoN: "492",
       stance: "Government-first: AI inside the Extended Monaco digital programme and a new permanent digital delegation",
       summary:
-        "Monaco has no AI law; AI is governed mainly by its 2024 data protection law. Its national digital programme, Extended Monaco, launched in 2019, puts AI at the centre. From 5 October 2026 a new Interministerial Delegation for Digital Affairs (DIN) replaced the digital transition delegation, with a mandate that includes an AI strategy for the administration.",
+        "Prince Albert II launched Monaco's national digital programme, Extended Monaco, in April 2019. From 5 October 2026 a new Interministerial Delegation for Digital Affairs (DIN) replaced the digital transition delegation, with a mandate that includes an AI strategy for the administration.",
       glance: { firstStrategy: "2019 (Extended Monaco)", latestStrategy: "2019 (Extended Monaco)", newestBody: "Interministerial Delegation for Digital Affairs (DIN)", newestBodyDate: "2026-10-05" },
       stats: { population: { v: 38341, year: 2025 }, gdpPerCapita: { v: 288002, year: 2024 }, internet: { v: 99.0, year: 2024 } },
       oxford: { rank: 105, scores: [12.0, 48.02, 57.4, 19.57, 34.95, 51.37] },
@@ -320,21 +307,11 @@
           ],
         },
         {
-          topic: "Regulation", date: "2026",
-          text: "Monaco has no dedicated AI statute. AI is governed mainly by Law no. 1.565 of 3 December 2024 on personal data protection, enforced by the data protection authority (APDP).",
-          level: "corroborated",
+          topic: "Strategy", date: "2019-04",
+          text: "Prince Albert II launched Extended Monaco, the Principality's programme to apply digital technology across its economy and public services, in April 2019.",
+          level: "single",
           sources: [
-            S("Levellers - AI regulation in Monaco", "https://www.levellers.ai/what-is/ai-regulation-monaco"),
-            S("Anurag Verma WorldWatch - AI regulation in Monaco (2026)", "https://anuragverma.co/worldwatch/monaco/ai"),
-          ],
-        },
-        {
-          topic: "Strategy", date: "2019",
-          text: "Monaco's national digital programme, Extended Monaco, launched in 2019, includes AI as a central component.",
-          level: "corroborated",
-          sources: [
-            S("Anurag Verma WorldWatch - AI regulation in Monaco (2026)", "https://anuragverma.co/worldwatch/monaco/ai"),
-            S("BSS Monaco - Extended Monaco 2026", "https://bss.mc/blog/extended-monaco-ai-digital-2026"),
+            S("Monaco Life - Monaco declares digital transition over as State enters new era of AI", "https://monacolife.net/monaco-declares-digital-transition-over-as-state-enters-new-era-of-ai-and-implementation/"),
           ],
         },
       ],
@@ -354,21 +331,22 @@
     // ------------------------------------------------------------------ SAN MARINO
     {
       id: "sm", name: "San Marino", flag: "🇸🇲", region: "Southern Europe", group: "Europe", geo: [12.45, 43.94], isoN: "674",
-      stance: "Debate stage: no AI law or strategy, with parties urging rules after Italy passed its AI law",
+      stance: "Debate stage: parties urging AI rules after Italy passed its own AI law",
       summary:
-        "San Marino has no AI law or published national AI strategy; AI falls under its GDPR-aligned data protection law of 2018. It signed the Council of Europe AI convention in September 2024. After Italy moved ahead with its own AI law in 2025, Sammarinese political groups called for a public debate on AI rules.",
+        "San Marino was among the first signatories of the Council of Europe AI convention in September 2024. After Italy moved ahead with its own AI law in 2025, Sammarinese political groups called for a public debate on AI rules.",
       glance: { firstStrategy: "—", latestStrategy: "—", newestBody: "—", newestBodyDate: "" },
       stats: { population: { v: 34109, year: 2025 }, gdpPerCapita: { v: 59871, year: 2023 }, internet: { v: 97.4, year: 2024 } },
       oxford: { rank: 112, scores: [27.0, 41.18, 45.65, 23.86, 33.26, 41.5] },
       msAdoption: null,
       facts: [
         {
-          topic: "Regulation", date: "2026-06",
-          text: "As of June 2026 San Marino had no dedicated AI statute. AI is governed indirectly through its GDPR-aligned data protection law (Law no. 171 of 21 December 2018) and central bank sector rules.",
+          topic: "International", date: "2024-09-05",
+          text: "San Marino was among the first signatories of the Council of Europe Framework Convention on AI when it opened for signature on 5 September 2024.",
           level: "single",
           sources: [
-            S("Levellers - AI regulation in San Marino", "https://www.levellers.ai/what-is/ai-regulation-san-marino"),
+            S("Council of Europe - Council of Europe opens first ever global treaty on AI for signature", "https://www.coe.int/en/web/portal/-/council-of-europe-opens-first-ever-global-treaty-on-ai-for-signature"),
           ],
+          note: "Read in a browser; the page blocks automated requests.",
         },
         {
           topic: "Politics", date: "2025-04-28",
@@ -463,10 +441,9 @@
         {
           topic: "Strategy", date: "2026-03-22",
           text: "On 22 March 2026 the acting ICT minister released a draft National Sovereign Digital Transformation and AI Strategy for public consultation.",
-          level: "corroborated",
+          level: "single",
           sources: [
             S("DICT PNG - Draft National Sovereign Digital Transformation and AI Strategy for consultation (Mar 2026)", "https://www.ict.gov.pg/png-releases-draft-national-sovereign-digital-transformation-and-ai-strategy-for-public-consultation/"),
-            S("Levellers - AI regulation in Papua New Guinea", "https://www.levellers.ai/what-is/ai-regulation-papua-new-guinea"),
           ],
         },
         {
@@ -506,10 +483,9 @@
         {
           topic: "Regulation", date: "2025",
           text: "Tonga passed the Privacy Act 2025, a comprehensive personal data protection framework, and the Electronic Transactions Act 2025. It has no dedicated AI law.",
-          level: "corroborated",
+          level: "single",
           sources: [
             S("Digital Watch - Tonga", "https://dig.watch/countries/tonga"),
-            S("Levellers - AI regulation in Tonga", "https://www.levellers.ai/what-is/ai-regulation-tonga"),
           ],
         },
         {
@@ -529,9 +505,9 @@
     // ------------------------------------------------------------------ SOLOMON ISLANDS
     {
       id: "sb", name: "Solomon Islands", flag: "🇸🇧", region: "Pacific", group: "Asia-Pacific", geo: [159.95, -9.43], isoN: "090",
-      stance: "Use before rules: AI for disaster management, no AI law",
+      stance: "Use before rules: AI for disaster management",
       summary:
-        "Solomon Islands has no AI law or regulator; AI falls under general laws such as the Telecommunications Act. In November 2025 UNESCO selected EDiSON, an AI-supported disaster risk system built on SAP technology, for use in the country to help authorities respond faster to cyclones and floods.",
+        "In November 2025 UNESCO selected EDiSON, an AI-supported disaster risk system built on SAP technology, for use in the country to help authorities respond faster to cyclones and floods.",
       glance: { firstStrategy: "—", latestStrategy: "—", newestBody: "—", newestBodyDate: "" },
       stats: { population: { v: 838645, year: 2025 }, gdpPerCapita: { v: 2086, year: 2025 }, internet: { v: 29.0, year: 2024 } },
       oxford: { rank: 162, scores: [4.0, 33.69, 12.64, 20.97, 20.46, 33.05] },
@@ -544,14 +520,6 @@
           sources: [
             S("SAP News - SAP and UNESCO launch AI-assisted disaster risk system in Solomon Islands (19 Nov 2025)", "https://news.sap.com/2025/11/sap-unesco-launch-ai-assisted-disaster-risk-management-system-solomon-islands/"),
             S("Digital Watch - UNESCO and SAP selected EDiSON for Solomon Islands (20 Nov 2025)", "https://dig.watch/updates/unesco-and-sap-selected-the-ai-system-edison-for-the-solomon-islands"),
-          ],
-        },
-        {
-          topic: "Regulation", date: "2026",
-          text: "Solomon Islands has no dedicated AI law or regulator as of mid-2026; AI falls under general laws such as the Telecommunications Act.",
-          level: "single",
-          sources: [
-            S("Levellers - AI regulation in Solomon Islands", "https://www.levellers.ai/what-is/ai-regulation-solomon-islands"),
           ],
         },
       ],
@@ -648,7 +616,7 @@
       id: "bo", name: "Bolivia", flag: "🇧🇴", region: "South America", group: "Americas", geo: [-68.15, -16.5], isoN: "068",
       stance: "Bill in limbo: an AI law giving the state tech agency AGETIC oversight passed the Senate but awaits the lower house",
       summary:
-        "Bolivia has no AI law in force. In October 2025 the Senate passed a 31-article bill on the promotion, management and use of AI that would put the state technology agency AGETIC in charge of AI oversight and require a National AI Strategy within 180 days of enactment. The bill went to the Chamber of Deputies, and its prospects are uncertain after a new government and legislature took office.",
+        "Bolivia has no AI law in force. In October 2025 the Senate passed a 31-article bill on the promotion, management and use of AI that would put the state technology agency AGETIC in charge of AI oversight and require a National AI Strategy within 180 days of enactment. The bill went to the Chamber of Deputies.",
       glance: { firstStrategy: "—", latestStrategy: "—", newestBody: "AGETIC (proposed AI regulator)", newestBodyDate: "" },
       stats: { population: { v: 12581843, year: 2025 }, gdpPerCapita: { v: 5148, year: 2025 }, internet: { v: 79.7, year: 2024 } },
       oxford: { rank: 139, scores: [0.0, 32.51, 43.5, 44.98, 13.55, 26.92] },
@@ -657,21 +625,12 @@
         {
           topic: "Regulation", date: "2025-10",
           text: "In October 2025 the Senate approved a 31-article bill on the promotion, management and use of AI. It would make the state technology agency AGETIC responsible for AI oversight, give it 90 days to write regulations and 180 days to set technical guidelines and a National AI Strategy. The bill went to the Chamber of Deputies.",
-          level: "verified",
+          level: "corroborated",
           sources: [
             S("El Deber - Senado aprueba proyecto de ley de uso de IA (23 Oct 2025)", "https://eldeber.com.bo/pais/senado-aprueba-proyecto-ley-uso-inteligencia-artificial-da-prerrogativas-agetic_1761265348"),
             S("CECASEM - Senado aprueba ley que otorga a la Agetic el control de la IA", "https://cecasem.com/notas/senado-aprueba-ley-que-otorga-a-la-agetic-el-control-del-desarrollo-y-uso-de-la-inteligencia-artificial-en-bolivia/"),
-            S("Levellers - AI regulation in Bolivia", "https://www.levellers.ai/what-is/ai-regulation-bolivia"),
           ],
           note: "Sources date the Senate vote to 22 or 23 October 2025.",
-        },
-        {
-          topic: "Regulation", date: "2026",
-          text: "The bill had not been promulgated and was pending in the Chamber of Deputies; its prospects are uncertain after a new government and legislature took office following the 2025 elections. Bolivia also lacks a comprehensive data protection law.",
-          level: "single",
-          sources: [
-            S("Levellers - AI regulation in Bolivia", "https://www.levellers.ai/what-is/ai-regulation-bolivia"),
-          ],
         },
       ],
       news: [
@@ -685,7 +644,7 @@
           ],
         },
       ],
-      watch: ["A vote in the Chamber of Deputies under the new legislature."],
+      watch: ["A vote in the Chamber of Deputies."],
     },
 
     // ------------------------------------------------------------------ NICARAGUA
@@ -725,9 +684,9 @@
     // ------------------------------------------------------------------ BELIZE
     {
       id: "bz", name: "Belize", flag: "🇧🇿", region: "Central America", group: "Americas", geo: [-88.77, 17.25], isoN: "084",
-      stance: "Courts first: a judicial rule on generative AI, regional digital leadership, and no national AI strategy",
+      stance: "Courts first: a judicial rule on generative AI and regional digital leadership",
       summary:
-        "Belize has no national AI law or strategy. Its Senior Courts issued a practice direction on the ethical use of generative AI in court proceedings in August 2025, requiring disclosure of AI use. In July 2026 Belize took the six-month presidency of the Central American (SICA) regional digital strategy group, with cybersecurity and AI among its priorities. The e-governance ministry backs 'augmented' AI that supports rather than replaces public officers.",
+        "Belize's Senior Courts issued a practice direction on the ethical use of generative AI in court proceedings in August 2025, requiring disclosure of AI use. In July 2026 Belize took the six-month presidency of the Central American (SICA) regional digital strategy group, with cybersecurity and AI among its priorities. The e-governance ministry backs 'augmented' AI that supports rather than replaces public officers.",
       glance: { firstStrategy: "—", latestStrategy: "—", newestBody: "—", newestBodyDate: "" },
       stats: { population: { v: 422924, year: 2025 }, gdpPerCapita: { v: 7865, year: 2025 }, internet: { v: 80.0, year: 2024 } },
       oxford: { rank: 158, scores: [7.5, 35.58, 23.08, 19.19, 13.59, 32.95] },
@@ -750,14 +709,6 @@
             S("Greater Belize Media - AI enters the courtroom as Belize acts to protect justice", "https://www.greaterbelize.com/ai-enters-the-courtroom-as-belize-acts-to-protect-justice/"),
           ],
         },
-        {
-          topic: "Strategy", date: "2026",
-          text: "A Caribbean data protection tracker found no substantive national AI document for Belize.",
-          level: "single",
-          sources: [
-            S("DPO Caribbean - AI laws, regulations, strategies and policies", "https://dpocaribbean.com/ai-laws-and-regs"),
-          ],
-        },
       ],
       news: [
         {
@@ -777,7 +728,7 @@
       id: "sr", name: "Suriname", flag: "🇸🇷", region: "South America (Caribbean)", group: "Americas", geo: [-55.2, 5.85], isoN: "740",
       stance: "Assessment first: the first country in its region to run UNESCO's updated AI readiness method",
       summary:
-        "Suriname has no AI law, regulator or standalone AI strategy; its National Digital Strategy 2023–2030 treats AI as a driver of public-service reform, and a broad privacy bill is pending. On 27 August 2026 it became the first country in the region to start UNESCO's updated AI Readiness Assessment (RAM 2.0), with 106 participants from 67 institutions at the launch meeting.",
+        "Suriname's National Digital Strategy 2023–2030 treats AI as a driver of public-service reform. On 27 August 2026 it became the first country in the region to start UNESCO's updated AI Readiness Assessment (RAM 2.0), with 106 participants from 67 institutions at the launch meeting.",
       glance: { firstStrategy: "—", latestStrategy: "National Digital Strategy 2023–2030 (AI as a driver)", newestBody: "—", newestBodyDate: "" },
       stats: { population: { v: 639850, year: 2025 }, gdpPerCapita: { v: 7070, year: 2025 }, internet: { v: 87.4, year: 2023 } },
       oxford: { rank: 181, scores: [0.0, 34.91, 19.62, 7.65, 13.6, 21.53] },
@@ -790,14 +741,6 @@
           sources: [
             S("UNESCO - Suriname advances responsible AI governance with RAM 2.0", "https://www.unesco.org/en/articles/suriname-advances-responsible-ai-governance-unescos-ram-20"),
             S("Carib Newsroom - Suriname sets Caribbean benchmark with new UNESCO AI assessment", "https://caribnewsroom.com/suriname-sets-caribbean-benchmark-with-new-unesco-ai-assessment/"),
-          ],
-        },
-        {
-          topic: "Regulation", date: "2026",
-          text: "Suriname has no AI-specific law, regulator or standalone AI strategy; a broad privacy bill is pending before the National Assembly.",
-          level: "single",
-          sources: [
-            S("Levellers - AI regulation in Suriname", "https://www.levellers.ai/what-is/ai-regulation-suriname"),
           ],
         },
         {
@@ -875,9 +818,9 @@
     // ------------------------------------------------------------------ SAINT LUCIA
     {
       id: "lc", name: "Saint Lucia", flag: "🇱🇨", region: "Caribbean", group: "Americas", geo: [-60.99, 14.01], isoN: "662",
-      stance: "Early stage: AI debated in schools and productivity policy, with no national AI document",
+      stance: "Early stage: AI debated in schools and productivity policy",
       summary:
-        "Saint Lucia has no national AI law or strategy; a Caribbean tracker found no substantive national AI document. The government has pushed AI for productivity since 2024, and in January 2026 the education and digital transformation minister raised concerns about AI use in Caribbean exam coursework.",
+        "The government of Saint Lucia has pushed AI for productivity since 2024, and in January 2026 the education and digital transformation minister raised concerns about AI use in Caribbean exam coursework.",
       glance: { firstStrategy: "—", latestStrategy: "—", newestBody: "—", newestBodyDate: "" },
       stats: { population: { v: 180149, year: 2025 }, gdpPerCapita: { v: 14746, year: 2025 }, internet: { v: 68.2, year: 2024 } },
       oxford: { rank: 142, scores: [4.0, 40.16, 34.38, 37.0, 13.0, 22.66] },
@@ -897,14 +840,6 @@
           level: "single",
           sources: [
             S("St. Lucia Times - Saint Lucia considers AI to enhance productivity (Oct 2024)", "https://stluciatimes.com/166394/2024/10/saint-lucia-considers-artificial-intelligence-to-enhance-productivity/"),
-          ],
-        },
-        {
-          topic: "Strategy", date: "2026",
-          text: "A Caribbean data protection tracker found no substantive national AI document for Saint Lucia.",
-          level: "single",
-          sources: [
-            S("DPO Caribbean - AI laws, regulations, strategies and policies", "https://dpocaribbean.com/ai-laws-and-regs"),
           ],
         },
       ],
@@ -1036,7 +971,6 @@
             S("TechAfrica News - Burundi launches framework to integrate AI (23 Apr 2026)", "https://techafricanews.com/2026/04/23/burundi-launches-framework-to-integrate-artificial-intelligence-into-governance-and-economy/"),
             S("Digital Business Africa - Burundi: la Stratégie nationale de l'IA validée", "https://www.digitalbusiness.africa/burundi-la-strategie-nationale-de-lintelligence-artificielle-validee-axes-et-objectifs/"),
             S("iAfrica - Burundi validates National AI Strategy for 2026–2030 (27 Apr 2026)", "https://iafrica.com/burundi-validates-national-ai-strategy-for-2026-2030-at-bujumbura-workshop/"),
-            S("Anurag Verma WorldWatch - AI regulation in Burundi (2026)", "https://anuragverma.co/worldwatch/burundi/ai"),
           ],
           note: "ARIB.info republishes the Digital Business Africa article; one source reports a 2025–2030 period.",
         },
@@ -1067,10 +1001,10 @@
     // ------------------------------------------------------------------ COMOROS
     {
       id: "km", name: "Comoros", flag: "🇰🇲", region: "East Africa (Indian Ocean)", group: "Africa", geo: [43.26, -11.7], isoN: "174",
-      stance: "First steps: a first national AI forum and a new data centre, but no AI law or strategy",
+      stance: "First steps: a first national AI forum",
       summary:
-        "The Comoros has no AI law, AI rules or AI strategy; its digital policy runs through the Comores Numérique 2028 strategy, which has no AI-specific goals. A national Tier III data centre funded by the African Development Bank is being used to host public services. In spring 2026 the country held its first national AI forum, where the digital economy minister called for an ecosystem to help young people, businesses and government adopt AI.",
-      glance: { firstStrategy: "—", latestStrategy: "Comores Numérique 2028 (no AI goals)", newestBody: "—", newestBodyDate: "" },
+        "In spring 2026 the country held its first national AI forum, where the digital economy minister called for an ecosystem to help young people, businesses and government adopt AI.",
+      glance: { firstStrategy: "—", latestStrategy: "—", newestBody: "—", newestBodyDate: "" },
       stats: { population: { v: 882847, year: 2025 }, gdpPerCapita: { v: 2056, year: 2025 }, internet: { v: 32.5, year: 2024 } },
       oxford: { rank: 171, scores: [7.5, 31.82, 10.24, 34.47, 10.01, 27.53] },
       msAdoption: null,
@@ -1082,14 +1016,6 @@
           sources: [
             S("Al-Fajr - Les Comores explorent l'intelligence artificielle (2 Apr 2026)", "https://www.al-fajrquotidien.com/technologie-numerique-les-comores-explorent-lintelligence-artificielle/"),
             S("Al-Watwan - Le premier forum fait jaillir les défis et opportunités de l'IA", "https://alwatwan.net/societe/intelligence-artificielle-aux-comores-i-le-premier-forum-fait-jaillir-les-d%C3%A9fis-et-les-opportunit%C3%A9s-de-l%E2%80%99ia.html"),
-          ],
-        },
-        {
-          topic: "Regulation", date: "2026-05",
-          text: "As of May 2026 the Comoros had no national AI legislation, sectoral AI rules, published AI guidelines or AI bill. Its digital strategy, Comores Numérique 2028, has no AI-specific provisions.",
-          level: "single",
-          sources: [
-            S("Anurag Verma WorldWatch - AI regulation in Comoros (2026)", "https://anuragverma.co/worldwatch/comoros/ai"),
           ],
         },
       ],

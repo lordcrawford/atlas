@@ -241,15 +241,16 @@ window.WORLDVIEW = {
         },
         {
           date: "2026-09-22",
-          title: "MAS flags AI-assisted cyber risk as a top concern for financial institutions",
+          title: "MAS warns an AI investment pullback could hit financial stability",
           summary:
-            "The Monetary Authority of Singapore's 2026 Financial Stability Review highlighted AI-assisted cyber and operational risks as leading concerns for financial institutions. It also warned that a sharp pullback in AI investment could threaten financial stability.",
-          level: "single",
+            "In its September 2026 Financial Stability Review, the Monetary Authority of Singapore warned that a sharp pullback in AI-related investment and a reassessment of AI asset valuations could weigh on corporate earnings, household incomes and financial stability.",
+          level: "verified",
           sources: [
-            { t: "OECD.AI Incidents Monitor - MAS flags AI investment downturn as financial stability risk", u: "https://oecd.ai/en/incidents/2026-09-22-4459" },
-            { t: "The Asian Banker - MAS strengthens financial system resilience as cloud, AI and quantum risks converge", u: "https://www.theasianbanker.com/updates-and-articles/mas-strengthens-financial-system-resilience-as-cloud-ai-and-quantum-risks-converge" },
+            { t: "TNGlobal - MAS flags risks from potential AI investment pullback (23 Sep 2026)", u: "https://technode.global/2026/09/23/mas-flags-risks-from-potential-ai-investment-pullback/" },
+            { t: "Crowdfund Insider - Singapore financial stability risks rise as AI investment lifts cost of capital", u: "https://www.crowdfundinsider.com/2026/09/313572-singapore-financial-stability-risks-rise-as-ai-investment-fiscal-pressures-lift-cost-of-capital/" },
+            { t: "The Arabian Post - MAS warns AI retreat could unsettle markets", u: "https://thearabianpost.com/mas-warns-ai-retreat-could-unsettle-markets/" },
           ],
-          note: "An earlier version quoted Bloomberg's figure that about 80% of chief risk officers named this risk. Bloomberg's page could not be read during the audit and the figure was not found elsewhere, so it was removed.",
+          note: "Rewritten in the 14 Oct 2026 re-audit: the OECD.AI incident page first cited no longer exists, and the remaining source did not cover the review. The claim that AI-assisted cyber risk was a top concern for financial institutions was dropped because no readable source stated it.",
         },
         {
           date: "2026-09-22",
@@ -330,7 +331,6 @@ window.WORLDVIEW = {
             { t: "ISSA - Artificial Intelligence for Estonia (adopted 25 July 2019)", u: "https://iskm.issa.int/node/13602" },
             { t: "EU Interoperable Europe - Estonia's national AI strategy", u: "https://interoperable-europe.ec.europa.eu/node/705457" },
             { t: "Interesting Engineering - KrattAI: Estonia's National AI Strategy", u: "https://interestingengineering.com/innovation/krattai-estonias-national-artificial-intelligence-strategy" },
-            { t: "Regulations.ai - Estonia National AI Strategy (2019–2021)", u: "https://regulations.ai/regulations/RAI-EE-NA-ENAISXX-2019" },
           ],
           note: "'Kratt' is a creature from Estonian folklore, and the government uses the word for narrow AI applications.",
         },
@@ -383,10 +383,9 @@ window.WORLDVIEW = {
           topic: "Education",
           date: "2026-06-09",
           text: "First-year results: 154 of Estonia's 156 upper-secondary schools took part, with about 5,000 teachers and 20,000 students. 94% of participating teachers used AI in their work and 63% redesigned their teaching. More than 12,000 students used the learning app, about 4,000 of them weekly.",
-          level: "corroborated",
+          level: "single",
           sources: [
             { t: "TI-Hüpe - AI Leap's first year (9 Jun 2026)", u: "https://tihupe.ee/en/3385/" },
-            { t: "Tom D'Accord (Substack) - AI Leap one year later", u: "https://tomdaccordai.substack.com/p/estonias-ai-leap-one-year-later-widespread" },
           ],
           note: "Teacher counts vary by source (4,700–5,000), and one analysis gives 95.9% teacher use instead of 94%. These are programme-reported numbers. Learning outcomes are still being studied by the University of Tartu with Stanford and OpenAI (~9,000 students), with analysis starting summer 2026.",
         },
@@ -432,17 +431,6 @@ window.WORLDVIEW = {
             { t: "IES Lublin - Eesti.ai: the next stage in Estonia's digital transformation", u: "https://ies.lublin.pl/en/comments/eesti-ai-the-next-stage-in-estonias-digital-transformation/" },
           ],
         },
-        {
-          topic: "Regulation",
-          date: "2026",
-          text: "As an EU member, Estonia is bound by the EU AI Act. As of mid-2026, trackers report that its national market-surveillance authority had not yet been formally designated. The Consumer Protection and Technical Regulatory Authority (TTJA) is the expected candidate.",
-          level: "corroborated",
-          sources: [
-            { t: "AI Policy Tracker - Estonia", u: "https://aipolicytracker.org/jurisdictions/estonia" },
-            { t: "Praxikon - AI Act enforcement in Estonia", u: "https://www.praxikon.com/en/enforcement/estonia" },
-          ],
-          note: "Both sources are secondary compliance trackers, and the status may have changed. Check TTJA and the Ministry of Justice and Digital Affairs.",
-        },
       ],
       news: [
         {
@@ -459,10 +447,9 @@ window.WORLDVIEW = {
           date: "2026-06-09",
           title: "AI Leap year one: wide teacher uptake, learning impact still unknown",
           summary: "154 of 156 upper-secondary schools took part, and 94% of teachers used AI. The programme expands to the whole upper-secondary level from fall 2026, and the ministry is considering vocational schools.",
-          level: "corroborated",
+          level: "single",
           sources: [
             { t: "TI-Hüpe", u: "https://tihupe.ee/en/3385/" },
-            { t: "Substack analysis", u: "https://tomdaccordai.substack.com/p/estonias-ai-leap-one-year-later-widespread" },
           ],
           note: "The original 2025 plan said vocational schools would join in September 2026. The June 2026 update says this is only 'being considered'.",
         },
@@ -552,11 +539,10 @@ window.WORLDVIEW = {
           topic: "Governance",
           date: "2024-07",
           text: "In July 2024 the UAE issued its Charter for the Development and Use of Artificial Intelligence, which sets out 12 principles including safety, human oversight, transparency, data privacy and avoiding algorithmic bias.",
-          level: "verified",
+          level: "corroborated",
           sources: [
             { t: "UAE Government portal - The UAE Charter for the Development and Use of AI", u: "https://u.ae/en/about-the-uae/strategies-initiatives-and-awards/policies/Ai/The-UAE-Charter-for-the-Development-and-Use-of-Artificial-Intelligence" },
             { t: "Pinsent Masons Out-Law - UAE launches AI charter", u: "https://www.pinsentmasons.com/out-law/news/uae-launches-ai-charter-with-focus-on-human-wellbeing" },
-            { t: "Securiti - UAE Charter for the Development and Use of AI", u: "https://securiti.ai/uae-charter-for-the-development-and-use-of-ai/" },
           ],
         },
         {
@@ -691,7 +677,6 @@ window.WORLDVIEW = {
           level: "verified",
           sources: [
             { t: "Access Partnership - Rwandan government approves National AI Policy", u: "https://accesspartnership.com/access-alert-rwandan-government-approves-national-ai-policy" },
-            { t: "Regulations.ai - Rwanda National AI Policy", u: "https://regulations.ai/regulations/RAI-RW-NA-NATARIN-2023" },
             { t: "KT Press - Cabinet approves new AI agency (recaps the April 2023 policy)", u: "https://www.ktpress.rw/2026/06/rwandas-ai-ambition-takes-shape-as-cabinet-approves-new-agency/" },
             { t: "Digital Policy Alert - Adopted National AI Policy", u: "https://digitalpolicyalert.org/change/12087" },
           ],
@@ -700,9 +685,8 @@ window.WORLDVIEW = {
           topic: "Strategy",
           date: "2023",
           text: "The policy's priorities include AI skills and literacy, compute infrastructure, a national data strategy, trustworthy public-sector adoption, private-sector growth, and research. ICT Minister Paula Ingabire has said 70% of the policy focuses on skills.",
-          level: "corroborated",
+          level: "single",
           sources: [
-            { t: "Regulations.ai - Rwanda AI Regulation Overview", u: "https://regulations.ai/regulations/RAI-RW-NA-SUMMARY-2023" },
             { t: "KT Press (Ingabire: 70% on skills)", u: "https://www.ktpress.rw/2026/06/rwandas-ai-ambition-takes-shape-as-cabinet-approves-new-agency/" },
           ],
         },
@@ -962,10 +946,9 @@ window.WORLDVIEW = {
         {
           topic: "Strategy",
           date: "2019-10",
-          text: "In October 2019 Malta launched 'Malta – The Ultimate AI Launchpad: A Strategy and Vision for AI in Malta 2030'. It rests on three pillars (investment and start-ups, public-sector adoption, private-sector adoption) and three enablers, with 72 actions.",
-          level: "verified",
+          text: "In October 2019 Malta launched 'Malta – The Ultimate AI Launchpad: A Strategy and Vision for AI in Malta 2030'. It rests on three pillars (investment and start-ups, public-sector adoption, private-sector adoption) and three enablers.",
+          level: "corroborated",
           sources: [
-            { t: "Regulations.ai - Malta National AI Strategy (2019)", u: "https://regulations.ai/regulations/RAI-MT-NA-MUALSXX-2019" },
             { t: "Mondaq - Malta launches national AI strategy", u: "https://www.mondaq.com/technology/855144/malta-launches-national-artificial-intelligence-strategy" },
             { t: "OECD.AI - The Ultimate AI Launchpad", u: "https://oecd.ai/en/dashboards/policy-initiatives/the-ultimate-ai-launchpad-a-strategy-and-vision-for-artificial-intelligence-in-malta-2030-2591" },
           ],
@@ -975,9 +958,8 @@ window.WORLDVIEW = {
           topic: "Certification",
           date: "2019+",
           text: "Malta runs a voluntary AI certification programme (the AI ITA scheme), administered by the Malta Digital Innovation Authority (MDIA). It predates the EU AI Act.",
-          level: "corroborated",
+          level: "single",
           sources: [
-            { t: "RegulatoryAI.eu - The EU AI Act in Malta", u: "https://www.regulatoryai.eu/ai-act-malta/" },
             { t: "OECD.AI - Malta Digital Innovation Authority", u: "https://oecd.ai/en/dashboards/policy-initiatives/malta-digital-innovation-authority-7991" },
           ],
         },
@@ -985,10 +967,8 @@ window.WORLDVIEW = {
           topic: "Regulation",
           date: "2025",
           text: "Under Legal Notice 226 of 2025, the MDIA is Malta's lead market-surveillance authority, single point of contact and regulatory-sandbox authority for the EU AI Act. Legal Notice 227 of 2025 makes the Information and Data Protection Commissioner (IDPC) a market-surveillance authority for certain high-risk uses, such as law enforcement.",
-          level: "verified",
+          level: "corroborated",
           sources: [
-            { t: "RegulatoryAI.eu - The EU AI Act in Malta", u: "https://www.regulatoryai.eu/ai-act-malta/" },
-            { t: "Levellers - AI regulation in Malta", u: "https://www.levellers.ai/what-is/ai-regulation-malta" },
             { t: "Legal 500 / Ganado - Malta's AI Act framework: new roles of MDIA and IDPC", u: "https://www.legal500.com/intelligence/malta/technology/malta's-ai-act-framework-the-new-roles-of-the-mdia-and-idpc" },
             { t: "Mamo TCV - Malta's AI Act authority designations", u: "https://www.mamotcv.com/insights/ai-act-authority-designations/" },
           ],

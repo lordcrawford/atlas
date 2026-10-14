@@ -68,8 +68,8 @@
       id: "cg", name: "Congo", flag: "🇨🇬", region: "Central Africa", group: "Africa", geo: [15.28, -4.27], isoN: "178",
       stance: "Research hub ambitions: hosts a pan-African AI research centre, now drafting a strategy built around local languages",
       summary:
-        "The Republic of the Congo (Congo-Brazzaville) hosts the African Research Centre on Artificial Intelligence (CARIA), set up by a 2024 law with the UN Economic Commission for Africa. It has no AI law; AI falls under its 2019 data protection law and the telecoms regulator ARPCE. In May 2026 a technical committee began drafting a national AI strategy with UNDP support, with a focus on digitising the Lingala and Kituba languages.",
-      glance: { firstStrategy: "In development (2026)", latestStrategy: "National AI strategy in development", newestBody: "CARIA (African Research Centre on AI)", newestBodyDate: "2024-05-23" },
+        "The Republic of the Congo (Congo-Brazzaville) hosts the African Research Centre on Artificial Intelligence (CARIA), launched with the UN Economic Commission for Africa. Its telecoms regulator ARPCE held a seminar on data and AI governance in January 2026, and in May 2026 a technical committee began drafting a national AI strategy with UNDP support, with a focus on digitising the Lingala and Kituba languages.",
+      glance: { firstStrategy: "In development (2026)", latestStrategy: "National AI strategy in development", newestBody: "CARIA (African Research Centre on AI)", newestBodyDate: "" },
       stats: { population: { v: 6484437, year: 2025 }, gdpPerCapita: { v: 2515, year: 2025 }, internet: { v: 47.3, year: 2024 } },
       oxford: { rank: 178, scores: [12.0, 22.41, 31.49, 3.89, 17.8, 20.39] },
       msAdoption: { h1_2025: 7.0, h2_2025: 7.8, q1_2026: null, q2_2026: null, rankLatest: null, regional: true, regionLabel: "Central Africa" },
@@ -93,19 +93,10 @@
           ],
         },
         {
-          topic: "Regulation", date: "2026",
-          text: "Congo has no dedicated AI law. AI is governed indirectly through its 2019 personal data protection law, the telecoms regulator ARPCE and national digital policy.",
+          topic: "Research", date: "2024",
+          text: "Congo hosts the African Research Centre on Artificial Intelligence (CARIA), launched with the UN Economic Commission for Africa.",
           level: "single",
           sources: [
-            S("Levellers - AI regulation in the Republic of the Congo", "https://www.levellers.ai/what-is/ai-regulation-republic-of-congo"),
-          ],
-        },
-        {
-          topic: "Research", date: "2024-05-23",
-          text: "Congo hosts the African Research Centre on Artificial Intelligence (CARIA), launched with the UN Economic Commission for Africa and created by Law No. 14-2024 of 23 May 2024.",
-          level: "corroborated",
-          sources: [
-            S("Levellers - AI regulation in the Republic of the Congo", "https://www.levellers.ai/what-is/ai-regulation-republic-of-congo"),
             S("We Are Tech Africa - Congo: les ambitions du gouvernement pour le développement de l'IA", "https://www.wearetech.africa/fr/fils/actualites/tech/congo-les-ambitions-du-gouvernement-pour-le-developpement-de-l-ia"),
           ],
         },
@@ -129,7 +120,7 @@
       id: "ga", name: "Gabon", flag: "🇬🇦", region: "Central Africa", group: "Africa", geo: [9.45, 0.39], isoN: "266",
       stance: "Sovereignty-minded: a first national data centre and 'small AI' diplomacy, with an AI strategy still being prepared",
       summary:
-        "Gabon has no AI law or regulator and no adopted AI strategy. With UNESCO support it ran an AI readiness assessment and set up a National Technical Committee for AI (CTN-IA) to prepare a strategy. In April 2026 Libreville hosted Artificial Intelligence Days on AI and digital sovereignty, and in July 2026 President Brice Oligui Nguema opened the country's first national Tier III data centre. Gabon's digital minister has argued for 'small AI' built for local needs.",
+        "Gabon has no adopted AI strategy. With UNESCO support it ran an AI readiness assessment and set up a National Technical Committee for AI (CTN-IA) to prepare a strategy. In April 2026 Libreville hosted Artificial Intelligence Days on AI and digital sovereignty, and in July 2026 President Brice Oligui Nguema opened the country's first national Tier III data centre. Gabon's digital minister has argued for 'small AI' built for local needs.",
       glance: { firstStrategy: "—", latestStrategy: "National AI strategy in preparation", newestBody: "National Technical Committee for AI (CTN-IA)", newestBodyDate: "" },
       stats: { population: { v: 2593130, year: 2025 }, gdpPerCapita: { v: 8263, year: 2025 }, internet: { v: 68.7, year: 2024 } },
       oxford: { rank: 133, scores: [16.0, 35.19, 51.25, 16.48, 20.37, 27.58] },
@@ -165,11 +156,10 @@
           note: "Both links are UNECA pages, so they count as one source.",
         },
         {
-          topic: "Regulation", date: "2026-06",
-          text: "As of June 2026 Gabon had no dedicated AI law or AI regulator. With UNESCO support it set up a National Technical Committee for AI (CTN-IA) and completed a readiness assessment meant to underpin a future national AI strategy.",
-          level: "corroborated",
+          topic: "Regulation", date: "2024",
+          text: "With UNESCO support Gabon ran an AI readiness assessment and set up a National Technical Committee for AI (CTN-IA) to prepare a national AI strategy.",
+          level: "single",
           sources: [
-            S("Levellers - AI regulation in Gabon", "https://www.levellers.ai/what-is/ai-regulation-gabon"),
             S("UNECA - ECA and Gabon explore economic diversification through AI", "https://www.uneca.org/eca-events/stories/eca-and-gabon-explore-accelerating-economic-diversification-through-ai"),
           ],
         },
@@ -194,7 +184,7 @@
       id: "dj", name: "Djibouti", flag: "🇩🇯", region: "East Africa", group: "Africa", geo: [43.15, 11.59], isoN: "262",
       stance: "Hub ambitions: a first AI strategy for 2026–2030 drafted with UN help, framed as an accelerator for Vision 2035",
       summary:
-        "Djibouti began drafting its first national AI strategy in January 2026 with support from UNESCO and the UN's ESCWA, starting from a UNESCO readiness assessment. At the country's first National AI Forum on 2–3 September 2026, President Ismail Omar Guelleh said Djibouti aims to become East Africa's regional AI hub, and the government presented the outline of a National AI Strategy for 2026–2030. Djibouti has no AI law; data protection and sector rules apply.",
+        "Djibouti began drafting its first national AI strategy in January 2026 with support from UNESCO and the UN's ESCWA, starting from a UNESCO readiness assessment. At the country's first National AI Forum on 2–3 September 2026, President Ismail Omar Guelleh said Djibouti aims to become East Africa's regional AI hub, and the government presented the outline of a National AI Strategy for 2026–2030.",
       glance: { firstStrategy: "2026–2030 strategy (presented, not yet adopted)", latestStrategy: "National AI Strategy 2026–2030 (draft)", newestBody: "—", newestBodyDate: "" },
       stats: { population: { v: 1184076, year: 2025 }, gdpPerCapita: { v: 3906, year: 2025 }, internet: { v: 65.3, year: 2024 } },
       oxford: { rank: 148, scores: [11.5, 37.67, 12.26, 26.8, 22.81, 23.89] },
@@ -221,14 +211,6 @@
             S("Ecofin Agency - Djibouti opens consultations on national AI strategy (30 Jan 2026)", "https://www.ecofinagency.com/news-digital/3001-52447-djibouti-opens-consultations-on-national-ai-strategy"),
           ],
           note: "Sources name the ministry differently (Digital Economy and Innovation; National Education, Innovation and Digital Development).",
-        },
-        {
-          topic: "Regulation", date: "2026",
-          text: "Djibouti has no AI law. Data protection rules and the data protection authority (CNDP) apply, along with sector oversight by the regulator ARMD; the national AI strategy was still a draft.",
-          level: "single",
-          sources: [
-            S("Levellers - AI regulation in Djibouti", "https://www.levellers.ai/what-is/ai-regulation-djibouti"),
-          ],
         },
         {
           topic: "Education", date: "2025-10",
