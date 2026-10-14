@@ -70,7 +70,7 @@ All ~340 source URLs were requested programmatically. Broken links (404) were re
 
 ## Limits
 
-- The 95 nations added after the first six have 2–5 key facts each, not full profiles.
+- The 96 nations added after the first six have 2–5 key facts each, not full profiles.
 - Microsoft reports one shared figure for several West African countries (Benin, Sierra Leone, Togo, Liberia, Mauritania) for Guyana, Suriname, Venezuela and French Guiana, for Congo and its Central African neighbours, for Tajikistan, and for Burundi. These are shown as hatched regional estimates.
 - Map boundaries are Natural Earth 110m. They are approximate and don't imply any position on disputed borders. Tiny states are shown as dots.
 - This is a snapshot as of 10 Oct 2026 (12–14 Oct for the last three batches), and the news feed does not update itself.

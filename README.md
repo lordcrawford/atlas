@@ -1,12 +1,12 @@
 # Atlas
 
-An interactive dashboard on how **101 small nations** (all under 15M people) are adopting and governing AI.
+An interactive dashboard on how **102 small nations** (all under 15M people) are adopting and governing AI.
 
 - **Europe (incl. South Caucasus):** Estonia, Malta, Denmark, Finland, Norway, Ireland, Luxembourg, Iceland, Lithuania, Slovenia, Cyprus, Switzerland, Sweden, Austria, Portugal, Greece, Latvia, Albania, Georgia, Armenia, Belgium, Czechia, Hungary, Croatia, Slovakia, Bulgaria, Serbia, Montenegro, Azerbaijan, Bosnia and Herzegovina, North Macedonia, Moldova, Belarus, Liechtenstein, Andorra, Monaco, San Marino
 - **Middle East:** UAE, Qatar, Bahrain, Jordan, Kuwait, Oman, Lebanon, Palestine
 - **Asia-Pacific (incl. Central Asia):** Singapore, New Zealand, Bhutan, Mongolia, Brunei, Kyrgyzstan, Laos, Fiji, Maldives, Tajikistan, Papua New Guinea, Tonga, Solomon Islands, Palau
 - **Africa:** Rwanda, Mauritius, Benin, Tunisia, Botswana, Sierra Leone, Togo, Namibia, Cabo Verde, Seychelles, Gambia, Liberia, Mauritania, Libya, Congo, Gabon, Djibouti, Eswatini, Lesotho, Burundi, Comoros, São Tomé and Príncipe
-- **Americas:** Uruguay, Costa Rica, Jamaica, El Salvador, Panama, Paraguay, Dominican Republic, Honduras, Trinidad and Tobago, Barbados, Bahamas, Guyana, Bolivia, Nicaragua, Belize, Suriname, Haiti, Saint Lucia, Antigua and Barbuda, Grenada
+- **Americas:** Uruguay, Costa Rica, Jamaica, El Salvador, Panama, Paraguay, Dominican Republic, Honduras, Trinidad and Tobago, Barbados, Bahamas, Guyana, Bolivia, Nicaragua, Belize, Suriname, Haiti, Saint Lucia, Antigua and Barbuda, Grenada, Saint Kitts and Nevis
 
 **Features**
 - **Overview:** highlights; a zoomable, draggable world map (colour by readiness or AI use, with region filters that zoom it); a searchable directory of every nation grouped by region; the readiness heatmap (Oxford Insights 2025); generative-AI use (Microsoft); AI talent (Stanford AI Index 2026); the UAE vs Singapore trend; milestones since 2024; and a sortable comparison table. Long rankings open on their top rows with a 'Show all' toggle.
@@ -14,7 +14,7 @@ An interactive dashboard on how **101 small nations** (all under 15M people) are
 - **News:** every development since January 2024, newest first, filterable by region, nation and verification level.
 - **Method:** verification rules, the full audit, corrections, and limits.
 
-Research cut-off: **10 October 2026** (12–14 October for the 56 nations added last).
+Research cut-off: **10 October 2026** (12–14 October for the 57 nations added last).
 
 ## Run it
 
@@ -38,7 +38,7 @@ Then open http://localhost:8765. Opening `index.html` directly also works.
 | `data/nations-more2.js` | Data for 20 more nations (added third) |
 | `data/nations-more3.js` | Data for 25 more nations (added fourth) |
 | `data/nations-more4.js` | Data for 6 more African nations (added fifth) |
-| `data/nations-more5.js` | Data for 25 more nations (added sixth) |
+| `data/nations-more5.js` | Data for 26 more nations (added sixth, including Saint Kitts and Nevis) |
 | `vendor/` | d3-geo, d3-array, topojson-client and world-atlas (Natural Earth 110m), bundled so the map works offline |
 | `METHODOLOGY.md` | Verification rules |
 

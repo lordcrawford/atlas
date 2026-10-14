@@ -1,4 +1,4 @@
-// Atlas dataset, part 6: 25 more small nations (added 14 Oct 2026).
+// Atlas dataset, part 6: 26 more small nations (added 14 Oct 2026).
 // Same verification rules as the other data files (see METHODOLOGY.md). Every claim here was run through
 // the automated source audit before publication; badges reflect sources that were readable and confirmed the claim.
 // msAdoption.regional marks Microsoft figures that are a shared regional estimate; regionLabel names the region.
@@ -1054,6 +1054,71 @@
           level: "single",
           sources: [
             S("Unlock Blockchain", "https://unlock-bc.com/en/sao-tome-principe-uae-iopn-digital-ai-transformation"),
+          ],
+        },
+      ],
+    },
+
+    // ------------------------------------------------------------------ SAINT KITTS AND NEVIS (added 14 Oct 2026)
+    {
+      id: "kn", name: "Saint Kitts and Nevis", flag: "🇰🇳", region: "Caribbean", group: "Americas", geo: [-62.72, 17.3], isoN: "659",
+      stance: "Regional-first: no AI law yet, with leaders backing a coordinated CARICOM approach",
+      summary:
+        "Saint Kitts and Nevis has no dedicated AI law; existing data protection, electronic transactions, cybercrime and consumer laws give only partial cover. Prime Minister Terrance Drew's government has proposed AI-driven traffic management, the Federation joined the UN's AI Youth Conference in August 2026, and Nevis Premier Mark Brantley has called for a coordinated Caribbean response built on CARICOM's AI policy roadmap.",
+      glance: { firstStrategy: "—", latestStrategy: "—", newestBody: "—", newestBodyDate: "" },
+      stats: { population: { v: 46922, year: 2025 }, gdpPerCapita: { v: 25223, year: 2025 }, internet: { v: 76.9, year: 2024 } },
+      oxford: { rank: 170, scores: [11.5, 33.72, 29.62, 5.43, 12.84, 27.99] },
+      msAdoption: null,
+      facts: [
+        {
+          topic: "Politics", date: "2026-09-27",
+          text: "Nevis Premier and opposition leader Mark Brantley urged a coordinated Caribbean response to AI, crediting CARICOM's July 2026 endorsement of the UNESCO Caribbean AI Policy Roadmap. He noted that Nevis's earlier plan to teach coding in every school had been overtaken by AI tools.",
+          level: "single",
+          sources: [
+            S("St Kitts Nevis Observer - 'AI will not wait for the Caribbean', op-ed by Mark Brantley (27 Sep 2026)", "https://www.thestkittsnevisobserver.com/ai-will-not-wait-for-the-caribbean-the-time-for-regional-action-is-now-op-ed-by-hon-mark-brantley/"),
+          ],
+        },
+        {
+          topic: "Regulation", date: "2026-09",
+          text: "Saint Kitts and Nevis has no dedicated AI legislation. Laws on data protection, electronic transactions, cybercrime and consumer protection offer only partial guidance; across 13 Caribbean states reviewed, none had an AI-specific regulatory framework.",
+          level: "corroborated",
+          sources: [
+            S("Commonwealth Lawyers Association - AI and the law: a St Kitts and Nevis case study (Sep 2026)", "https://www.commonwealthlawyers.com/cla/ai-and-the-law-why-readiness-must-precede-expansion-a-st-christopher-st-kitts-and-nevis-case-study-by-edisha-k-greene/"),
+            S("Cullen International - AI regulation and policy are at an early stage in the Caribbean (Sep 2026)", "https://www.cullen-international.com/news/2026/09/Artificial-intelligence-regulation-and-policy-are-at-an-early-stage-in-the-Caribbean.html"),
+          ],
+        },
+        {
+          topic: "International", date: "2026-08",
+          text: "Saint Kitts and Nevis took part in the UN AI Youth Conference on International Youth Day and welcomed its Youth-Led Declaration on AI Policy and Governance.",
+          level: "single",
+          sources: [
+            S("Ministry of Foreign Affairs - St Kitts and Nevis joins UN youth dialogue on AI (Aug 2026)", "https://www.mofa.gov.kn/2026/09/06/st-kitts-and-nevis-joins-global-youth-dialogue-on-the-future-of-artificial-intelligence-at-the-united-nations-on-international-youth-day/"),
+          ],
+        },
+        {
+          topic: "Public sector", date: "2024",
+          text: "Prime Minister Terrance Drew said the government was evaluating proposals for AI-driven traffic monitoring to improve road safety and cut congestion.",
+          level: "single",
+          sources: [
+            S("St Kitts Nevis Observer - Drew-led government to harness technology and AI for safer roads", "https://www.thestkittsnevisobserver.com/drew-led-government-to-harness-technology-and-ai-for-safer-roads-in-st-kitts-and-nevis/"),
+          ],
+        },
+      ],
+      news: [
+        {
+          date: "2026-09-27", title: "Nevis Premier calls for regional action on AI",
+          summary: "Mark Brantley argued the Caribbean must shape AI's impact together through CARICOM rather than let it happen to the region.",
+          level: "single",
+          sources: [
+            S("St Kitts Nevis Observer - 'AI will not wait for the Caribbean', op-ed by Mark Brantley (27 Sep 2026)", "https://www.thestkittsnevisobserver.com/ai-will-not-wait-for-the-caribbean-the-time-for-regional-action-is-now-op-ed-by-hon-mark-brantley/"),
+          ],
+        },
+        {
+          date: "2026-08", title: "Federation joins UN AI Youth Conference",
+          summary: "Young nationals took part, and the government welcomed the conference's Youth-Led Declaration on AI governance.",
+          level: "single",
+          sources: [
+            S("Ministry of Foreign Affairs - St Kitts and Nevis joins UN youth dialogue on AI (Aug 2026)", "https://www.mofa.gov.kn/2026/09/06/st-kitts-and-nevis-joins-global-youth-dialogue-on-the-future-of-artificial-intelligence-at-the-united-nations-on-international-youth-day/"),
           ],
         },
       ],
