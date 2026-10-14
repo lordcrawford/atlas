@@ -465,3 +465,16 @@ a.cpill:hover { border-color: var(--accent); color: var(--ink); }
 }
 @media (prefers-reduced-motion: reduce) { .collab-line { transition: none; } .cx-progress { display: none; } }
 @media (hover: hover) { .cx-main:hover .cx-progress { opacity: 0; } }
+/* ---------- nation page: AI partners */
+.np { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: var(--s5); align-items: start; }
+.np-mapwrap svg { border-radius: var(--radius-sm); }
+.np-line { opacity: .85; stroke-width: 2; }
+.np-line.group { opacity: .7; stroke-width: 1.6; }
+.np-side { display: flex; flex-direction: column; gap: var(--s4); min-width: 0; }
+.np-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); margin-bottom: var(--s2); }
+.np-block .cparties { margin-bottom: 0; }
+.np-rows { display: flex; flex-direction: column; margin: 0 calc(-1 * var(--s2)); }
+a.cx-row { text-decoration: none; color: var(--ink); }
+.np .show-more-row { margin-top: var(--s2); padding-top: var(--s3); }
+.np-more { font-size: 14px; font-weight: 550; }
+@media (max-width: 760px) { .np { grid-template-columns: 1fr; } }
