@@ -1,9 +1,9 @@
-/* Worldview dashboard - vanilla JS, no build step.
+/* Atlas dashboard - vanilla JS, no build step.
    Data: data/nations.js + data/nations-more.js. Map: vendor/ (d3-geo, topojson-client, world-atlas). */
 (function () {
   "use strict";
 
-  const D = window.WORLDVIEW;
+  const D = window.ATLAS;
   const N = D.nations;
   const S = D.meta.sources;
   const PILLARS = D.meta.pillars;
@@ -1103,10 +1103,10 @@
     const key = (location.hash || "#overview").slice(1);
     renderTabs(key);
     const n = byId(key);
-    if (n) { renderNation(n); document.title = `${n.name} — Worldview`; }
-    else if (key === "news") { renderNews(); document.title = "News — Worldview"; }
-    else if (key === "method") { renderMethod(); document.title = "Method — Worldview"; }
-    else { renderOverview(); document.title = "Worldview — AI in Small Nations"; }
+    if (n) { renderNation(n); document.title = `${n.name} — Atlas`; }
+    else if (key === "news") { renderNews(); document.title = "News — Atlas"; }
+    else if (key === "method") { renderMethod(); document.title = "Method — Atlas"; }
+    else { renderOverview(); document.title = "Atlas — AI in Small Nations"; }
     if (keepScroll !== true) scrollTo(0, 0);
   }
 

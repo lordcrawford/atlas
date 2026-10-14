@@ -1,4 +1,4 @@
-# Worldview
+# Atlas
 
 An interactive dashboard on how **101 small nations** (all under 15M people) are adopting and governing AI.
 

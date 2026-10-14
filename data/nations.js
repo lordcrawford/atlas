@@ -1,4 +1,4 @@
-// Worldview dataset: AI policy & governance in six small nations.
+// Atlas dataset: AI policy & governance in six small nations.
 // Research cut-off: 10 October 2026.
 //
 // Verification levels (see METHODOLOGY.md):
@@ -11,7 +11,7 @@
 // Every source below was opened or returned in search during research.
 // `note` records discrepancies between sources.
 
-window.WORLDVIEW = {
+window.ATLAS = {
   meta: {
     asOf: "2026-10-10",
     pillars: [

@@ -1,11 +1,11 @@
-// Worldview dataset, part 3: 20 more small nations (added 10 Oct 2026).
+// Atlas dataset, part 3: 20 more small nations (added 10 Oct 2026).
 // Same verification rules as the other data files (see METHODOLOGY.md). Every claim here was run through
 // the automated source audit before publication; badges reflect sources that were readable and confirmed the claim.
 // msRegional: true marks Microsoft figures that are a shared regional estimate, not a national measurement.
 
 (function () {
   const S = (t, u) => ({ t, u });
-  window.WORLDVIEW.nations.push(
+  window.ATLAS.nations.push(
     // ------------------------------------------------------------------ SWEDEN
     {
       id: "se", name: "Sweden", flag: "🇸🇪", region: "Northern Europe (EU)", group: "Europe", geo: [18.07, 59.33], isoN: "752",

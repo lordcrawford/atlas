@@ -1,11 +1,11 @@
-// Worldview dataset, part 5: 6 more African nations (added 13 Oct 2026).
+// Atlas dataset, part 5: 6 more African nations (added 13 Oct 2026).
 // Same verification rules as the other data files (see METHODOLOGY.md). Every claim here was run through
 // the automated source audit before publication; badges reflect sources that were readable and confirmed the claim.
 // msAdoption.regional marks Microsoft figures that are a shared regional estimate; regionLabel names the region.
 
 (function () {
   const S = (t, u) => ({ t, u });
-  window.WORLDVIEW.nations.push(
+  window.ATLAS.nations.push(
     // ------------------------------------------------------------------ LIBYA
     {
       id: "ly", name: "Libya", flag: "🇱🇾", region: "North Africa", group: "Africa", geo: [13.19, 32.89], isoN: "434",
