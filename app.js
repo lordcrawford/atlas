@@ -766,7 +766,8 @@
     const ranked = [...N].sort((a, b) => a.oxford.rank - b.oxford.rank);
     const best = ranked[0], worst = ranked[ranked.length - 1];
     const lowUse = [...valid].sort((a, b) => a.msAdoption.h2_2025 - b.msAdoption.h2_2025)[0];
-    const euAct = N.filter((n) => /\((EU|EEA)\)/.test(n.region)).length;
+    const euAct = N.filter((n) => /\(EU\)/.test(n.region)).length;
+    const eea = N.filter((n) => /\(EEA\)/.test(n.region)).map((n) => n.name);
     const newBodies = N.filter((n) => n.facts.some((f) => f.topic === "Institutions" && /^2026/.test(f.date))).length;
     const ae = byId("ae"), sg = byId("sg");
     const mig = D.meta.aiIndex.netMigration;
@@ -776,7 +777,7 @@
       { v: `${lowUse.msAdoption.h2_2025}%`, t: `is the lowest separately reported AI use in this set (${lowUse.name}). Where internet access is limited, AI use stays low.`, src: [S.msH2] },
       { v: `#${best.oxford.rank}–#${worst.oxford.rank}`, t: `is the AI-readiness range across these ${N.length} nations, from ${best.name} to ${worst.name}, out of ${OXFORD_TOTAL} countries.`, src: [S.oxford] },
       { v: `${topMig[1]}`, t: `net AI workers gained per 10,000 LinkedIn members in ${byId(topMig[0]).name}, the highest AI talent inflow of any country tracked.`, src: [S.aiIndex] },
-      { v: `${euAct} of ${N.length}`, t: "are bound by the EU AI Act, as EU members or (for Norway and Iceland) through the EEA. The rest set their own rules.", src: [] },
+      { v: `${euAct} of ${N.length}`, t: `are EU members bound by the EU AI Act. ${eea.join(", ").replace(/, ([^,]*)$/, " and $1")} (EEA) will be once it is added to the EEA Agreement. The rest set their own rules.`, src: [S.fliAct] },
       { v: `${newBodies}`, t: "nations here set up a new national AI institution in 2026, from the UAE's AI & Data Authority to Rwanda's AI Agency and Ireland's AI Office.", src: [] },
     ];
     return el("div", { class: "highlights" }, items.map((h) =>
@@ -978,7 +979,7 @@
         el("li", {}, "Removed: the Stargate UAE '5,000 workers' figure, MAS's '80% of risk officers' figure, Omar Al Olama's age, Norway's '4–6 research centres', a 2028 Swiss date, Slovenia's exact AI-factory launch day, El Salvador's '2031' target year, and Kuwait's unconfirmed '2025–2028' strategy dates."),
         el("li", {}, "Fixed: the UAE AI & Data Authority date (14 June 2026), the UAE strategy's two dates (2017 launch, 2019 adoption), and Finland's gigafactory claim (now the documented Nokia-led bid)."),
         el("li", {}, "Fixed: readiness scores for 13 newly added nations were corrected to match Oxford Insights' table exactly."),
-        el("li", {}, "Flagged: Microsoft's figures for Benin, Sierra Leone, Togo, Liberia and Mauritania (9.3%) for Guyana (9.0%, shared with Suriname, Venezuela and French Guiana) and for Congo (7.8%, shared with Cameroon, Chad, the Central African Republic and DR Congo) are regional estimates, not national measurements."),
+        el("li", {}, "Flagged: some Microsoft figures are regional estimates, not national measurements: Benin, Sierra Leone, Togo, Liberia and Mauritania (9.3%, West Africa); Guyana and Suriname (9.0%, shared with Venezuela and French Guiana); Congo (7.8%, shared with Cameroon, Chad, the Central African Republic and DR Congo); Tajikistan (5.6%, shared with Afghanistan and Turkmenistan); and Burundi (6.8%, shared with several East African countries)."),
         el("li", {}, "Replaced about 50 dead, empty or bot-blocked source links with readable sources that confirm the claim."),
         el("li", {}, "Oxford Insights' December 2025 rankings contained errors. This site uses the validated January 2026 table.")),
       el("h2", {}, "What's shown"),

@@ -148,7 +148,7 @@ window.WORLDVIEW.nations.push(
     id: "no", name: "Norway", flag: "🇳🇴", region: "Northern Europe (EEA)", group: "Europe", geo: [10.75, 59.91], isoN: "578",
     stance: "High usage, research-funded, cautious on rules; implementing the EU AI Act via the EEA",
     summary:
-      "Norway published a national AI strategy in 2020 and a 2024 digitalisation strategy that aims to make it the world's most digitalised country by 2030. It has committed at least NOK 1 billion to AI research. It is outside the EU but bound through the EEA, and is still passing its own AI Act law, with Nkom as coordinator. Its Gen-AI use (46%) is among the highest in Europe.",
+      "Norway published a national AI strategy in 2020 and a 2024 digitalisation strategy that aims to make it the world's most digitalised country by 2030. It has committed at least NOK 1 billion to AI research. It is outside the EU but set to follow the EU AI Act through the EEA, and is still passing its own AI Act law, with Nkom as coordinator. Its Gen-AI use (46%) is among the highest in Europe.",
     glance: { firstStrategy: "2020", latestStrategy: "2024 (Digitalisation strategy to 2030)", newestBody: "—", newestBodyDate: "" },
     stats: { population: { v: 5610870, year: 2025 }, gdpPerCapita: { v: 94594, year: 2025 }, internet: { v: 99, year: 2024 } },
     oxford: { rank: 10, scores: [88.0, 65.67, 94.02, 84.17, 60.57, 77.5] },
@@ -187,7 +187,7 @@ window.WORLDVIEW.nations.push(
       },
       {
         topic: "Regulation", date: "2025",
-        text: "The EU AI Act applies to Norway through the EEA but is not yet Norwegian law. Nkom (the communications authority) will coordinate and serve as single point of contact. The draft law's public consultation closed on 30 September 2025.",
+        text: "Norway is implementing the EU AI Act through the EEA, but it is not yet Norwegian law. Nkom (the communications authority) will coordinate and serve as single point of contact. The draft law's public consultation closed on 30 September 2025.",
         level: "corroborated",
         sources: [
           { t: "Haavind - Artificial Intelligence Act (Tech Insight)", u: "https://haavind.no/techinsight/tech-insight/artificial-intelligence-act/" },

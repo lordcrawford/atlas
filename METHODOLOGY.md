@@ -36,6 +36,12 @@ The 25 nations added on 12 October 2026 went through the same audit before publi
 
 Six African nations (Libya, Congo, Gabon, Djibouti, Eswatini, Lesotho) were added through the same audit: 27 claims, each checked against its cited pages, with the seven the script could not confirm reviewed by hand. Where only one source carries a detail (for example the cost of Gabon's data centre), the claim says so in a note. Microsoft's figure for Congo (7.8%) is a Central Africa regional estimate shared with Cameroon, Chad, the Central African Republic and DR Congo.
 
+## Sixth batch (14 Oct 2026)
+
+25 more nations were added through the same audit: 84 claims, each checked against its cited pages, with the ones the script could not confirm reviewed by hand. Four pages that block automated requests (two Antigua News Room articles and two UNDP pages) were read in a browser and are marked as such. Many of these states, especially microstates and Pacific and Caribbean islands, have little independent coverage, so a large share of their claims carry single-source badges. State media (for example in Belarus and Nicaragua) are flagged in notes.
+
+During this batch the overview's EU AI Act highlight was corrected. It had said Norway and Iceland were already bound through the EEA; the Act is still under scrutiny for incorporation into the EEA Agreement, so the highlight now counts EU members only and lists the EEA states as pending.
+
 ## Link check
 
 All ~340 source URLs were requested programmatically. Broken links (404) were replaced with verified alternatives. Some publishers (Bloomberg, gov.mt, uaecabinet.ae, MaltaToday, openai.com and others) block automated requests (403) but open normally in a browser.
@@ -52,10 +58,10 @@ All ~340 source URLs were requested programmatically. Broken links (404) were re
 
 ## Limits
 
-- The 70 nations added after the first six have 2–5 key facts each, not full profiles.
-- Microsoft reports one shared figure for several West African countries (Benin, Sierra Leone, Togo, Liberia, Mauritania) for Guyana, Suriname, Venezuela and French Guiana, and for Congo and its Central African neighbours. These are shown as hatched regional estimates.
+- The 95 nations added after the first six have 2–5 key facts each, not full profiles.
+- Microsoft reports one shared figure for several West African countries (Benin, Sierra Leone, Togo, Liberia, Mauritania) for Guyana, Suriname, Venezuela and French Guiana, for Congo and its Central African neighbours, for Tajikistan, and for Burundi. These are shown as hatched regional estimates.
 - Map boundaries are Natural Earth 110m. They are approximate and don't imply any position on disputed borders. Tiny states are shown as dots.
-- This is a snapshot as of 10 Oct 2026 (12–13 Oct for the last two batches), and the news feed does not update itself.
+- This is a snapshot as of 10 Oct 2026 (12–14 Oct for the last three batches), and the news feed does not update itself.
 - Summaries and "stance" lines are editorial synthesis.
 - Programme-reported figures (e.g. AI Leap teacher usage) are not independent evaluations.
 - Disclosure: compiled by Claude (Anthropic). Anthropic is party to agreements described here (Rwanda MOU, Estonia AI Leap talks). Those facts rely on both parties' public statements.

@@ -27,6 +27,10 @@ window.WORLDVIEW = {
         t: "Oxford Insights - Government AI Readiness Index 2025 (validated Jan 2026 report, full rankings p.59-68)",
         u: "https://oxfordinsights.com/wp-content/uploads/2026/01/2025-Government-AI-Readiness-Index-Report_01_26.pdf",
       },
+      fliAct: {
+        t: "Future of Life Institute - AI Act national implementation plans (EEA status)",
+        u: "https://artificialintelligenceact.eu/national-implementation-plans/",
+      },
       oxfordPage: {
         t: "Oxford Insights - Government AI Readiness Index 2025 (index page)",
         u: "https://oxfordinsights.com/ai-readiness/government-ai-readiness-index-2025/",
