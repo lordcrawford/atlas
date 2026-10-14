@@ -68,7 +68,6 @@ window.WORLDVIEW.nations.push(
         ],
       },
     ],
-    watch: ["Whether the deepfake copyright bill passes the Folketing, and how platforms comply.", "Final status of Denmark's AI Act supplementing law."],
   },
 
   // ------------------------------------------------------------------ FINLAND
@@ -138,7 +137,6 @@ window.WORLDVIEW.nations.push(
         ],
       },
     ],
-    watch: ["Whether Finland wins an EU AI gigafactory.", "An updated national AI strategy. Current policy sits inside the Digital Compass roadmap to 2030."],
   },
 
   // ------------------------------------------------------------------ NORWAY
@@ -205,7 +203,6 @@ window.WORLDVIEW.nations.push(
         ],
       },
     ],
-    watch: ["Passage of Norway's national AI Act law (KI-loven).", "A refreshed national AI strategy, reportedly in drafting to replace the 2020 plan."],
   },
 
   // ------------------------------------------------------------------ IRELAND
@@ -263,7 +260,6 @@ window.WORLDVIEW.nations.push(
         ],
       },
     ],
-    watch: ["How Ireland's regulators enforce the AI Act against the large AI firms headquartered there.", "The follow-up AI bill expected in autumn 2026."],
   },
 
   // ------------------------------------------------------------------ LUXEMBOURG
@@ -331,7 +327,6 @@ window.WORLDVIEW.nations.push(
         ],
       },
     ],
-    watch: ["Adoption of Bill 8476 and the CNPD's sandbox."],
   },
 
   // ------------------------------------------------------------------ ICELAND
@@ -372,7 +367,6 @@ window.WORLDVIEW.nations.push(
         sources: [{ t: "Iceland Review - Iceland publishes roadmap for safe use of AI in healthcare", u: "https://www.icelandreview.com/news/iceland-ai-healthcare-roadmap-clinical-practice-2026/" }],
       },
     ],
-    watch: ["The OECD (2026) notes Iceland still lacks dedicated oversight for AI in public decision-making."],
   },
 
   // ------------------------------------------------------------------ LITHUANIA
@@ -429,7 +423,6 @@ window.WORLDVIEW.nations.push(
         ],
       },
     ],
-    watch: ["The Innovation Agency's action plan to implement the 2026–2035 guidelines."],
   },
 
   // ------------------------------------------------------------------ SLOVENIA
@@ -514,7 +507,6 @@ window.WORLDVIEW.nations.push(
         ],
       },
     ],
-    watch: ["The NsUI 2030 action plan, due within nine months of the March 2026 adoption."],
   },
 
   // ------------------------------------------------------------------ CYPRUS
@@ -577,7 +569,6 @@ window.WORLDVIEW.nations.push(
         ],
       },
     ],
-    watch: ["Final adoption of the strategy, and when the National AI Authority starts work."],
   },
 
   // ------------------------------------------------------------------ SWITZERLAND
@@ -641,7 +632,6 @@ window.WORLDVIEW.nations.push(
         ],
       },
     ],
-    watch: ["Publication of the consultation draft (end-2026 or early 2027)."],
   },
 
   // ------------------------------------------------------------------ QATAR
@@ -704,7 +694,6 @@ window.WORLDVIEW.nations.push(
         ],
       },
     ],
-    watch: ["Qatar's low 'Resilience' score (39), the weakest pillar for the Gulf states in this set."],
   },
 
   // ------------------------------------------------------------------ BAHRAIN
@@ -757,7 +746,6 @@ window.WORLDVIEW.nations.push(
         ],
       },
     ],
-    watch: ["Whether the Council of Representatives revives the AI bill.", "A full national AI strategy, reportedly in draft."],
   },
 
   // ------------------------------------------------------------------ JORDAN
@@ -806,7 +794,6 @@ window.WORLDVIEW.nations.push(
         sources: [{ t: "Petra - Water, Digital Economy Ministers review AI water project", u: "https://petra.gov.jo/en/news/water-digital-economy-ministers-review-ai-water-project" }],
       },
     ],
-    watch: ["A reported second-edition strategy (2025–2030). Not confirmed."],
   },
 
   // ------------------------------------------------------------------ NEW ZEALAND
@@ -856,7 +843,6 @@ window.WORLDVIEW.nations.push(
         ],
       },
     ],
-    watch: ["Whether the light-touch stance holds as Australia and the EU tighten their rules."],
   },
 
   // ------------------------------------------------------------------ BHUTAN
@@ -916,7 +902,6 @@ window.WORLDVIEW.nations.push(
         ],
       },
     ],
-    watch: ["Formal approval of the National AI Strategy.", "Whether the GMC compute campus moves past the letter of intent."],
   },
 
   // ------------------------------------------------------------------ MAURITIUS
@@ -994,7 +979,6 @@ window.WORLDVIEW.nations.push(
         ],
       },
     ],
-    watch: ["Whether the 50,000-person AI training pledge is delivered."],
   },
 
   // ------------------------------------------------------------------ BENIN
@@ -1042,7 +1026,6 @@ window.WORLDVIEW.nations.push(
         ],
       },
     ],
-    watch: ["Implementation reporting on SNIAM's 123 actions. Little public data exists.", "Internet use (34%) limits AI reach."],
   },
 
   // ------------------------------------------------------------------ COSTA RICA
@@ -1084,7 +1067,6 @@ window.WORLDVIEW.nations.push(
         sources: [{ t: "INPLP - Legal update on privacy and AI: Costa Rica", u: "https://inplp.com/latest-news/article/legal-update-on-privacy-and-artificial-intelligence-costa-rica/" }],
       },
     ],
-    watch: ["Whether any AI bill is called for debate by the executive."],
   },
 
   // ------------------------------------------------------------------ JAMAICA
@@ -1134,6 +1116,5 @@ window.WORLDVIEW.nations.push(
         sources: [{ t: "Jamaica Gleaner (16 Aug 2026)", u: "https://jamaica-gleaner.com/article/business/20260816/new-ai-platform-launches-ja-prepares-public-debate-ai-rules" }],
       },
     ],
-    watch: ["Delivery of the draft national AI policy (promised November 2026)."],
   }
 );

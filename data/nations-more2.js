@@ -65,7 +65,6 @@
           ],
         },
       ],
-      watch: ["Passage of Sweden's national AI Act implementing law."],
     },
 
     // ------------------------------------------------------------------ AUSTRIA
@@ -106,7 +105,6 @@
           sources: [ S("VLO Law Firm - AI Regulation in Austria 2026", "https://vlolawfirm.com/trackers/ai-regulation-austria")],
         },
       ],
-      watch: ["Formal designation of Austria's AI Act authorities and the planned upgrade of the RTR Service Desk."],
     },
 
     // ------------------------------------------------------------------ PORTUGAL
@@ -174,7 +172,6 @@
           ],
         },
       ],
-      watch: ["Uptake of Amália by government services and companies."],
     },
 
     // ------------------------------------------------------------------ GREECE
@@ -230,7 +227,6 @@
           ],
         },
       ],
-      watch: ["Daedalus entering full service: it was benchmarked in June 2026 (31st on the TOP500) and its operator expects it to open to researchers during 2026."],
     },
 
     // ------------------------------------------------------------------ LATVIA
@@ -283,7 +279,6 @@
           ],
         },
       ],
-      watch: ["An updated national AI strategy, reportedly in drafting in 2026."],
     },
 
     // ------------------------------------------------------------------ ALBANIA
@@ -331,7 +326,6 @@
           ],
         },
       ],
-      watch: ["Evidence of how procurement decisions are actually made under the system."],
     },
 
     // ------------------------------------------------------------------ GEORGIA
@@ -370,7 +364,6 @@
           sources: [S("Georgia Today", "https://georgiatoday.ge/eu-georgia-collaboration-is-a-win-win-for-ai-research-and-innovation/")],
         },
       ],
-      watch: ["Publication of a first national AI strategy."],
     },
 
     // ------------------------------------------------------------------ ARMENIA
@@ -418,7 +411,6 @@
           ],
         },
       ],
-      watch: ["Whether local AI use catches up with the compute build-out.", "A government AI strategy, which was not found."],
     },
 
     // ------------------------------------------------------------------ KUWAIT
@@ -458,7 +450,6 @@
           sources: [S("AGBI", "https://www.agbi.com/analysis/ai/2026/02/kuwaits-dedication-to-ai-rollout-faces-challenges/")],
         },
       ],
-      watch: ["Publication of the national AI strategy."],
     },
 
     // ------------------------------------------------------------------ OMAN
@@ -497,7 +488,6 @@
           sources: [S("Muscat Daily", "https://www.muscatdaily.com/2026/03/10/mtcit-unveils-new-drive-to-expand-digital-economy/")],
         },
       ],
-      watch: ["Delivery of the planned Omani-language model."],
     },
 
     // ------------------------------------------------------------------ MONGOLIA
@@ -541,7 +531,6 @@
           ],
         },
       ],
-      watch: ["Whether the planned National AI Council and GPU-based AI centre are set up."],
     },
 
     // ------------------------------------------------------------------ BRUNEI
@@ -580,7 +569,6 @@
           sources: [S("The Star", "https://www.thestar.com.my/aseanplus/aseanplus-news/2026/05/01/brunei-ramps-up-efforts-to-ensure-ethical-ai-practices")],
         },
       ],
-      watch: ["A national data and AI strategy under Digital Brunei 2030, reported as still in preparation."],
     },
 
     // ------------------------------------------------------------------ TUNISIA
@@ -620,7 +608,6 @@
           sources: [S("TechAfrica News", "https://techafricanews.com/2026/05/22/tunisian-customs-integrates-artificial-intelligence-into-national-screening-system/")],
         },
       ],
-      watch: ["A successor to the 2021–2025 AI strategy."],
     },
 
     // ------------------------------------------------------------------ BOTSWANA
@@ -654,7 +641,6 @@
           ],
         },
       ],
-      watch: ["Publication of the National AI Policy."],
     },
 
     // ------------------------------------------------------------------ SIERRA LEONE
@@ -700,7 +686,6 @@
           ],
         },
       ],
-      watch: ["Publication of the strategy.", "The Microsoft usage figure (9.3%) is a West Africa regional estimate, not a national measurement."],
     },
 
     // ------------------------------------------------------------------ TOGO
@@ -735,7 +720,6 @@
           sources: [S("Togo First - Togo unveils AI project to promote national languages", "https://www.togofirst.com/en/culture/1407-19561-togo-unveils-ai-project-to-promote-national-languages")],
         },
       ],
-      watch: ["Publication of the national AI strategy.", "The Microsoft usage figure (9.3%) is a West Africa regional estimate."],
     },
 
     // ------------------------------------------------------------------ EL SALVADOR
@@ -788,7 +772,6 @@
           ],
         },
       ],
-      watch: ["Independent evidence on AI in public health and schools, where critics question the government's claims."],
     },
 
     // ------------------------------------------------------------------ PANAMA
@@ -826,7 +809,6 @@
           sources: [S("Newsroom Panama - What do the AI giants see in Panama?", "https://newsroompanama.com/2026/09/23/what-do-the-ai-giants-see-in-panama-google-meta-nvidia-microsoft-anthropic/")],
         },
       ],
-      watch: ["Whether the AI bill is signed into law."],
     },
 
     // ------------------------------------------------------------------ PARAGUAY
@@ -870,7 +852,6 @@
           ],
         },
       ],
-      watch: ["Formal adoption of a national AI strategy."],
     },
 
     // ------------------------------------------------------------------ DOMINICAN REPUBLIC
@@ -923,7 +904,6 @@
           ],
         },
       ],
-      watch: ["Whether ENIA's delayed items (data-protection update, sandbox) are delivered."],
     }
   );
 })();

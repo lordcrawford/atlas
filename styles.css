@@ -345,9 +345,6 @@ svg.zoomable:focus-visible { box-shadow: 0 0 0 2px var(--accent); }
 .summary { font-size: 16px; max-width: 75ch; margin-top: var(--s5); }
 .summary + .muted { margin-top: var(--s2); }
 .topic-filter { margin-bottom: var(--s3); }
-.watch { margin: 0; padding-left: 18px; }
-.watch li { margin: var(--s1) 0; color: var(--ink-2); }
-.watch li + li { margin-top: var(--s2); }
 .pager { display: flex; justify-content: space-between; gap: var(--s3); border-top: 1px solid var(--grid); padding-top: var(--s4); }
 .pager a { text-decoration: none; }
 

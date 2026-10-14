@@ -60,7 +60,6 @@
           ],
         },
       ],
-      watch: ["Whether the planned National AI Authority is set up.", "Progress on the 2030 targets, such as training 10,000 public employees."],
     },
 
     // ------------------------------------------------------------------ CONGO
@@ -112,7 +111,6 @@
           ],
         },
       ],
-      watch: ["Completion of the national AI strategy (horizon 2030).", "Whether CARIA becomes fully operational."],
     },
 
     // ------------------------------------------------------------------ GABON
@@ -176,7 +174,6 @@
           ],
         },
       ],
-      watch: ["Adoption of the national AI strategy prepared by CTN-IA."],
     },
 
     // ------------------------------------------------------------------ DJIBOUTI
@@ -233,7 +230,6 @@
           ],
         },
       ],
-      watch: ["Formal adoption of the National AI Strategy 2026–2030."],
     },
 
     // ------------------------------------------------------------------ ESWATINI
@@ -284,7 +280,6 @@
           ],
         },
       ],
-      watch: ["Publication of the national AI strategy."],
     },
 
     // ------------------------------------------------------------------ LESOTHO
@@ -341,7 +336,6 @@
           ],
         },
       ],
-      watch: ["Adoption of the National AI Strategy and Data Centre Blueprint.", "AI-specific legislation, which the policy says Lesotho still lacks."],
     },
 
   );

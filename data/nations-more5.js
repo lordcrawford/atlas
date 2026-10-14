@@ -54,7 +54,6 @@
           ],
         },
       ],
-      watch: ["Whether the state level adopts a national AI strategy or AI Act-aligned law as part of EU accession."],
     },
 
     // ------------------------------------------------------------------ NORTH MACEDONIA
@@ -98,7 +97,6 @@
           ],
         },
       ],
-      watch: ["Whether the stalled national AI strategy is revived."],
     },
 
     // ------------------------------------------------------------------ MOLDOVA
@@ -158,7 +156,6 @@
           ],
         },
       ],
-      watch: ["Adoption of the National Programme on AI and Data 2026–2030.", "Designation of a national AI authority."],
     },
 
     // ------------------------------------------------------------------ BELARUS
@@ -201,7 +198,6 @@
           ],
         },
       ],
-      watch: ["Whether Belarus turns the CIS model law into national legislation."],
     },
 
     // ------------------------------------------------------------------ LIECHTENSTEIN
@@ -242,7 +238,6 @@
           ],
         },
       ],
-      watch: ["Incorporation of the EU AI Act into the EEA Agreement and designation of national authorities."],
     },
 
     // ------------------------------------------------------------------ ANDORRA
@@ -284,7 +279,6 @@
           ],
         },
       ],
-      watch: ["Ratification of the Council of Europe AI convention."],
     },
 
     // ------------------------------------------------------------------ MONACO
@@ -325,7 +319,6 @@
           ],
         },
       ],
-      watch: ["The DIN's AI strategy for the administration."],
     },
 
     // ------------------------------------------------------------------ SAN MARINO
@@ -361,7 +354,6 @@
       ],
       news: [
       ],
-      watch: ["Whether the Great and General Council takes up an AI bill."],
     },
 
     // ------------------------------------------------------------------ TAJIKISTAN
@@ -415,7 +407,6 @@
           ],
         },
       ],
-      watch: ["Setting up the Regional AI Centre in Dushanbe."],
     },
 
     // ------------------------------------------------------------------ PAPUA NEW GUINEA
@@ -466,7 +457,6 @@
           ],
         },
       ],
-      watch: ["Finalisation of the strategy and tabling of a National AI Act."],
     },
 
     // ------------------------------------------------------------------ TONGA
@@ -499,7 +489,6 @@
       ],
       news: [
       ],
-      watch: ["Whether Tonga follows its new data laws with AI-specific guidance."],
     },
 
     // ------------------------------------------------------------------ SOLOMON ISLANDS
@@ -534,7 +523,6 @@
           ],
         },
       ],
-      watch: ["A national data protection law, the likely base for AI rules."],
     },
 
     // ------------------------------------------------------------------ PALAU
@@ -567,7 +555,6 @@
           ],
         },
       ],
-      watch: ["Whether the new office produces an AI policy."],
     },
 
     // ------------------------------------------------------------------ PALESTINE
@@ -608,7 +595,6 @@
           ],
         },
       ],
-      watch: ["Whether a standalone national AI strategy follows the 2026–2028 sector policy."],
     },
 
     // ------------------------------------------------------------------ BOLIVIA
@@ -644,7 +630,6 @@
           ],
         },
       ],
-      watch: ["A vote in the Chamber of Deputies."],
     },
 
     // ------------------------------------------------------------------ NICARAGUA
@@ -678,7 +663,6 @@
           ],
         },
       ],
-      watch: ["Whether membership brings AI projects or training to Nicaragua."],
     },
 
     // ------------------------------------------------------------------ BELIZE
@@ -720,7 +704,6 @@
           ],
         },
       ],
-      watch: ["Whether Belize drafts a national AI policy."],
     },
 
     // ------------------------------------------------------------------ SURINAME
@@ -763,7 +746,6 @@
           ],
         },
       ],
-      watch: ["The readiness assessment's findings and any national AI strategy that follows."],
     },
 
     // ------------------------------------------------------------------ HAITI
@@ -812,7 +794,6 @@
           ],
         },
       ],
-      watch: ["Whether the next elected government adopts the AI roadmap."],
     },
 
     // ------------------------------------------------------------------ SAINT LUCIA
@@ -853,7 +834,6 @@
           ],
         },
       ],
-      watch: ["A national AI policy, possibly under the CARICOM AI roadmap."],
     },
 
     // ------------------------------------------------------------------ ANTIGUA AND BARBUDA
@@ -896,7 +876,6 @@
           ],
         },
       ],
-      watch: ["Tabling of the draft AI legislation in Parliament."],
     },
 
     // ------------------------------------------------------------------ GRENADA
@@ -949,7 +928,6 @@
           ],
         },
       ],
-      watch: ["How Grenada applies the CARICOM AI roadmap at home."],
     },
 
     // ------------------------------------------------------------------ BURUNDI
@@ -995,7 +973,6 @@
           ],
         },
       ],
-      watch: ["Funding for the strategy's first projects."],
     },
 
     // ------------------------------------------------------------------ COMOROS
@@ -1030,7 +1007,6 @@
           ],
         },
       ],
-      watch: ["Whether the forum leads to a national AI strategy."],
     },
 
     // ------------------------------------------------------------------ SÃO TOMÉ AND PRÍNCIPE
@@ -1081,7 +1057,6 @@
           ],
         },
       ],
-      watch: ["Whether any of the promised AI investment materialises."],
     },
 
   );

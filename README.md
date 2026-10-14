@@ -10,7 +10,7 @@ An interactive dashboard on how **101 small nations** (all under 15M people) are
 
 **Features**
 - **Overview:** highlights; a zoomable, draggable world map (colour by readiness or AI use, with region filters that zoom it); a searchable directory of every nation grouped by region; the readiness heatmap (Oxford Insights 2025); generative-AI use (Microsoft); AI talent (Stanford AI Index 2026); the UAE vs Singapore trend; milestones since 2024; and a sortable comparison table. Long rankings open on their top rows with a 'Show all' toggle.
-- **Nation pages:** a zoomable locator map, stat tiles, the readiness profile against the median of all nations, facts newest first (with pre-2024 background behind a toggle), news since 2024, and what to watch.
+- **Nation pages:** a zoomable locator map, stat tiles, the readiness profile against the median of all nations, facts newest first (with pre-2024 background behind a toggle), and news since 2024.
 - **News:** every development since January 2024, newest first, filterable by region, nation and verification level.
 - **Method:** verification rules, the full audit, corrections, and limits.
 

@@ -297,10 +297,6 @@ window.WORLDVIEW = {
           ],
         },
       ],
-      watch: [
-        "Whether the 15,000 AI-practitioner target (set in Dec 2023, 3–5 year horizon) is met. No official count has been published.",
-        "How MAS and the PDPC respond to AI-linked incidents, now that the first breach is on record.",
-      ],
     },
 
     // ------------------------------------------------------------------ ESTONIA
@@ -475,10 +471,6 @@ window.WORLDVIEW = {
           ],
         },
       ],
-      watch: [
-        "Results from the University of Tartu study on whether AI Leap improves student learning (analysis from summer 2026).",
-        "Formal designation of Estonia's EU AI Act market-surveillance authority.",
-      ],
     },
 
     // ------------------------------------------------------------------ UAE
@@ -645,10 +637,6 @@ window.WORLDVIEW = {
           ],
         },
       ],
-      watch: [
-        "Confirmation that Stargate UAE's first 200 MW is live (target was Q3 2026).",
-        "US export-control approvals for advanced NVIDIA chips to G42, flagged as uncertain in mid-2025 reporting.",
-      ],
     },
 
     // ------------------------------------------------------------------ RWANDA
@@ -788,11 +776,6 @@ window.WORLDVIEW = {
           ],
         },
       ],
-      watch: [
-        "Who leads the new National AI Agency, and its budget.",
-        "Whether the proposed $60B Africa AI Fund turns into real commitments.",
-        "Generative-AI use is only about 6% of working-age people (Microsoft, H2 2025), and internet use is about 32%. Access is the binding constraint.",
-      ],
     },
 
     // ------------------------------------------------------------------ URUGUAY
@@ -917,10 +900,6 @@ window.WORLDVIEW = {
             { t: "Montevideo Portal", u: "https://www.montevideo.com.uy/Noticias/Uruguay-LATU-y-Microsoft-lanzaron-el-primer-laboratorio-regional-de-IA-para-el-bien--uc955637" },
           ],
         },
-      ],
-      watch: [
-        "Whether a dedicated AI bill emerges. Current protections rest mainly on personal-data law (Law 18.331).",
-        "Debate over sovereign compute and the role of state telecom Antel in AI infrastructure.",
       ],
     },
 
@@ -1087,10 +1066,6 @@ window.WORLDVIEW = {
             { t: "MaltaInvest", u: "https://maltainvest.mt/malta-joins-global-partnership-on-artificial-intelligence/" },
           ],
         },
-      ],
-      watch: [
-        "The final text of the realigned 2025–2030 strategy and its consultation outcome report.",
-        "Who funds ChatGPT Plus access after the first year (around $240 per person a year at list price).",
       ],
     },
   ],

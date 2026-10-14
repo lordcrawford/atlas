@@ -69,7 +69,6 @@
           ],
         },
       ],
-      watch: ["A law formally designating BIPT and the other AI Act authorities.", "How the regions and communities take up the September 2026 strategy."],
     },
 
     // ------------------------------------------------------------------ CZECHIA
@@ -139,7 +138,6 @@
           ],
         },
       ],
-      watch: ["Parliament's vote on the AI Act implementing law.", "Delivery of the KarolAIna AI supercomputer for the Czech AI Factory."],
     },
 
     // ------------------------------------------------------------------ HUNGARY
@@ -182,7 +180,6 @@
           ],
         },
       ],
-      watch: ["How the Hungarian AI Council and the designated authorities apply the AI Act in practice."],
     },
 
     // ------------------------------------------------------------------ CROATIA
@@ -216,7 +213,6 @@
       ],
       news: [
       ],
-      watch: ["Adoption of the National AI Plan to 2032.", "Designation of Croatia's AI Act authorities."],
     },
 
     // ------------------------------------------------------------------ SLOVAKIA
@@ -279,7 +275,6 @@
           ],
         },
       ],
-      watch: ["Parliament's handling of the AI supervision law (legislative process LP/2026/17)."],
     },
 
     // ------------------------------------------------------------------ BULGARIA
@@ -344,7 +339,6 @@
           ],
         },
       ],
-      watch: ["Construction of the Discoverer++ supercomputer for BRAIN++.", "Whether business AI adoption moves closer to the EU average."],
     },
 
     // ------------------------------------------------------------------ SERBIA
@@ -402,7 +396,6 @@
           ],
         },
       ],
-      watch: ["Publication and passage of Serbia's first AI law.", "Whether an AI agency follows, as NALED expects."],
     },
 
     // ------------------------------------------------------------------ MONTENEGRO
@@ -457,7 +450,6 @@
           ],
         },
       ],
-      watch: ["Adoption of the national AI strategy for 2026–2030."],
     },
 
     // ------------------------------------------------------------------ AZERBAIJAN
@@ -505,7 +497,6 @@
           ],
         },
       ],
-      watch: ["A dedicated AI legal framework, which some guides say the strategy expects by 2027."],
     },
 
     // ------------------------------------------------------------------ KYRGYZSTAN
@@ -553,7 +544,6 @@
           ],
         },
       ],
-      watch: ["The final text of the AI ethics regulation after consultation closes on 13 October 2026."],
     },
 
     // ------------------------------------------------------------------ LEBANON
@@ -617,7 +607,6 @@
           ],
         },
       ],
-      watch: ["Whether Parliament passes the law creating the Ministry of Technology and AI."],
     },
 
     // ------------------------------------------------------------------ LAOS
@@ -670,7 +659,6 @@
           ],
         },
       ],
-      watch: ["Final adoption of the National AI Strategy 2026–2035."],
     },
 
     // ------------------------------------------------------------------ FIJI
@@ -719,7 +707,6 @@
           ],
         },
       ],
-      watch: ["Whether the AI governance framework announced in 2024 is published."],
     },
 
     // ------------------------------------------------------------------ MALDIVES
@@ -772,7 +759,6 @@
           ],
         },
       ],
-      watch: ["Completion of the national AI masterplan and its legal framework."],
     },
 
     // ------------------------------------------------------------------ NAMIBIA
@@ -817,7 +803,6 @@
           ],
         },
       ],
-      watch: ["Tabling of the AI Bill in the National Assembly.", "Publication of the national AI strategy."],
     },
 
     // ------------------------------------------------------------------ CABO VERDE
@@ -863,7 +848,6 @@
           ],
         },
       ],
-      watch: ["Publication of the national AI strategy."],
     },
 
     // ------------------------------------------------------------------ SEYCHELLES
@@ -898,7 +882,6 @@
           ],
         },
       ],
-      watch: ["Whether a national AI strategy follows the schools framework."],
     },
 
     // ------------------------------------------------------------------ GAMBIA
@@ -939,7 +922,6 @@
       ],
       news: [
       ],
-      watch: ["Whether the recommended National AI Research Centre is set up."],
     },
 
     // ------------------------------------------------------------------ LIBERIA
@@ -972,7 +954,6 @@
           ],
         },
       ],
-      watch: ["A national AI policy or strategy."],
     },
 
     // ------------------------------------------------------------------ MAURITANIA
@@ -1015,7 +996,6 @@
           ],
         },
       ],
-      watch: ["The size and timing of the additional WARDIP financing."],
     },
 
     // ------------------------------------------------------------------ HONDURAS
@@ -1058,7 +1038,6 @@
           ],
         },
       ],
-      watch: ["First pilots of the IDB-backed AI tool.", "Congress's vote on the AI cyberbullying reform."],
     },
 
     // ------------------------------------------------------------------ TRINIDAD AND TOBAGO
@@ -1102,7 +1081,6 @@
           ],
         },
       ],
-      watch: ["Publication of the readiness findings and a national AI policy."],
     },
 
     // ------------------------------------------------------------------ BARBADOS
@@ -1146,7 +1124,6 @@
           ],
         },
       ],
-      watch: ["The UN AI panel meeting in Barbados in November 2026.", "Results of the workforce impact assessment."],
     },
 
     // ------------------------------------------------------------------ BAHAMAS
@@ -1188,7 +1165,6 @@
           ],
         },
       ],
-      watch: ["Cabinet approval of the AI white paper."],
     },
 
     // ------------------------------------------------------------------ GUYANA
@@ -1229,7 +1205,6 @@
           ],
         },
       ],
-      watch: ["Whether Guyana moves from sector projects to a national AI framework."],
     },
 
   );

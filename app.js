@@ -949,9 +949,6 @@
           const items = [...n.news].filter(isRecent).sort(byDateDesc);
           return items.length ? items.map((x) => newsItem(x, n, false)) : [el("p", { class: "muted empty" }, "No news items since 2024 in this dataset.")];
         })())),
-      el("section", { class: "section" },
-        sectionHead("What to watch", null),
-        el("div", { class: "card" }, el("ul", { class: "watch" }, n.watch.map((w) => el("li", {}, w))))),
       el("nav", { class: "section pager", "aria-label": "Neighbouring nations by rank" },
         pos > 0 ? el("a", { href: `#${ranked[pos - 1].id}` }, `← ${ranked[pos - 1].flag} ${ranked[pos - 1].name}`) : el("span", {}),
         pos < ranked.length - 1 ? el("a", { href: `#${ranked[pos + 1].id}` }, `${ranked[pos + 1].flag} ${ranked[pos + 1].name} →`) : el("span", {})),
