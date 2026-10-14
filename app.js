@@ -404,8 +404,7 @@
     box.append(el("div", { class: "chart-foot" },
       tableToggle(box, () => table(["Nation", "Region", "Readiness rank", "Gen-AI use (H2 '25)"],
         [...shown].sort((a, b) => a.oxford.rank - b.oxford.rank).map((n) => [n.name, n.group, `#${n.oxford.rank}`, n.msAdoption ? `${n.msAdoption.h2_2025}%${n.msAdoption.regional ? " (regional est.)" : ""}` : "Not reported"]), [2, 3])),
-      el("span", { class: "muted small" }, "· Source:"), sourceChips([S[metric.source]]),
-      el("span", { class: "muted small" }, "· Boundaries: Natural Earth via world-atlas")));
+      el("span", { class: "muted small" }, "· Source:"), sourceChips([S[metric.source]])));
     return box;
   }
   let mapSlot = null;
