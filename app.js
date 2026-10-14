@@ -992,8 +992,8 @@
     return p ? { key, name: p.name, flag: p.flag, geo: p.geo, nation: null } : null;
   }
   // Short forms people type, matched exactly in the collaborations search.
-  const COLLAB_ALIASES = { ae: ["uae", "emirates"], us: ["us", "usa", "america"], gb: ["uk", "britain"], coe: ["coe"], waico: ["waico"] };
-  const COLLAB_BODIES = new Set(["coe", "waico"]); // group hubs that are organisations, not countries
+  const COLLAB_ALIASES = { ae: ["uae", "emirates"], us: ["us", "usa", "america"], gb: ["uk", "britain"], kr: ["korea"], coe: ["coe"], waico: ["waico"], asean: ["asean"], oecd: ["oecd", "gpai"] };
+  const COLLAB_BODIES = new Set(["coe", "waico", "asean", "oecd"]); // group hubs that are organisations, not countries
   const collabParties = (c) => (c.kind === "bilateral" ? [c.a, c.b] : [c.hub, ...c.members]);
 
   function renderCollab() {
