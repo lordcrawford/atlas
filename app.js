@@ -1086,7 +1086,150 @@
           el("a", { class: "np-more", href: "#collab" }, "All agreements on the Collaborations map →"))))];
   }
 
+  // ---- Alignment: which partner groups each nation's AI agreements are with
+  const BLOCS = D.partnerBlocs || { order: [], labels: {}, places: {}, gulf: [], regions: {}, groups: {} };
+  function blocOf(key) {
+    if (BLOCS.places[key]) return BLOCS.places[key];
+    const n = byId(key);
+    if (!n) return "other";
+    return BLOCS.gulf.includes(key) ? "gulf" : BLOCS.regions[n.group] || "other";
+  }
+  const blocLabel = (b) => (b === "mixed" ? "Several equally" : BLOCS.labels[b] || b);
+  // For each nation: its agreements, sorted by the partner group each one links it to. A two-country deal counts
+  // toward the other country; a group toward its host (or, for the host, toward its members); global forums apart.
+  function alignmentRows() {
+    const out = new Map();
+    for (const c of D.collaborations || []) {
+      for (const k of collabParties(c)) {
+        const n = byId(k);
+        if (!n) continue;
+        const forced = BLOCS.groups[c.id];
+        const partners = c.kind === "bilateral" ? [c.a === k ? c.b : c.a] : c.hub === k ? c.members : [c.hub];
+        const blocs = forced ? [forced] : [...new Set(partners.map(blocOf))];
+        if (!out.has(k)) out.set(k, { n, by: new Map(), total: 0 });
+        const r = out.get(k);
+        r.total++;
+        for (const b of blocs) { if (!r.by.has(b)) r.by.set(b, []); r.by.get(b).push(c); }
+      }
+    }
+    // Main group: the one with most agreements, leaving global forums aside; a tie reads "several".
+    for (const r of out.values()) {
+      const cand = [...r.by].filter(([b]) => b !== "global");
+      if (!cand.length) { r.main = "global"; continue; }
+      const max = Math.max(...cand.map(([, l]) => l.length));
+      const top = cand.filter(([, l]) => l.length === max);
+      r.main = top.length > 1 ? "mixed" : top[0][0];
+    }
+    return [...out.values()];
+  }
+  const collabSwitch = (active) => el("div", { class: "seg", role: "group", "aria-label": "Collaborations view" },
+    el("a", { class: "seg-btn", href: "#collab", "aria-current": active === "agreements" ? "page" : null }, "Agreements"),
+    el("a", { class: "seg-btn", href: "#collab/alignment", "aria-current": active === "alignment" ? "page" : null }, "Alignment"));
+
+  function renderAlignment() {
+    const rows = alignmentRows();
+    const blocs = BLOCS.order.filter((b) => rows.some((r) => r.by.has(b)));
+    const links = (b) => rows.reduce((t, r) => t + (r.by.get(b) || []).length, 0);
+    const ranked = blocs.filter((b) => b !== "global").sort((a, b) => links(b) - links(a));
+    const both = rows.filter((r) => r.by.has("us") && r.by.has("china")).sort((a, b) => a.n.name.localeCompare(b.n.name));
+    const spread = rows.filter((r) => [...r.by.keys()].filter((b) => b !== "global").length >= 3).sort((a, b) => b.by.size - a.by.size);
+    const names = (list) => list.map((r) => r.n.name).join(", ").replace(/, ([^,]*)$/, " and $1");
+    const color = (b) => `var(--bloc-${b})`;
+
+    // ---- findings, computed from the agreements listed
+    const findings = el("ul", { class: "al-findings" },
+      el("li", {}, el("strong", {}, `${rows.length} of ${N.length}`), ` nations on this site have at least one AI agreement with another government listed here.`),
+      el("li", {}, "Most links run to ", el("strong", {}, `${blocLabel(ranked[0])} (${links(ranked[0])})`), `, then ${blocLabel(ranked[1])} (${links(ranked[1])}) and ${blocLabel(ranked[2])} (${links(ranked[2])}). The United States appears in ${links("us")}, China in ${links("china")}.`),
+      el("li", {}, both.length ? [el("strong", {}, `${both.length} ${both.length > 1 ? "nations have" : "nation has"} agreements with both the United States and China: `), names(both), "."] : "No nation here has agreements with both the United States and China."),
+      spread.length ? el("li", {}, el("strong", {}, `${spread.length} spread their agreements across three or more partner groups`), `, led by ${names(spread.slice(0, 4))}.`) : null);
+
+    // ---- map: each nation coloured by its main partner group
+    const world = worldFeatures();
+    const mapBox = el("div", {});
+    if (!world) mapBox.append(el("p", { class: "muted" }, "Map libraries failed to load."));
+    else {
+      const W = 960, H = 470;
+      const proj = d3.geoNaturalEarth1().fitExtent([[6, 6], [W - 6, H - 6]], world);
+      const path = d3.geoPath(proj);
+      const svg = s("svg", { viewBox: `0 0 ${W} ${H}`, width: W, role: "img", tabindex: "0", class: "zoomable",
+        "aria-label": `Map of ${rows.length} nations coloured by the partner group most of their AI agreements are with.` });
+      svg.append(s("defs", {}, s("clipPath", { id: "alclip" }, s("rect", { x: 0, y: 0, width: W, height: H, rx: 8 })),
+        s("pattern", { id: "al-mixed", width: 6, height: 6, patternUnits: "userSpaceOnUse", patternTransform: "rotate(45)" },
+          s("rect", { width: 6, height: 6, fill: "var(--land)" }), s("rect", { width: 3, height: 6, fill: "var(--bloc-mixed)" }))));
+      const clip = s("g", { "clip-path": "url(#alclip)" });
+      clip.append(s("rect", { x: 0, y: 0, width: W, height: H, fill: "var(--sea)" }));
+      const geoLayer = s("g", {});
+      const byIso = new Map(rows.map((r) => [r.n.isoN, r]));
+      for (const f of world.features) {
+        const d = path(f);
+        if (!d) continue;
+        const r = byIso.get(f.id);
+        geoLayer.append(s("path", { d, fill: r ? (r.main === "mixed" ? "url(#al-mixed)" : color(r.main)) : "var(--land)", "fill-opacity": r ? 0.75 : null, stroke: "var(--land-stroke)", "stroke-width": 0.6, "vector-effect": "non-scaling-stroke" }));
+      }
+      const dotLayer = s("g", {});
+      clip.append(geoLayer, dotLayer);
+      svg.append(clip);
+      const tip = (r) => [el("div", { class: "tv" }, `${r.n.flag} ${r.n.name}`),
+        ...[...r.by].sort((a, b) => b[1].length - a[1].length).map(([b, l]) => el("div", { class: "tl" }, `${blocLabel(b)}: ${l.length}`)),
+        el("div", { class: "tl small", style: "margin-top:4px" }, "Click to open the nation")];
+      const place = (z) => dotLayer.replaceChildren(...rows.map((r) => {
+        const [x0, y0] = proj(r.n.geo), x = x0 * z.k + z.x, y = y0 * z.k + z.y;
+        const g = s("g", { class: "al-dot", "data-id": r.n.id }, s("circle", { cx: x, cy: y, r: 3 + Math.min(r.total, 8) * 0.5, fill: r.main === "mixed" ? "var(--bloc-mixed)" : color(r.main) }));
+        g.addEventListener("pointermove", (e) => showTip(e, tip(r)));
+        g.addEventListener("pointerleave", hideTip);
+        return g;
+      }));
+      const zoom = attachZoom(svg, W, H, geoLayer, place);
+      zoom.apply();
+      // The map captures the pointer for dragging, so resolve clicks from the svg.
+      svg.addEventListener("click", (e) => {
+        if (zoom.wasDrag()) return;
+        const hit = document.elementsFromPoint(e.clientX, e.clientY).map((n) => n.closest && n.closest(".al-dot")).find(Boolean);
+        if (hit) location.hash = `#${hit.dataset.id}`;
+      });
+      const keyed = [...blocs, ...(rows.some((r) => r.main === "mixed") ? ["mixed"] : [])].filter((b) => rows.some((r) => r.main === b));
+      mapBox.append(
+        el("div", { class: "map-head" }, el("div", { class: "legend" }, keyed.map((b) => el("span", {}, el("i", { class: b === "mixed" ? "al-key-mixed" : null, style: b === "mixed" ? null : `background:${color(b)}` }), blocLabel(b))))),
+        el("div", { class: "map-stage" }, el("div", { class: "chart map-wrap" }, svg), zoomControls(zoom)));
+    }
+
+    // ---- table: one row per nation, a dot per agreement in each partner group
+    let sortBy = "total";
+    const tableBox = el("div", {});
+    const drawTable = () => {
+      const val = (r) => (sortBy === "total" ? r.total : (r.by.get(sortBy) || []).length);
+      const sorted = [...rows].sort((a, b) => val(b) - val(a) || b.total - a.total || a.n.name.localeCompare(b.n.name));
+      const head = el("tr", {},
+        el("th", { scope: "col", class: "al-name" }, "Nation"),
+        el("th", { scope: "col", "aria-sort": sortBy === "total" ? "descending" : null }, el("button", { type: "button", class: "al-sort", onclick: () => { sortBy = "total"; drawTable(); } }, "All")),
+        ...blocs.map((b) => el("th", { scope: "col", "aria-sort": sortBy === b ? "descending" : null },
+          el("button", { type: "button", class: "al-sort", title: `Sort by agreements with ${blocLabel(b)}`, onclick: () => { sortBy = b; drawTable(); } }, el("i", { class: "al-swatch", style: `background:${color(b)}` }), blocLabel(b)))));
+      const build = (k) => el("div", { class: "al-scroll" }, el("table", { class: "al-table" }, el("thead", {}, head),
+        el("tbody", {}, sorted.slice(0, k).map((r) => el("tr", {},
+          el("th", { scope: "row", class: "al-name" }, el("a", { href: `#${r.n.id}` }, el("span", { "aria-hidden": "true" }, r.n.flag), ` ${r.n.name}`),
+            r.by.has("us") && r.by.has("china") ? el("span", { class: "al-badge", title: "Has agreements with both the United States and China" }, "US + China") : null),
+          el("td", { class: "al-total" }, String(r.total)),
+          ...blocs.map((b) => el("td", {}, (r.by.get(b) || []).map((c) => el("a", { class: "al-cell-dot", href: `#collab/${c.id}`, style: `background:${color(b)}`, title: `${c.short || c.title} (${monthYear(c.date)})`, "aria-label": `${c.title}, ${monthYear(c.date)}` })))))))));
+      tableBox.replaceChildren(expandable(build, sorted.length, { limit: 15, hint: sortBy === "total" ? "by number of agreements" : `by agreements with ${blocLabel(sortBy)}` }));
+    };
+    drawTable();
+
+    view.replaceChildren(
+      el("h1", {}, "AI collaborations between countries"),
+      el("p", { class: "summary ink2" }, "Who the small nations here make their AI agreements with: the United States, China, Europe, the Gulf states or each other."),
+      collabSwitch("alignment"),
+      el("section", { class: "section" }, el("div", { class: "card" }, findings)),
+      el("section", { class: "section" },
+        sectionHead("Main partner group", "Each nation is coloured by the group most of its agreements are with (global forums aside). Stripes mean a tie."),
+        el("div", { class: "card" }, mapBox)),
+      el("section", { class: "section" },
+        sectionHead("Every nation's agreements, by partner group", "Each dot is one agreement; click it to open it. Click a column to sort."),
+        el("div", { class: "card" }, tableBox,
+          el("p", { class: "note" }, "Counted only from the agreements listed on this site, so a gap does not mean a nation has no ties with that group. A two-country deal counts toward the other country's group. A group agreement counts toward its host (for the host, toward its members), except global forums such as the Bletchley Declaration and the Global Partnership on AI. The partner groups are editorial; see Method."))));
+  }
+
   function renderCollab(initialId) {
+    if (initialId === "alignment") return renderAlignment();
     const all = [...(D.collaborations || [])].sort(byDateDesc);
     const byCid = new Map(all.map((c) => [c.id, c]));
     // A link to one agreement (#collab/<id>) opens it with the tour paused.
@@ -1334,6 +1477,7 @@
     view.replaceChildren(
       el("h1", {}, "AI collaborations between countries"),
       el("p", { class: "summary ink2" }, `${all.length} AI agreements between governments (${nBil} between two countries, ${all.length - nBil} in groups), each involving at least one nation on this site. The map steps through them every few seconds; pick one from the list to stop and read it.`),
+      collabSwitch("agreements"),
       el("section", { class: "section cx" },
         el("div", { class: "cx-side card" }, el("div", { class: "cx-side-in" }, search, status, rows)),
         stage),

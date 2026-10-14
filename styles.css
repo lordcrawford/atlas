@@ -30,6 +30,8 @@
   --land: #dcdad3;
   --land-stroke: #fcfcfb;
   --na: #a9a7a0;
+  --bloc-us: #2a78d6; --bloc-china: #d8443a; --bloc-europe: #8a63d2; --bloc-gulf: #d99a1c; --bloc-asia: #14a38b;
+  --bloc-africa: #6f9e22; --bloc-americas: #d9589c; --bloc-global: #7d8590; --bloc-other: #a9a7a0; --bloc-mixed: #52514e;
 }
 @media (prefers-color-scheme: dark) {
   :root:where(:not([data-theme="light"])) {
@@ -478,3 +480,29 @@ a.cx-row { text-decoration: none; color: var(--ink); }
 .np .show-more-row { margin-top: var(--s2); padding-top: var(--s3); }
 .np-more { font-size: 14px; font-weight: 550; }
 @media (max-width: 760px) { .np { grid-template-columns: 1fr; } }
+/* ---------- collaborations: view switch and alignment */
+.seg { display: inline-flex; gap: 2px; padding: 3px; margin: var(--s4) 0 var(--s2); background: var(--surface-2); border: 1px solid var(--border); border-radius: 999px; }
+.seg-btn { padding: 6px 16px; border-radius: 999px; font-size: 14px; font-weight: 550; color: var(--ink-2); text-decoration: none; }
+.seg-btn:hover { color: var(--ink); }
+.seg-btn[aria-current="page"] { background: var(--surface); color: var(--ink); box-shadow: var(--shadow), 0 0 0 1px var(--border); }
+.al-findings { margin: 0; padding-left: 1.2em; display: grid; gap: var(--s2); }
+.al-findings li { line-height: 1.55; }
+.al-dot { cursor: pointer; }
+.al-dot circle { stroke: var(--surface); stroke-width: 1.5; }
+.legend i.al-key-mixed { background: repeating-linear-gradient(45deg, var(--bloc-mixed) 0 3px, var(--land) 3px 6px); }
+.al-scroll { overflow-x: auto; margin: 0 calc(-1 * var(--s2)); }
+.al-table { border-collapse: collapse; width: 100%; font-size: 13px; }
+.al-table th, .al-table td { padding: 7px var(--s2); border-bottom: 1px solid var(--grid); text-align: left; vertical-align: middle; }
+.al-table thead th { font-weight: 600; white-space: nowrap; }
+.al-table .al-name { position: sticky; left: 0; background: var(--surface); white-space: nowrap; font-weight: 500; }
+.al-table .al-name a { color: var(--ink); text-decoration: none; }
+.al-table .al-name a:hover { text-decoration: underline; }
+.al-total { font-variant-numeric: tabular-nums; color: var(--ink-2); }
+.al-sort { all: unset; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; color: var(--ink-2); }
+.al-sort:hover, th[aria-sort] .al-sort { color: var(--ink); }
+th[aria-sort] .al-sort { text-decoration: underline; text-underline-offset: 3px; }
+.al-sort:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+.al-swatch { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+.al-cell-dot { display: inline-block; width: 11px; height: 11px; border-radius: 50%; margin: 2px 3px 2px 0; vertical-align: middle; }
+.al-cell-dot:hover, .al-cell-dot:focus-visible { outline: 2px solid var(--ink); outline-offset: 1px; }
+.al-badge { margin-left: var(--s2); font-size: 10.5px; font-weight: 600; padding: 1px 6px; border-radius: 999px; color: var(--ink); background: color-mix(in srgb, var(--bloc-china) 18%, color-mix(in srgb, var(--bloc-us) 18%, var(--surface))); }

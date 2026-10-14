@@ -66,6 +66,14 @@ A second round (14 October 2026) added 26 entries, from 25 to 51. Left out in th
 
 On the map, a solid line joins the two countries in a bilateral deal. A dashed line runs from each group member to the group's host or coordinator, which is a placement choice, not a claim about who leads. Partner countries that are not on the site (for example the United States, France and China) appear as hollow dots.
 
+### Alignment view
+
+The Alignment view sorts each nation's agreements by partner group. The groups are editorial: the United States; China (including WAICO in Shanghai); Europe (European countries plus the Council of Europe); the Gulf states (UAE, Qatar, Bahrain, Kuwait, Oman); Asia-Pacific (including India, Japan, South Korea, Taiwan and ASEAN); Africa; the Americas; global forums; and other (Lebanon, Jordan, Palestine). Nations on the site fall into these by region.
+
+How agreements count: a two-country deal counts toward the other country's group. A group agreement counts toward its host or coordinator; for the host itself, it counts toward its listed members. Global forums (the Bletchley Declaration and the Global Partnership on AI) count as "global forums" for every member and are left out when picking a nation's main partner group. A tie for the main group shows as stripes.
+
+The view counts only the agreements listed on this site. A nation missing from a column may still have ties with that group that are not recorded here, and nations with more coverage will show more agreements. The findings at the top of the view are computed from the same data whenever the page loads.
+
 ## Link check
 
 All ~340 source URLs were requested programmatically. Broken links (404) were replaced with verified alternatives. Some publishers (Bloomberg, gov.mt, uaecabinet.ae, MaltaToday, openai.com and others) block automated requests (403) but open normally in a browser.
