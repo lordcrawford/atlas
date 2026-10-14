@@ -1062,10 +1062,9 @@
           if (!a || !b) continue;
           const d = arc(proj(a.geo), proj(b.geo), c.kind === "bilateral" ? 0.2 : 0.08);
           const vis = s("path", { d, class: `collab-line ${c.kind}`, "vector-effect": "non-scaling-stroke" });
-          const hit = s("path", { d, class: "collab-hit", "vector-effect": "non-scaling-stroke" });
-          hit.addEventListener("pointermove", (e) => { if (!svg.classList.contains("is-dragging")) showTip(e, [el("div", { class: "tv" }, c.short || c.title), el("div", { class: "tl" }, partiesOf(c).map((p) => p.name).join(c.kind === "bilateral" ? " ⟷ " : ", ")), el("div", { class: "tl small", style: "margin-top:4px" }, "Click to open")]); });
+          const hit = s("path", { d, class: "collab-hit", "vector-effect": "non-scaling-stroke", "data-id": c.id });
+          hit.addEventListener("pointermove", (e) => { if (!svg.classList.contains("is-dragging")) showTip(e, [el("div", { class: "tv" }, c.short || c.title), el("div", { class: "tl" }, partiesOf(c).map((p) => p.name).join(c.kind === "bilateral" ? " ⟷ " : ", ")), el("div", { class: "tl small", style: "margin-top:4px" }, "Click for details")]); });
           hit.addEventListener("pointerleave", hideTip);
-          hit.addEventListener("click", () => { if (!zoom.wasDrag()) select(c.id, true); });
           lineLayer.append(vis);
           hitLayer.append(hit);
           segs.push({ c, d, vis });
@@ -1086,7 +1085,7 @@
           const x = d.xy[0] * z.k + z.x, y = d.xy[1] * z.k + z.y;
           const on = lit.has(d.k);
           const r = on ? 6 : 2.5 + Math.min(counts.get(d.k), 5) * 0.5;
-          const g = s("g", { class: "collab-dot" + (on ? " is-lit" : "") + (d.p.nation ? "" : " is-outside") + (shownKeys.has(d.k) ? "" : " is-out"), tabindex: on ? "0" : "-1", role: "button",
+          const g = s("g", { class: "collab-dot" + (on ? " is-lit" : "") + (d.p.nation ? "" : " is-outside") + (shownKeys.has(d.k) ? "" : " is-out"), "data-k": d.k, tabindex: on ? "0" : "-1", role: "button",
             "aria-label": `${d.p.name}: ${counts.get(d.k)} agreement${counts.get(d.k) > 1 ? "s" : ""}. Show them.` });
           g.append(s("circle", { cx: x, cy: y, r }));
           if (named.has(d.k)) {
@@ -1095,7 +1094,6 @@
           }
           g.addEventListener("pointermove", (e) => showTip(e, [el("div", { class: "tv" }, `${d.p.flag} ${d.p.name}`), el("div", { class: "tl" }, `${counts.get(d.k)} agreement${counts.get(d.k) > 1 ? "s" : ""}`), el("div", { class: "tl small", style: "margin-top:4px" }, "Click to list them")]));
           g.addEventListener("pointerleave", hideTip);
-          g.addEventListener("click", () => { if (!zoom.wasDrag()) selectCountry(d.k); });
           g.addEventListener("keydown", (e) => { if (e.key === "Enter") selectCountry(d.k); });
           return g;
         };
@@ -1107,6 +1105,16 @@
       zoom = attachZoom(svg, W, H, geoLayer, place, { maxK: 10, onUser: () => pause(),
         onHint: () => { hintEl.hidden = false; clearTimeout(hintTimer); hintTimer = setTimeout(() => { hintEl.hidden = true; }, 1600); } });
       zoom.apply();
+      // The map captures the pointer while pressed (for dragging), so clicks land on the svg itself:
+      // find the dot or line under the pointer from there.
+      svg.addEventListener("click", (e) => {
+        if (zoom.wasDrag()) return;
+        for (const n of document.elementsFromPoint(e.clientX, e.clientY)) {
+          const dot = n.closest && n.closest(".collab-dot");
+          if (dot) { hideTip(); selectCountry(dot.dataset.k); return; }
+          if (n.classList && n.classList.contains("collab-hit")) { hideTip(); select(n.dataset.id, true); return; }
+        }
+      });
       paint = () => {
         const c = byCid.get(st.sel);
         const shownIds = new Set(shownList().map((x) => x.id));
