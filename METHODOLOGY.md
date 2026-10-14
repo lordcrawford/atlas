@@ -54,6 +54,10 @@ During this batch the overview's EU AI Act highlight was corrected. It had said 
 - Corrected: Panama (strategy approved by Cabinet on 11 August 2026; an unverified resolution number removed), Sweden (an October 2025 inquiry proposing PTS as lead authority, not June 2026 interim authorities), Slovenia (National AI Strategy to 2030 adopted 5 March 2026), Greece (Daedalus not yet in full service), Georgia (news summary), and a Singapore MAS item whose cited OECD page no longer exists.
 - Removed as unconfirmable without trackers: Hungary's 2026 decree moving AI supervision, Croatia's missed AI Act deadline, Malta's "72 actions", and several exact dates and decree numbers (Czechia, Slovakia, Congo, Maldives).
 
+## Collaborations tab
+
+Each entry on the Collaborations tab reuses a claim already on a nation's page, with the same text, badge and sources, so it carries the same verification. The one combined entry (the Council of Europe AI convention) cites the Council of Europe's own signature list, read in a browser, plus Switzerland's sources. Partner names and types (company, shared supercomputing, development partner, government, treaty or regional bloc) are editorial labels.
+
 ## Link check
 
 All ~340 source URLs were requested programmatically. Broken links (404) were replaced with verified alternatives. Some publishers (Bloomberg, gov.mt, uaecabinet.ae, MaltaToday, openai.com and others) block automated requests (403) but open normally in a browser.

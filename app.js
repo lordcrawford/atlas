@@ -690,7 +690,7 @@
   }
 
   // Long rankings open on their top rows, with a toggle to reveal the rest.
-  function expandable(build, total, { limit = 12, hint = "" } = {}) {
+  function expandable(build, total, { limit = 12, hint = "", noun = "nations" } = {}) {
     const box = el("div", { class: "expandable" });
     const collapsible = total > limit + 3;
     let open = !collapsible;
@@ -702,7 +702,7 @@
         el("button", { class: "show-more", type: "button", "aria-expanded": String(open), onclick: () => {
           open = !open; draw();
           if (!open) box.scrollIntoView({ block: "nearest" });
-        } }, open ? "Show fewer" : `Show all ${total} nations`)));
+        } }, open ? "Show fewer" : `Show all ${total} ${noun}`)));
     };
     draw();
     return box;
@@ -984,6 +984,69 @@
       el("section", { class: "section" }, regionFilter(draw), el("div", { class: "filters" }, select), row2, list));
   }
 
+  // ---------------------------------------------------------------- collaborations
+  const KINDS = {
+    company: { label: "Tech companies", desc: "Deals with AI and cloud companies" },
+    compute: { label: "Shared supercomputing", desc: "EU AI Factories co-funded with EuroHPC" },
+    development: { label: "Development partners", desc: "UN agencies, development banks and donors" },
+    government: { label: "Government to government", desc: "Bilateral agreements and declarations" },
+    multilateral: { label: "Treaties & regional blocs", desc: "Conventions, UN resolutions and regional bodies" },
+  };
+  function renderCollab() {
+    const all = [...(D.collaborations || [])].sort(byDateDesc);
+    const filt = { kind: "all", partner: null };
+    const nationsIn = (c) => c.nations.map(byId).filter(Boolean);
+    const partnerCounts = () => {
+      const m = new Map();
+      all.filter((c) => nationsIn(c).some(inRegion)).forEach((c) => c.partners.forEach((p) => m.set(p, (m.get(p) || 0) + 1)));
+      return [...m].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+    };
+    const tiles = el("div", { class: "kind-tiles" });
+    const bars = el("div", { class: "partner-bars" });
+    const active = el("div", { class: "active-filters" });
+    const listBox = el("div", {});
+    const item = (c) => el("article", { class: "news-item collab-item" },
+      el("div", { class: "fact-date" }, fmtDate(c.date)),
+      el("div", {},
+        el("p", { class: "who" }, el("span", { class: "kind-tag" }, KINDS[c.kind].label), " · ",
+          nationsIn(c).map((n, i) => [i ? ", " : "", el("a", { href: `#${n.id}` }, `${n.flag} ${n.name}`)])),
+        el("h3", {}, c.title),
+        el("div", { class: "partner-chips" }, c.partners.map((p) =>
+          el("button", { class: "partner-chip", type: "button", "aria-pressed": String(filt.partner === p), onclick: () => { filt.partner = filt.partner === p ? null : p; draw(); } }, p))),
+        el("p", { class: "ink2" }, c.text),
+        el("div", { class: "fact-meta" }, badge(c.level, c.sources.length), sourceChips(c.sources)),
+        c.note ? el("p", { class: "note" }, c.note) : null));
+    const draw = () => {
+      const inReg = all.filter((c) => nationsIn(c).some(inRegion));
+      tiles.replaceChildren(...[["all", "All collaborations", `${inReg.length} in total`], ...Object.entries(KINDS).map(([k, v]) => [k, v.label, `${inReg.filter((c) => c.kind === k).length} · ${v.desc}`])]
+        .map(([k, label, sub]) => el("button", { class: "kind-tile", type: "button", "aria-pressed": String(filt.kind === k), onclick: () => { filt.kind = k; draw(); } },
+          el("span", { class: "l" }, label), el("span", { class: "v" }, k === "all" ? String(inReg.length) : String(inReg.filter((c) => c.kind === k).length)), el("span", { class: "s" }, k === "all" ? "Click a type to filter" : KINDS[k].desc))));
+      const top = partnerCounts().slice(0, 12);
+      const max = top.length ? top[0][1] : 1;
+      bars.replaceChildren(...top.map(([p, n]) => el("button", { class: "pbar", type: "button", "aria-pressed": String(filt.partner === p), onclick: () => { filt.partner = filt.partner === p ? null : p; draw(); } },
+        el("span", { class: "pbar-name" }, p),
+        el("span", { class: "pbar-track" }, el("span", { class: "pbar-fill", style: `width:${(n / max) * 100}%` })),
+        el("span", { class: "pbar-n" }, String(n)))));
+      const shown = inReg.filter((c) => (filt.kind === "all" || c.kind === filt.kind) && (!filt.partner || c.partners.includes(filt.partner)));
+      active.replaceChildren(...(filt.partner ? [el("span", { class: "muted small" }, "Partner:"), el("button", { class: "chip-btn", type: "button", "aria-pressed": "true", onclick: () => { filt.partner = null; draw(); } }, `${filt.partner} ✕`)] : []));
+      listBox.replaceChildren(shown.length
+        ? expandable((k) => el("div", {}, shown.slice(0, k).map(item)), shown.length, { limit: 12, hint: "newest first", noun: "collaborations" })
+        : el("p", { class: "muted" }, "No collaborations match these filters."));
+    };
+    draw();
+    const nationCount = new Set(all.flatMap((c) => c.nations)).size;
+    view.replaceChildren(
+      el("h1", {}, "AI collaborations"),
+      el("p", { class: "summary ink2" }, `${all.length} partnerships linking ${nationCount} of the ${N.length} nations here with AI companies, shared EU supercomputers, development partners, other governments and international treaties. Each one is a sourced claim from a nation's profile.`),
+      el("section", { class: "section" }, tiles),
+      el("section", { class: "section" },
+        sectionHead("Who they partner with", "The most frequent partners across these collaborations. Click one to see its deals."),
+        el("div", { class: "card" }, bars)),
+      el("section", { class: "section" },
+        sectionHead("The collaborations", "Newest first. Filter by region, or click a partner name."),
+        regionFilter(draw), active, el("div", { class: "card" }, listBox)));
+  }
+
   function renderMethod() {
     const claims = allClaims();
     const cnt = (lv) => claims.filter((c) => c.level === lv).length;
@@ -1091,11 +1154,12 @@
   }
   function renderTabs(key) {
     const current = byId(key);
-    const isOverview = key === "overview" || (!current && key !== "news" && key !== "method");
+    const isOverview = key === "overview" || (!current && key !== "news" && key !== "collab" && key !== "method");
     tabsEl.replaceChildren(
       el("a", { class: "tab", href: "#overview", "aria-current": isOverview ? "page" : null }, "Overview"),
       nationMenu(current),
       el("a", { class: "tab", href: "#news", "aria-current": key === "news" ? "page" : null }, "News"),
+      el("a", { class: "tab", href: "#collab", "aria-current": key === "collab" ? "page" : null }, "Collaborations"),
       el("a", { class: "tab", href: "#method", "aria-current": key === "method" ? "page" : null }, "Method"));
   }
   function route(keepScroll) {
@@ -1105,6 +1169,7 @@
     const n = byId(key);
     if (n) { renderNation(n); document.title = `${n.name} — Atlas`; }
     else if (key === "news") { renderNews(); document.title = "News — Atlas"; }
+    else if (key === "collab") { renderCollab(); document.title = "AI collaborations — Atlas"; }
     else if (key === "method") { renderMethod(); document.title = "Method — Atlas"; }
     else { renderOverview(); document.title = "Atlas — AI in Small Nations"; }
     if (keepScroll !== true) scrollTo(0, 0);
