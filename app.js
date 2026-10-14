@@ -222,6 +222,8 @@
     svg.addEventListener("wheel", (e) => {
       if (!(wheelArmed || e.ctrlKey || e.metaKey)) { if (opts.onHint) opts.onHint(); return; }
       e.preventDefault();
+      cancelAnimationFrame(anim);
+      if (opts.onUser) opts.onUser();
       const [px, py] = toSvg(e);
       zoomAt(px, py, Math.exp(-e.deltaY * (e.ctrlKey ? 0.01 : 0.0018)));
     }, { passive: false });
@@ -230,6 +232,8 @@
     let moved = 0, last = null, pinch0 = null;
     svg.addEventListener("pointerdown", (e) => {
       if (e.button !== 0 && e.pointerType === "mouse") return;
+      cancelAnimationFrame(anim);
+      if (opts.onUser) opts.onUser();
       wheelArmed = true;
       svg.setPointerCapture(e.pointerId);
       pts.set(e.pointerId, toSvg(e));
@@ -265,12 +269,39 @@
       if (e.key === "-" || e.key === "_") { zoomAt(W / 2, H / 2, 1 / 1.5); e.preventDefault(); }
       if (e.key === "0") { z.k = 1; z.x = 0; z.y = 0; apply(); }
     });
+    // Animated move to a target view: the centre moves while the scale changes on a log curve.
+    let anim = 0;
+    const flyTo = (t, ms = 900) => {
+      cancelAnimationFrame(anim);
+      const goal = { ...t };
+      const k = Math.max(1, Math.min(maxK, goal.k));
+      goal.k = k;
+      goal.x = Math.min(0, Math.max(W - W * k, goal.x));
+      goal.y = Math.min(0, Math.max(H - H * k, goal.y));
+      if (!ms || matchMedia("(prefers-reduced-motion: reduce)").matches) { Object.assign(z, goal); apply(); return; }
+      const c0 = [(W / 2 - z.x) / z.k, (H / 2 - z.y) / z.k], c1 = [(W / 2 - goal.x) / goal.k, (H / 2 - goal.y) / goal.k];
+      const k0 = z.k, t0 = performance.now();
+      const ease = (u) => (u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2);
+      const step = (now) => {
+        const u = Math.min(1, (now - t0) / ms), e = ease(u);
+        // Pull back a little mid-flight on long moves so the jump reads as travel.
+        const dist = Math.hypot(c1[0] - c0[0], c1[1] - c0[1]) / W;
+        const dip = Math.min(0.45, dist) * Math.sin(Math.PI * e);
+        const kk = Math.exp(Math.log(k0) + (Math.log(goal.k) - Math.log(k0)) * e) * (1 - dip);
+        const cx = c0[0] + (c1[0] - c0[0]) * e, cy = c0[1] + (c1[1] - c0[1]) * e;
+        z.k = Math.max(1, kk); z.x = W / 2 - cx * z.k; z.y = H / 2 - cy * z.k;
+        apply();
+        if (u < 1) anim = requestAnimationFrame(step);
+      };
+      anim = requestAnimationFrame(step);
+    };
     return {
       z,
+      flyTo,
       wasDrag: () => moved > 6,
-      zoomIn: () => zoomAt(W / 2, H / 2, 1.6),
-      zoomOut: () => zoomAt(W / 2, H / 2, 1 / 1.6),
-      reset: () => { z.k = 1; z.x = 0; z.y = 0; apply(); },
+      zoomIn: () => { cancelAnimationFrame(anim); if (opts.onUser) opts.onUser(); zoomAt(W / 2, H / 2, 1.6); },
+      zoomOut: () => { cancelAnimationFrame(anim); if (opts.onUser) opts.onUser(); zoomAt(W / 2, H / 2, 1 / 1.6); },
+      reset: () => { cancelAnimationFrame(anim); if (opts.onUser) opts.onUser(); z.k = 1; z.x = 0; z.y = 0; apply(); },
       apply,
     };
   }
@@ -708,38 +739,6 @@
     return box;
   }
 
-  // Compact, searchable list of every nation, grouped by region.
-  function nationDirectory(list) {
-    const groups = state.region === "All" ? GROUPS : [state.region];
-    const input = el("input", { type: "search", class: "dir-search", placeholder: `Search ${list.length} nations`, "aria-label": "Search nations by name or region" });
-    const cols = el("div", { class: "dir-cols" });
-    const narrow = matchMedia("(max-width: 520px)").matches;
-    const draw = () => {
-      const q = input.value.trim().toLowerCase();
-      const blocks = groups.map((g) => {
-        const items = list.filter((n) => n.group === g && (!q || n.name.toLowerCase().includes(q) || n.region.toLowerCase().includes(q)))
-          .sort((a, b) => a.oxford.rank - b.oxford.rank);
-        if (!items.length) return null;
-        // On phones each region folds away until tapped (or matched by a search).
-        const open = !narrow || !!q || groups.length === 1;
-        return el("details", { class: "dir-group", open },
-          el("summary", { class: "dir-h" }, g, el("span", {}, String(items.length))),
-          el("ul", {}, items.map((n) => el("li", {},
-            el("a", { class: "dir-item", href: `#${n.id}`, title: n.stance },
-              el("span", { class: "flag", "aria-hidden": "true" }, n.flag),
-              el("span", { class: "dir-name" }, n.name),
-              el("span", { class: "dir-rank", title: "AI readiness rank (Oxford Insights 2025)" }, `#${n.oxford.rank}`))))));
-      }).filter(Boolean);
-      cols.replaceChildren(...(blocks.length ? blocks : [el("p", { class: "muted" }, `No nation matches "${input.value}".`)]));
-    };
-    input.addEventListener("input", draw);
-    input.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") { const a = cols.querySelector("a"); if (a) location.hash = a.getAttribute("href"); }
-    });
-    draw();
-    return el("div", { class: "card dir" }, input, cols);
-  }
-
   // ---------------------------------------------------------------- views
   function renderOverview() {
     const claims = allClaims();
@@ -772,7 +771,6 @@
           sectionHead("Where they are", "Hover a country or dot for its numbers, click to open its profile. Picking a region zooms in."),
           el("div", { class: "card" }, mapSlot,
             el("p", { class: "note" }, "At this scale Singapore, Malta, Bahrain and Mauritius are too small to draw as shapes, so every nation is also marked with a dot at its capital."))),
-        el("section", { class: "section" }, sectionHead(state.region === "All" ? "The nations" : `The nations · ${state.region}`, "Grouped by region and sorted by AI readiness rank (#). Search or click a name to open its profile."), nationDirectory(list)),
         el("section", { class: "section" },
           sectionHead("Government AI readiness, by pillar", `Oxford Insights 2025 index (${OXFORD_TOTAL} countries ranked). The United States (#1) is shown for reference. Click a name to open its profile.`),
           el("div", { class: "card" }, expandable((k) => readinessHeatmap(list, k), list.length, { hint: "by readiness rank" }),
@@ -1000,7 +998,8 @@
 
   function renderCollab() {
     const all = [...(D.collaborations || [])].sort(byDateDesc);
-    const st = { q: "", hover: null, spot: null, playing: true };
+    const byCid = new Map(all.map((c) => [c.id, c]));
+    const st = { q: "", sel: all[0] && all[0].id, playing: true, hold: false };
     const counts = new Map();
     all.forEach((c) => collabParties(c).forEach((k) => counts.set(k, (counts.get(k) || 0) + 1)));
     const norm = (t) => t.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").trim();
@@ -1013,42 +1012,45 @@
       if (!q) return all;
       const k = exactKey();
       if (k) return all.filter((c) => collabParties(c).includes(k));
-      return all.filter((c) => collabParties(c).some((x) => names(x).some((n) => n.includes(q))) || norm(c.title).includes(q) || norm(c.text).includes(q));
+      return all.filter((c) => collabParties(c).some((x) => names(x).some((n) => n.includes(q))) || norm(c.title).includes(q) || norm(c.short || "").includes(q) || norm(c.text).includes(q));
     };
-    const current = () => st.hover || st.spot;
+    const partiesOf = (c) => collabParties(c).map(party).filter(Boolean);
+    const countriesIn = (c) => collabParties(c).filter((k) => !COLLAB_BODIES.has(k)).length;
+    const monthYear = (d) => fmtDate(d).replace(/^\d+ /, "");
 
     // A country "pill": flag and name, linking to the nation page when the country is on this site.
     const pill = (p, host) => el(p.nation ? "a" : "span", { class: "cpill" + (p.nation ? "" : " is-outside"), href: p.nation ? `#${p.key}` : null, title: p.nation ? `Open ${p.name}` : `${p.name} (not one of the nations on this site)` },
       el("span", { class: "cpill-flag", "aria-hidden": "true" }, p.flag), p.name, host ? el("span", { class: "cpill-host" }, COLLAB_BODIES.has(p.key) ? "coordinator" : "host") : null);
-    const partiesRow = (c, small) => {
-      const ps = collabParties(c).map(party).filter(Boolean);
-      if (c.kind === "bilateral") return el("div", { class: "cparties" + (small ? " is-small" : "") }, pill(ps[0]), el("span", { class: "cparties-link", "aria-label": "and" }, "⟷"), pill(ps[1]));
-      return el("div", { class: "cparties" + (small ? " is-small" : "") }, pill(ps[0], true),
+    const partiesRow = (c) => {
+      const ps = partiesOf(c);
+      if (c.kind === "bilateral") return el("div", { class: "cparties" }, pill(ps[0]), el("span", { class: "cparties-link", "aria-label": "and" }, "⟷"), pill(ps[1]));
+      return el("div", { class: "cparties" }, pill(ps[0], true),
         ps.length > 1 ? [el("span", { class: "cparties-link", "aria-label": "with" }, "+"), ...ps.slice(1).map((p) => pill(p))] : el("span", { class: "muted small" }, "members not listed"));
     };
 
     // ---- map
-    const mapBox = el("div", {});
-    const spot = el("div", { class: "spot" });
+    const W = 960, H = 480;
     const world = worldFeatures();
-    let highlight = () => {};
-    if (!world) mapBox.append(el("p", { class: "muted" }, "Map libraries failed to load."));
+    const mapCard = el("div", { class: "card cx-map" });
+    let proj = null, zoom = null, svg = null;
+    let paint = () => {};
+    if (!world) mapCard.append(el("p", { class: "muted" }, "Map libraries failed to load."));
     else {
-      const W = 960, H = 480;
-      const proj = d3.geoNaturalEarth1().fitExtent([[6, 6], [W - 6, H - 6]], world);
+      proj = d3.geoNaturalEarth1().fitExtent([[6, 6], [W - 6, H - 6]], world);
       const path = d3.geoPath(proj);
-      const svg = s("svg", { viewBox: `0 0 ${W} ${H}`, width: W, role: "img", tabindex: "0", class: "zoomable collab-map",
-        "aria-label": `Map of ${all.length} AI collaborations between countries. Lines join the countries in each agreement.` });
+      svg = s("svg", { viewBox: `0 0 ${W} ${H}`, width: W, role: "img", tabindex: "0", class: "zoomable collab-map",
+        "aria-label": `Map of ${all.length} AI agreements between countries. The selected agreement is drawn brightly and its countries are shaded.` });
       svg.append(s("defs", {}, s("clipPath", { id: "collabclip" }, s("rect", { x: 0, y: 0, width: W, height: H, rx: 8 }))));
       const clip = s("g", { "clip-path": "url(#collabclip)" });
       clip.append(s("rect", { x: 0, y: 0, width: W, height: H, fill: "var(--sea)" }));
       const geoLayer = s("g", {});
       geoLayer.append(s("path", { d: path({ type: "Sphere" }), fill: "var(--sea)", stroke: "var(--grid)", "vector-effect": "non-scaling-stroke" }));
-      for (const f of world.features) { const d = path(f); if (d) geoLayer.append(s("path", { d, fill: "var(--land)", stroke: "var(--land-stroke)", "stroke-width": 0.6, "vector-effect": "non-scaling-stroke" })); }
-      const lineLayer = s("g", {}), topLayer = s("g", {}), hitLayer = s("g", {});
-      geoLayer.append(lineLayer, topLayer, hitLayer);
+      const land = new Map();
+      for (const f of world.features) { const d = path(f); if (d) { land.set(f.id, d); geoLayer.append(s("path", { d, fill: "var(--land)", stroke: "var(--land-stroke)", "stroke-width": 0.6, "vector-effect": "non-scaling-stroke" })); } }
+      const fillLayer = s("g", {}), lineLayer = s("g", {}), topLayer = s("g", {}), hitLayer = s("g", {});
+      geoLayer.append(fillLayer, lineLayer, topLayer, hitLayer);
       // Curved line between two projected points, bowed to one side so overlapping routes stay readable.
-      const arc = (p1, p2, bow = 0.18) => {
+      const arc = (p1, p2, bow) => {
         const mx = (p1[0] + p2[0]) / 2, my = (p1[1] + p2[1]) / 2, dx = p2[0] - p1[0], dy = p2[1] - p1[1];
         return `M${p1[0]},${p1[1]} Q${mx - dy * bow},${my + dx * bow} ${p2[0]},${p2[1]}`;
       };
@@ -1058,168 +1060,213 @@
         for (const [k1, k2] of pairs) {
           const a = party(k1), b = party(k2);
           if (!a || !b) continue;
-          const p1 = proj(a.geo), p2 = proj(b.geo);
-          const d = arc(p1, p2, c.kind === "bilateral" ? 0.2 : 0.08);
-          const vis = s("path", { d, class: `collab-line ${c.kind}`, "vector-effect": "non-scaling-stroke", "data-id": c.id });
-          const hit = s("path", { d, class: "collab-hit", "vector-effect": "non-scaling-stroke", "data-id": c.id });
-          hit.addEventListener("pointermove", (e) => { if (svg.classList.contains("is-dragging")) return; if (st.hover !== c.id) { st.hover = c.id; highlight(); } showTip(e, collabTip(c)); });
-          hit.addEventListener("pointerleave", () => { st.hover = null; highlight(); hideTip(); });
-          hit.addEventListener("click", () => { if (zoom.wasDrag()) return; focusItem(c.id); });
+          const d = arc(proj(a.geo), proj(b.geo), c.kind === "bilateral" ? 0.2 : 0.08);
+          const vis = s("path", { d, class: `collab-line ${c.kind}`, "vector-effect": "non-scaling-stroke" });
+          const hit = s("path", { d, class: "collab-hit", "vector-effect": "non-scaling-stroke" });
+          hit.addEventListener("pointermove", (e) => { if (!svg.classList.contains("is-dragging")) showTip(e, [el("div", { class: "tv" }, c.short || c.title), el("div", { class: "tl" }, partiesOf(c).map((p) => p.name).join(c.kind === "bilateral" ? " ⟷ " : ", ")), el("div", { class: "tl small", style: "margin-top:4px" }, "Click to open")]); });
+          hit.addEventListener("pointerleave", hideTip);
+          hit.addEventListener("click", () => { if (!zoom.wasDrag()) select(c.id, true); });
           lineLayer.append(vis);
           hitLayer.append(hit);
-          segs.push({ c, vis });
+          segs.push({ c, d, vis });
         }
       }
       // Country dots live in screen space so they keep their size while zooming.
       const dotLayer = s("g", {});
       clip.append(geoLayer, dotLayer);
       svg.append(clip);
-      const hubs = new Set(all.filter((c) => c.kind === "group").map((c) => c.hub));
       const dots = [...counts.keys()].map((k) => ({ p: party(k), k })).filter((d) => d.p).map((d) => ({ ...d, xy: proj(d.p.geo) }));
       const place = (z) => {
-        const on = all.find((c) => c.id === current());
-        // Name the countries in the highlighted agreement (large groups: just the host).
-        const named = new Set(on ? (collabParties(on).length <= 6 ? collabParties(on) : [on.hub]) : []);
-        const sel = exactKey();
-        if (sel) named.add(sel);
+        const c = byCid.get(st.sel);
+        const lit = new Set(c ? collabParties(c) : []);
+        // Name every country in the selected agreement; for large groups only the host.
+        const named = new Set(c ? (lit.size <= 6 ? lit : [c.hub]) : []);
+        const shownKeys = new Set(shownList().flatMap(collabParties));
         const node = (d) => {
           const x = d.xy[0] * z.k + z.x, y = d.xy[1] * z.k + z.y;
-          const r = 3.5 + Math.min(counts.get(d.k), 6);
-          const lit = on && collabParties(on).includes(d.k);
-          const g = s("g", { class: "collab-dot" + (sel === d.k ? " is-selected" : "") + (lit ? " is-lit" : "") + (d.p.nation ? "" : " is-outside"), tabindex: "0", role: "button",
-            "aria-label": `${d.p.name}: ${counts.get(d.k)} collaboration${counts.get(d.k) > 1 ? "s" : ""}` });
-          g.append(s("circle", { cx: x, cy: y, r, class: hubs.has(d.k) ? "is-hub" : null }));
-          if (z.k >= 2.2 || named.has(d.k)) g.append(s("text", { x: x + r + 3, y: y + 4, class: "map-label" + (named.has(d.k) ? " is-strong" : "") }, d.p.name));
-          const tipNodes = () => [el("div", { class: "tv" }, `${d.p.flag} ${d.p.name}`), el("div", { class: "tl" }, `${counts.get(d.k)} collaboration${counts.get(d.k) > 1 ? "s" : ""}`), el("div", { class: "tl small", style: "margin-top:4px" }, "Click to show only these")];
-          g.addEventListener("pointermove", (e) => showTip(e, tipNodes()));
+          const on = lit.has(d.k);
+          const r = on ? 6 : 2.5 + Math.min(counts.get(d.k), 5) * 0.5;
+          const g = s("g", { class: "collab-dot" + (on ? " is-lit" : "") + (d.p.nation ? "" : " is-outside") + (shownKeys.has(d.k) ? "" : " is-out"), tabindex: on ? "0" : "-1", role: "button",
+            "aria-label": `${d.p.name}: ${counts.get(d.k)} agreement${counts.get(d.k) > 1 ? "s" : ""}. Show them.` });
+          g.append(s("circle", { cx: x, cy: y, r }));
+          if (named.has(d.k)) {
+            const flip = x > W - 150;
+            g.append(s("text", { x: flip ? x - r - 4 : x + r + 4, y: y + 4, class: "map-label is-strong", "text-anchor": flip ? "end" : "start" }, d.p.name));
+          }
+          g.addEventListener("pointermove", (e) => showTip(e, [el("div", { class: "tv" }, `${d.p.flag} ${d.p.name}`), el("div", { class: "tl" }, `${counts.get(d.k)} agreement${counts.get(d.k) > 1 ? "s" : ""}`), el("div", { class: "tl small", style: "margin-top:4px" }, "Click to list them")]));
           g.addEventListener("pointerleave", hideTip);
-          g.addEventListener("click", () => { if (zoom.wasDrag()) return; selectCountry(sel === d.k ? null : d.k); });
-          g.addEventListener("keydown", (e) => { if (e.key === "Enter") selectCountry(sel === d.k ? null : d.k); });
+          g.addEventListener("click", () => { if (!zoom.wasDrag()) selectCountry(d.k); });
+          g.addEventListener("keydown", (e) => { if (e.key === "Enter") selectCountry(d.k); });
           return g;
         };
-        // Lit and labelled dots go last so they sit on top.
-        const rank = (d) => (named.has(d.k) ? 2 : on && collabParties(on).includes(d.k) ? 1 : 0);
+        const rank = (d) => (named.has(d.k) ? 2 : lit.has(d.k) ? 1 : 0);
         dotLayer.replaceChildren(...[...dots].sort((a, b) => rank(a) - rank(b)).map(node));
       };
       const hintEl = el("div", { class: "map-hint", hidden: true }, "Click the map, or hold ⌘/Ctrl, to zoom with scroll. Drag to pan.");
       let hintTimer = null;
-      const zoom = attachZoom(svg, W, H, geoLayer, place, { onHint: () => { hintEl.hidden = false; clearTimeout(hintTimer); hintTimer = setTimeout(() => { hintEl.hidden = true; }, 1600); } });
+      zoom = attachZoom(svg, W, H, geoLayer, place, { maxK: 10, onUser: () => pause(),
+        onHint: () => { hintEl.hidden = false; clearTimeout(hintTimer); hintTimer = setTimeout(() => { hintEl.hidden = true; }, 1600); } });
       zoom.apply();
-      highlight = () => {
-        const id = current();
-        const shownIds = new Set(shownList().map((c) => c.id));
-        segs.forEach(({ c, vis }) => {
-          vis.classList.toggle("is-out", !shownIds.has(c.id));
-          vis.classList.toggle("is-on", c.id === id);
-          (c.id === id ? topLayer : lineLayer).append(vis);
-        });
-        place({ k: zoom.z.k, x: zoom.z.x, y: zoom.z.y });
-        listBox.querySelectorAll(".collab-card").forEach((n) => n.classList.toggle("is-on", n.dataset.id === id));
-        drawSpot();
+      paint = () => {
+        const c = byCid.get(st.sel);
+        const shownIds = new Set(shownList().map((x) => x.id));
+        segs.forEach(({ c: x, vis }) => vis.classList.toggle("is-out", !shownIds.has(x.id)));
+        topLayer.replaceChildren(...segs.filter((x) => c && x.c.id === c.id).flatMap(({ d }) => [
+          s("path", { d, class: `collab-glow ${c.kind}`, "vector-effect": "non-scaling-stroke" }),
+          s("path", { d, class: `collab-line is-on ${c.kind}`, "vector-effect": "non-scaling-stroke" })]));
+        const isos = c ? collabParties(c).map((k) => (byId(k) || PLACES[k] || {}).isoN).filter((i) => i && land.has(i)) : [];
+        fillLayer.replaceChildren(...isos.map((i) => s("path", { d: land.get(i), class: "cx-fill", "vector-effect": "non-scaling-stroke" })));
+        place(zoom.z);
       };
-      mapBox.append(
-        el("div", { class: "map-head" },
-          el("div", { class: "legend" },
-            el("span", {}, el("i", { class: "key-line bilateral" }), "Agreement between two countries"),
-            el("span", {}, el("i", { class: "key-line group" }), "Group: lines run to the host or coordinator"),
-            el("span", {}, el("i", { class: "key-dot" }), "Nation on this site"),
-            el("span", {}, el("i", { class: "key-dot is-outside" }), "Partner country"))),
-        el("div", { class: "map-stage" }, el("div", { class: "chart map-wrap" }, svg), zoomControls(zoom), hintEl),
-        spot);
+      mapCard.append(el("div", { class: "map-stage" }, el("div", { class: "chart map-wrap" }, svg), zoomControls(zoom), hintEl));
     }
-    const collabTip = (c) => [el("div", { class: "tv" }, c.title), el("div", { class: "tl" }, collabParties(c).map(party).filter(Boolean).map((p) => `${p.flag} ${p.name}`).join(c.kind === "bilateral" ? "  ⟷  " : ", ")), el("div", { class: "tl small", style: "margin-top:4px" }, `${fmtDate(c.date)} · click for details`)];
+    // Frame the selected agreement's countries, leaving room for their labels.
+    const fit = (c) => {
+      if (!zoom || !c) return;
+      const pts = partiesOf(c).map((p) => proj(p.geo));
+      const xs = pts.map((p) => p[0]), ys = pts.map((p) => p[1]);
+      const x0 = Math.min(...xs), x1 = Math.max(...xs), y0 = Math.min(...ys), y1 = Math.max(...ys);
+      const k = Math.max(1, Math.min((W - 260) / Math.max(x1 - x0, 1), (H - 150) / Math.max(y1 - y0, 1), pts.length > 1 ? 4 : 3));
+      const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2;
+      zoom.flyTo({ k, x: W / 2 - cx * k, y: H / 2 - cy * k });
+    };
 
-    // ---- spotlight: one agreement at a time, every 3 seconds
-    const SPOT_MS = 3000;
-    let timer = null;
-    const advance = (dir) => {
+    // ---- tour controls (over the map) and the detail panel
+    const tour = el("div", { class: "cx-tour" });
+    const detail = el("article", { class: "card cx-detail", "aria-live": "polite" });
+    const drawTour = () => {
       const list = shownList();
-      if (!list.length) { st.spot = null; return; }
-      const i = list.findIndex((c) => c.id === st.spot);
-      st.spot = list[i < 0 ? 0 : (i + dir + list.length) % list.length].id;
-    };
-    const restart = () => {
-      clearInterval(timer);
-      if (!st.playing) return;
-      timer = setInterval(() => {
-        if (!mapBox.isConnected) { clearInterval(timer); return; }
-        if (st.hover || document.hidden) return;
-        advance(1); highlight();
-      }, SPOT_MS);
-    };
-    function drawSpot() {
-      const list = shownList();
-      const c = all.find((x) => x.id === current());
-      const i = c ? list.findIndex((x) => x.id === c.id) : -1;
+      const i = list.findIndex((c) => c.id === st.sel);
       const btn = (label, icon, fn) => el("button", { class: "spot-btn", type: "button", "aria-label": label, title: label, onclick: fn }, icon);
-      spot.replaceChildren(
-        el("div", { class: "spot-ctl" },
-          btn("Previous agreement", "‹", () => { advance(-1); restart(); highlight(); }),
-          btn(st.playing ? "Pause the tour" : "Play the tour", st.playing ? "❚❚" : "▶", () => { st.playing = !st.playing; restart(); drawSpot(); }),
-          btn("Next agreement", "›", () => { advance(1); restart(); highlight(); }),
-          el("span", { class: "spot-count muted small" }, i >= 0 ? `${i + 1} of ${list.length}` : `${list.length} shown`)),
-        c ? el("div", { class: "spot-body" }, partiesRow(c, true),
-              el("button", { class: "spot-title", type: "button", onclick: () => focusItem(c.id) }, c.title, el("span", { class: "muted" }, ` · ${fmtDate(c.date)} ↓`)))
-          : el("div", { class: "spot-body muted small" }, "No agreements match the search."));
-    }
-
-    // ---- most connected
-    const top = el("div", { class: "connected" });
-    const drawTop = () => {
-      const sel = exactKey();
-      top.replaceChildren(el("span", { class: "muted small" }, "Most connected:"),
-        ...[...counts].sort((a, b) => b[1] - a[1] || party(a[0]).name.localeCompare(party(b[0]).name)).slice(0, 10).map(([k, n]) => {
-          const p = party(k);
-          return el("button", { class: "chip-btn", type: "button", "aria-pressed": String(sel === k), onclick: () => selectCountry(sel === k ? null : k) }, `${p.flag} ${p.name} · ${n}`);
-        }));
+      tour.replaceChildren(
+        btn("Previous agreement", "‹", () => { step(-1); pause(); }),
+        btn(st.playing ? "Pause the tour" : "Play the tour", st.playing ? "❚❚" : "▶", () => { st.playing ? pause() : play(); }),
+        btn("Next agreement", "›", () => { step(1); pause(); }),
+        el("span", { class: "cx-count" }, list.length ? `${i + 1} of ${list.length}` : "0 shown"),
+        ...(st.playing ? [el("span", { class: "cx-progress", "aria-hidden": "true" }, el("i", { style: `animation-duration:${TOUR_MS}ms` }))] : []));
+    };
+    const drawDetail = () => {
+      const c = byCid.get(st.sel);
+      if (!c) { detail.replaceChildren(el("p", { class: "muted" }, "No agreements match the search.")); return; }
+      detail.replaceChildren(
+        el("div", { class: "cx-detail-top" },
+          el("span", { class: "cx-kind" }, c.kind === "bilateral" ? "Between two countries" : c.members.length ? `Group of ${countriesIn(c)} countries` : "Group"),
+          el("span", { class: "muted small" }, fmtDate(c.date))),
+        el("h2", { class: "cx-title" }, c.title),
+        partiesRow(c),
+        el("p", { class: "ink2 cx-text" }, c.text),
+        el("div", { class: "fact-meta" }, badge(c.level, c.sources.length), sourceChips(c.sources)),
+        ...(c.note ? [el("p", { class: "note" }, c.note)] : []));
     };
 
-    // ---- search and list
-    const search = el("input", { type: "search", class: "dir-search collab-search", placeholder: "Search a country or agreement, e.g. Singapore", "aria-label": "Search collaborations by country or agreement" });
-    const status = el("p", { class: "muted small collab-status", "aria-live": "polite" });
-    const listBox = el("div", { class: "collab-grid" });
-    const card = (c) => {
-      const node = el("article", { class: "collab-card", "data-id": c.id },
-        partiesRow(c),
-        el("h3", {}, c.title),
-        el("div", { class: "collab-meta muted small" }, fmtDate(c.date), c.kind === "group" ? (c.members.length ? ` · group of ${collabParties(c).filter((k) => !COLLAB_BODIES.has(k)).length} countries` : " · group, members not listed") : ""),
-        el("p", { class: "ink2" }, c.text),
-        el("div", { class: "fact-meta" }, badge(c.level, c.sources.length), sourceChips(c.sources)),
-        c.note ? el("p", { class: "note" }, c.note) : null);
-      node.addEventListener("pointerenter", () => { st.hover = c.id; highlight(); });
-      node.addEventListener("pointerleave", () => { st.hover = null; highlight(); });
-      return node;
+    // ---- list
+    const search = el("input", { type: "search", class: "dir-search cx-search", placeholder: "Search a country or topic", "aria-label": "Search agreements by country or topic" });
+    const status = el("p", { class: "muted small cx-status", "aria-live": "polite" });
+    const rows = el("div", { class: "cx-rows", role: "listbox", "aria-label": "Agreements" });
+    const flagStack = (c) => {
+      const ps = partiesOf(c);
+      const show = c.kind === "bilateral" ? ps : ps.slice(0, 1);
+      return el("span", { class: "cx-flags", "aria-hidden": "true" }, show.map((p) => el("span", {}, p.flag)), ps.length > show.length ? el("span", { class: "cx-more" }, `+${ps.length - show.length}`) : null);
+    };
+    const row = (c) => {
+      const ps = partiesOf(c);
+      const who = c.kind === "bilateral" ? `${ps[0].name} & ${ps[1].name}` : c.short;
+      const what = c.kind === "bilateral" ? c.short : c.members.length ? `Group of ${countriesIn(c)} countries` : `Group hosted by ${ps[0].name}`;
+      return el("button", { class: "cx-row", type: "button", role: "option", "data-id": c.id, "aria-selected": "false", onclick: () => select(c.id, true) },
+        flagStack(c),
+        el("span", { class: "cx-row-text" }, el("span", { class: "cx-who" }, who), el("span", { class: "cx-what" }, what)),
+        el("span", { class: "cx-date" }, monthYear(c.date)));
     };
     const drawList = () => {
       const list = shownList();
       const k = exactKey();
-      status.textContent = !st.q.trim() ? `All ${all.length} agreements, newest first.`
-        : `${list.length} of ${all.length} agreements ${k ? `involve ${party(k).name}` : `match “${st.q.trim()}”`}.`;
-      listBox.replaceChildren(...(list.length ? list.map(card) : [el("p", { class: "muted" }, "No agreements match. Try a country name such as Singapore or Estonia.")]));
+      status.textContent = !st.q.trim() ? `${all.length} agreements, newest first` : k ? `${list.length} involving ${party(k).name}` : `${list.length} matching “${st.q.trim()}”`;
+      let year = null;
+      const out = [];
+      for (const c of list) {
+        const y = c.date.slice(0, 4);
+        if (y !== year) { year = y; out.push(el("div", { class: "cx-year", role: "presentation" }, y)); }
+        out.push(row(c));
+      }
+      rows.replaceChildren(...(out.length ? out : [el("p", { class: "muted small cx-empty" }, "No agreements match. Try a country such as Singapore or Estonia.")]));
     };
-    const refresh = () => {
-      if (!shownList().some((c) => c.id === st.spot)) { st.spot = null; advance(1); }
-      drawTop(); drawList(); highlight(); restart();
+    const markRow = (scroll) => {
+      rows.querySelectorAll(".cx-row").forEach((n) => { const on = n.dataset.id === st.sel; n.classList.toggle("is-on", on); n.setAttribute("aria-selected", String(on)); });
+      const r = rows.querySelector(`.cx-row[data-id="${st.sel}"]`);
+      // Keep the active row in view inside the list without moving the page.
+      if (scroll && r && rows.scrollHeight > rows.clientHeight + 4 && (r.offsetTop < rows.scrollTop + 32 || r.offsetTop + r.offsetHeight > rows.scrollTop + rows.clientHeight))
+        rows.scrollTo({ top: r.offsetTop - rows.clientHeight / 3, behavior: "smooth" });
     };
-    search.addEventListener("input", () => { st.q = search.value; refresh(); });
-    function selectCountry(k) { st.q = k ? party(k).name : ""; search.value = st.q; refresh(); }
-    function focusItem(id) {
-      if (!listBox.querySelector(`[data-id="${id}"]`)) selectCountry(null);
-      const node = listBox.querySelector(`[data-id="${id}"]`);
-      if (node) { node.scrollIntoView({ behavior: "smooth", block: "center" }); node.classList.add("is-flash"); setTimeout(() => node.classList.remove("is-flash"), 1400); }
+    rows.addEventListener("keydown", (e) => {
+      if (e.key !== "ArrowDown" && e.key !== "ArrowUp") return;
+      e.preventDefault();
+      step(e.key === "ArrowDown" ? 1 : -1); pause();
+      const r = rows.querySelector(`.cx-row[data-id="${st.sel}"]`);
+      if (r) r.focus();
+    });
+
+    // ---- state changes
+    const TOUR_MS = 3000;
+    let timer = null;
+    const update = (scroll = true) => { paint(); drawTour(); drawDetail(); markRow(scroll); };
+    function select(id, byUser) {
+      st.sel = id;
+      if (byUser) {
+        st.playing = false; clearInterval(timer);
+        if (matchMedia("(max-width: 900px)").matches && stage.getBoundingClientRect().top < 0) stage.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+      update();
+      fit(byCid.get(id));
     }
-    if (!world) highlight = () => { listBox.querySelectorAll(".collab-card").forEach((n) => n.classList.toggle("is-on", n.dataset.id === current())); drawSpot(); };
-    refresh();
+    function step(dir) {
+      const list = shownList();
+      if (!list.length) return;
+      const i = list.findIndex((c) => c.id === st.sel);
+      select(list[i < 0 ? 0 : (i + dir + list.length) % list.length].id);
+    }
+    function play() {
+      st.playing = true;
+      clearInterval(timer);
+      timer = setInterval(() => {
+        if (!rows.isConnected) { clearInterval(timer); return; }
+        if (st.hold || document.hidden) return;
+        step(1);
+      }, TOUR_MS);
+      drawTour();
+    }
+    function pause() { if (!st.playing) return; st.playing = false; clearInterval(timer); drawTour(); }
+    function selectCountry(k) { st.q = k ? party(k).name : ""; search.value = st.q; pause(); refresh(true); }
+    function refresh(reselect) {
+      const list = shownList();
+      drawList();
+      if (reselect || !list.some((c) => c.id === st.sel)) { st.sel = list.length ? list[0].id : null; update(); fit(byCid.get(st.sel)); }
+      else update();
+      if (st.playing) play();
+    }
+    search.addEventListener("input", () => { st.q = search.value; refresh(true); });
+
+    const stage = el("div", { class: "cx-main" }, el("div", { class: "cx-mapwrap" }, mapCard, tour), detail);
+    // Hovering the map or the details pauses the tour so they can be read.
+    stage.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") st.hold = true; });
+    stage.addEventListener("pointerleave", () => { st.hold = false; });
+
+    drawList();
+    update(false);
+    if (zoom) zoom.flyTo({ k: 1, x: 0, y: 0 }, 0);
+    play();
 
     const nBil = all.filter((c) => c.kind === "bilateral").length;
-    const nGrp = all.length - nBil;
     view.replaceChildren(
       el("h1", {}, "AI collaborations between countries"),
-      el("p", { class: "summary ink2" }, `${nBil} agreements between two countries and ${nGrp} group arrangements, each involving at least one nation on this site. Every line on the map is a sourced agreement; the map steps through them one at a time. Hover a line for details, or click a country to see only its collaborations.`),
-      el("section", { class: "section" }, el("div", { class: "card" }, mapBox, top)),
-      el("section", { class: "section" },
-        sectionHead("The agreements", "Each card names the countries involved. Hover one to light it up on the map."),
-        search, status, listBox));
+      el("p", { class: "summary ink2" }, `${all.length} AI agreements between governments (${nBil} between two countries, ${all.length - nBil} in groups), each involving at least one nation on this site. The map steps through them every few seconds; pick one from the list to stop and read it.`),
+      el("section", { class: "section cx" },
+        el("div", { class: "cx-side card" }, el("div", { class: "cx-side-in" }, search, status, rows)),
+        stage),
+      el("p", { class: "muted small cx-foot" },
+        el("span", {}, el("i", { class: "key-dot" }), "Nation on this site"),
+        el("span", {}, el("i", { class: "key-dot is-outside" }), "Partner country outside this site"),
+        el("span", {}, el("i", { class: "key-line" }), "Two countries"),
+        el("span", {}, el("i", { class: "key-line group" }), "Group: lines run to the host")));
   }
 
   function renderMethod() {

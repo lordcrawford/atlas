@@ -3,16 +3,16 @@
 // Entries reusing a nation-page claim keep its text, badge and sources; new entries were audited the same way (see METHODOLOGY.md).
 
 window.ATLAS.places = {
-  us: { name: "United States", flag: "🇺🇸", geo: [-77.04, 38.9] },
-  fr: { name: "France", flag: "🇫🇷", geo: [2.35, 48.86] },
-  it: { name: "Italy", flag: "🇮🇹", geo: [12.5, 41.9] },
-  gb: { name: "United Kingdom", flag: "🇬🇧", geo: [-0.13, 51.51] },
-  au: { name: "Australia", flag: "🇦🇺", geo: [149.13, -35.28] },
-  cn: { name: "China", flag: "🇨🇳", geo: [116.4, 39.9] },
-  ua: { name: "Ukraine", flag: "🇺🇦", geo: [30.52, 50.45] },
-  tw: { name: "Taiwan", flag: "🇹🇼", geo: [121.56, 25.03] },
-  my: { name: "Malaysia", flag: "🇲🇾", geo: [101.69, 3.14] },
-  pl: { name: "Poland", flag: "🇵🇱", geo: [21.01, 52.23] },
+  us: { name: "United States", flag: "🇺🇸", geo: [-77.04, 38.9], isoN: "840" },
+  fr: { name: "France", flag: "🇫🇷", geo: [2.35, 48.86], isoN: "250" },
+  it: { name: "Italy", flag: "🇮🇹", geo: [12.5, 41.9], isoN: "380" },
+  gb: { name: "United Kingdom", flag: "🇬🇧", geo: [-0.13, 51.51], isoN: "826" },
+  au: { name: "Australia", flag: "🇦🇺", geo: [149.13, -35.28], isoN: "036" },
+  cn: { name: "China", flag: "🇨🇳", geo: [116.4, 39.9], isoN: "156" },
+  ua: { name: "Ukraine", flag: "🇺🇦", geo: [30.52, 50.45], isoN: "804" },
+  tw: { name: "Taiwan", flag: "🇹🇼", geo: [121.56, 25.03], isoN: "158" },
+  my: { name: "Malaysia", flag: "🇲🇾", geo: [101.69, 3.14], isoN: "458" },
+  pl: { name: "Poland", flag: "🇵🇱", geo: [21.01, 52.23], isoN: "616" },
   coe: { name: "Council of Europe (Strasbourg)", flag: "🇪🇺", geo: [7.75, 48.58] },
   waico: { name: "China (WAICO, Shanghai)", flag: "🇨🇳", geo: [121.47, 31.23] },
 };
@@ -21,6 +21,7 @@ window.ATLAS.collaborations = [
   {
     id: "ae-us", kind: "bilateral", date: "2025-05-15",
     title: "US–UAE AI Acceleration Partnership",
+    short: "AI Acceleration Partnership",
     a: "ae", b: "us",
     text: "During President Trump's May 2025 visit, the US and the UAE agreed the 'US-UAE AI Acceleration Partnership', a government-to-government framework for AI, and unveiled a 5GW AI campus in Abu Dhabi built by G42 with US companies.",
     level: "verified",
@@ -33,6 +34,7 @@ window.ATLAS.collaborations = [
   {
     id: "ae-fr", kind: "bilateral", date: "2025-02-06",
     title: "UAE–France AI framework and 1 GW data centre",
+    short: "AI framework and 1 GW data centre",
     a: "ae", b: "fr",
     text: "France and the UAE signed an AI cooperation framework that includes a 1-gigawatt AI data centre in France, the core of an AI campus worth €30–50 billion, alongside cooperation on chips and talent.",
     level: "corroborated",
@@ -44,6 +46,7 @@ window.ATLAS.collaborations = [
   {
     id: "ae-it", kind: "bilateral", date: "2025-02",
     title: "UAE pledges $40 billion in Italy, including AI and data centres",
+    short: "$40 billion pledge, including AI and data centres",
     a: "ae", b: "it",
     text: "On a state visit to Rome, the UAE committed to invest $40 billion in Italy. More than 40 agreements covered areas including AI and data centres, among them a letter of intent with Eni, MGX and G42 for data centres of up to 1 GW.",
     level: "verified",
@@ -56,6 +59,7 @@ window.ATLAS.collaborations = [
   {
     id: "lb-ae", kind: "bilateral", date: "2026-09",
     title: "One Million Lebanese AI Experts",
+    short: "One Million Lebanese AI Experts",
     a: "lb", b: "ae",
     text: "In September 2026 the UAE and Lebanon launched the 'One Million Lebanese AI Experts' initiative on the sidelines of the UN General Assembly, to train one million people in generative AI and prompt engineering.",
     level: "corroborated",
@@ -67,6 +71,7 @@ window.ATLAS.collaborations = [
   {
     id: "sg-rw", kind: "bilateral", date: "2024-09-22",
     title: "AI Playbook for Small States",
+    short: "AI Playbook for Small States",
     a: "sg", b: "rw",
     text: "Singapore and Rwanda developed the AI Playbook for Small States, an anthology of how small countries are implementing AI, for the Digital Forum of Small States. It was launched at the UN Summit of the Future in September 2024.",
     level: "single",
@@ -78,6 +83,7 @@ window.ATLAS.collaborations = [
   {
     id: "sg-gb", kind: "bilateral", date: "2024-11-06",
     title: "Singapore–UK AI safety agreement",
+    short: "AI safety agreement",
     a: "sg", b: "gb",
     text: "On 6 November 2024 Singapore and the United Kingdom signed a Memorandum of Cooperation on the safety of AI, to make AI development and use safer and more reliable.",
     level: "single",
@@ -88,6 +94,7 @@ window.ATLAS.collaborations = [
   {
     id: "sg-au", kind: "bilateral", date: "2026-08",
     title: "Australia–Singapore AI cooperation",
+    short: "AI cooperation",
     a: "sg", b: "au",
     text: "Australia and Singapore held their first Cyber and Digital Senior Officials Dialogue, building on the Australia-Singapore Memorandum of Understanding on Cooperation on Artificial Intelligence.",
     level: "single",
@@ -99,6 +106,7 @@ window.ATLAS.collaborations = [
   {
     id: "sg-fi", kind: "bilateral", date: "2026-10-13",
     title: "Singapore–Finland joint statement on AI",
+    short: "Joint statement on AI",
     a: "sg", b: "fi",
     text: "On 13 October 2026 Singapore and Finland issued a joint statement committing to closer cooperation on AI, quantum technologies and digital infrastructure, including AI safety and international AI governance.",
     level: "corroborated",
@@ -110,6 +118,7 @@ window.ATLAS.collaborations = [
   {
     id: "am-us", kind: "bilateral", date: "2025-08-08",
     title: "US–Armenia memorandum on AI and semiconductors",
+    short: "Memorandum on AI and semiconductors",
     a: "am", b: "us",
     text: "On 8 August 2025 in Washington the US and Armenian governments signed a memorandum on AI and semiconductors. Armenia's government credits it with enabling US export approvals for the NVIDIA chips in Firebird's AI factory.",
     level: "verified",
@@ -122,6 +131,7 @@ window.ATLAS.collaborations = [
   {
     id: "ee-ua", kind: "bilateral", date: "2025-10-09",
     title: "Estonia–Ukraine joint AI and digital projects",
+    short: "Joint AI and digital projects",
     a: "ee", b: "ua",
     text: "At the Tallinn Digital Summit on 9 October 2025, Estonia and Ukraine signed a memorandum on joint digitalisation and cybersecurity projects, including a joint AI accelerator and an AI sandbox for government.",
     level: "verified",
@@ -134,6 +144,7 @@ window.ATLAS.collaborations = [
   {
     id: "rs-ae", kind: "bilateral", date: "2024-02-13",
     title: "Serbia–UAE memorandum on AI",
+    short: "Memorandum on AI",
     a: "rs", b: "ae",
     text: "On 13 February 2024, at the World Governments Summit in Dubai, Serbia and the UAE signed a memorandum of understanding on developing and applying AI.",
     level: "verified",
@@ -146,6 +157,7 @@ window.ATLAS.collaborations = [
   {
     id: "uy-us", kind: "bilateral", date: "2024-04-11",
     title: "US–Uruguay memorandum on emerging technologies",
+    short: "Memorandum on emerging technologies",
     a: "uy", b: "us",
     text: "On 11 April 2024 the United States and Uruguay signed a memorandum of understanding on cooperation in critical and emerging technologies, including machine learning and AI.",
     level: "single",
@@ -157,6 +169,7 @@ window.ATLAS.collaborations = [
   {
     id: "la-cn-health", kind: "bilateral", date: "2026-02-13",
     title: "Laos–China National Health AI Platform study",
+    short: "National Health AI Platform study",
     a: "la", b: "cn",
     text: "On 13 February 2026 Laos's technology ministry signed an MoU with three Chinese partner companies for a feasibility study on a National Health AI Platform, presented as Laos–China cooperation under the Belt and Road framework.",
     level: "corroborated",
@@ -168,6 +181,7 @@ window.ATLAS.collaborations = [
   {
     id: "la-cn-centre", kind: "bilateral", date: "2025-02-23",
     title: "China–Laos AI Innovation Cooperation Center",
+    short: "AI Innovation Cooperation Center",
     a: "la", b: "cn",
     text: "On 23 February 2025 China's Guangxi region and Laos agreed to jointly build a China–Laos AI Innovation Cooperation Center in Vientiane.",
     level: "corroborated",
@@ -179,6 +193,7 @@ window.ATLAS.collaborations = [
   {
     id: "py-tw", kind: "bilateral", date: "2026-05",
     title: "Paraguay–Taiwan sovereign AI infrastructure",
+    short: "Sovereign AI infrastructure",
     a: "py", b: "tw",
     text: "In May 2026 Paraguay and Taiwan signed a memorandum to develop sovereign AI infrastructure. The first stage is a 10 MW data centre, estimated by the ICT ministry at about US$300 million.",
     level: "corroborated",
@@ -191,6 +206,7 @@ window.ATLAS.collaborations = [
   {
     id: "ht-my", kind: "bilateral", date: "2026-07-10",
     title: "Haiti–Malaysia cooperation agreement",
+    short: "Cooperation agreement signed at WSIS",
     a: "ht", b: "my",
     text: "At the WSIS Forum in Geneva (6–10 July 2026), CONATEL presented Haiti's digital strategy with AI as a lever for development and signed a cooperation agreement with Malaysia.",
     level: "single",
@@ -201,6 +217,7 @@ window.ATLAS.collaborations = [
   {
     id: "mk-gr", kind: "bilateral", date: "2025-10-14",
     title: "North Macedonia's Vezilka joins Greece's Pharos AI Factory",
+    short: "Vezilka joins the Pharos AI Factory",
     a: "mk", b: "gr",
     text: "On 14 October 2025 Digital Transformation Minister Stefan Andonovski presented Vezilka, a National Centre for AI worth about €6 million, funded mainly by the EU through Horizon Europe and EuroHPC. It is an affiliated unit of the Pharos AI Factory in Greece, giving local users access to European supercomputers.",
     level: "corroborated",
@@ -212,6 +229,7 @@ window.ATLAS.collaborations = [
   {
     id: "lumi", kind: "group", date: "2025-12-02",
     title: "LUMI AI Factory",
+    short: "LUMI AI Factory",
     hub: "fi", members: ["cz", "dk", "ee", "no", "pl"],
     text: "The LUMI AI Factory, the largest of the EU's AI Factories, opened its main hub on 2 December 2025 at Aalto University's Otaniemi campus. CSC coordinates it on behalf of Finland, Czechia, Denmark, Estonia, Norway and Poland.",
     level: "verified",
@@ -225,6 +243,7 @@ window.ATLAS.collaborations = [
   {
     id: "daedalus", kind: "group", date: "2022-11-28",
     title: "DAEDALUS supercomputer consortium",
+    short: "DAEDALUS supercomputer",
     hub: "gr", members: ["cy", "me", "mk"],
     text: "Greece hosts DAEDALUS, a EuroHPC supercomputer co-funded by the EU and Greece. Cyprus, Montenegro and North Macedonia are members of its consortium and share access.",
     level: "corroborated",
@@ -236,6 +255,7 @@ window.ATLAS.collaborations = [
   {
     id: "coe", kind: "group", date: "2024-09-05",
     title: "Council of Europe Framework Convention on AI",
+    short: "Council of Europe AI convention",
     hub: "coe", members: ["ad", "ge", "is", "no", "md", "sm", "ch", "uy"],
     text: "The first binding international treaty on AI opened for signature on 5 September 2024. Its first signatories included Andorra, Georgia, Iceland, Norway, Moldova and San Marino. Switzerland decided in February 2025 to ratify it, and in September 2025 Uruguay became the first Latin American country to sign.",
     level: "single",
@@ -251,6 +271,7 @@ window.ATLAS.collaborations = [
   {
     id: "pax-silica", kind: "group", date: "2026-06",
     title: "Pax Silica (US-led technology partnership)",
+    short: "Pax Silica",
     hub: "us", members: ["py", "cr"],
     text: "Paraguay and Costa Rica joined Pax Silica, a US-led initiative on secure supply chains for semiconductors and AI, at a June 2026 summit in Washington.",
     level: "corroborated",
@@ -264,6 +285,7 @@ window.ATLAS.collaborations = [
   {
     id: "waico", kind: "group", date: "2026-07-16",
     title: "World Organization for Cooperation in AI (WAICO)",
+    short: "WAICO",
     hub: "waico", members: ["ni", "kg"],
     text: "Nicaragua signed the agreement establishing the China-based World Organization for Cooperation in AI in Shanghai on 16 July 2026 and ratified it in September; Kyrgyzstan's prime minister said it was one of the founding states.",
     level: "single",
@@ -276,6 +298,7 @@ window.ATLAS.collaborations = [
   {
     id: "caricom", kind: "group", date: "2026-09-27",
     title: "CARICOM endorses the Caribbean AI Policy Roadmap",
+    short: "Caribbean AI Policy Roadmap",
     hub: "gy", members: ["jm", "tt", "bb", "bs", "lc", "ag", "gd", "kn", "sr", "bz", "ht"],
     text: "Nevis Premier and opposition leader Mark Brantley urged a coordinated Caribbean response to AI, crediting CARICOM's July 2026 endorsement of the UNESCO Caribbean AI Policy Roadmap. He noted that Nevis's earlier plan to teach coding in every school had been overtaken by AI tools.",
     level: "single",
@@ -286,6 +309,7 @@ window.ATLAS.collaborations = [
   {
     id: "sica", kind: "group", date: "2026-07",
     title: "SICA regional digital strategy",
+    short: "SICA digital strategy",
     hub: "sv", members: ["bz", "cr", "hn", "ni", "pa", "do"],
     text: "Belize took the July–December 2026 presidency of the group implementing the Central American Integration System's Regional Digital Strategy, with cybersecurity and AI among its focus areas.",
     level: "single",
@@ -296,6 +320,7 @@ window.ATLAS.collaborations = [
   {
     id: "africa-declaration", kind: "group", date: "2025-04-04",
     title: "Africa Declaration on AI (Kigali summit)",
+    short: "Africa Declaration on AI",
     hub: "rw", members: [],
     text: "Kigali hosted the Global AI Summit on Africa on 3–4 April 2025. Delegates signed the Africa Declaration on AI, which proposes an Africa AI Council and a $60 billion Africa AI Fund drawing on public, private and philanthropic capital.",
     level: "verified",
