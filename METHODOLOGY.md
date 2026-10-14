@@ -56,7 +56,13 @@ During this batch the overview's EU AI Act highlight was corrected. It had said 
 
 ## Collaborations tab
 
-Each entry on the Collaborations tab reuses a claim already on a nation's page, with the same text, badge and sources, so it carries the same verification. The one combined entry (the Council of Europe AI convention) cites the Council of Europe's own signature list, read in a browser, plus Switzerland's sources. Partner names and types (company, shared supercomputing, development partner, government, treaty or regional bloc) are editorial labels.
+The Collaborations tab lists only agreements between governments: two-country deals (memorandums, joint centres, compute or research agreements) and groups of countries (shared supercomputers, treaties, regional bodies). Deals with companies and projects run by development agencies are not on this tab; they stay on the nation pages.
+
+Entries that match a claim already on a nation's page keep its text, badge and sources. New entries went through the same checks: fetched and token-checked, with every flagged mismatch reviewed by hand. Pages that block automated requests (IMDA, the Australian industry department, the Danish Data Protection Authority and the Council of Europe) were read in a browser and are marked so in the entry's note. Group entries rest on the strongest source for the group, and a note says when a single country's membership rests on one source.
+
+Candidates dropped because no government or news source confirmed a country-to-country AI agreement: Qatar–United States, India–Mauritius, Bhutan–India, a Malta bilateral, and the Shanghai Cooperation Organisation.
+
+On the map, a solid line joins the two countries in a bilateral deal. A dashed line runs from each group member to the group's host or coordinator, which is a placement choice, not a claim about who leads. Partner countries that are not on the site (for example the United States, France and China) appear as hollow dots.
 
 ## Link check
 
