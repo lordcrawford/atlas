@@ -30,6 +30,8 @@
   --land: #dcdad3;
   --land-stroke: #fcfcfb;
   --na: #a9a7a0;
+  --grp-europe: #8a63d2; --grp-mideast: #d99a1c; --grp-africa: #6f9e22; --grp-asia: #14a38b;
+  --grp-americas: #d9589c; --grp-outside: #7d8590; --grp-body: #52514e;
 }
 @media (prefers-color-scheme: dark) {
   :root:where(:not([data-theme="light"])) {
@@ -601,3 +603,29 @@ html.is-locked body > :not(.gate):not(script) { display: none !important; }
 .sv-count { font-size: 12px; font-weight: 600; color: var(--muted); }
 .ia-note-btn[aria-pressed="true"] { color: var(--link); border-color: var(--link); }
 .ia-note-btn[aria-expanded="true"] { background: var(--surface-2); color: var(--ink); }
+
+/* ---------- collaborations chord diagram ---------- */
+.ch-wrap { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: var(--s4); align-items: start; }
+.ch-chart svg.chord { width: 100%; height: auto; display: block; max-width: 760px; margin: 0 auto; }
+.ch-ribbon { fill-opacity: 0.32; stroke: none; cursor: pointer; transition: fill-opacity .15s; }
+.ch-ribbon.bilateral { fill: var(--series-1); }
+.ch-ribbon.group { fill: var(--series-2); }
+.ch-ribbon:hover, .ch-ribbon:focus-visible { fill-opacity: 0.9; outline: none; }
+.chord.has-focus .ch-ribbon { fill-opacity: 0.05; }
+.chord.has-focus .ch-ribbon.is-on { fill-opacity: 0.8; }
+.ch-node { cursor: pointer; }
+.ch-node:focus, .ch-node:focus-visible, .ch-ribbon:focus { outline: none; }
+.ch-node:focus-visible path { stroke: var(--ink); stroke-width: 1.5; }
+.chord.has-focus .ch-node:not(.is-on) { opacity: 0.3; }
+.ch-label { font-size: 10px; fill: var(--ink-2); }
+.ch-label.is-outside { font-style: italic; fill: var(--muted); }
+.ch-node.is-on .ch-label, .ch-node:hover .ch-label { fill: var(--ink); font-weight: 650; }
+.ch-side { position: sticky; top: 72px; display: flex; flex-direction: column; gap: var(--s2); max-height: calc(100vh - 96px); overflow: auto; }
+.ch-side-top { display: flex; justify-content: space-between; align-items: baseline; gap: var(--s2); }
+.ch-side-h { font-size: 17px; }
+.ch-top { display: flex; flex-wrap: wrap; gap: var(--s2); }
+.ch-pick { font: inherit; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+@media (max-width: 860px) {
+  .ch-wrap { grid-template-columns: 1fr; }
+  .ch-side { position: static; max-height: none; }
+}

@@ -984,7 +984,151 @@
           el("a", { class: "np-more", href: "#collab" }, "All agreements on the Collaborations map →"))))];
   }
 
+  // ---- view switch between the map and the chord diagram
+  const collabSwitch = (active) => el("div", { class: "seg", role: "group", "aria-label": "Collaborations view" },
+    el("a", { class: "seg-btn", href: "#collab", "aria-current": active === "map" ? "page" : null }, "Map"),
+    el("a", { class: "seg-btn", href: "#collab/chord", "aria-current": active === "chord" ? "page" : null }, "Chord diagram"));
+
+  // ---- chord diagram (#collab/chord): every country or body with an agreement sits on a circle, grouped by region;
+  // each agreement is a ribbon between the two parties (a group agreement links each member to its host, as on the map).
+  const CHORD_GROUPS = [
+    ["Europe", "var(--grp-europe)"], ["Middle East", "var(--grp-mideast)"], ["Africa", "var(--grp-africa)"],
+    ["Asia-Pacific", "var(--grp-asia)"], ["Americas", "var(--grp-americas)"],
+    ["Outside partners", "var(--grp-outside)"], ["International bodies", "var(--grp-body)"],
+  ];
+  function renderChord() {
+    const all = [...(D.collaborations || [])].sort(byDateDesc);
+    // Links: one per pair of parties per agreement.
+    const links = all.flatMap((c) => (c.kind === "bilateral" ? [[c.a, c.b]] : c.members.map((m) => [c.hub, m]))
+      .filter(([a, b]) => party(a) && party(b)).map(([a, b]) => ({ c, a, b })));
+    const groupOf = (k) => { const p = party(k); return COLLAB_BODIES.has(k) ? "International bodies" : p.nation ? p.nation.group : "Outside partners"; };
+    const deg = new Map();
+    for (const l of links) for (const k of [l.a, l.b]) deg.set(k, (deg.get(k) || 0) + 1);
+    const order = CHORD_GROUPS.map(([g]) => g);
+    const nodes = [...deg.keys()].map((k) => ({ k, p: party(k), g: groupOf(k), deg: deg.get(k) }))
+      .sort((x, y) => order.indexOf(x.g) - order.indexOf(y.g) || y.deg - x.deg || x.p.name.localeCompare(y.p.name));
+
+    // Angles: each node gets one base unit plus one per link, with gaps between nodes and wider gaps between groups.
+    const TAU = Math.PI * 2, NODE_GAP = 0.004, GROUP_GAP = 0.05;
+    const groupsUsed = new Set(nodes.map((n) => n.g)).size;
+    const units = nodes.reduce((t, n) => t + 1 + n.deg, 0);
+    const unit = (TAU - nodes.length * NODE_GAP - groupsUsed * GROUP_GAP) / units;
+    let a = GROUP_GAP / 2, prevG = null;
+    for (const n of nodes) {
+      if (prevG && n.g !== prevG) a += GROUP_GAP;
+      prevG = n.g;
+      n.a0 = a; n.a1 = a + (1 + n.deg) * unit; n.mid = (n.a0 + n.a1) / 2;
+      a = n.a1 + NODE_GAP;
+    }
+    const byKey = new Map(nodes.map((n) => [n.k, n]));
+    // Each link end gets a slot on its node, ordered by where the other end sits so ribbons do not cross at the node.
+    const ends = new Map(nodes.map((n) => [n.k, []]));
+    links.forEach((l, i) => { ends.get(l.a).push({ i, other: l.b }); ends.get(l.b).push({ i, other: l.a }); });
+    const slot = new Map();
+    for (const n of nodes) {
+      const rel = (k) => (byKey.get(k).mid - n.mid + TAU) % TAU;
+      const list = ends.get(n.k).sort((x, y) => rel(y.other) - rel(x.other));
+      const start = n.a0 + unit / 2;
+      list.forEach((e, j) => slot.set(`${e.i}:${n.k}`, [start + j * unit, start + (j + 1) * unit]));
+    }
+
+    const R = 300, W = 940;
+    const pt = (ang, r) => `${(r * Math.sin(ang)).toFixed(1)},${(-r * Math.cos(ang)).toFixed(1)}`;
+    const svg = s("svg", { viewBox: `${-W / 2} ${-W / 2} ${W} ${W}`, class: "chord", role: "img",
+      "aria-label": `Chord diagram of ${all.length} AI agreements between ${nodes.length} countries and international bodies, grouped by region.` });
+    const ribbons = s("g", { class: "ch-ribbons" }), arcs = s("g", {}), labels = s("g", {});
+    svg.append(ribbons, arcs, labels);
+
+    const ribbonEls = links.map((l, i) => {
+      const [a0, a1] = slot.get(`${i}:${l.a}`), [b0, b1] = slot.get(`${i}:${l.b}`);
+      const d = `M${pt(a0, R)} A${R},${R} 0 0 1 ${pt(a1, R)} Q0,0 ${pt(b0, R)} A${R},${R} 0 0 1 ${pt(b1, R)} Q0,0 ${pt(a0, R)} Z`;
+      const path = s("path", { d, class: `ch-ribbon ${l.c.kind}`, tabindex: "0", role: "link", "aria-label": `${l.c.title}: ${party(l.a).name} and ${party(l.b).name}` });
+      path.addEventListener("pointermove", (e) => showTip(e, [el("div", { class: "tv" }, l.c.short || l.c.title),
+        el("div", { class: "tl" }, `${party(l.a).name} ⟷ ${party(l.b).name}`),
+        el("div", { class: "tl small" }, `${monthYear(l.c.date)} · ${l.c.kind === "bilateral" ? "two countries" : "group agreement"} · click to open`)]));
+      path.addEventListener("pointerleave", hideTip);
+      const open = () => { location.hash = `collab/${l.c.id}`; };
+      path.addEventListener("click", open);
+      path.addEventListener("keydown", (e) => { if (e.key === "Enter") open(); });
+      ribbons.append(path);
+      return path;
+    });
+
+    const color = (g) => CHORD_GROUPS.find(([name]) => name === g)[1];
+    const nodeEls = new Map();
+    for (const n of nodes) {
+      const r0 = R + 3, r1 = R + 15, big = n.a1 - n.a0 > Math.PI ? 1 : 0;
+      const d = `M${pt(n.a0, r1)} A${r1},${r1} 0 ${big} 1 ${pt(n.a1, r1)} L${pt(n.a1, r0)} A${r0},${r0} 0 ${big} 0 ${pt(n.a0, r0)} Z`;
+      const deg = (n.mid * 180) / Math.PI, flip = n.mid > Math.PI;
+      const g = s("g", { class: "ch-node", tabindex: "0", role: "button", "aria-label": `${n.p.name}: ${n.deg} link${n.deg === 1 ? "" : "s"}` },
+        s("path", { d, fill: color(n.g) }),
+        s("text", { transform: `rotate(${deg - 90}) translate(${R + 21},0)${flip ? " rotate(180)" : ""}`, "text-anchor": flip ? "end" : "start", dy: "0.35em", class: "ch-label" + (n.p.nation ? "" : " is-outside") },
+          `${n.p.flag} ${n.p.nation ? shortName(n.p.nation) : n.p.name}`));
+      g.addEventListener("pointermove", (e) => { if (!locked) focus(n.k); showTip(e, [el("div", { class: "tv" }, `${n.p.flag} ${n.p.name}`), el("div", { class: "tl" }, `${agreementsOf(n.k).length} agreement${agreementsOf(n.k).length === 1 ? "" : "s"} · ${n.g}`), el("div", { class: "tl small" }, "Click to list them")]); });
+      g.addEventListener("pointerleave", () => { hideTip(); if (!locked) focus(null); });
+      g.addEventListener("click", () => select(n.k));
+      g.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); select(n.k); } });
+      arcs.append(g);
+      nodeEls.set(n.k, g);
+    }
+
+    // Focus: light up one party's ribbons and partners. A click locks it and lists its agreements beside the diagram.
+    let locked = null;
+    const agreementsOf = (k) => all.filter((c) => links.some((l) => l.c === c && (l.a === k || l.b === k)));
+    function focus(k) {
+      svg.classList.toggle("has-focus", !!k);
+      const partners = new Set(k ? [k] : []);
+      links.forEach((l, i) => {
+        const on = !!k && (l.a === k || l.b === k);
+        ribbonEls[i].classList.toggle("is-on", on);
+        if (on) { partners.add(l.a); partners.add(l.b); }
+      });
+      for (const [key, g] of nodeEls) g.classList.toggle("is-on", partners.has(key));
+    }
+    const side = el("div", { class: "card ch-side", "aria-live": "polite" });
+    function drawSide() {
+      if (!locked) {
+        const top = [...nodes].sort((x, y) => agreementsOf(y.k).length - agreementsOf(x.k).length).slice(0, 8);
+        side.replaceChildren(
+          el("h2", { class: "ch-side-h" }, "Most connected"),
+          el("p", { class: "muted small" }, "Click a country on the circle, or one below, to see its agreements. Click a ribbon to open an agreement."),
+          el("div", { class: "ch-top" }, top.map((n) => el("button", { class: "cpill ch-pick", type: "button", onclick: () => select(n.k) },
+            el("span", { class: "cpill-flag", "aria-hidden": "true" }, n.p.flag), n.p.name, el("span", { class: "sv-count" }, String(agreementsOf(n.k).length))))));
+        return;
+      }
+      const p = party(locked), list = agreementsOf(locked);
+      side.replaceChildren(
+        el("div", { class: "ch-side-top" },
+          el("h2", { class: "ch-side-h" }, `${p.flag} ${p.name}`),
+          el("button", { class: "linklike small", type: "button", onclick: () => select(null) }, "Clear")),
+        el("p", { class: "muted small" }, `${list.length} agreement${list.length === 1 ? "" : "s"}`, p.nation ? [" · ", el("a", { href: `#${p.key}` }, "Open nation page")] : null),
+        el("div", { class: "np-rows" }, list.map((c) => el("a", { class: "cx-row", href: `#collab/${c.id}` }, ...collabRowParts(c, p.nation ? p.key : undefined)))));
+    }
+    function select(k) {
+      locked = k && locked !== k ? k : null;
+      focus(locked);
+      drawSide();
+    }
+    svg.addEventListener("click", (e) => { if (e.target === svg) select(null); });
+    drawSide();
+
+    const nBil = all.filter((c) => c.kind === "bilateral").length;
+    view.replaceChildren(
+      el("h1", {}, "AI collaborations between countries"),
+      el("p", { class: "summary ink2" }, `${all.length} AI agreements between governments (${nBil} between two countries, ${all.length - nBil} in groups). Each ribbon links two parties; a group agreement links each member to its host, so busy hubs such as the Global Partnership on AI stand out.`),
+      collabSwitch("chord"),
+      el("section", { class: "section ch-wrap" },
+        el("div", { class: "card ch-card" }, el("div", { class: "chart ch-chart" }, svg),
+          el("div", { class: "legend" },
+            CHORD_GROUPS.filter(([g]) => nodes.some((n) => n.g === g)).map(([g, col]) => el("span", {}, el("i", { style: `background:${col}` }), g)),
+            el("span", {}, el("i", { class: "line", style: "background:var(--series-1)" }), "Two countries"),
+            el("span", {}, el("i", { class: "line", style: "background:var(--series-2)" }), "Group agreement"))),
+        side),
+      el("p", { class: "muted small" }, "Arc length grows with a party's number of links. The Africa Declaration on AI has no member list here, so it does not appear."));
+  }
+
   function renderCollab(initialId) {
+    if (initialId === "chord") return renderChord();
     const all = [...(D.collaborations || [])].sort(byDateDesc);
     const byCid = new Map(all.map((c) => [c.id, c]));
     // A link to one agreement (#collab/<id>) opens it with the tour paused.
@@ -1233,6 +1377,7 @@
     view.replaceChildren(
       el("h1", {}, "AI collaborations between countries"),
       el("p", { class: "summary ink2" }, `${all.length} AI agreements between governments (${nBil} between two countries, ${all.length - nBil} in groups), each involving at least one nation on this site. The map steps through them every few seconds; pick one from the list to stop and read it.`),
+      collabSwitch("map"),
       el("section", { class: "section cx" },
         el("div", { class: "cx-side card" }, el("div", { class: "cx-side-in" }, search, status, rows)),
         stage),
