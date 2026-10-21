@@ -750,7 +750,7 @@
 
   // ---- news ranking. There is no click or engagement data, so the relevance sorts read each item's own text,
   // sources and date. Every ranked item shows the signals that placed it, and Method explains the rules.
-  const NEWS_SORTS = [["trending", "Trending"], ["impact", "Most impactful"], ["insight", "Most insightful"], ["newest", "Newest"], ["oldest", "Oldest"]];
+  const NEWS_SORTS = [["relevance", "Relevance"], ["newest", "Newest"], ["oldest", "Oldest"]];
   const NEWS_THEMES = [
     ["Strategies and plans", /strateg|roadmap|action plan|national plan/i],
     ["Laws and regulation", /\b(law|act|bill|decree|regulat\w*|legislat\w*)\b/i],
@@ -780,48 +780,57 @@
     [1, "a comparison", (t) => /\b(first|only|largest|lowest|highest|leads?|behind|ahead of|top)\b/i.test(t)],
   ];
   const LEVEL_BONUS = { verified: 1.5, corroborated: 0.75, single: 0, dataset: 0.75 };
+  // Relevance blends three signals, each scaled 0–1 across the items being ranked and weighted equally:
+  // trending (recent, on themes with a lot of recent news), impact (decisions, money, institutions) and
+  // insight (data, figures, caveats). More independent sources add a small bonus.
+  // "Strategies and plans" -> "strategies and plans", but keep acronyms such as "AI" and "MoUs" as they are.
+  const lowerFirst = (t) => (/^[A-Z][a-z]/.test(t) ? t[0].toLowerCase() + t.slice(1) : t);
   function rankNews(items, mode) {
     const now = dateValue(D.meta.asOf);
     const daysAgo = (x) => Math.max(0, (now - (dateValue(x.date) ?? now)) * 365);
     const text = (x) => `${x.title}. ${x.summary}`;
-    if (mode === "newest" || mode === "oldest") {
+    if (mode !== "relevance") {
       const out = [...items].sort((a, b) => byDateDesc(a.x, b.x));
       return { list: (mode === "oldest" ? out.reverse() : out).map((r) => ({ ...r, why: null })), themes: [] };
     }
-    if (mode === "trending") {
-      // A theme's heat is the recency-weighted number of items on it; an item trends when it is recent and on hot themes.
-      const heat = new Map(NEWS_THEMES.map(([name]) => [name, 0]));
-      const themesOf = (x) => NEWS_THEMES.filter(([, re]) => re.test(text(x))).map(([name]) => name);
-      for (const { x } of items) for (const th of themesOf(x)) heat.set(th, heat.get(th) + Math.exp(-daysAgo(x) / 30));
-      const maxHeat = Math.max(1e-9, ...heat.values());
-      const scored = items.map((r) => {
-        const ths = themesOf(r.x).sort((a, b) => heat.get(b) - heat.get(a));
-        const warm = ths.reduce((t, th) => t + heat.get(th) / maxHeat, 0);
-        const score = Math.exp(-daysAgo(r.x) / 21) * (1 + warm) + LEVEL_BONUS[r.x.level] * 0.1;
-        return { ...r, score, why: ths.length ? [`Trending: ${ths.slice(0, 2).join(", ").toLowerCase()}`] : ["Recent"] };
-      }).sort((a, b) => b.score - a.score);
-      const recent = (name) => items.filter(({ x }) => daysAgo(x) <= 60 && NEWS_THEMES.find(([n]) => n === name)[1].test(text(x))).length;
-      const themes = [...heat].sort((a, b) => b[1] - a[1]).slice(0, 5).map(([name]) => ({ name, n: recent(name) })).filter((t) => t.n > 0);
-      return { list: scored, themes };
-    }
-    const rules = mode === "impact" ? IMPACT_RULES : INSIGHT_RULES;
-    const scored = items.map((r) => {
+    // Trending: a theme's heat is the recency-weighted number of items on it.
+    const heat = new Map(NEWS_THEMES.map(([name]) => [name, 0]));
+    const themesOf = (x) => NEWS_THEMES.filter(([, re]) => re.test(text(x))).map(([name]) => name);
+    for (const { x } of items) for (const th of themesOf(x)) heat.set(th, heat.get(th) + Math.exp(-daysAgo(x) / 30));
+    const maxHeat = Math.max(1e-9, ...heat.values());
+    const parts = items.map((r) => {
       const t = text(r.x);
-      const hits = rules.filter(([, , test]) => test(t));
-      let score = hits.reduce((s, [w]) => s + w, 0) + LEVEL_BONUS[r.x.level];
-      const why = hits.filter(([w]) => w > 0).map(([, label]) => label);
-      if (mode === "insight") {
-        // Concrete figures (not years or dates) make an item more informative, up to three.
-        const figures = new Set((t.replace(/\b(19|20)\d{2}\b/g, " ").match(/\d[\d.,]*/g) || []).filter((v) => v.length > 1 || +v > 1)).size;
-        score += Math.min(3, figures) * 0.75;
-        if (figures) why.push("specific figures");
-        if (r.x.note) { score += 1.5; why.push("a caveat or source disagreement noted"); }
-      }
-      score += Math.exp(-daysAgo(r.x) / 365) * 0.5; // ties go to the more recent item
-      if (r.x.level !== "single") why.push(LEVELS[r.x.level].label);
-      return { ...r, score, why: [`${mode === "impact" ? "Impact" : "Insight"}: ${why.join(", ") || "no strong signals"}`] };
+      const ths = themesOf(r.x).sort((a, b) => heat.get(b) - heat.get(a));
+      const trend = Math.exp(-daysAgo(r.x) / 21) * (1 + ths.reduce((sum, th) => sum + heat.get(th) / maxHeat, 0));
+      const impactHits = IMPACT_RULES.filter(([, , test]) => test(t));
+      const impact = impactHits.reduce((sum, [w]) => sum + w, 0);
+      const insightHits = INSIGHT_RULES.filter(([, , test]) => test(t));
+      // Concrete figures (not years or dates) make an item more informative, up to three.
+      const figures = new Set((t.replace(/\b(19|20)\d{2}\b/g, " ").match(/\d[\d.,]*/g) || []).filter((v) => v.length > 1 || +v > 1)).size;
+      const insight = insightHits.reduce((sum, [w]) => sum + w, 0) + Math.min(3, figures) * 0.75 + (r.x.note ? 1.5 : 0);
+      const insightWhy = [...insightHits.map(([, label]) => label), ...(figures ? ["specific figures"] : []), ...(r.x.note ? ["a caveat noted"] : [])];
+      return { r, trend, impact, insight, themes: ths, impactWhy: impactHits.filter(([w]) => w > 0).map(([, label]) => label), insightWhy };
+    });
+    const scale = (key) => {
+      const vals = parts.map((p) => p[key]), lo = Math.min(...vals), hi = Math.max(...vals);
+      return (v) => (hi > lo ? (v - lo) / (hi - lo) : 0);
+    };
+    const sT = scale("trend"), sI = scale("impact"), sN = scale("insight");
+    const list = parts.map((p) => {
+      const t = sT(p.trend), i = sI(p.impact), n = sN(p.insight);
+      const score = (t + i + n) / 3 + LEVEL_BONUS[p.r.x.level] * 0.05;
+      // Name the signals that pulled the item up, strongest first.
+      const why = [
+        [t, p.themes.length ? `trending (${p.themes.slice(0, 2).map(lowerFirst).join(", ")})` : "recent"],
+        [i, p.impactWhy.length ? `impact (${p.impactWhy.slice(0, 2).join(", ")})` : null],
+        [n, p.insightWhy.length ? `insight (${p.insightWhy.slice(0, 2).join(", ")})` : null],
+      ].filter(([v, label]) => label && v >= 0.3).sort((a, b) => b[0] - a[0]).map(([, label]) => label);
+      if (p.r.x.level !== "single") why.push(LEVELS[p.r.x.level].label);
+      return { ...p.r, score, why: [`Relevant for: ${why.join("; ") || "no strong signals"}`] };
     }).sort((a, b) => b.score - a.score);
-    return { list: scored, themes: [] };
+    const recent = (name) => items.filter(({ x }) => daysAgo(x) <= 60 && NEWS_THEMES.find(([nm]) => nm === name)[1].test(text(x))).length;
+    const themes = [...heat].sort((a, b) => b[1] - a[1]).slice(0, 5).map(([name]) => ({ name, n: recent(name) })).filter((th) => th.n > 0);
+    return { list, themes };
   }
 
   function renderNews() {
@@ -840,7 +849,7 @@
       row2.replaceChildren(...[["all", "Any number of sources"], ...["verified", "corroborated", "single"].map((k) => [k, LEVELS[k].label])].map(([k, lab]) =>
         el("button", { class: "chip-btn", type: "button", "aria-pressed": String(level === k), onclick: () => { level = k; draw(); } }, lab)));
       sortRow.replaceChildren(el("span", { class: "filter-label" }, "Sort"),
-        ...NEWS_SORTS.flatMap(([k, lab], i) => [i === 3 ? el("span", { class: "sort-sep", "aria-hidden": "true" }) : null,
+        ...NEWS_SORTS.flatMap(([k, lab], i) => [i === 1 ? el("span", { class: "sort-sep", "aria-hidden": "true" }) : null,
           el("button", { class: "chip-btn", type: "button", "aria-pressed": String(state.newsSort === k), onclick: () => { state.newsSort = k; theme = null; draw(); } }, lab)]).filter(Boolean));
       const pool = items.filter(({ x, n }) => inRegion(n) && (nation === "all" || n.id === nation) && (level === "all" || x.level === level));
       const ranked = rankNews(pool, state.newsSort);
@@ -856,7 +865,7 @@
       el("h1", {}, "News feed"),
       el("p", { class: "summary ink2" }, `${items.length} developments since January 2024 across ${N.length} nations. Research cut-off ${fmtDate(D.meta.asOf)}.`),
       el("section", { class: "section" }, sortRow,
-        el("p", { class: "muted small news-sort-note" }, "Trending, impactful and insightful are worked out from each item's text, sources and date; there is no click or popularity data. Each item says why it ranked. See Method."),
+        el("p", { class: "muted small news-sort-note" }, "Relevance combines how much an item is trending, its likely impact and how insightful it is, worked out from its text, sources and date; there is no click or popularity data. Each item says why it ranked. See Method."),
         themeRow, regionFilter(draw), el("div", { class: "filters" }, select), row2, list));
   }
 
@@ -1265,12 +1274,12 @@
         el("li", {}, "Pages that block automated access were opened in a browser where possible. Pages behind bot challenges (for example Bloomberg and gov.mt) were not bypassed. Readable independent coverage was found to replace them."),
         el("li", {}, "Where no readable source could confirm a detail, the detail was removed or the badge was lowered.")),
       el("h2", {}, "How the news feed ranks items"),
-      el("p", {}, "The news feed can be sorted by date or by three kinds of relevance. The site has no click or popularity data, so relevance is worked out from each item's own text, sources and date, and every ranked item lists the signals that placed it."),
+      el("p", {}, "The news feed can be sorted by date or by relevance. The site has no click or popularity data, so relevance is worked out from each item's own text, sources and date. It combines three signals with equal weight, each scaled from 0 to 1 across the items shown, and every item lists the signals that placed it."),
       el("ul", {},
-        el("li", {}, "Trending: items are grouped into themes (strategies, laws, data centres, partnerships, skills, AI in government services, rankings, safety and misuse, investment, China and WAICO). A theme is hot when many recent items are about it, weighted towards the last month. An item trends when it is recent and on hot themes."),
-        el("li", {}, "Most impactful: points for a law or binding rule adopted, a strategy or policy decision, billion- or million-scale money, a new public body, compute infrastructure or an international agreement, minus a little for events and trainings; plus a bonus for more independent sources."),
-        el("li", {}, "Most insightful: points for data or an assessment (indices, rankings, surveys, reports), percentages, comparisons, specific figures and a noted caveat or source disagreement; plus a bonus for more independent sources."),
-        el("li", {}, "These are simple keyword rules, not a judgement of importance. Read the item, not the rank.")),
+        el("li", {}, "Trending: items are grouped into themes (strategies, laws, data centres, partnerships, skills, AI in government services, rankings, safety and misuse, investment, China and WAICO). A theme is hot when many recent items are about it, weighted towards the last month; an item scores high when it is recent and on hot themes."),
+        el("li", {}, "Impact: points for a law or binding rule adopted, a strategy or policy decision, billion- or million-scale money, a new public body, compute infrastructure or an international agreement, minus a little for events and trainings."),
+        el("li", {}, "Insight: points for data or an assessment (indices, rankings, surveys, reports), percentages, comparisons, specific figures and a noted caveat or source disagreement."),
+        el("li", {}, "Items with more independent sources get a small bonus. These are simple keyword rules, not a judgement of importance.")),
       el("h2", {}, "The last 19 nations (21 October 2026)"),
       el("ul", {},
         el("li", {}, "To cover every sovereign state under 15 million people (Israel aside), 19 were added: Timor-Leste, Vanuatu, Samoa, Kiribati, Micronesia, the Marshall Islands, Nauru, Tuvalu, Turkmenistan, Cuba, Dominica, Saint Vincent and the Grenadines, South Sudan, the Central African Republic, Eritrea, Guinea-Bissau, Equatorial Guinea, Kosovo and the Holy See. Territories are not included."),

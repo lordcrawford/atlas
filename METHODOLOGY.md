@@ -82,11 +82,11 @@ Region-by-region searches for 10–20 October 2026 added nine news items, each c
 
 ## News feed ranking
 
-The news feed sorts by date (newest or oldest) or by one of three relevance orders. There is no click or popularity data, so relevance is computed from each item's own text, sources and date, and each ranked item shows the signals behind its place:
+The news feed sorts by date (newest or oldest) or by relevance. There is no click or popularity data, so relevance is computed from each item's own text, sources and date. It is the average of three signals, each scaled from 0 to 1 across the items being ranked, plus a small bonus for 2 or 3+ independent sources. Each item shows the signals that placed it.
 
-- **Trending:** items are matched to themes (strategies, laws, data centres and compute, partnerships, skills, AI in government services, rankings, safety and misuse, investment, China and WAICO). A theme's heat is the number of items on it, weighted by recency (roughly a 30-day decay). An item's score is its own recency (roughly a 3-week decay) times one plus the heat of its themes. The hottest themes over the last 60 days are shown as filters.
-- **Most impactful:** keyword points for a law or binding rule adopted (5), a strategy or policy decision (4), billion-scale money (4), a new public body (3), million-scale money, compute infrastructure or an international agreement (2 each), minus 1.5 for events and trainings, plus a bonus for 2 or 3+ independent sources.
-- **Most insightful:** points for data or an assessment such as an index, ranking, survey or report (3), a percentage (1.5), a comparison (1), up to three specific figures (0.75 each) and a noted caveat or source disagreement (1.5), plus the same source bonus.
+- **Trending:** items are matched to themes (strategies, laws, data centres and compute, partnerships, skills, AI in government services, rankings, safety and misuse, investment, China and WAICO). A theme's heat is the number of items on it, weighted by recency (roughly a 30-day decay). An item's trending score is its own recency (roughly a 3-week decay) times one plus the heat of its themes. The hottest themes over the last 60 days are shown as filters.
+- **Impact:** keyword points for a law or binding rule adopted (5), a strategy or policy decision (4), billion-scale money (4), a new public body (3), million-scale money, compute infrastructure or an international agreement (2 each), minus 1.5 for events and trainings.
+- **Insight:** points for data or an assessment such as an index, ranking, survey or report (3), a percentage (1.5), a comparison (1), up to three specific figures (0.75 each) and a noted caveat or source disagreement (1.5).
 
 These are simple rules, not editorial judgements of importance.
 
