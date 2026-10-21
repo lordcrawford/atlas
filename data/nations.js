@@ -51,9 +51,9 @@ window.ATLAS = {
         t: "WAM - Microsoft: UAE ranks first globally in AI adoption (Q1 2026)",
         u: "https://www.wam.ae/en/article/c03y6ol-microsoft-uae-ranks-first-globally-adoption",
       },
-      mapprQ1: {
-        t: "Mappr - AI Adoption by Country in 2026 (Q1 2026 table)",
-        u: "https://www.mappr.co/ai-adoption-by-country/",
+      trQ1: {
+        t: "Telecom Review - UAE leads global AI uptake as usage crosses 70% milestone (Microsoft Q1 2026)",
+        u: "https://www.telecomreview.com/articles/reports-and-coverage/29184-uae-leads-global-ai-uptake-as-usage-crosses-70-milestone/",
       },
       meaiQ2: {
         t: "Middle East AI News - UAE retains top world AI use ranking",
@@ -170,10 +170,9 @@ window.ATLAS = {
           topic: "Governance",
           date: "2026-01-22",
           text: "On 22 January 2026, at the World Economic Forum in Davos, Singapore launched a Model AI Governance Framework for Agentic AI. It is voluntary best-practice guidance that keeps accountability with humans and asks organisations to bound agents' risk before deployment.",
-          level: "verified",
+          level: "corroborated",
           sources: [
             { t: "CMS - Singapore Issues Global First Agentic AI Model Governance Framework at Davos", u: "https://cms.law/en/sgp/legal-updates/singapore-issues-global-first-agentic-ai-model-governance-framework-at-davos" },
-            { t: "Singapore Legal Advice - What is the new Model AI Governance Framework for Agentic AI?", u: "https://singaporelegaladvice.com/singapore-new-agentic-ai-governance-framework/" },
             { t: "Allen & Gledhill - Model AI Governance Framework for Agentic AI", u: "https://www.allenandgledhill.com/sg/publication/articles/32314/launches-new-model-ai-governance-framework-for-agentic-ai" },
           ],
         },
@@ -204,11 +203,10 @@ window.ATLAS = {
           topic: "Incentives",
           date: "2026-02-12",
           text: "Budget 2026 added AI spending to the Enterprise Innovation Scheme: a 400% tax deduction on up to S$50,000 of qualifying AI spending per Year of Assessment, for YA 2027 and YA 2028. Unlike the scheme's other categories, AI spending cannot be converted to a cash payout.",
-          level: "verified",
+          level: "corroborated",
           sources: [
             { t: "Ministry of Finance - Budget 2026 Annex C-1 (PDF)", u: "https://isomer-user-content.by.gov.sg/137/e8e0cd35-9515-4fbc-966a-5d21ebc3fd6a/fy2026_annexc1.pdf" },
             { t: "Mondaq - Decoding Singapore Budget 2026: key tax measures", u: "https://www.mondaq.com/tax-authorities/1747428/decoding-singapore-budget-2026-spotlight-on-key-tax-measures" },
-            { t: "Vistra - Singapore Budget 2026 round-up", u: "https://www.vistra.com/insights/singapore-budget-2026-round-key-measures" },
           ],
         },
         {
@@ -289,10 +287,9 @@ window.ATLAS = {
           date: "2026-01-22",
           title: "World-first governance framework for agentic AI launched at Davos",
           summary: "IMDA's framework covers bounding agent risk, human accountability, technical controls and transparency to end users.",
-          level: "verified",
+          level: "corroborated",
           sources: [
             { t: "CMS", u: "https://cms.law/en/sgp/legal-updates/singapore-issues-global-first-agentic-ai-model-governance-framework-at-davos" },
-            { t: "Singapore Legal Advice - What is the new Model AI Governance Framework for Agentic AI?", u: "https://singaporelegaladvice.com/singapore-new-agentic-ai-governance-framework/" },
             { t: "Allen & Gledhill", u: "https://www.allenandgledhill.com/sg/publication/articles/32314/launches-new-model-ai-governance-framework-for-agentic-ai" },
           ],
         },
@@ -334,10 +331,9 @@ window.ATLAS = {
           topic: "Public services",
           date: "2019+",
           text: "The Kratt programme produced Bürokratt, an AI-based virtual assistant that gives citizens access to government services across channels and devices.",
-          level: "corroborated",
+          level: "single",
           sources: [
             { t: "The Mandarin - Estonia's AI vision", u: "https://www.themandarin.com.au/239853-estonias-ai-vision-building-a-data-driven-society-and-government" },
-            { t: "MindTitan - AI use cases for government: how Estonia is leading", u: "https://mindtitan.com/resources/industry-use-cases/ai-use-cases-in-government/" },
           ],
         },
         {
@@ -500,7 +496,6 @@ window.ATLAS = {
           sources: [
             { t: "Atlantic Council - Omar Sultan Al Olama, Minister of State for AI", u: "https://www.atlanticcouncil.org/?p=147641" },
             { t: "World Governments Summit - Omar Sultan Al Olama", u: "https://www.worldgovernmentssummit.org/about/leadership/omar-sultan-al-olama" },
-            { t: "Peter Fisk - UAE becomes first nation to appoint a Minister for AI", u: "https://www.peterfisk.com/?p=9933" },
             { t: "Khaleej Times - (notes Al Olama became the world's first AI minister in 2017)", u: "https://www.khaleejtimes.com/uae/uae-authority-ai-data-digital-government" },
           ],
         },
@@ -535,6 +530,7 @@ window.ATLAS = {
           sources: [
             { t: "UAE Government portal - The UAE Charter for the Development and Use of AI", u: "https://u.ae/en/about-the-uae/strategies-initiatives-and-awards/policies/Ai/The-UAE-Charter-for-the-Development-and-Use-of-Artificial-Intelligence" },
             { t: "Pinsent Masons Out-Law - UAE launches AI charter", u: "https://www.pinsentmasons.com/out-law/news/uae-launches-ai-charter-with-focus-on-human-wellbeing" },
+            { t: "Derasat - A new charter for artificial intelligence in the United Arab Emirates", u: "https://www.derasat.org.bh/?p=143631" },
           ],
         },
         {
@@ -616,13 +612,12 @@ window.ATLAS = {
           date: "2026-05-08",
           title: "UAE becomes first country above 70% AI usage",
           summary: "Microsoft's Q1 2026 data put the UAE at 70.1%, with Singapore second at 63.4%.",
-          note: "The UAE figure appears in all three sources. Singapore's 63.4% appears only in Mappr's table.",
+          note: "The UAE figure appears in all three sources. Singapore's 63.4% appears in Telecom Review's coverage.",
           level: "verified",
           sources: [
             { t: "Middle East AI News - UAE leads the world in AI adoption with 70%", u: "https://www.middleeastainews.com/p/uae-leads-the-world-in-ai-adoption" },
             { t: "MENA Startup Digest - UAE claims top spot for AI adoption at 70%", u: "https://menastartupdigest.com/?p=38700" },
-            { t: "Mappr", u: "https://www.mappr.co/ai-adoption-by-country/" },
-            { t: "Middle East AI News", u: "https://www.middleeastainews.com/p/uae-leads-the-world-in-ai-adoption" },
+            { t: "Telecom Review - UAE leads global AI uptake as usage crosses 70% milestone", u: "https://www.telecomreview.com/articles/reports-and-coverage/29184-uae-leads-global-ai-uptake-as-usage-crosses-70-milestone/" },
           ],
         },
         {
@@ -662,11 +657,10 @@ window.ATLAS = {
           topic: "Strategy",
           date: "2023-04-20",
           text: "Rwanda's Cabinet approved the National AI Policy on 20 April 2023. The Ministry of ICT and Innovation (MINICT) developed it with RURA, GIZ FAIR Forward, C4IR Rwanda and The Future Society.",
-          level: "verified",
+          level: "corroborated",
           sources: [
             { t: "Access Partnership - Rwandan government approves National AI Policy", u: "https://accesspartnership.com/access-alert-rwandan-government-approves-national-ai-policy" },
             { t: "KT Press - Cabinet approves new AI agency (recaps the April 2023 policy)", u: "https://www.ktpress.rw/2026/06/rwandas-ai-ambition-takes-shape-as-cabinet-approves-new-agency/" },
-            { t: "Digital Policy Alert - Adopted National AI Policy", u: "https://digitalpolicyalert.org/change/12087" },
           ],
         },
         {
@@ -872,7 +866,7 @@ window.ATLAS = {
         {
           date: "2026-09-07",
           title: "National AI research centre 'Instituto Vidart' opens",
-          summary: "The centre is funded by an IDB loan. More than 80 meetings with over 200 people shaped its design, and research lines will be led by academics who keep their university ties.",
+          summary: "The centre is funded by an IDB loan. Research lines will be led by academics who keep their university ties.",
           level: "verified",
           sources: [
             { t: "la diaria", u: "https://ladiaria.com.uy/futuro/articulo/2026/9/uruguay-lanza-centro-nacional-de-inteligencia-artificial-que-desarrollara-soluciones-en-salud-agro-y-educacion/" },
@@ -981,10 +975,9 @@ window.ATLAS = {
           date: "2026-02-13",
           text: "On 13 February 2026 Economy Minister Silvio Schembri announced that Malta's application to join the Global Partnership on AI (GPAI) had been formally accepted.",
           level: "corroborated",
-          note: "A November 2025 report already listed Malta among newly approved members, so approval may predate the February announcement.",
           sources: [
-            { t: "Hespress - Morocco to join Global Partnership on AI (lists Malta among approved members)", u: "https://en.hespress.com/103151-morocco-to-join-global-partnership-on-ai.html" },
             { t: "MaltaInvest - Malta joins Global Partnership on AI", u: "https://maltainvest.mt/malta-joins-global-partnership-on-artificial-intelligence/" },
+            { t: "OECD.AI - About GPAI (lists Malta among members)", u: "https://oecd.ai/en/about/about-gpai" },
           ],
         },
         {
@@ -1062,8 +1055,8 @@ window.ATLAS = {
           summary: "The government framed membership as part of its responsible-AI governance credentials.",
           level: "corroborated",
           sources: [
-            { t: "Hespress - Morocco to join Global Partnership on AI (lists Malta among approved members)", u: "https://en.hespress.com/103151-morocco-to-join-global-partnership-on-ai.html" },
             { t: "MaltaInvest", u: "https://maltainvest.mt/malta-joins-global-partnership-on-artificial-intelligence/" },
+            { t: "OECD.AI - About GPAI (members)", u: "https://oecd.ai/en/about/about-gpai" },
           ],
         },
       ],

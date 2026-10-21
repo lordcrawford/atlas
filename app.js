@@ -578,7 +578,7 @@
       el("div", { class: "chart" }, svg));
     box.append(el("div", { class: "chart-foot" },
       tableToggle(box, () => table(["Period", ...series.map((x) => x.n.name)], periods.map(([k, lab]) => [lab, ...series.map((x) => x.n.msAdoption[k] + "%")]), [1, 2])),
-      el("span", { class: "muted small" }, " · Sources:"), sourceChips([S.msH2, S.wamQ1, S.mapprQ1, S.msQ2, S.meaiQ2])));
+      el("span", { class: "muted small" }, " · Sources:"), sourceChips([S.msH2, S.wamQ1, S.trQ1, S.msQ2, S.meaiQ2])));
     return box;
   }
 
@@ -785,7 +785,7 @@
         showTrend ? el("section", { class: "section" },
           sectionHead("The two global leaders keep pulling ahead", "UAE vs Singapore, the world's #1 and #2 for AI use, over the latest four reporting periods."),
           el("div", { class: "card" }, leaderTrend(),
-            el("p", { class: "note" }, "Microsoft moved from half-year to quarterly reporting in 2026, so the periods are not evenly spaced in time. Q1 2026 figures come from WAM and Mappr coverage of Microsoft's report. Q2 2026 figures come from Microsoft directly."))) : null,
+            el("p", { class: "note" }, "Microsoft moved from half-year to quarterly reporting in 2026, so the periods are not evenly spaced in time. Q1 2026 figures come from WAM and Telecom Review coverage of Microsoft's report. Q2 2026 figures come from Microsoft directly."))) : null,
         el("section", { class: "section" },
           sectionHead("Milestones since 2024", "Each dot is a sourced fact or news item. Hover for details, click a dot or name to open the nation."),
           el("div", { class: "card" }, expandable((k) => milestoneTimeline([...list].sort((a, b) => a.oxford.rank - b.oxford.rank), k), list.length, { hint: "by readiness rank" }))),
@@ -1518,6 +1518,12 @@
         el("li", {}, "Every mismatch was reviewed by hand against the most relevant passage of the page."),
         el("li", {}, "Pages that block automated access were opened in a browser where possible. Pages behind bot challenges (for example Bloomberg and gov.mt) were not bypassed. Readable independent coverage was found to replace them."),
         el("li", {}, "Where no readable source could confirm a detail, the detail was removed or the badge was lowered.")),
+      el("h2", {}, "Third audit (20 October 2026)"),
+      el("ul", {},
+        el("li", {}, "Every cited link (about 760) was fetched again and every claim, news item and collaboration was re-checked against its sources. Pages that block automated requests were read in a browser."),
+        el("li", {}, "More sources that break the source rule were removed: a policy-tracker site, a compliance vendor's explainers, an AI-law aggregator, a personal blog, consultancy and vendor blogs, and Wikipedia. One dead government page and one page behind a bot check were dropped. 16 badges were lowered to match the sources left."),
+        el("li", {}, "Removed: São Tomé and Príncipe's $10 billion 'AI nation' memorandum, which was reported only by a crypto news blog, and a detail on Uruguay's Instituto Vidart (the number of design meetings) that no source now carries."),
+        el("li", {}, "Corrected or re-sourced: the US–Uruguay technology memorandum (signed 10 April 2024 in Montevideo, per the US Commerce Department), El Salvador's 20%-of-GDP AI goal, Malta's GPAI membership, Jordan's HUMAIN memorandum, the UAE AI Charter, and the Q1 2026 Microsoft figures for Singapore.")),
       el("h2", {}, "Second audit (14 October 2026)"),
       el("ul", {},
         el("li", {}, "Every cited link was fetched again, and every readiness score, Microsoft usage figure, World Bank statistic and AI Index talent figure was re-checked against its dataset. All matched."),

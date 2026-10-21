@@ -19,7 +19,7 @@ Government and parliament sites, international organisations, established news o
 These were read from the publisher's own data, not from secondary summaries:
 
 - **Oxford Insights Government AI Readiness Index 2025**: the full rankings table (pp. 59–68) of the validated January 2026 report. The December 2025 release had errors, and many third-party sites still quote it (e.g. Estonia 19th, Uruguay 52nd, UAE 23rd).
-- **Microsoft AI Diffusion**: the H2 2025 report appendix (PDF). Q1 2026 figures are from WAM and Mappr coverage. Q2 2026 figures are from Microsoft's 22 Sep 2026 release.
+- **Microsoft AI Diffusion**: the H2 2025 report appendix (PDF). Q1 2026 figures are from WAM and Telecom Review coverage. Q2 2026 figures are from Microsoft's 22 Sep 2026 release.
 - **World Bank WDI**: population, GDP per capita and internet use, pulled from the World Bank API.
 
 ## Full audit (10 Oct 2026)
@@ -45,6 +45,14 @@ Six African nations (Libya, Congo, Gabon, Djibouti, Eswatini, Lesotho) were adde
 25 more nations were added through the same audit: 84 claims, each checked against its cited pages, with the ones the script could not confirm reviewed by hand. Four pages that block automated requests (two Antigua News Room articles and two UNDP pages) were read in a browser and are marked as such. Many of these states, especially microstates and Pacific and Caribbean islands, have little independent coverage, so a large share of their claims carry single-source badges. State media (for example in Belarus and Nicaragua) are flagged in notes.
 
 During this batch the overview's EU AI Act highlight was corrected. It had said Norway and Iceland were already bound through the EEA; the Act is still under scrutiny for incorporation into the EEA Agreement, so the highlight now counts EU members only and lists the EEA states as pending.
+
+## Third audit (20 Oct 2026)
+
+- Every cited link (about 760) was fetched fresh and every claim, news item and collaboration re-checked against its sources; the 140 or so that the automatic check could not fully match were reviewed by hand, and pages that block automated requests were read in a browser. No page behind a bot check was bypassed.
+- Sources removed under the source rule: Digital Policy Alert (a policy tracker), Nemko (compliance-vendor explainers), AI Baltics (an AI-law aggregator), Peter Fisk (a personal blog), Frank Group, Vistra, MindTitan, Singapore Legal Advice and Global Relay (consultancy and vendor content), Mappr (republished Microsoft's table) and Wikipedia. Also dropped: a dead Sierra Leone ministry page, a Jordan Times page behind a bot check, and a Hespress report that said only that Malta wanted to join GPAI.
+- 16 badges were lowered to match the sources left. Replacements were added where a primary or news source exists: the US Commerce Department for the US–Uruguay memorandum (dated 10 April 2024, not 11), Jordan's digital-economy ministry and Jordan News for the HUMAIN memorandum, OECD.AI for Malta's GPAI membership, DPL News for El Salvador's 20%-of-GDP goal, Derasat for the UAE AI Charter, and Telecom Review for the Q1 2026 Microsoft figures.
+- Removed: São Tomé and Príncipe's $10 billion "AI nation" memorandum (only a crypto news blog reported it) and the number of design meetings behind Uruguay's Instituto Vidart.
+- CONATEL's website (Haiti) could not be reached; its one claim is kept with a note.
 
 ## Second audit (14 Oct 2026)
 

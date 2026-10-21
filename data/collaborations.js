@@ -1,5 +1,5 @@
 // Atlas: country-to-country AI collaborations involving the nations on this site.
-// kind 'bilateral' links a and b; kind 'group' links each member to the hub. Keys are nation ids or entries in ATLAS.places.
+// Edit this file directly. kind 'bilateral' links a and b; kind 'group' links each member to the hub. Keys are nation ids or entries in ATLAS.places.
 // Entries reusing a nation-page claim keep its text, badge and sources; new entries were audited the same way (see METHODOLOGY.md).
 
 window.ATLAS.places = {
@@ -172,16 +172,17 @@ window.ATLAS.collaborations = [
     ],
   },
   {
-    id: "uy-us", kind: "bilateral", date: "2024-04-11",
+    id: "uy-us", kind: "bilateral", date: "2024-04-10",
     title: "US–Uruguay memorandum on emerging technologies",
     short: "Memorandum on emerging technologies",
     a: "uy", b: "us",
-    text: "On 11 April 2024 the United States and Uruguay signed a memorandum of understanding on cooperation in critical and emerging technologies, including machine learning and AI.",
+    text: "On 10 April 2024 in Montevideo, the US Departments of Commerce and State and Uruguay's foreign and industry ministries signed a memorandum of understanding on critical and emerging technologies, setting up a bilateral working group whose areas include AI and semiconductors.",
     level: "single",
     sources: [
-      { t: "Digital Policy Alert - Signed US-Uruguay MoU on critical and emerging technologies", u: "https://digitalpolicyalert.org/event/19127-signed-us-uruguay-memorandum-of-understanding-on-cooperation-in-critical-and-emerging-technologies" },
+      { t: "US International Trade Administration - Uruguay critical and emerging technologies agreement with USA", u: "https://www.trade.gov/market-intelligence/uruguay-critical-and-emerging-technologies-agreement-usa" },
+      { t: "US International Trade Administration - Remarks by Under Secretary Marisa Lago at the signing (10 Apr 2024)", u: "https://www.trade.gov/feature-article/remarks-under-secretary-marisa-lago-signing-us-uruguay-memorandum-understanding" },
     ],
-    note: "Read in a browser; the page blocks automated requests.",
+    note: "Both sources are from the US Commerce Department, so they count as one.",
   },
   {
     id: "la-cn-health", kind: "bilateral", date: "2026-02-13",

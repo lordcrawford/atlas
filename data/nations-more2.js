@@ -143,9 +143,8 @@
         {
           topic: "Models", date: "2024-11",
           text: "Prime Minister Luís Montenegro first announced the national LLM at Web Summit in November 2024.",
-          level: "corroborated",
+          level: "single",
           sources: [
-            S("Wikipedia - Amália (LLM)", "https://en.wikipedia.org/wiki/Am%C3%A1lia_(LLM)"),
             S("Instituto de Telecomunicações - AMALIA: the first Portuguese-language LLM", "https://www.it.pt/News/NewsPost/5065"),
           ],
         },
@@ -252,10 +251,9 @@
         {
           topic: "Institutions", date: "2025-03",
           text: "Latvia's Artificial Intelligence Centre Law (2025) set up a National AI Centre to connect government, industry and universities, with the option of running an AI sandbox.",
-          level: "corroborated",
+          level: "single",
           sources: [
             S("BDO / AI & Partners - AI Ecosystem Brief: Latvia 2025 (PDF)", "https://www.bdo.lv/getmedia/c0cbedae-bc27-42ea-bbe4-2c11d5d5a85e/Report-AI-Ecosystem-Brief-Latvia-2025-10-16.pdf"),
-            S("AI Baltics - AI regulation in the Baltics (PDF)", "https://aibaltics.com/wp-content/uploads/2026/05/baltic-ai-quick-guide.pdf"),
           ],
           note: "Sources give the law's adoption date as either January or March 2025.",
         },
@@ -272,10 +270,9 @@
         {
           date: "2025-03", title: "National AI Centre created by law",
           summary: "Latvia chose a dedicated national centre to coordinate AI between the state, business and academia.",
-          level: "corroborated",
+          level: "single",
           sources: [
             S("BDO / AI & Partners", "https://www.bdo.lv/getmedia/c0cbedae-bc27-42ea-bbe4-2c11d5d5a85e/Report-AI-Ecosystem-Brief-Latvia-2025-10-16.pdf"),
-            S("AI Baltics", "https://aibaltics.com/wp-content/uploads/2026/05/baltic-ai-quick-guide.pdf"),
           ],
         },
       ],
@@ -657,11 +654,10 @@
         {
           topic: "Readiness", date: "2025-10",
           text: "In October 2025 the Ministry of Communication, Technology and Innovation and the World Bank launched a national AI readiness assessment covering compute, skills, and policy and regulation.",
-          level: "verified",
+          level: "corroborated",
           sources: [
             S("Ecofin - Sierra Leone, World Bank launch AI readiness assessment", "https://www.ecofinagency.com/news-digital/0310-49267-sierra-leone-world-bank-launch-ai-readiness-assessment-to-drive-inclusive-digital-transformation"),
             S("iAfrica - Sierra Leone launches national AI readiness assessment", "https://iafrica.com/sierra-leone-launches-national-ai-readiness-assessment-with-world-bank-support/"),
-            S("MoCTI - Sierra Leone takes a purpose-driven approach to AI", "https://mocti.gov.sl/sierra-leone-takes-a-purpose-driven-approach-to-ai/"),
           ],
         },
         {
@@ -755,9 +751,10 @@
         {
           topic: "Strategy", date: "2026-05-15",
           text: "ANIA published a National AI Strategy on 15 May 2026. The government says it aims for AI to contribute to 20% of GDP.",
-          level: "single",
+          level: "corroborated",
           sources: [
             S("El Salvador in English - El Salvador unveils 2026 National AI Strategy", "https://elsalvadorinenglish.com/2026/05/15/el-salvador-unveils-2026-national-ai-strategy-a-new-blueprint-for-global-sovereign-ai/"),
+            S("DPL News - El Salvador: national AI strategy aims for AI to contribute 20% of GDP", "https://dplnews.com/?p=321516"),
           ],
           note: "The 20% target is the government's claim, and no independent assessment was found.",
         },

@@ -177,7 +177,6 @@ window.ATLAS.nations.push(
         level: "single",
         sources: [
           { t: "Regjeringen - The Digital Norway of the Future, ch.1: the most digitalised country in the world", u: "https://www.regjeringen.no/en/documents/the-digital-norway-of-the-future/id3054645/?ch=2" },
-          { t: "Global Relay Intelligence - Norway aims to become the world's most digitized country", u: "https://www.grip.globalrelay.com/norway-aims-to-become-the-worlds-most-digitized-country/" },
         ],
       },
       {
@@ -727,10 +726,9 @@ window.ATLAS.nations.push(
       {
         topic: "Public sector", date: "2025",
         text: "The Information & eGovernment Authority issued a non-binding General Policy for the Use of AI (v1.0) for government entities. It sets four pillars and eleven principles, including human decision-making.",
-        level: "corroborated",
+        level: "single",
         sources: [
           { t: "Middle East AI News - Bahrain launches national AI policy", u: "https://www.middleeastainews.com/p/bahrain-launches-national-ai-policy" },
-          { t: "Nemko - AI Regulation Bahrain", u: "https://digital.nemko.com/regulations/ai-regulation-bahrain" },
         ],
         note: "Sources date it to May 2025 or 30 July 2025.",
       },
@@ -782,8 +780,11 @@ window.ATLAS.nations.push(
       {
         topic: "Partnerships", date: "2026",
         text: "Jordan's digital-economy ministry signed an MOU with Saudi AI company HUMAIN at LEAP 2026, covering Arabic AI models and public-sector AI.",
-        level: "single",
-        sources: [{ t: "Jordan Times - Jordan, Saudi HUMAIN forge partnership to advance AI", u: "https://jordantimes.com/news/business/jordan-saudi-humain-forge-partnership-to-advance-ai" }],
+        level: "corroborated",
+        sources: [
+          { t: "MoDEE - Jordan and HUMAIN sign MoU to strengthen AI ecosystem", u: "https://www.modee.gov.jo/En/NewsDetails/Jordan_and_HUMAIN_Sign_MoU_to_Strengthen_AI_Ecosystem" },
+          { t: "Jordan News - Jordan and Saudi Arabia's HUMAIN partner to advance Arabic AI models", u: "https://www.jordannews.jo/Section-113/All/Jordan-and-Saudi-Arabia-s-HUMAIN-Partner-to-Advance-Arabic-AI-Models-55363" },
+        ],
       },
     ],
     news: [
@@ -816,7 +817,6 @@ window.ATLAS.nations.push(
           { t: "DLA Piper - New Zealand's new strategic approach to AI", u: "https://www.dlapiper.com/en-us/insights/publications/2025/07/quick-on-the-uptake-new-zealand-s-new-strategic-approach-to-artificial-intelligence" },
           { t: "Global Government Forum - New Zealand launches its first national AI strategy", u: "https://www.globalgovernmentforum.com/new-zealand-launches-its-first-national-ai-strategy/" },
           { t: "Bell Gully - NZ's AI strategy: light-touch regulation", u: "https://www.bellgully.com/insights/nz-s-ai-strategy-light-touch-regulation-and-opportunities-for-businesses/" },
-          { t: "Nemko - New Zealand AI Strategy 2025", u: "https://digital.nemko.com/news/new-zealand-ai-strategy-2025" },
         ],
       },
       {
@@ -827,7 +827,6 @@ window.ATLAS.nations.push(
           { t: "Digital.govt.nz - Artificial intelligence", u: "https://www.digital.govt.nz/standards-and-guidance/technology-and-architecture/artificial-intelligence" },
           { t: "DLA Piper - New Zealand's Public Service AI Framework (Feb 2025)", u: "https://www.dlapiper.com/en/insights/publications/2025/02/new-zealands-public-service-ai-framework-guiding-responsible-innovation" },
           { t: "Russell McVeagh - Release of public sector AI framework", u: "https://russellmcveagh.com/insights-news/release-of-public-sector-ai-framework" },
-          { t: "Frank Group - How AI is reshaping public services in New Zealand", u: "https://frankgroup.co.nz/ai-transforming-work-in-public-sector" },
         ],
       },
     ],
@@ -835,9 +834,8 @@ window.ATLAS.nations.push(
       {
         date: "2025-07-08", title: "First national AI strategy: 'Investing with confidence'",
         summary: "It was released alongside responsible-AI guidance for businesses and supports the government's 'Going for Growth' agenda.",
-        level: "verified",
+        level: "corroborated",
         sources: [
-          { t: "Nemko - New Zealand AI Strategy 2025", u: "https://digital.nemko.com/news/new-zealand-ai-strategy-2025" },
           { t: "Global Government Forum", u: "https://www.globalgovernmentforum.com/new-zealand-launches-its-first-national-ai-strategy/" },
           { t: "Oxford Insights - GAIRI 2025 report (notes NZ's 'going for growth' ethos)", u: "https://oxfordinsights.com/wp-content/uploads/2026/01/2025-Government-AI-Readiness-Index-Report_01_26.pdf" },
         ],
@@ -869,9 +867,8 @@ window.ATLAS.nations.push(
       {
         topic: "Economy", date: "2023-12",
         text: "Gelephu Mindfulness City, a special administrative region with its own executive, judicial and legislative powers, was announced in December 2023. It aims to attract carbon-free tech industries, including data centres and AI companies.",
-        level: "verified",
+        level: "corroborated",
         sources: [
-          { t: "Wikipedia - Gelephu Mindfulness City", u: "https://en.wikipedia.org/wiki/Gelephu_Mindfulness_City" },
           { t: "PR Newswire - Bhutan appoints strategic leaders for GMC", u: "https://www.prnewswire.com/apac/news-releases/bhutan-appoints-strategic-leaders-to-propel-gelephu-mindfulness-city-to-global-prominence-302266714.html" },
           { t: "The Secretariat - Can a Bhutanese city be the Indian investor's new Shangri-la?", u: "https://thesecretariat.in/article/can-a-bhutanese-city-be-the-indian-investor-s-new-shangri-la" },
         ],

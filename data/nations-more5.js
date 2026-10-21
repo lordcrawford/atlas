@@ -774,6 +774,7 @@
           sources: [
             S("CONATEL - Le CONATEL renforce les capacités de son personnel en IA", "https://conatel.gouv.ht/node/667"),
           ],
+          note: "CONATEL's website could not be reached during the 20 October 2026 recheck; the claim rests on the page as read when it was added.",
         },
         {
           topic: "International", date: "2026-07-10",
@@ -1012,23 +1013,14 @@
     // ------------------------------------------------------------------ SÃO TOMÉ AND PRÍNCIPE
     {
       id: "st", name: "São Tomé and Príncipe", flag: "🇸🇹", region: "Central Africa", group: "Africa", geo: [6.73, 0.34], isoN: "678",
-      stance: "Very early: AI discussed through UN reports and a large but unproven private 'AI nation' pledge",
+      stance: "Very early: AI discussed mainly through UN reports",
       summary:
-        "São Tomé and Príncipe has no AI law or AI strategy; its 2020 national digital governance strategy predates the current AI wave. In August 2025 UNDP and the foreign ministry launched the Human Development Report on AI with a national panel on AI's risks and opportunities. In October 2025 the country's citizenship-by-investment unit signed a memorandum with private firms promising up to $10 billion of investment to make it an 'AI-enabled' island nation, a claim not backed by any published government plan.",
+        "São Tomé and Príncipe has no AI law or AI strategy; its 2020 national digital governance strategy predates the current AI wave. In August 2025 UNDP and the foreign ministry launched the Human Development Report on AI with a national panel on AI's risks and opportunities.",
       glance: { firstStrategy: "—", latestStrategy: "2020 (National Digital Governance Strategy)", newestBody: "—", newestBodyDate: "" },
       stats: { population: { v: 240254, year: 2025 }, gdpPerCapita: { v: 4084, year: 2025 }, internet: { v: 59.1, year: 2024 } },
       oxford: { rank: 180, scores: [0.0, 29.52, 27.86, 15.63, 10.03, 19.58] },
       msAdoption: null,
       facts: [
-        {
-          topic: "Investment", date: "2025-10-12",
-          text: "The Citizenship and Investment Unit, which runs the citizenship-by-investment programme, signed a memorandum with Atlas Sovereign Smart Solutions, linked to IOPn and Betabytes, to mobilise up to $10 billion over a decade for a digital and AI transformation.",
-          level: "single",
-          sources: [
-            S("Unlock Blockchain - São Tomé and Príncipe partners with IOPn for AI transformation (12 Oct 2025)", "https://unlock-bc.com/en/sao-tome-principe-uae-iopn-digital-ai-transformation"),
-          ],
-          note: "These figures are the promoters' own claims; no government investment plan was found.",
-        },
         {
           topic: "Development", date: "2025-08-01",
           text: "On 1 August 2025 UNDP and the Ministry of Foreign Affairs launched the 2025 Human Development Report, on people and possibilities in the age of AI, with a high-level panel on AI's opportunities and risks for São Tomé and Príncipe.",
@@ -1047,16 +1039,7 @@
           ],
         },
       ],
-      news: [
-        {
-          date: "2025-10-12", title: "Citizenship unit signs $10 billion 'AI nation' memorandum",
-          summary: "The private partners say they will use sovereign AI computing to digitise the islands; no timeline or government plan was published.",
-          level: "single",
-          sources: [
-            S("Unlock Blockchain", "https://unlock-bc.com/en/sao-tome-principe-uae-iopn-digital-ai-transformation"),
-          ],
-        },
-      ],
+      news: [],
     },
 
     // ------------------------------------------------------------------ SAINT KITTS AND NEVIS (added 14 Oct 2026)

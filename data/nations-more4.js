@@ -127,7 +127,7 @@
         {
           topic: "Infrastructure", date: "2026-07-03",
           text: "On 3 July 2026 President Brice Clotaire Oligui Nguema inaugurated Gabon's first national Tier III data centre, in the Nkok special economic zone near Libreville. ST Digital built it for 8 billion CFA francs (about $14 million); about 95% of Gabon's data is currently hosted abroad.",
-          level: "verified",
+          level: "corroborated",
           sources: [
             S("We Are Tech Africa - Gabon launches $14 million Tier III data center (7 Jul 2026)", "https://www.wearetech.africa/en/fils-uk/news/tech/gabon-launches-14-million-tier-iii-data-center-in-digital-sovereignty-push"),
             S("Developing Telecoms - Gabon inaugurates Tier III data centre (7 Jul 2026)", "https://developingtelecoms.com/telecom-technology/data-centres-networks/20496-gabon-inaugurates-tier-iii-data-centre.html"),

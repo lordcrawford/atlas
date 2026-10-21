@@ -331,7 +331,7 @@
         {
           date: "2025-03-12", title: "Bulgaria wins EU AI Factory",
           summary: "BRAIN++ at Sofia Tech Park, a €90 million project with INSAIT, will serve state bodies, researchers and companies.",
-          level: "verified",
+          level: "corroborated",
           sources: [
             S("Ministry of Innovation and Growth", "https://www.mig.government.bg/all-news/sofia-tech-park-and-insait-are-selected-for-e90-million-eu-project-bulgaria-will-be-home-to-one-of-six-new-eu-ai-factories/?lang=en"),
             S("BTA", "https://www.bta.bg/en/news/bulgaria/850246-bulgaria-to-host-one-of-six-new-ai-factories-across-europe"),
@@ -370,7 +370,6 @@
             S("ai.gov.rs - Serbia adopts AI strategy 2025–2030 (10 Jan 2025)", "https://ai.gov.rs/vest/en/1296/serbia-adopts-strategy-for-the-development-of-artificial-intelligence-for-the-period-20252030.php"),
             S("Western Balkans Info Hub - Serbia adopts AI strategy 2025–2030", "https://westernbalkans-infohub.eu/news/serbia-adopts-strategy-for-the-development-of-artificial-intelligence-for-the-period-2025-2030/"),
             S("TerraLex - Serbia AI guide (Gecić Law, 2026)", "https://www.terralex.org/insights-cross-border-guides/terralex-ai-guide/serbia-ai-guide"),
-            S("Nemko - AI regulation in Serbia", "https://digital.nemko.com/regulations/ai-regulation-in-serbia"),
           ],
         },
         {
@@ -388,11 +387,10 @@
         {
           date: "2025-01-10", title: "Serbia adopts AI strategy to 2030",
           summary: "The new strategy succeeds the 2019 one and puts legislation, skills and public-sector AI at the centre.",
-          level: "verified",
+          level: "corroborated",
           sources: [
             S("ai.gov.rs", "https://ai.gov.rs/vest/en/1296/serbia-adopts-strategy-for-the-development-of-artificial-intelligence-for-the-period-20252030.php"),
             S("Western Balkans Info Hub", "https://westernbalkans-infohub.eu/news/serbia-adopts-strategy-for-the-development-of-artificial-intelligence-for-the-period-2025-2030/"),
-            S("Nemko", "https://digital.nemko.com/regulations/ai-regulation-in-serbia"),
           ],
         },
       ],
@@ -589,9 +587,8 @@
         {
           topic: "Institutions", date: "2025-02-08",
           text: "In February 2025 Kamal Shehadi became Lebanon's first Minister of State for Technology and Artificial Intelligence, alongside the post of Minister of the Displaced, in Nawaf Salam's government.",
-          level: "verified",
+          level: "corroborated",
           sources: [
-            S("Wikipedia - Kamal Shehadi", "https://en.wikipedia.org/wiki/Kamal_Shehadi"),
             S("Tahawul Tech - Lebanon appoints its first AI ministry", "https://www.tahawultech.com/news/lebanon-joins-global-tech-race-with-appointment-of-its-first-ministry-of-ai/"),
             S("The National - Lebanon's AI minister says $50m can transform government (Apr 2025)", "https://www.thenationalnews.com/future/technology/2025/04/17/lebanons-ai-minister-says-50m-can-transform-government-and-make-it-more-accountable/"),
           ],
