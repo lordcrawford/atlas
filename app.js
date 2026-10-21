@@ -431,43 +431,6 @@
   function rerenderMap() { if (mapSlot) mapSlot.replaceChildren(worldMap()); }
 
   // ---------------------------------------------------------------- charts
-  function milestoneTimeline(list, limit = Infinity) {
-    list = list.slice(0, limit);
-    const y0 = RECENT_FROM, y1 = 2027;
-    const labelW = 190, rowH = 34, T = 10, B = 26, plotW = 760;
-    const W = labelW + plotW + 16, H = T + list.length * rowH + B;
-    const x = (v) => labelW + ((v - y0) / (y1 - y0)) * plotW;
-    const svg = s("svg", { viewBox: `0 0 ${W} ${H}`, width: W, role: "img", "aria-label": `Timeline of AI policy milestones for ${list.length} nations, 2017 to 2026` });
-    for (let yr = y0; yr <= y1; yr++) {
-      svg.append(s("line", { x1: x(yr), x2: x(yr), y1: T, y2: H - B, class: "grid" }));
-      if (yr < y1) svg.append(s("text", { x: x(yr + 0.5), y: H - 8, "text-anchor": "middle", class: "t-muted" }, String(yr)));
-      if (yr < y1) for (const q of [0.25, 0.5, 0.75]) svg.append(s("line", { x1: x(yr + q), x2: x(yr + q), y1: T, y2: H - B, class: "grid grid-minor" }));
-    }
-    list.forEach((n, i) => {
-      const cy = T + i * rowH + rowH / 2;
-      svg.append(s("line", { x1: labelW, x2: labelW + plotW, y1: cy, y2: cy, class: "axis" }));
-      const lab = s("text", { x: 0, y: cy + 4, class: "t-ink link-text" }, `${n.flag} ${n.name}`);
-      lab.addEventListener("click", () => { location.hash = n.id; });
-      svg.append(lab);
-      const items = [...n.facts, ...n.news.filter((x) => !n.facts.some((f) => f.date === x.date))]
-        .map((f) => ({ f, v: dateValue(f.date) })).filter((o) => o.v != null && o.v >= y0);
-      items.forEach(({ f, v }) => {
-        const cx = x(v + (String(f.date).length === 4 ? 0.5 : 0) + 1 / 24);
-        svg.append(s("circle", { cx, cy, r: 5, fill: "var(--accent)", stroke: "var(--surface)", "stroke-width": 2, class: "mark" }));
-        const hit = s("circle", { cx, cy, r: 12, class: "hit", style: "cursor:pointer" });
-        hit.addEventListener("click", () => { location.hash = n.id; });
-        const txt = f.title || f.text;
-        hoverable(hit, () => [
-          el("div", { class: "tl small" }, `${n.name} · ${fmtDate(f.date)}`),
-          el("div", {}, txt.length > 170 ? txt.slice(0, 167) + "…" : txt),
-          el("div", { style: "margin-top:6px" }, badge(f.level, f.sources.length)),
-        ]);
-        svg.append(hit);
-      });
-    });
-    return el("div", { class: "chart wide" }, svg);
-  }
-
   function pillarBars(n) {
     const med = PILLARS.map((_, i) => median(N.map((x) => x.oxford.scores[i])));
     const labelW = 190, plotW = 440, rowH = 36, barH = 20, T = 6, B = 24;
@@ -620,9 +583,6 @@
           sectionHead("Where they are", "Hover a country or dot for its numbers, click to open its profile. Picking a region zooms in."),
           el("div", { class: "card" }, mapSlot,
             el("p", { class: "note" }, "At this scale Singapore, Malta, Bahrain and Mauritius are too small to draw as shapes, so every nation is also marked with a dot at its capital."))),
-        el("section", { class: "section" },
-          sectionHead("Milestones since 2024", "Each dot is a sourced fact or news item. Hover for details, click a dot or name to open the nation."),
-          el("div", { class: "card" }, expandable((k) => milestoneTimeline([...list].sort((a, b) => a.oxford.rank - b.oxford.rank), k), list.length, { hint: "by readiness rank" }))),
         el("section", { class: "section" },
           sectionHead("At a glance", "Click a column header to sort; the top rows follow the sort."),
           el("div", { class: "card compare" }, expandable((k) => compareTable(list, k), list.length, { limit: 10, hint: "in this sort order" }), sourceLine("oxford", "wbNet"))),
