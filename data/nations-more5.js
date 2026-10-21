@@ -778,7 +778,7 @@
         },
         {
           topic: "International", date: "2026-07-10",
-          text: "At the WSIS Forum in Geneva (6–10 July 2026), CONATEL presented Haiti's digital strategy with AI as a lever for development and signed a cooperation agreement with Malaysia.",
+          text: "At the WSIS Forum in Geneva (6–10 July 2026), CONATEL presented Haiti's digital strategy with AI as a lever for development. On 10 July it signed a memorandum with the Malaysian Communications and Multimedia Commission to strengthen cooperation between the two telecom regulators.",
           level: "single",
           sources: [
             S("Juno7 - Haïti met l'IA au cœur de sa stratégie numérique à Genève (15 Jul 2026)", "https://www.juno7.ht/haiti-intelligence-artificielle-wsis-geneve-2026/"),

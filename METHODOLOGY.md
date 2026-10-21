@@ -22,6 +22,8 @@ These were read from the publisher's own data, not from secondary summaries:
 - **Microsoft AI Diffusion**: the H2 2025 report appendix (PDF). Q1 2026 figures are from WAM and Telecom Review coverage. Q2 2026 figures are from Microsoft's 22 Sep 2026 release.
 - **World Bank WDI**: population, GDP per capita and internet use, pulled from the World Bank API.
 
+Since 21 October 2026 the overview no longer re-plots these datasets (the readiness heatmap, the Microsoft AI-use charts and the Stanford talent chart were removed). The comparison table keeps the Oxford Insights readiness rank as context, nation pages keep their stat tiles, and the overview links to each publisher's own report.
+
 ## Full audit (10 Oct 2026)
 
 Every claim on the site was re-checked after the build:
@@ -86,6 +88,8 @@ Candidates dropped because no government or news source confirmed a country-to-c
 
 A second round (14 October 2026) added 26 entries, from 25 to 51. Left out in that round: deals where one side was a company or an association rather than a government (Jordan–HUMAIN, Azerbaijan–Presight, a Saudi–Kuwaiti association MoU), a Georgia–Japan digital memorandum that mentions AI only in passing, a New Zealand–Korea joint statement, and anything involving Israel, which this site does not cover. ZDNet's report on the Singapore–US crosswalk no longer loads, so that entry rests on Singapore government sources, counted as one. Pages that block automated requests (the Nordic Council of Ministers, the Swedish government, ASEAN and Ukraine's Cabinet of Ministers) were read in a browser; Georgia's 1TV, which shows a bot check, was not used.
 
+A legitimacy check on 21 October 2026 re-read every entry to confirm that it is an AI agreement between governments, with sources that say so. Three were removed, from 51 to 48: Laos–China health AI (the Lao health ministry's partners were three Chinese companies, not the Chinese government), Haiti–Malaysia (a memorandum between the two telecom regulators that is not about AI; it stays on Haiti's page as a telecom fact) and the SICA regional entry (a digital-strategy presidency, not an AI agreement). Two were corrected: Serbia was added to WAICO, as one of the 29 countries that signed its founding agreement in Shanghai in July 2026; and the CARICOM entry now describes COTED's July 2026 endorsement of the UNESCO Caribbean AI Policy Roadmap, with a note that it rests on one newspaper column and that no CARICOM or UNESCO release confirming the date was found. Entries kept on a single source are badged as such: CARICOM, Georgia–South Korea, UAE–UK, UAE–India, Singapore–France, UAE–Malaysia–Rwanda, Ukraine–UK–Estonia and Singapore–US. The Laos–China AI centre entry is with the Guangxi regional government, not the national one, and says so.
+
 On the map, a solid line joins the two countries in a bilateral deal. A dashed line runs from each group member to the group's host or coordinator, which is a placement choice, not a claim about who leads. Partner countries that are not on the site (for example the United States, France and China) appear as hollow dots.
 
 ### Alignment view
@@ -113,7 +117,7 @@ All ~340 source URLs were requested programmatically. Broken links (404) were re
 ## Limits
 
 - The 96 nations added after the first six have 2–5 key facts each, not full profiles.
-- Microsoft reports one shared figure for several West African countries (Benin, Sierra Leone, Togo, Liberia, Mauritania) for Guyana, Suriname, Venezuela and French Guiana, for Congo and its Central African neighbours, for Tajikistan, and for Burundi. These are shown as hatched regional estimates.
+- Microsoft reports one shared figure for several West African countries (Benin, Sierra Leone, Togo, Liberia, Mauritania) for Guyana, Suriname, Venezuela and French Guiana, for Congo and its Central African neighbours, for Tajikistan, and for Burundi. Nation pages label these as regional estimates.
 - Map boundaries are Natural Earth 110m. They are approximate and don't imply any position on disputed borders. Tiny states are shown as dots.
 - This is a snapshot. Full research ran to 10 Oct 2026 (12–14 Oct for the last three batches). A news update on 20 Oct 2026 searched each region for developments from 10 to 20 October and added nine items; it was not an exhaustive nation-by-nation search, so smaller nations may have recent news that is not here. The news feed does not update itself.
 - Summaries and "stance" lines are editorial synthesis.

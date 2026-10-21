@@ -130,7 +130,6 @@
     return [
       el("div", { class: "tv" }, `${n.flag} ${n.name}`),
       el("div", { class: "tl" }, `AI readiness #${n.oxford.rank} of ${OXFORD_TOTAL}`),
-      el("div", { class: "tl" }, n.msAdoption ? `Gen-AI use ${n.msAdoption.h2_2025}% (H2 2025)${n.msAdoption.regional ? ", regional est." : ""}` : "Gen-AI use not reported"),
       el("div", { class: "tl small" }, `First AI strategy: ${n.glance.firstStrategy}`),
       el("div", { class: "tl small", style: "margin-top:4px" }, "Click to open profile"),
     ];
@@ -171,13 +170,6 @@
       t: (n) => (110 - n.oxford.rank) / 103, // #7 -> ~1, #110 -> 0
       lo: "#101", hi: "#7", loLabel: "Lower readiness", hiLabel: "Higher readiness",
       source: "oxford",
-    },
-    use: {
-      label: "Gen-AI use (H2 2025)",
-      value: (n) => (n.msAdoption ? n.msAdoption.h2_2025 : null),
-      t: (n) => (n.msAdoption ? n.msAdoption.h2_2025 / 70 : null),
-      lo: "0%", hi: "70%", loLabel: "Lower use", hiLabel: "Higher use",
-      source: "msH2",
     },
   };
 
@@ -418,23 +410,20 @@
     zoom.apply();
 
     // Legend + controls
-    const ctrl = el("div", { class: "seg", role: "group", "aria-label": "Colour the map by" },
-      Object.entries(METRICS).map(([k, m]) =>
-        el("button", { type: "button", class: "seg-btn", "aria-pressed": String(state.colorBy === k), onclick: () => { state.colorBy = k; rerenderMap(); } }, m.label)));
+    const ctrl = el("span", { class: "muted small" }, `Shaded by ${metric.label.toLowerCase()} (Oxford Insights 2025)`);
     const legend = el("div", { class: "legend map-legend" },
       el("span", { class: "ramp-key" },
         `${metric.loLabel} ${metric.lo}`,
         el("span", { class: "ramp" }, [0.05, 0.3, 0.55, 0.8, 1].map((t) => el("i", { style: `background:${rampAt(t)}` }))),
         `${metric.hi} ${metric.hiLabel}`),
-      state.colorBy === "use" ? el("span", {}, el("i", { style: "background:var(--na)" }), "Not reported") : null,
       el("span", {}, el("i", { style: "background:var(--land)" }), "Not covered"));
 
     box.append(
       el("div", { class: "map-head" }, ctrl, legend),
       el("div", { class: "map-stage" }, el("div", { class: "chart map-wrap" }, svg), zoomControls(zoom), hintEl));
     box.append(el("div", { class: "chart-foot" },
-      tableToggle(box, () => table(["Nation", "Region", "Readiness rank", "Gen-AI use (H2 '25)"],
-        [...shown].sort((a, b) => a.oxford.rank - b.oxford.rank).map((n) => [n.name, n.group, `#${n.oxford.rank}`, n.msAdoption ? `${n.msAdoption.h2_2025}%${n.msAdoption.regional ? " (regional est.)" : ""}` : "Not reported"]), [2, 3])),
+      tableToggle(box, () => table(["Nation", "Region", "Readiness rank"],
+        [...shown].sort((a, b) => a.oxford.rank - b.oxford.rank).map((n) => [n.name, n.group, `#${n.oxford.rank}`]), [2])),
       el("span", { class: "muted small" }, "· Source:"), sourceChips([S[metric.source]])));
     return box;
   }
@@ -442,146 +431,6 @@
   function rerenderMap() { if (mapSlot) mapSlot.replaceChildren(worldMap()); }
 
   // ---------------------------------------------------------------- charts
-  function readinessHeatmap(list, limit = Infinity) {
-    const rows = [...list].sort((a, b) => a.oxford.rank - b.oxford.rank).slice(0, limit)
-      .map((n) => ({ name: n.name, sub: `#${n.oxford.rank}`, scores: n.oxford.scores, id: n.id }));
-    rows.push({ name: "United States", sub: "#1 · reference", scores: D.meta.usReference.scores, ref: true });
-    const labelW = 190, cellW = 96, cellH = 32, gap = 2, headH = 44;
-    const W = labelW + PILLARS.length * cellW, H = headH + rows.length * cellH + 10;
-    const svg = s("svg", { viewBox: `0 0 ${W} ${H}`, width: W, role: "img", "aria-label": `Heatmap of Oxford Insights 2025 pillar scores for ${list.length} nations and the United States` });
-    const headLines = [["Policy", "capacity"], ["AI", "infrastructure"], ["Governance", ""], ["Public sector", "adoption"], ["Development", "& diffusion"], ["Resilience", ""]];
-    headLines.forEach((ls, i) => {
-      const x = labelW + i * cellW + cellW / 2;
-      svg.append(s("text", { x, y: 16, "text-anchor": "middle", class: "t-ink" }, ls[0]));
-      if (ls[1]) svg.append(s("text", { x, y: 31, "text-anchor": "middle" }, ls[1]));
-    });
-    rows.forEach((r, ri) => {
-      const y = headH + ri * cellH + (r.ref ? 10 : 0);
-      const nameNode = s("text", { x: 0, y: y + cellH / 2 + 4, class: r.ref ? "t-muted" : "t-ink link-text" }, r.name);
-      if (r.id) nameNode.addEventListener("click", () => { location.hash = r.id; });
-      svg.append(nameNode);
-      svg.append(s("text", { x: labelW - 12, y: y + cellH / 2 + 4, "text-anchor": "end", class: "t-muted" }, r.sub));
-      r.scores.forEach((v, ci) => {
-        const fill = rampColor(v);
-        const x = labelW + ci * cellW;
-        const rect = s("rect", { x: x + gap / 2, y: y + gap / 2, width: cellW - gap, height: cellH - gap, rx: 4, fill, class: "cell", opacity: r.ref ? 0.55 : 1 });
-        hoverable(rect, () => [
-          el("div", { class: "tv" }, v.toFixed(2)),
-          el("div", { class: "tl" }, `${r.name} · ${PILLARS[ci]}`),
-          el("div", { class: "tl small" }, "Score out of 100, Oxford Insights 2025"),
-        ]);
-        svg.append(rect, s("text", { x: x + cellW / 2, y: y + cellH / 2 + 4, "text-anchor": "middle", style: `fill:${inkOn(fill)};font-variant-numeric:tabular-nums;pointer-events:none` }, v.toFixed(1)));
-      });
-    });
-    const box = el("div", {}, el("div", { class: "chart wide" }, svg));
-    box.append(el("div", { class: "legend" },
-      el("span", { style: "display:inline-flex;align-items:center;gap:6px;white-space:nowrap" }, "Low",
-        el("span", { style: "display:inline-flex;gap:2px" }, [30, 45, 60, 75, 90].map((v) => el("i", { style: `background:${rampColor(v)};width:22px;margin:0` }))),
-        "High · score out of 100")),
-      el("div", { class: "chart-foot" },
-        tableToggle(box, () => table(["Country", "Rank", ...PILLARS], rows.map((r) => [r.name, r.sub, ...r.scores.map((v) => v.toFixed(2))]), [2, 3, 4, 5, 6, 7])),
-        el("span", { class: "muted small" }, " · Source:"), sourceChips([S.oxford])));
-    return box;
-  }
-
-  function usageBars(list, limit = Infinity) {
-    const rows = [...list].map((n) => ({ n, v: n.msAdoption ? n.msAdoption.h2_2025 : null }))
-      .sort((a, b) => (b.v ?? -1) - (a.v ?? -1)).slice(0, limit);
-    const labelW = 190, barH = 18, rowH = 30, plotW = 560, top = 8, max = 80;
-    const W = labelW + plotW + 60, H = top + rows.length * rowH + 26;
-    const x = (v) => labelW + (v / max) * plotW;
-    const svg = s("svg", { viewBox: `0 0 ${W} ${H}`, width: W, role: "img", "aria-label": "Bar chart of generative AI user share, H2 2025" });
-    svg.append(s("defs", {}, s("pattern", { id: "hatch", width: 6, height: 6, patternUnits: "userSpaceOnUse", patternTransform: "rotate(45)" },
-      s("rect", { width: 6, height: 6, fill: "var(--surface)" }), s("line", { x1: 0, y1: 0, x2: 0, y2: 6, stroke: "var(--series-1)", "stroke-width": 2.5 }))));
-    for (let t = 0; t <= max; t += 20) {
-      svg.append(s("line", { x1: x(t), x2: x(t), y1: top, y2: H - 22, class: t === 0 ? "axis" : "grid" }));
-      svg.append(s("text", { x: x(t), y: H - 6, "text-anchor": "middle", class: "t-muted" }, `${t}%`));
-    }
-    rows.forEach(({ n, v }, i) => {
-      const y = top + i * rowH + (rowH - barH) / 2;
-      svg.append(s("text", { x: 0, y: y + barH / 2 + 4, class: "t-ink" }, `${n.flag} ${n.name}`));
-      if (v == null) {
-        svg.append(s("text", { x: x(0) + 8, y: y + barH / 2 + 4, class: "t-muted" }, "Not reported separately"));
-        return;
-      }
-      const w = x(v) - x(0), r = Math.min(4, w / 2);
-      const reg = n.msAdoption.regional;
-      const path = `M${x(0)},${y} h${w - r} a${r},${r} 0 0 1 ${r},${r} v${barH - 2 * r} a${r},${r} 0 0 1 -${r},${r} h-${w - r} Z`;
-      const hit = s("rect", { x: x(0), y: y - 5, width: Math.max(w, 40) + 120, height: barH + 10, class: "hit" });
-      hoverable(hit, () => [
-        el("div", { class: "tv" }, `${v.toFixed(1)}%`),
-        el("div", { class: "tl" }, `${n.name}, H2 2025${reg ? " · regional estimate" : ""}`),
-        el("div", { class: "tl small" }, reg ? `Microsoft reports one shared figure for several countries in ${n.msAdoption.regionLabel || "West Africa"}.` : `H1 2025: ${n.msAdoption.h1_2025.toFixed(1)}%`),
-      ]);
-      svg.append(s("path", { d: path, fill: reg ? "url(#hatch)" : "var(--series-1)", stroke: reg ? "var(--series-1)" : null, "stroke-width": reg ? 1 : null, class: "mark" }),
-        s("text", { x: x(v) + 6, y: y + barH / 2 + 4, class: reg ? "t-muted" : "t-ink", style: "font-variant-numeric:tabular-nums" }, `${v.toFixed(1)}%${reg ? " · regional est." : ""}`), hit);
-    });
-    const box = el("div", {}, el("div", { class: "chart" }, svg));
-    box.append(el("div", { class: "chart-foot" },
-      tableToggle(box, () => table(["Country", "H1 2025", "H2 2025"], rows.map(({ n }) => [n.name, n.msAdoption ? n.msAdoption.h1_2025 + "%" : "Not reported", n.msAdoption ? n.msAdoption.h2_2025 + "%" + (n.msAdoption.regional ? " (regional est.)" : "") : "Not reported"]), [1, 2])),
-      el("span", { class: "muted small" }, " · Source:"), sourceChips([S.msH2, S.msBlog])));
-    return box;
-  }
-
-  function leaderTrend() {
-    const periods = [["h1_2025", "H1 2025"], ["h2_2025", "H2 2025"], ["q1_2026", "Q1 2026"], ["q2_2026", "Q2 2026"]];
-    const series = [
-      { n: byId("ae"), color: "var(--series-1)" },
-      { n: byId("sg"), color: "var(--series-2)" },
-    ];
-    const L = 40, R = 124, T = 14, B = 30, W = 620, H = 250, lo = 50, hi = 80;
-    const x = (i) => L + (i / (periods.length - 1)) * (W - L - R);
-    const y = (v) => T + (1 - (v - lo) / (hi - lo)) * (H - T - B);
-    const svg = s("svg", { viewBox: `0 0 ${W} ${H}`, width: W, role: "img", "aria-label": "Line chart: UAE and Singapore AI user share, H1 2025 to Q2 2026" });
-    for (let t = lo; t <= hi; t += 10) {
-      svg.append(s("line", { x1: L, x2: W - R, y1: y(t), y2: y(t), class: "grid" }));
-      svg.append(s("text", { x: L - 8, y: y(t) + 4, "text-anchor": "end", class: "t-muted" }, `${t}%`));
-    }
-    periods.forEach(([, lab], i) => svg.append(s("text", { x: x(i), y: H - 8, "text-anchor": "middle", class: "t-muted" }, lab)));
-    const cross = s("line", { x1: 0, x2: 0, y1: T, y2: H - B, class: "axis", visibility: "hidden" });
-    svg.append(cross);
-    series.forEach(({ n, color }) => {
-      const pts = periods.map(([k], i) => [x(i), y(n.msAdoption[k])]);
-      svg.append(s("polyline", { points: pts.map((p) => p.join(",")).join(" "), fill: "none", stroke: color, "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round" }));
-      pts.forEach(([px, py]) => svg.append(s("circle", { cx: px, cy: py, r: 4, fill: color, stroke: "var(--surface)", "stroke-width": 2 })));
-      const last = pts[pts.length - 1];
-      svg.append(s("text", { x: last[0] + 10, y: last[1] + 4, class: "t-ink" }, `${shortName(n)} ${n.msAdoption.q2_2026}%`));
-    });
-    const hit = s("rect", { x: L - 20, y: T, width: W - L - R + 40, height: H - T - B, class: "hit", tabindex: "0" });
-    let focusIdx = periods.length - 1;
-    const readout = (i) => [
-      el("div", { class: "tl" }, periods[i][1]),
-      ...series.map(({ n, color }) => el("div", { class: "row" },
-        el("span", { class: "key", style: `background:${color}` }),
-        el("span", { class: "tv" }, `${n.msAdoption[periods[i][0]]}%`),
-        el("span", { class: "tl" }, n.name))),
-    ];
-    const at = (i, evt) => { cross.setAttribute("x1", x(i)); cross.setAttribute("x2", x(i)); cross.setAttribute("visibility", "visible"); showTip(evt, readout(i)); };
-    hit.addEventListener("pointermove", (e) => {
-      const r = svg.getBoundingClientRect();
-      const px = ((e.clientX - r.left) / r.width) * W;
-      const i = Math.max(0, Math.min(periods.length - 1, Math.round(((px - L) / (W - L - R)) * (periods.length - 1))));
-      at(i, e);
-    });
-    hit.addEventListener("pointerleave", () => { hideTip(); cross.setAttribute("visibility", "hidden"); });
-    hit.addEventListener("focus", (e) => at(focusIdx, e));
-    hit.addEventListener("blur", () => { hideTip(); cross.setAttribute("visibility", "hidden"); });
-    hit.addEventListener("keydown", (e) => {
-      if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
-        focusIdx = Math.max(0, Math.min(periods.length - 1, focusIdx + (e.key === "ArrowRight" ? 1 : -1)));
-        at(focusIdx, { target: hit, type: "focus" }); e.preventDefault();
-      }
-    });
-    svg.append(hit);
-    const box = el("div", {},
-      el("div", { class: "legend" }, series.map(({ n, color }) => el("span", {}, el("i", { class: "line", style: `background:${color}` }), n.name))),
-      el("div", { class: "chart" }, svg));
-    box.append(el("div", { class: "chart-foot" },
-      tableToggle(box, () => table(["Period", ...series.map((x) => x.n.name)], periods.map(([k, lab]) => [lab, ...series.map((x) => x.n.msAdoption[k] + "%")]), [1, 2])),
-      el("span", { class: "muted small" }, " · Sources:"), sourceChips([S.msH2, S.wamQ1, S.trQ1, S.msQ2, S.meaiQ2])));
-    return box;
-  }
-
   function milestoneTimeline(list, limit = Infinity) {
     list = list.slice(0, limit);
     const y0 = RECENT_FROM, y1 = 2027;
@@ -700,7 +549,8 @@
         el("h3", {}, item.title),
         el("p", { class: "ink2" }, item.summary),
         el("div", { class: "fact-meta" }, badge(item.level, item.sources.length), sourceChips(item.sources)),
-        item.note ? el("p", { class: "note" }, item.note) : null));
+        item.note ? el("p", { class: "note" }, item.note) : null,
+        itemActions(newsKey(item, n), newsSnap(item, n))));
   }
   const allClaims = () => N.flatMap((n) => [...n.facts, ...n.news]);
   // Newest first. Undated-precision items ("2025") sort as the start of that year.
@@ -765,68 +615,24 @@
       hideTip();
       const list = filtered();
       mapSlot = el("div", {}, worldMap());
-      const showTrend = list.some((n) => n.id === "ae" || n.id === "sg");
       body.replaceChildren(...[
         el("section", { class: "section" },
           sectionHead("Where they are", "Hover a country or dot for its numbers, click to open its profile. Picking a region zooms in."),
           el("div", { class: "card" }, mapSlot,
             el("p", { class: "note" }, "At this scale Singapore, Malta, Bahrain and Mauritius are too small to draw as shapes, so every nation is also marked with a dot at its capital."))),
         el("section", { class: "section" },
-          sectionHead("Government AI readiness, by pillar", `Oxford Insights 2025 index (${OXFORD_TOTAL} countries ranked). The United States (#1) is shown for reference. Click a name to open its profile.`),
-          el("div", { class: "card" }, expandable((k) => readinessHeatmap(list, k), list.length, { hint: "by readiness rank" }),
-            el("p", { class: "note" }, "Oxford Insights corrected its December 2025 release. These are the validated January 2026 figures. Some third-party trackers still repeat the earlier numbers."))),
-        el("section", { class: "section" },
-          sectionHead("How many people use generative AI", "Share of working-age population (15–64), H2 2025."),
-          el("div", { class: "card" }, expandable((k) => usageBars(list, k), list.length, { hint: "by AI use" }),
-            el("p", { class: "note" }, "Microsoft's estimate comes from anonymised Microsoft telemetry adjusted for device share and population. It measures use, not enterprise deployment. Smaller states without their own figure are marked 'not reported'. World averages: Global North 24.7%, Global South 14.1%."))),
-        el("section", { class: "section" },
-          sectionHead("Where AI talent is going", "LinkedIn data from the Stanford AI Index 2026. Only the top 15 economies are published, so most nations here have no value."),
-          el("div", { class: "card" }, talentChart(list))),
-        showTrend ? el("section", { class: "section" },
-          sectionHead("The two global leaders keep pulling ahead", "UAE vs Singapore, the world's #1 and #2 for AI use, over the latest four reporting periods."),
-          el("div", { class: "card" }, leaderTrend(),
-            el("p", { class: "note" }, "Microsoft moved from half-year to quarterly reporting in 2026, so the periods are not evenly spaced in time. Q1 2026 figures come from WAM and Telecom Review coverage of Microsoft's report. Q2 2026 figures come from Microsoft directly."))) : null,
-        el("section", { class: "section" },
           sectionHead("Milestones since 2024", "Each dot is a sourced fact or news item. Hover for details, click a dot or name to open the nation."),
           el("div", { class: "card" }, expandable((k) => milestoneTimeline([...list].sort((a, b) => a.oxford.rank - b.oxford.rank), k), list.length, { hint: "by readiness rank" }))),
         el("section", { class: "section" },
           sectionHead("At a glance", "Click a column header to sort; the top rows follow the sort."),
-          el("div", { class: "card compare" }, expandable((k) => compareTable(list, k), list.length, { limit: 10, hint: "in this sort order" }), sourceLine("oxford", "msH2", "wbNet"))),
-      ].filter(Boolean));
+          el("div", { class: "card compare" }, expandable((k) => compareTable(list, k), list.length, { limit: 10, hint: "in this sort order" }), sourceLine("oxford", "wbNet"))),
+        dataSources(),
+      ]);
     };
     view.replaceChildren(head,
       el("div", { class: "section filter-bar" }, el("span", { class: "filter-label" }, "Region"), regionFilter(drawBody)),
       body);
     drawBody();
-  }
-
-  function talentChart(list) {
-    const ai = D.meta.aiIndex;
-    const panel = (title, unit, data, fmt) => {
-      const rows = list.filter((n) => data[n.id] != null).map((n) => ({ n, v: data[n.id] })).sort((a, b) => b.v - a.v);
-      if (!rows.length) return el("div", { class: "talent-panel" }, el("h3", {}, title), el("p", { class: "muted small" }, "No nation in this region appears in the AI Index top 15."));
-      const max = Math.max(...rows.map((r) => r.v)) * 1.15;
-      const labelW = 150, plotW = 260, rowH = 30, barH = 18, T = 4;
-      const W = labelW + plotW + 60, H = T + rows.length * rowH + 4;
-      const x = (v) => labelW + (v / max) * plotW;
-      const svg = s("svg", { viewBox: `0 0 ${W} ${H}`, width: W, role: "img", "aria-label": title });
-      svg.append(s("line", { x1: x(0), x2: x(0), y1: 0, y2: H, class: "axis" }));
-      rows.forEach(({ n, v }, i) => {
-        const y = T + i * rowH + (rowH - barH) / 2, w = x(v) - x(0), r = Math.min(4, w / 2);
-        svg.append(s("text", { x: 0, y: y + barH / 2 + 4, class: "t-ink" }, `${n.flag} ${shortName(n)}`));
-        svg.append(s("path", { d: `M${x(0)},${y} h${w - r} a${r},${r} 0 0 1 ${r},${r} v${barH - 2 * r} a${r},${r} 0 0 1 -${r},${r} h-${w - r} Z`, fill: "var(--series-1)" }));
-        svg.append(s("text", { x: x(v) + 6, y: y + barH / 2 + 4, class: "t-ink", style: "font-variant-numeric:tabular-nums" }, fmt(v)));
-        const hit = s("rect", { x: 0, y: y - 5, width: W, height: barH + 10, class: "hit" });
-        hoverable(hit, () => [el("div", { class: "tv" }, fmt(v)), el("div", { class: "tl" }, `${n.name} · ${unit}, 2025`)]);
-        svg.append(hit);
-      });
-      return el("div", { class: "talent-panel" }, el("h3", {}, title), el("p", { class: "muted small" }, unit), el("div", { class: "chart" }, svg));
-    };
-    return el("div", {},
-      el("div", { class: "grid-2 talent" },
-        panel("AI talent concentration", "Share of LinkedIn members with AI skills or jobs", ai.talentConcentration, (v) => `${v.toFixed(2)}%`),
-        panel("Net AI talent migration", "Net AI workers gained per 10,000 LinkedIn members", ai.netMigration, (v) => v.toFixed(2))),
-      el("div", { class: "chart-foot" }, el("span", { class: "muted small" }, "Source:"), sourceChips([S.aiIndex])));
   }
 
   function compareTable(list, limit = Infinity) {
@@ -837,7 +643,6 @@
       { h: "Latest strategy", key: "latest", get: (n) => n.glance.latestStrategy },
       { h: "Newest AI body", key: "body", get: (n) => n.glance.newestBodyDate || "", cell: (n) => (n.glance.newestBody === "—" ? "—" : `${n.glance.newestBody} (${fmtDate(n.glance.newestBodyDate)})`) },
       { h: "Readiness rank", key: "rank", num: true, get: (n) => n.oxford.rank, cell: (n) => `#${n.oxford.rank}` },
-      { h: "Gen-AI use", key: "use", num: true, get: (n) => (n.msAdoption ? n.msAdoption.h2_2025 : -1), cell: (n) => (n.msAdoption ? `${n.msAdoption.h2_2025}%` : "n/a") },
       { h: "Internet users", key: "net", num: true, get: (n) => n.stats.internet.v, cell: (n) => `${n.stats.internet.v.toFixed(0)}%` },
     ];
     const wrap = el("div", {});
@@ -851,13 +656,35 @@
         el("thead", {}, el("tr", {}, cols.map((c) =>
           el("th", { class: c.num ? "num" : null, "aria-sort": c.key === state.sortKey ? (state.sortDir > 0 ? "ascending" : "descending") : null },
             el("button", { class: "th-btn", type: "button", onclick: () => {
-              if (state.sortKey === c.key) state.sortDir *= -1; else { state.sortKey = c.key; state.sortDir = c.key === "use" || c.key === "net" ? -1 : 1; }
+              if (state.sortKey === c.key) state.sortDir *= -1; else { state.sortKey = c.key; state.sortDir = c.key === "net" ? -1 : 1; }
               draw();
             } }, c.h, c.key === state.sortKey ? (state.sortDir > 0 ? " ↑" : " ↓") : ""))))),
         el("tbody", {}, rows.map((n) => el("tr", {}, cols.map((c) => el("td", { class: c.num ? "num" : null }, c.cell ? c.cell(n) : c.get(n))))))));
     };
     draw();
     return wrap;
+  }
+
+  // The broader datasets this site draws on, linked at the source instead of re-plotted here.
+  function dataSources() {
+    const link = (t, u) => el("a", { href: u, target: "_blank", rel: "noopener noreferrer" }, t, " ↗");
+    const item = (name, what, ...links) => el("li", { class: "ds-item" },
+      el("div", { class: "ds-name" }, name), el("p", { class: "ink2 small" }, what), el("div", { class: "ds-links" }, links));
+    return el("section", { class: "section" },
+      sectionHead("Where to find the wider data", "The readiness rank above is the only index figure kept here. For rankings, usage and talent data across all countries, go to the people who measure it."),
+      el("ul", { class: "card ds-list" },
+        item("Oxford Insights · Government AI Readiness Index", "Readiness scores and pillar breakdowns for 195 governments. Source of the rank in the table.",
+          link("Index page", "https://oxfordinsights.com/ai-readiness/government-ai-readiness-index-2025/"), link("2025 report (PDF)", S.oxford.u)),
+        item("Microsoft AI Economy Institute · AI Diffusion reports", "Estimated share of working-age people using generative AI, by country, updated quarterly.",
+          link("Reports", "https://www.microsoft.com/en-us/corporate-responsibility/topics/ai-economy-institute/"), link("H2 2025 report (PDF)", S.msH2.u)),
+        item("Stanford HAI · AI Index", "Annual report on research, investment, talent (LinkedIn data) and policy.",
+          link("AI Index", "https://hai.stanford.edu/ai-index"), link("2026 report (PDF)", S.aiIndex.u)),
+        item("OECD.AI Policy Observatory", "National AI strategies and policy initiatives, country by country.",
+          link("OECD.AI", "https://oecd.ai/en/")),
+        item("OECD Digital Economy Policy Platform", "Country profiles of digital and AI policy.",
+          link("Country profiles", "https://depp.oecd.org/countries")),
+        item("World Bank · World Development Indicators", "Population, GDP per capita and internet use, as shown on each nation page.",
+          link("World Bank data", "https://data.worldbank.org/"))));
   }
 
   // Up to two key documents per nation (strategies, laws, official guidance), from data/documents.js.
@@ -870,7 +697,8 @@
           el("span", { class: "kd-meta" }, [d.by, d.year].filter(Boolean).join(" · ")),
           d.note ? el("span", { class: "kd-note" }, d.note) : null,
           // Where the file is published, so readers can see its context.
-          d.from ? el("span", { class: "kd-from" }, "From: ", el("a", { href: d.from.u, target: "_blank", rel: "noopener noreferrer" }, d.from.t, " ↗")) : null)))
+          d.from ? el("span", { class: "kd-from" }, "From: ", el("a", { href: d.from.u, target: "_blank", rel: "noopener noreferrer" }, d.from.t, " ↗")) : null,
+          itemActions(docKey(d, n), docSnap(d, n)))))
       : el("p", { class: "muted" }, "No official AI strategy or AI law document is listed for this nation yet.");
     return el("section", { class: "section" },
       sectionHead("Key documents", docs.length ? `The ${docs.length === 1 ? "document" : "two documents"} to read first on ${n.name}'s approach to AI.` : "Official strategies and laws, when there are any."),
@@ -1114,6 +942,7 @@
   }
   const collabSwitch = (active) => el("div", { class: "seg", role: "group", "aria-label": "Collaborations view" },
     el("a", { class: "seg-btn", href: "#collab", "aria-current": active === "agreements" ? "page" : null }, "Agreements"),
+    el("a", { class: "seg-btn", href: "#collab/timeline", "aria-current": active === "timeline" ? "page" : null }, "Timeline"),
     el("a", { class: "seg-btn", href: "#collab/alignment", "aria-current": active === "alignment" ? "page" : null }, "Alignment"));
 
   function renderAlignment() {
@@ -1218,8 +1047,105 @@
           el("p", { class: "note" }, "Counted only from the agreements listed on this site, so a gap does not mean a nation has no ties with that group. A two-country deal counts toward the other country's group. A group agreement counts toward its host (for the host, toward its members), except global forums such as the Bletchley Declaration and the Global Partnership on AI. The partner groups are editorial; see Method."))));
   }
 
+  // ---- timeline view (#collab/timeline): every agreement on a time axis, then year by year
+  function renderTimeline() {
+    const all = [...(D.collaborations || [])].sort(byDateDesc);
+    const st = { kind: "all", q: "" };
+    const norm = (t) => t.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").trim();
+    const shown = () => {
+      const q = norm(st.q);
+      return all.filter((c) => (st.kind === "all" || (st.kind === "bilateral") === (c.kind === "bilateral")) &&
+        (!q || partiesOf(c).some((p) => norm(p.name).includes(q) || (COLLAB_ALIASES[p.key] || []).includes(q)) || norm(c.title).includes(q) || norm(c.text).includes(q)));
+    };
+    // Mid-point of the period a date names ("2026-07" is mid-July, "2018" mid-2018).
+    const when = (d) => dateValue(d) + (d.length === 4 ? 0.5 : d.length === 7 ? 0.5 / 12 : 0);
+    const color = (c) => (c.kind === "bilateral" ? "var(--series-1)" : "var(--series-2)");
+
+    const strip = el("div", { class: "chart tl-chart" });
+    const drawStrip = (list) => {
+      const y0 = Math.min(2018, ...all.map((c) => Math.floor(when(c.date)))), y1 = Math.floor(dateValue(D.meta.asOf)) + 1;
+      // Years before 2024 are few and far between, so they share 30% of the width.
+      const W = 960, L = 12, R = 12, split = 2024, cut = L + (W - L - R) * 0.3;
+      const x = (v) => (v < split ? L + ((v - y0) / (split - y0)) * (cut - L) : cut + ((v - split) / (y1 - split)) * (W - R - cut));
+      const r = 6, gap = 2;
+      const placed = [];
+      const dots = [...list].sort((a, b) => when(a.date) - when(b.date)).map((c) => {
+        const cx = x(when(c.date));
+        let row = 0;
+        while (placed.some((p) => p.row === row && Math.abs(p.cx - cx) < 2 * r + gap)) row++;
+        placed.push({ cx, row });
+        return { c, cx, row };
+      });
+      const rows = Math.max(3, ...placed.map((p) => p.row + 1));
+      const axisY = 8 + rows * (2 * r + gap) + 4, H = axisY + 26;
+      const svg = s("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": `Timeline of ${list.length} agreements, ${y0} to ${y1 - 1}` });
+      for (let y = y0; y <= y1; y++) {
+        if (y < split && y !== y0 && (y - y0) % 2) continue;
+        const tx = x(y);
+        svg.append(s("line", { x1: tx, x2: tx, y1: 4, y2: axisY, class: "gridline" }));
+        if (y < y1) svg.append(s("text", { x: tx + 4, y: axisY + 18, class: "t-muted" }, String(y)));
+      }
+      svg.append(s("line", { x1: L, x2: W - R, y1: axisY, y2: axisY, class: "axis" }));
+      svg.append(s("text", { x: (L + cut) / 2, y: 14, class: "t-muted", "text-anchor": "middle" }, "earlier years compressed"));
+      for (const { c, cx, row } of dots) {
+        const cy = axisY - 4 - r - row * (2 * r + gap);
+        const dot = s("circle", { cx, cy, r, fill: color(c), class: "tl-dot", role: "link", "aria-label": `${c.title}, ${fmtDate(c.date)}` });
+        hoverable(dot, () => [el("div", { class: "tv" }, c.short || c.title), el("div", { class: "tl" }, partiesOf(c).map((p) => p.name).join(c.kind === "bilateral" ? " ⟷ " : ", ")), el("div", { class: "tl small" }, `${fmtDate(c.date)} · click to open`)]);
+        dot.addEventListener("click", () => { location.hash = `collab/${c.id}`; });
+        dot.addEventListener("keydown", (e) => { if (e.key === "Enter") location.hash = `collab/${c.id}`; });
+        svg.append(dot);
+      }
+      strip.replaceChildren(svg);
+    };
+
+    const listBox = el("div", { class: "tl-years" });
+    const drawList = (list) => {
+      const years = [...new Set(list.map((c) => c.date.slice(0, 4)))];
+      listBox.replaceChildren(...(years.length ? years.map((y) => {
+        const items = list.filter((c) => c.date.startsWith(y));
+        return el("section", { class: "tl-year" },
+          el("h2", { class: "tl-year-h" }, y, el("span", { class: "muted small" }, ` · ${items.length} agreement${items.length === 1 ? "" : "s"}`)),
+          el("ol", { class: "tl-list" }, items.map((c) => el("li", { class: "tl-item" },
+            el("span", { class: "tl-mark", style: `background:${color(c)}`, "aria-hidden": "true" }),
+            el("div", { class: "tl-date" }, fmtDate(c.date)),
+            el("div", { class: "tl-body" },
+              el("div", { class: "tl-head" },
+                el("a", { class: "tl-title", href: `#collab/${c.id}` }, c.title),
+                saveBtn(collabKey(c), collabSnap(c))),
+              partiesRow(c),
+              el("p", { class: "ink2 small tl-text" }, c.text),
+              el("div", { class: "fact-meta" }, badge(c.level, c.sources.length)))))));
+      }) : [el("p", { class: "muted" }, "No agreements match.")]));
+    };
+    const status = el("p", { class: "muted small", "aria-live": "polite" });
+    const draw = () => {
+      const list = shown();
+      status.textContent = `${list.length} of ${all.length} agreements`;
+      drawStrip(list); drawList(list);
+    };
+    const search = el("input", { type: "search", class: "dir-search tl-search", placeholder: "Search a country or topic", "aria-label": "Search agreements by country or topic" });
+    search.addEventListener("input", () => { st.q = search.value; draw(); });
+    const kinds = el("div", { class: "filters", role: "group", "aria-label": "Kind of agreement" });
+    const drawKinds = () => kinds.replaceChildren(...[["all", "All"], ["bilateral", "Two countries"], ["group", "Groups"]].map(([k, lab]) =>
+      el("button", { class: "chip-btn", type: "button", "aria-pressed": String(st.kind === k), onclick: () => { st.kind = k; drawKinds(); draw(); } }, lab)));
+    drawKinds(); draw();
+
+    view.replaceChildren(
+      el("h1", {}, "AI collaborations between countries"),
+      el("p", { class: "summary ink2" }, "When each agreement was signed. Most date from 2024 onwards. Hover a dot for the agreement, click it to open it on the map."),
+      collabSwitch("timeline"),
+      el("section", { class: "section" },
+        el("div", { class: "tl-controls" }, search, kinds, status),
+        el("div", { class: "card" }, strip,
+          el("div", { class: "legend" },
+            el("span", {}, el("i", { style: "background:var(--series-1)" }), "Between two countries"),
+            el("span", {}, el("i", { style: "background:var(--series-2)" }), "Group agreement")))),
+      el("section", { class: "section" }, listBox));
+  }
+
   function renderCollab(initialId) {
     if (initialId === "alignment") return renderAlignment();
+    if (initialId === "timeline") return renderTimeline();
     const all = [...(D.collaborations || [])].sort(byDateDesc);
     const byCid = new Map(all.map((c) => [c.id, c]));
     // A link to one agreement (#collab/<id>) opens it with the tour paused.
@@ -1371,7 +1297,8 @@
         partiesRow(c),
         el("p", { class: "ink2 cx-text" }, c.text),
         el("div", { class: "fact-meta" }, badge(c.level, c.sources.length), sourceChips(c.sources)),
-        ...(c.note ? [el("p", { class: "note" }, c.note)] : []));
+        ...(c.note ? [el("p", { class: "note" }, c.note)] : []),
+        itemActions(collabKey(c), collabSnap(c)));
     };
 
     // ---- list
@@ -1508,6 +1435,11 @@
         el("li", {}, "Every mismatch was reviewed by hand against the most relevant passage of the page."),
         el("li", {}, "Pages that block automated access were opened in a browser where possible. Pages behind bot challenges (for example Bloomberg and gov.mt) were not bypassed. Readable independent coverage was found to replace them."),
         el("li", {}, "Where no readable source could confirm a detail, the detail was removed or the badge was lowered.")),
+      el("h2", {}, "Collaborations check (21 October 2026)"),
+      el("ul", {},
+        el("li", {}, `Every agreement was re-read to confirm it is an AI agreement between governments, with sources that say so. ${(D.collaborations || []).length} remain.`),
+        el("li", {}, "Removed: Laos–China health AI (the Lao ministry's partners were Chinese companies, not the Chinese government), Haiti–Malaysia (a telecom regulators' memorandum, not about AI) and the SICA regional entry (a digital-strategy presidency, not an AI agreement)."),
+        el("li", {}, "Corrected: Serbia added to WAICO (it signed the founding agreement in Shanghai in July 2026), and the CARICOM entry now describes COTED's July 2026 endorsement of the UNESCO Caribbean AI Policy Roadmap, flagged as resting on one source.")),
       el("h2", {}, "Third audit (20 October 2026)"),
       el("ul", {},
         el("li", {}, "Every cited link (about 760) was fetched again and every claim, news item and collaboration was re-checked against its sources. Pages that block automated requests were read in a browser."),
@@ -1536,11 +1468,249 @@
       el("ul", {},
         el("li", {}, `This is a snapshot as of ${fmtDate(D.meta.asOf)}. The news feed does not update itself.`),
         el("li", {}, "Summaries and 'stance' lines are editorial synthesis, not quotations."),
+        el("li", {}, "Profiles, saved items and review notes are kept only in this browser. They don't sync between devices, and clearing site data deletes them."),
         el("li", {}, "Programme-reported figures are the programmes' own numbers, not independent evaluations. Government-aligned outlets are labelled where relevant."),
         el("li", {}, "Map boundaries come from Natural Earth (110m scale). They are approximate and don't imply any position on disputed borders."),
         el("li", {}, "Disclosure: this dashboard was compiled by Claude, an AI model made by Anthropic. Anthropic is party to agreements described here (Rwanda MOU, Estonia AI Leap talks). Those claims rely on both parties' public statements.")),
     ));
   }
+
+  // ---------------------------------------------------------------- profiles, saved items and review marks
+  // Everything is kept in this browser's localStorage (no server yet): a list of profiles with salted
+  // password hashes, and per profile the saved items and review marks (read & vetted / seems suspicious + note).
+  const Store = (() => {
+    const K_PROFILES = "atlas-profiles", K_USER = "atlas-user";
+    const read = (k, d) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch { return d; } };
+    const write = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch { return false; } };
+    const hash = (salt, pw) => window.atlasGate.sha256(`${salt}:${pw}`);
+    const idOf = (name) => name.trim().toLowerCase();
+    let user = read(K_USER, null);
+    if (user && !read(K_PROFILES, {})[user]) user = null;
+    let data = null;
+    const load = () => { data = user ? Object.assign({ saved: {}, marks: {} }, read(`atlas-data:${user}`, {})) : null; };
+    const save = () => { if (user) write(`atlas-data:${user}`, data); };
+    const listeners = new Set();
+    const emit = (why) => listeners.forEach((fn) => fn(why));
+    load();
+    return {
+      user: () => user,
+      displayName: () => (user ? read(K_PROFILES, {})[user].name : null),
+      onChange: (fn) => listeners.add(fn),
+      create(name, pw) {
+        const id = idOf(name), all = read(K_PROFILES, {});
+        if (!/^[\w .-]{2,32}$/.test(name.trim())) return "Use 2–32 letters, numbers, spaces, dots or dashes.";
+        if (all[id]) return "That name is taken on this browser. Sign in instead.";
+        if (pw.length < 4) return "Use a password of at least 4 characters.";
+        const salt = [...crypto.getRandomValues(new Uint8Array(16))].map((b) => b.toString(16).padStart(2, "0")).join("");
+        all[id] = { name: name.trim(), salt, hash: hash(salt, pw), created: new Date().toISOString() };
+        if (!write(K_PROFILES, all)) return "This browser is not letting the site store anything (private mode?).";
+        user = id; write(K_USER, user); load(); emit("auth");
+        return null;
+      },
+      signIn(name, pw) {
+        const p = read(K_PROFILES, {})[idOf(name)];
+        if (!p || p.hash !== hash(p.salt, pw)) return "Name or password not recognised on this browser.";
+        user = idOf(name); write(K_USER, user); load(); emit("auth");
+        return null;
+      },
+      signOut() { user = null; try { localStorage.removeItem(K_USER); } catch {} load(); emit("auth"); },
+      deleteProfile() {
+        const all = read(K_PROFILES, {});
+        delete all[user]; write(K_PROFILES, all);
+        try { localStorage.removeItem(`atlas-data:${user}`); } catch {}
+        this.signOut();
+      },
+      data: () => data,
+      isSaved: (key) => !!(data && data.saved[key]),
+      toggleSave(key, snap) {
+        if (data.saved[key]) delete data.saved[key];
+        else data.saved[key] = { ...snap, at: new Date().toISOString() };
+        save(); emit("data");
+      },
+      mark: (key) => (data && data.marks[key]) || null,
+      // patch: { status?: "vetted" | "sus" | null, note?: string }. A mark with no status and no note is dropped.
+      setMark(key, patch, snap) {
+        const m = { ...(data.marks[key] || {}), ...snap, ...patch, at: new Date().toISOString() };
+        if (!m.status && !(m.note || "").trim()) delete data.marks[key];
+        else data.marks[key] = m;
+        save(); emit("data");
+      },
+    };
+  })();
+
+  // Sign-in / create-profile dialog. `then` runs after a successful sign-in (e.g. the save the user clicked).
+  function accountDialog(then, mode = "signin") {
+    const dlg = el("dialog", { class: "acct-dialog", "aria-labelledby": "acctTitle" });
+    const draw = () => {
+      const creating = mode === "create";
+      const err = el("p", { class: "acct-err", role: "alert", hidden: true });
+      const name = el("input", { class: "acct-input", id: "acctName", autocomplete: "username", required: true, maxlength: "32" });
+      const pw = el("input", { class: "acct-input", id: "acctPw", type: "password", autocomplete: creating ? "new-password" : "current-password", required: true });
+      const pw2 = creating ? el("input", { class: "acct-input", id: "acctPw2", type: "password", autocomplete: "new-password", required: true }) : null;
+      const form = el("form", { method: "dialog", onsubmit: (e) => {
+        e.preventDefault();
+        if (creating && pw.value !== pw2.value) { err.textContent = "The two passwords don't match."; err.hidden = false; return; }
+        const msg = creating ? Store.create(name.value, pw.value) : Store.signIn(name.value, pw.value);
+        if (msg) { err.textContent = msg; err.hidden = false; return; }
+        dlg.close();
+        if (then) then();
+        route(true); // redraw so every icon on the page shows this profile's marks
+      } },
+        el("h2", { id: "acctTitle" }, creating ? "Create a profile" : "Sign in"),
+        el("p", { class: "muted small" }, "A profile keeps your saved items and review notes. It lives only in this browser for now, so don't reuse a password from anywhere else."),
+        el("label", { class: "acct-label", for: "acctName" }, "Name"), name,
+        el("label", { class: "acct-label", for: "acctPw" }, "Password"), pw,
+        creating ? [el("label", { class: "acct-label", for: "acctPw2" }, "Password again"), pw2] : null,
+        err,
+        el("div", { class: "acct-actions" },
+          el("button", { class: "acct-btn primary", type: "submit" }, creating ? "Create profile" : "Sign in"),
+          el("button", { class: "acct-btn", type: "button", onclick: () => dlg.close() }, "Cancel")),
+        el("p", { class: "small acct-switch" }, creating ? "Already have a profile? " : "New here? ",
+          el("button", { class: "linklike", type: "button", onclick: () => { mode = creating ? "signin" : "create"; draw(); } }, creating ? "Sign in" : "Create a profile")));
+      dlg.replaceChildren(form);
+      requestAnimationFrame(() => name.focus());
+    };
+    draw();
+    dlg.addEventListener("close", () => dlg.remove());
+    document.body.append(dlg);
+    dlg.showModal();
+  }
+  // Run fn if signed in, otherwise ask for a profile first.
+  const needUser = (fn) => (Store.user() ? fn() : accountDialog(fn, "create"));
+
+  // Header account control: "Sign in", or the profile name with a small menu.
+  const accountEl = document.getElementById("account");
+  let acctCleanup = null;
+  function renderAccount() {
+    if (acctCleanup) { acctCleanup(); acctCleanup = null; }
+    if (!Store.user()) {
+      accountEl.replaceChildren(el("button", { class: "acct-open", type: "button", onclick: () => accountDialog(null, "signin") }, "Sign in"));
+      return;
+    }
+    const d = Store.data();
+    const n = Object.keys(d.saved).length + Object.keys(d.marks).length;
+    const panel = el("div", { class: "acct-menu", hidden: true },
+      el("p", { class: "muted small" }, `Signed in as ${Store.displayName()}`),
+      el("a", { class: "nav-item", href: "#saved", onclick: () => close() }, "Saved & reviewed", n ? ` (${n})` : ""),
+      el("button", { class: "nav-item linklike", type: "button", onclick: () => { close(); Store.signOut(); route(true); } }, "Sign out"),
+      el("button", { class: "nav-item linklike", type: "button", onclick: () => window.atlasGate.lock() }, "Lock the site"));
+    const btn = el("button", { class: "acct-open is-in", type: "button", "aria-expanded": "false", "aria-haspopup": "true", onclick: () => (panel.hidden ? open() : close()) },
+      el("span", { class: "acct-avatar", "aria-hidden": "true" }, Store.displayName().slice(0, 1).toUpperCase()), Store.displayName());
+    const outside = (e) => { if (!accountEl.contains(e.target)) close(); };
+    function open() { panel.hidden = false; btn.setAttribute("aria-expanded", "true"); document.addEventListener("pointerdown", outside); }
+    function close() { panel.hidden = true; btn.setAttribute("aria-expanded", "false"); document.removeEventListener("pointerdown", outside); }
+    acctCleanup = close;
+    accountEl.replaceChildren(btn, panel);
+  }
+
+  // A star that saves an item to the profile.
+  function saveBtn(key, snap) {
+    const b = el("button", { class: "ia-btn ia-save", type: "button" });
+    const draw = () => {
+      const on = Store.isSaved(key);
+      b.setAttribute("aria-pressed", String(on));
+      b.title = on ? "Saved. Click to remove" : "Save to your profile";
+      b.setAttribute("aria-label", b.title);
+      b.textContent = on ? "★" : "☆";
+    };
+    b.addEventListener("click", () => needUser(() => { Store.toggleSave(key, snap); draw(); }));
+    draw();
+    return b;
+  }
+  // Save star, review icons (✓ read & vetted, ⚠ seems suspicious) and the note they open.
+  const MARKS = { vetted: { icon: "✓", label: "Read & vetted" }, sus: { icon: "⚠", label: "Seems suspicious" } };
+  function itemActions(key, snap) {
+    const box = el("div", { class: "ia" });
+    let editing = false;
+    const draw = () => {
+      const m = Store.mark(key);
+      const markBtn = (k) => el("button", { class: `ia-btn ia-${k}`, type: "button", "aria-pressed": String(!!m && m.status === k), title: m && m.status === k ? `${MARKS[k].label}. Click to clear` : `Mark as ${MARKS[k].label.toLowerCase()}`,
+        "aria-label": MARKS[k].label, onclick: () => needUser(() => {
+          const cur = Store.mark(key);
+          const off = cur && cur.status === k;
+          Store.setMark(key, { status: off ? null : k }, snap);
+          editing = !off; draw();
+        }) }, MARKS[k].icon);
+      const bar = el("div", { class: "ia-bar" }, saveBtn(key, snap), markBtn("vetted"), markBtn("sus"),
+        m && m.status ? el("span", { class: `ia-state ia-state-${m.status}` }, MARKS[m.status].label) : null,
+        m && !editing ? el("button", { class: "linklike small", type: "button", onclick: () => { editing = true; draw(); } }, m.note ? "Edit note" : "Add a note") : null);
+      const kids = [bar];
+      if (editing) {
+        const ta = el("textarea", { class: "ia-note-input", rows: "3", placeholder: m && m.status === "sus" ? "What looks off? (wrong date, dead link, weak source…)" : "Your note (optional)", "aria-label": "Note" });
+        ta.value = (m && m.note) || "";
+        const done = (keep) => { if (keep) Store.setMark(key, { note: ta.value.trim() }, snap); editing = false; draw(); };
+        ta.addEventListener("keydown", (e) => { if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) done(true); if (e.key === "Escape") done(false); });
+        kids.push(el("div", { class: "ia-edit" }, ta,
+          el("div", { class: "ia-edit-actions" },
+            el("button", { class: "acct-btn primary small", type: "button", onclick: () => done(true) }, "Save note"),
+            el("button", { class: "acct-btn small", type: "button", onclick: () => done(false) }, "Cancel"))));
+      } else if (m && m.note) kids.push(el("p", { class: `ia-note ia-note-${m.status || "plain"}` }, m.note));
+      box.replaceChildren(...kids);
+      const ta = box.querySelector("textarea");
+      if (ta) ta.focus({ preventScroll: true });
+    };
+    draw();
+    return box;
+  }
+  const slug = (t) => t.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 60);
+  const newsKey = (item, n) => `news:${n.id}:${item.date}:${slug(item.title)}`;
+  const newsSnap = (item, n) => ({ type: "news", title: item.title, sub: `${n.flag} ${n.name} · ${fmtDate(item.date)}`, href: `#${n.id}`, ext: item.sources[0] && item.sources[0].u });
+  const docKey = (d, n) => `doc:${n.id}:${d.u}`;
+  const docSnap = (d, n) => ({ type: "doc", title: d.t, sub: `${n.flag} ${n.name} · ${d.kind}${d.year ? ` · ${d.year}` : ""}`, href: `#${n.id}`, ext: d.u });
+  const collabKey = (c) => `collab:${c.id}`;
+  const collabSnap = (c) => ({ type: "collab", title: c.title, sub: `${partiesOf(c).map((p) => p.name).slice(0, 4).join(", ")}${partiesOf(c).length > 4 ? "…" : ""} · ${fmtDate(c.date)}`, href: `#collab/${c.id}` });
+
+  // #saved: the profile's saved items and review marks.
+  function renderSaved() {
+    if (!Store.user()) {
+      view.replaceChildren(el("h1", {}, "Saved & reviewed"),
+        el("p", { class: "summary ink2" }, "Sign in to keep a list of agreements, news and documents, and to mark what you have read and vetted or what looks suspicious, with notes."),
+        el("div", { class: "section acct-actions" },
+          el("button", { class: "acct-btn primary", type: "button", onclick: () => accountDialog(null, "create") }, "Create a profile"),
+          el("button", { class: "acct-btn", type: "button", onclick: () => accountDialog(null, "signin") }, "Sign in")));
+      return;
+    }
+    const d = Store.data();
+    const TYPES = { collab: "Agreement", news: "News", doc: "Key document" };
+    let filter = "all";
+    const body = el("div", { class: "section" });
+    const entry = (key, x) => el("article", { class: "sv-item" },
+      el("div", { class: "sv-top" }, el("span", { class: "kd-kind" }, TYPES[x.type] || "Item"), el("span", { class: "muted small" }, x.sub)),
+      el("a", { class: "sv-title", href: x.href }, x.title),
+      x.ext ? el("a", { class: "src", href: x.ext, target: "_blank", rel: "noopener noreferrer" }, domain(x.ext), " ↗") : null,
+      itemActions(key, { type: x.type, title: x.title, sub: x.sub, href: x.href, ext: x.ext }));
+    const draw = () => {
+      const saved = Object.entries(d.saved).sort((a, b) => b[1].at.localeCompare(a[1].at));
+      const marks = Object.entries(d.marks).sort((a, b) => b[1].at.localeCompare(a[1].at));
+      const groups = [
+        ["saved", "Saved", saved, "Nothing saved yet. Use ☆ on an agreement, a news item or a key document."],
+        ["vetted", "Read & vetted", marks.filter(([, m]) => m.status === "vetted"), "Nothing marked ✓ yet."],
+        ["sus", "Seems suspicious", marks.filter(([, m]) => m.status === "sus"), "Nothing flagged ⚠ yet."],
+        ["note", "Notes only", marks.filter(([, m]) => !m.status), null],
+      ];
+      const chips = el("div", { class: "filters", role: "group", "aria-label": "Show" },
+        [["all", `Everything`], ...groups.filter((g) => g[2].length || g[0] !== "note").map(([k, lab, l]) => [k, `${lab} · ${l.length}`])].map(([k, lab]) =>
+          el("button", { class: "chip-btn", type: "button", "aria-pressed": String(filter === k), onclick: () => { filter = k; draw(); } }, lab)));
+      body.replaceChildren(chips, ...groups.filter(([k, , l]) => (filter === "all" ? l.length || k !== "note" : filter === k)).map(([, lab, l, empty]) =>
+        el("section", { class: "section" }, sectionHead(lab),
+          el("div", { class: "card sv-list" }, l.length ? l.map(([k, x]) => entry(k, x)) : el("p", { class: "muted" }, empty)))));
+    };
+    draw();
+    const download = () => {
+      const blob = new Blob([JSON.stringify({ profile: Store.displayName(), exported: new Date().toISOString(), ...d }, null, 2)], { type: "application/json" });
+      const a = el("a", { href: URL.createObjectURL(blob), download: `atlas-${slug(Store.displayName())}.json` });
+      document.body.append(a); a.click(); a.remove();
+    };
+    view.replaceChildren(
+      el("h1", {}, "Saved & reviewed"),
+      el("p", { class: "summary ink2" }, `${Store.displayName()}'s saved items and review notes. They are stored only in this browser.`),
+      body,
+      el("div", { class: "section sv-foot" },
+        el("button", { class: "acct-btn", type: "button", onclick: download }, "Download a copy (JSON)"),
+        el("button", { class: "acct-btn danger", type: "button", onclick: () => { if (confirm(`Delete the profile "${Store.displayName()}" and everything saved in it from this browser?`)) { Store.deleteProfile(); route(true); } } }, "Delete this profile")));
+  }
+  // The header count follows every change. Pages redraw on sign-in and sign-out only, so a note being written stays open.
+  Store.onChange(renderAccount);
 
   // ---------------------------------------------------------------- routing
   const tabsEl = document.getElementById("tabs");
@@ -1591,24 +1761,27 @@
   }
   function renderTabs(key) {
     const current = byId(key);
-    const isOverview = key === "overview" || (!current && key !== "news" && key !== "collab" && key !== "method");
+    const isCollab = key === "collab" || (!current && !["news", "overview", "method", "saved"].includes(key));
     tabsEl.replaceChildren(
-      el("a", { class: "tab", href: "#overview", "aria-current": isOverview ? "page" : null }, "Overview"),
+      el("a", { class: "tab", href: "#collab", "aria-current": isCollab ? "page" : null }, "Collaborations"),
       nationMenu(current),
+      el("a", { class: "tab", href: "#overview", "aria-current": key === "overview" ? "page" : null }, "Overview"),
       el("a", { class: "tab", href: "#news", "aria-current": key === "news" ? "page" : null }, "News"),
-      el("a", { class: "tab", href: "#collab", "aria-current": key === "collab" ? "page" : null }, "Collaborations"),
       el("a", { class: "tab", href: "#method", "aria-current": key === "method" ? "page" : null }, "Method"));
   }
   function route(keepScroll) {
+    if (document.documentElement.classList.contains("is-locked")) return;
     hideTip();
-    const key = (location.hash || "#overview").slice(1);
+    const key = (location.hash || "#collab").slice(1);
     renderTabs(key.startsWith("collab/") ? "collab" : key);
     const n = byId(key);
     if (n) { renderNation(n); document.title = `${n.name} — Atlas`; }
     else if (key === "news") { renderNews(); document.title = "News — Atlas"; }
-    else if (key === "collab" || key.startsWith("collab/")) { renderCollab(key.slice(7)); document.title = "AI collaborations — Atlas"; }
+    else if (key === "overview") { renderOverview(); document.title = "Overview — Atlas"; }
     else if (key === "method") { renderMethod(); document.title = "Method — Atlas"; }
-    else { renderOverview(); document.title = "Atlas — AI in Small Nations"; }
+    else if (key === "saved") { renderSaved(); document.title = "Saved & reviewed — Atlas"; }
+    // Collaborations is the landing page, and unknown addresses fall back to it.
+    else { renderCollab(key.startsWith("collab/") ? key.slice(7) : ""); document.title = "AI collaborations — Atlas"; }
     if (keepScroll !== true) scrollTo(0, 0);
   }
 
@@ -1624,7 +1797,11 @@
   matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => route(true));
 
   document.getElementById("asOf").textContent = fmtDate(D.meta.asOf);
-  addEventListener("hashchange", () => route());
   addEventListener("scroll", hideTip, { passive: true });
-  route();
+  // Nothing renders until the password gate (gate.js) is passed.
+  window.atlasGate.ready(() => {
+    addEventListener("hashchange", () => route());
+    renderAccount();
+    route();
+  });
 })();
