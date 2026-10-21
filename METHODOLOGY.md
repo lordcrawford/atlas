@@ -46,6 +46,10 @@ Six African nations (Libya, Congo, Gabon, Djibouti, Eswatini, Lesotho) were adde
 
 During this batch the overview's EU AI Act highlight was corrected. It had said Norway and Iceland were already bound through the EEA; the Act is still under scrutiny for incorporation into the EEA Agreement, so the highlight now counts EU members only and lists the EEA states as pending.
 
+## Key documents
+
+Each nation page lists up to two key documents: the national AI strategy or policy, an AI law, or official guidance. Links go to the document itself or to its official page; when the copy is hosted by OECD.AI, the EU's Digital Skills Platform or the European Commission's AI Watch rather than the issuing government, the entry says so. EU member states list the EU AI Act, which applies directly in each of them. Where no official AI strategy or law document could be found, the page says so rather than listing a news report. Every link was checked on 20 October 2026; a few government sites block automated checks and were opened in a browser instead. 47 nations have at least one document listed.
+
 ## News update (20 Oct 2026)
 
 Region-by-region searches for 10–20 October 2026 added nine news items, each checked against its sources: the 2026 Latin American AI Index for Uruguay, Costa Rica and the Dominican Republic (published by CENIA and ECLAC on 20 October), Anthropic's AI safety memorandum with Singapore, Abu Dhabi's $3.5 billion AI-government investment and TAMM Global, France–Kuwait data and AI cooperation, Finland's classified-information AI pilot, Fiji's push for responsible-AI standards and New Zealand's election split on AI regulation. Candidates left out: items dated before 10 October, company-only deals with no government party, and reports that could not be confirmed (an Iceland AI proposals report whose date could not be checked, and the UAE's WEF prize, which is an event rather than policy).
