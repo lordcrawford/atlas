@@ -1476,12 +1476,16 @@
           Store.setMark(key, { status: off ? null : k }, snap);
           editing = !off; draw();
         }) }, MARKS[k].icon);
-      const bar = el("div", { class: "ia-bar" }, saveBtn(key, snap), markBtn("vetted"), markBtn("sus"),
-        m && m.status ? el("span", { class: `ia-state ia-state-${m.status}` }, MARKS[m.status].label) : null,
-        m && !editing ? el("button", { class: "linklike small", type: "button", onclick: () => { editing = true; draw(); } }, m.note ? "Edit note" : "Add a note") : null);
+      // A note can be added to any item, with or without a ✓ or ⚠.
+      const hasNote = !!(m && m.note);
+      const noteBtn = el("button", { class: "ia-btn ia-note-btn", type: "button", "aria-pressed": String(hasNote), "aria-expanded": String(editing),
+        title: hasNote ? "Edit your note" : "Add a note", "aria-label": hasNote ? "Edit your note" : "Add a note",
+        onclick: () => needUser(() => { editing = !editing; draw(); }) }, "✎");
+      const bar = el("div", { class: "ia-bar" }, saveBtn(key, snap), markBtn("vetted"), markBtn("sus"), noteBtn,
+        m && m.status ? el("span", { class: `ia-state ia-state-${m.status}` }, MARKS[m.status].label) : null);
       const kids = [bar];
       if (editing) {
-        const ta = el("textarea", { class: "ia-note-input", rows: "3", placeholder: m && m.status === "sus" ? "What looks off? (wrong date, dead link, weak source…)" : "Your note (optional)", "aria-label": "Note" });
+        const ta = el("textarea", { class: "ia-note-input", rows: "3", placeholder: m && m.status === "sus" ? "What looks off? (wrong date, dead link, weak source…)" : "Your note", "aria-label": "Note" });
         ta.value = (m && m.note) || "";
         const done = (keep) => { if (keep) Store.setMark(key, { note: ta.value.trim() }, snap); editing = false; draw(); };
         ta.addEventListener("keydown", (e) => { if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) done(true); if (e.key === "Escape") done(false); });
@@ -1523,7 +1527,7 @@
       el("a", { class: "sv-title", href: x.href }, x.title),
       x.ext ? el("a", { class: "src", href: x.ext, target: "_blank", rel: "noopener noreferrer" }, domain(x.ext), " ↗") : null,
       itemActions(key, { type: x.type, title: x.title, sub: x.sub, href: x.href, ext: x.ext }));
-    // One list at a time, chosen with a toggle. "Notes only" (a note with no ✓ or ⚠) appears only when there are any.
+    // One list at a time, chosen with a toggle. Notes lists every item with a note, whether or not it is also marked.
     const draw = () => {
       const saved = Object.entries(d.saved).sort((a, b) => b[1].at.localeCompare(a[1].at));
       const marks = Object.entries(d.marks).sort((a, b) => b[1].at.localeCompare(a[1].at));
@@ -1531,8 +1535,8 @@
         ["saved", "Saved", saved, "Nothing saved yet. Use ☆ on an agreement, a news item or a key document."],
         ["vetted", "Read & vetted", marks.filter(([, m]) => m.status === "vetted"), "Nothing marked ✓ yet."],
         ["sus", "Seems suspicious", marks.filter(([, m]) => m.status === "sus"), "Nothing flagged ⚠ yet."],
-        ["note", "Notes only", marks.filter(([, m]) => !m.status), ""],
-      ].filter(([k, , l]) => k !== "note" || l.length);
+        ["note", "Notes", marks.filter(([, m]) => (m.note || "").trim()), "No notes yet. Use ✎ on any agreement, news item or key document."],
+      ];
       if (!tabs.some(([k]) => k === state.savedTab)) state.savedTab = "saved";
       const [, , list, empty] = tabs.find(([k]) => k === state.savedTab);
       body.replaceChildren(

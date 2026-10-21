@@ -599,3 +599,5 @@ html.is-locked body > :not(.gate):not(script) { display: none !important; }
 .sv-tabs .seg-btn { font: inherit; font-size: 14px; font-weight: 550; border: 0; background: none; cursor: pointer; white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; }
 .sv-tabs .seg-btn[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: var(--shadow), 0 0 0 1px var(--border); }
 .sv-count { font-size: 12px; font-weight: 600; color: var(--muted); }
+.ia-note-btn[aria-pressed="true"] { color: var(--link); border-color: var(--link); }
+.ia-note-btn[aria-expanded="true"] { background: var(--surface-2); color: var(--ink); }
