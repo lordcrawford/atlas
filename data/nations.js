@@ -1,5 +1,5 @@
 // Atlas dataset: AI policy & governance in six small nations.
-// Research cut-off: 10 October 2026.
+// Research cut-off: 20 October 2026 (news); full research to 10 October 2026.
 //
 // Verification levels (see METHODOLOGY.md):
 //   "verified"     - 3+ independent sources agree on the claim
@@ -13,7 +13,7 @@
 
 window.ATLAS = {
   meta: {
-    asOf: "2026-10-10",
+    asOf: "2026-10-20",
     pillars: [
       "Policy Capacity",
       "AI Infrastructure",
@@ -223,6 +223,15 @@ window.ATLAS = {
         },
       ],
       news: [
+        {
+          date: "2026-10-14", title: "Anthropic signs AI safety MOU with Singapore",
+          summary: "Anthropic opened a Singapore office and signed a memorandum of understanding with the Ministry of Digital Development and Information, covering AI model evaluation, safety research and incident response, and research on AI adoption and its impact.",
+          level: "corroborated",
+          sources: [
+            { t: "Marketing-Interactive - Anthropic opens SG office, partners govt on AI safety", u: "https://www.marketing-interactive.com/anthropic-opens-sg-office-partners-govt-on-ai-safety" },
+            { t: "Devdiscourse (ANI) - Anthropic opens office in Singapore, partners with government on AI safety and adoption (14 Oct 2026)", u: "https://www.devdiscourse.com/article/business/3992335-anthropic-opens-office-in-singapore-partners-with-government-on-ai-safety-and-adoption" },
+          ],
+        },
         {
           date: "2026-09-30",
           title: "Singapore records its first AI-linked personal data breach",
@@ -587,6 +596,16 @@ window.ATLAS = {
       ],
       news: [
         {
+          date: "2026-10-16", title: "Abu Dhabi bets $3.5 billion on an 'AI-native' government",
+          summary: "Abu Dhabi is investing 13 billion dirhams ($3.5 billion) to transform its digital government services by 2027, aiming to become the first 'AI-native' government. On 16 October it set up TAMM Global, a company to sell its AI-powered government services platform abroad.",
+          level: "single",
+          note: "Each part rests on one source: the investment on Fortune, TAMM Global on The National.",
+          sources: [
+            { t: "Fortune - Abu Dhabi invests $3.5 billion in AI-powered government (14 Oct 2026)", u: "https://fortune.com/2026/10/14/no-forms-no-fuss-abu-dhabi-wants-ai-to-eliminate-government-paperwork/" },
+            { t: "The National - Abu Dhabi launches TAMM Global to export AI-powered government services (16 Oct 2026)", u: "https://www.thenationalnews.com/news/uae/2026/10/16/abu-dhabi-launches-tamm-global-to-export-ai-powered-government-services-worldwide/" },
+          ],
+        },
+        {
           date: "2026-09-22",
           title: "UAE extends world lead in AI use to 73.3%",
           summary: "Microsoft's Q2 2026 figures put working-age generative-AI use in the UAE at 73.3%, up from 70.1% in Q1. The global figure is 18.8%.",
@@ -854,6 +873,16 @@ window.ATLAS = {
         },
       ],
       news: [
+        {
+          date: "2026-10-20", title: "Uruguay third in the 2026 Latin American AI Index",
+          summary: "In the fourth Latin American AI Index (ILIA), published by Chile's CENIA and ECLAC on 20 October, Uruguay scored 67.0, behind Chile (71.4) and Brazil (68.4). It stays in the 'pioneer' group of countries scoring above 60.",
+          level: "verified",
+          sources: [
+            { t: "CENIA - ILIA 2026: 4th edition", u: "https://cenia.cl/2026/10/20/ilia-2026-4ta-edicion-revela-que-america-latina-y-el-caribe-se-juegan-su-futuro-en-ia-en-la-colaboracion-regional-para-datos-talento-y-computo/" },
+            { t: "la diaria - Uruguay integra el grupo de países pioneros en IA", u: "https://ladiaria.com.uy/futuro/articulo/2026/10/uruguay-integra-el-grupo-de-paises-pioneros-en-ia-y-lidera-la-adopcion-empresarial-en-la-region-segun-estudio/" },
+            { t: "TeleSemana - ILIA 2026: brechas de soberanía tecnológica e infraestructura", u: "https://www.telesemana.com/blog/2026/10/20/ilia-2026-con-avances-y-oportunidades-america-latina-exhibe-brechas-de-soberania-tecnologica-y-de-infraestructura-en-la-carrera-global-de-la-ia/" },
+          ],
+        },
         {
           date: "2026-10-05",
           title: "AI for Good Lab delivers 8 government AI projects in 6 months",

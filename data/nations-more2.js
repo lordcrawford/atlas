@@ -441,6 +441,15 @@
       ],
       news: [
         {
+          date: "2026-10-19", title: "France and Kuwait agree data and AI cooperation",
+          summary: "During President Macron's visit, Kuwait and France signed eight agreements. One covers exploratory cooperation on data and AI between Kuwait's communications and IT authorities and the French company Pertimm.",
+          level: "single",
+          note: "Read in a browser; the page blocks automated requests.",
+          sources: [
+            { t: "bne IntelliNews (KUNA) - Macron begins Gulf tour in Kuwait with eight cooperation agreements (19 Oct 2026)", u: "https://www.intellinews.com/macron-begins-gulf-tour-in-kuwait-with-eight-cooperation-agreements-477038/" },
+          ],
+        },
+        {
           date: "2026-02", title: "AI rollout runs into infrastructure limits",
           summary: "Analysts point to only five data centres, data-residency rules and an unreliable grid as hurdles.",
           level: "single",
@@ -890,6 +899,15 @@
         },
       ],
       news: [
+        {
+          date: "2026-10-20", title: "Dominican Republic tenth in the 2026 Latin American AI Index",
+          summary: "The Dominican Republic scored 45.1 in the fourth Latin American AI Index (ILIA), tenth of 20 countries, in the 'adopter' group.",
+          level: "corroborated",
+          sources: [
+            { t: "CENIA - ILIA 2026: 4th edition", u: "https://cenia.cl/2026/10/20/ilia-2026-4ta-edicion-revela-que-america-latina-y-el-caribe-se-juegan-su-futuro-en-ia-en-la-colaboracion-regional-para-datos-talento-y-computo/" },
+            { t: "Amexi - ILIA 2026 regional ranking", u: "https://amexi.com.mx/economia-y-negocios/mexico-octavo-lugar-inteligencia-artificial-america-latina-2026/" },
+          ],
+        },
         {
           date: "2026-09-10", title: "'RD Inteligente' aims to train one million people in AI",
           summary: "The President said the goal is to give people tools for their existing work, not to make them programmers.",

@@ -15,7 +15,7 @@ An interactive dashboard on how **102 small nations** (all under 15M people) are
 - **News:** every development since January 2024, newest first, filterable by region, nation and verification level.
 - **Method:** verification rules, the full audit, corrections, and limits.
 
-Research cut-off: **10 October 2026** (12–14 October for the 57 nations added last).
+Research cut-off: **20 October 2026** for news (a search across all regions for 10–20 October); full research to 10 October 2026 (12–14 October for the 57 nations added last).
 
 ## Run it
 

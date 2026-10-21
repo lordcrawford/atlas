@@ -696,6 +696,14 @@
       ],
       news: [
         {
+          date: "2026-10-15", title: "Fiji pushes standards for responsible AI",
+          summary: "At World Standards Day, Deputy Prime Minister Manoa Kamikamica called for stronger AI governance standards. Fiji is one of six Pacific Island countries in an Australian-funded responsible-AI project run by Standards Australia with CSIRO.",
+          level: "single",
+          sources: [
+            { t: "FBC News - Fiji moves to strengthen responsible AI use", u: "https://www.fbcnews.com.fj/news/fiji-moves-to-strengthen-responsible-ai-use/" },
+          ],
+        },
+        {
           date: "2026-09-24", title: "Fiji starts framework on misinformation, citing AI",
           summary: "The Deputy Prime Minister said AI had added urgency to tackling misinformation and disinformation.",
           level: "single",

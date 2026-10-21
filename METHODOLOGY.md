@@ -46,6 +46,10 @@ Six African nations (Libya, Congo, Gabon, Djibouti, Eswatini, Lesotho) were adde
 
 During this batch the overview's EU AI Act highlight was corrected. It had said Norway and Iceland were already bound through the EEA; the Act is still under scrutiny for incorporation into the EEA Agreement, so the highlight now counts EU members only and lists the EEA states as pending.
 
+## News update (20 Oct 2026)
+
+Region-by-region searches for 10–20 October 2026 added nine news items, each checked against its sources: the 2026 Latin American AI Index for Uruguay, Costa Rica and the Dominican Republic (published by CENIA and ECLAC on 20 October), Anthropic's AI safety memorandum with Singapore, Abu Dhabi's $3.5 billion AI-government investment and TAMM Global, France–Kuwait data and AI cooperation, Finland's classified-information AI pilot, Fiji's push for responsible-AI standards and New Zealand's election split on AI regulation. Candidates left out: items dated before 10 October, company-only deals with no government party, and reports that could not be confirmed (an Iceland AI proposals report whose date could not be checked, and the UAE's WEF prize, which is an event rather than policy).
+
 ## Third audit (20 Oct 2026)
 
 - Every cited link (about 760) was fetched fresh and every claim, news item and collaboration re-checked against its sources; the 140 or so that the automatic check could not fully match were reviewed by hand, and pages that block automated requests were read in a browser. No page behind a bot check was bypassed.
@@ -101,7 +105,7 @@ All ~340 source URLs were requested programmatically. Broken links (404) were re
 - The 96 nations added after the first six have 2–5 key facts each, not full profiles.
 - Microsoft reports one shared figure for several West African countries (Benin, Sierra Leone, Togo, Liberia, Mauritania) for Guyana, Suriname, Venezuela and French Guiana, for Congo and its Central African neighbours, for Tajikistan, and for Burundi. These are shown as hatched regional estimates.
 - Map boundaries are Natural Earth 110m. They are approximate and don't imply any position on disputed borders. Tiny states are shown as dots.
-- This is a snapshot as of 10 Oct 2026 (12–14 Oct for the last three batches), and the news feed does not update itself.
+- This is a snapshot. Full research ran to 10 Oct 2026 (12–14 Oct for the last three batches). A news update on 20 Oct 2026 searched each region for developments from 10 to 20 October and added nine items; it was not an exhaustive nation-by-nation search, so smaller nations may have recent news that is not here. The news feed does not update itself.
 - Summaries and "stance" lines are editorial synthesis.
 - Programme-reported figures (e.g. AI Leap teacher usage) are not independent evaluations.
 - Disclosure: compiled by Claude (Anthropic). Anthropic is party to agreements described here (Rwanda MOU, Estonia AI Leap talks). Those facts rely on both parties' public statements.

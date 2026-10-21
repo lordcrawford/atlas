@@ -127,6 +127,15 @@ window.ATLAS.nations.push(
       },
     ],
     news: [
+        {
+          date: "2026-10-13", title: "Foreign Ministry pilots AI assistant for classified information",
+          summary: "The AI assistant UMAI entered pilot use on 13 October 2026 inside a secure environment approved for information classified at national security level IV.",
+          level: "corroborated",
+          sources: [
+            { t: "Helsinki Times - Foreign Ministry introduces secure AI system for classified government data (13 Oct 2026)", u: "https://www.helsinkitimes.fi/finland/finland-news/domestic/29383-foreign-ministry-introduces-secure-ai-system-for-classified-government-data.html" },
+            { t: "Nordic Defence Sector - Finland's Foreign Ministry pilots AI assistant for classified information", u: "https://nordicdefencesector.com/en/article/finlands-foreign-ministry-pilots-ai-assistant-for-classified-information" },
+          ],
+        },
       {
         date: "2026-01-01", title: "National AI Act enforcement law takes effect",
         summary: "Finland now has a working AI Act enforcement system: Traficom coordinates, more than half a dozen sector supervisors share the work, and a sanctions board can fine up to the EU maximums.",
@@ -831,6 +840,14 @@ window.ATLAS.nations.push(
       },
     ],
     news: [
+        {
+          date: "2026-10-12", title: "AI regulation splits National and Labour before the election",
+          summary: "Prime Minister Christopher Luxon said AI carries 'serious dangers and evils' but is keeping the government's light-touch strategy. Labour has promised to drop that strategy if elected.",
+          level: "single",
+          sources: [
+            { t: "RNZ - Taking a light touch with AI's 'dangers and evils' (12 Oct 2026)", u: "https://www.rnz.co.nz/news/science-and-technology/1852139/taking-a-light-touch-with-ai-s-dangers-and-evils" },
+          ],
+        },
       {
         date: "2025-07-08", title: "First national AI strategy: 'Investing with confidence'",
         summary: "It was released alongside responsible-AI guidance for businesses and supports the government's 'Going for Growth' agenda.",
@@ -1057,6 +1074,16 @@ window.ATLAS.nations.push(
       },
     ],
     news: [
+        {
+          date: "2026-10-20", title: "Costa Rica fifth in the 2026 Latin American AI Index",
+          summary: "Costa Rica scored 56.0 in the fourth Latin American AI Index (ILIA), fifth of 20 countries and just behind Colombia (56.8). That places it among the 'adopters', which score between 35 and 60.",
+          level: "verified",
+          sources: [
+            { t: "CENIA - ILIA 2026: 4th edition", u: "https://cenia.cl/2026/10/20/ilia-2026-4ta-edicion-revela-que-america-latina-y-el-caribe-se-juegan-su-futuro-en-ia-en-la-colaboracion-regional-para-datos-talento-y-computo/" },
+            { t: "Amexi - ILIA 2026 regional ranking", u: "https://amexi.com.mx/economia-y-negocios/mexico-octavo-lugar-inteligencia-artificial-america-latina-2026/" },
+            { t: "TeleSemana - ILIA 2026", u: "https://www.telesemana.com/blog/2026/10/20/ilia-2026-con-avances-y-oportunidades-america-latina-exhibe-brechas-de-soberania-tecnologica-y-de-infraestructura-en-la-carrera-global-de-la-ia/" },
+          ],
+        },
       {
         date: "2026-03", title: "AI management-system standard adopted nationally",
         summary: "Costa Rica formalised INTE/ISO/IEC 42001:2026, its adaptation of the international AI management-system standard.",
