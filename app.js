@@ -14,14 +14,14 @@
   const SVGNS = "http://www.w3.org/2000/svg";
 
   const LEVELS = {
-    verified: { icon: "✓✓✓", label: "Verified", desc: "3+ independent sources agree" },
-    corroborated: { icon: "✓✓", label: "Corroborated", desc: "2 independent sources agree" },
-    single: { icon: "!", label: "Single source", desc: "Only one source found. Treat with care" },
-    dataset: { icon: "▦", label: "Dataset", desc: "Read directly from the publisher's dataset" },
+    verified: { label: "3+ sources", desc: "Confirmed by 3 or more independent sources" },
+    corroborated: { label: "2 sources", desc: "Confirmed by 2 independent sources" },
+    single: { label: "1 source", desc: "Only one source found. Treat with care" },
+    dataset: { label: "Dataset", desc: "Read directly from the publisher's dataset" },
   };
 
   // Overview state (kept across navigation within a visit)
-  const state = { region: "All", colorBy: "rank", sortKey: "rank", sortDir: 1 };
+  const state = { region: "All", colorBy: "rank", sortKey: "rank", sortDir: 1, newsSort: "newest" };
 
   // ---------------------------------------------------------------- helpers
   function el(tag, attrs, ...kids) {
@@ -91,9 +91,9 @@
   const filtered = () => N.filter(inRegion);
 
   function badge(level, count) {
+    // Counts independent sources (pages from one organisation count once), so it can be lower than the links shown.
     const L = LEVELS[level];
-    const label = level === "single" || level === "dataset" ? L.label : `${L.label} · ${count} sources`;
-    return el("span", { class: `badge ${level}`, title: L.desc }, el("span", { class: "ic", "aria-hidden": "true" }, L.icon), label);
+    return el("span", { class: `badge ${level}`, title: L.desc }, L.label);
   }
   function sourceChips(sources) {
     return sources.map((src, i) =>
@@ -511,13 +511,14 @@
         el("div", { class: "fact-meta" }, badge(f.level, f.sources.length), sourceChips(f.sources)),
         f.note ? el("p", { class: "note" }, f.note) : null));
   }
-  function newsItem(item, n, showCountry) {
+  function newsItem(item, n, showCountry, why) {
     return el("article", { class: "news-item" },
       el("div", { class: "fact-date" }, fmtDate(item.date)),
       el("div", {},
         showCountry ? el("p", { class: "who" }, el("a", { href: `#${n.id}` }, `${n.flag} ${n.name}`)) : null,
         el("h3", {}, item.title),
         el("p", { class: "ink2" }, item.summary),
+        why && why.length ? el("p", { class: "news-why" }, why.join(" · ")) : null,
         el("div", { class: "fact-meta" }, badge(item.level, item.sources.length), sourceChips(item.sources)),
         item.note ? el("p", { class: "note" }, item.note) : null,
         itemActions(newsKey(item, n), newsSnap(item, n))));
@@ -577,7 +578,7 @@
         el("p", { class: "hero-cap" }, `claims confirmed by 3 or more independent sources (${srcCount} sources cited in total)`),
         el("div", { class: "levelbar", role: "img", "aria-label": levels.map((l) => `${LEVELS[l].label}: ${count(l)}`).join(", ") },
           levels.map((l) => el("span", { style: `flex:${count(l)};background:${levelColor[l]}`, title: `${LEVELS[l].label}: ${count(l)}` }))),
-        el("div", { class: "legend" }, levels.map((l) => el("span", {}, el("i", { style: `background:${levelColor[l]}` }), `${LEVELS[l].icon} ${LEVELS[l].label} ${count(l)}`)))));
+        el("div", { class: "legend" }, levels.map((l) => el("span", {}, el("i", { style: `background:${levelColor[l]}` }), `${LEVELS[l].label}: ${count(l)}`)))));
 
     // Everything below the filter row re-renders against the chosen region.
     const body = el("div", {});
@@ -747,27 +748,116 @@
       el("div", { style: "margin-top:8px" }, el("a", { class: "src", href: src.u, target: "_blank", rel: "noopener noreferrer", title: src.t }, domain(src.u), " ↗")));
   }
 
+  // ---- news ranking. There is no click or engagement data, so the relevance sorts read each item's own text,
+  // sources and date. Every ranked item shows the signals that placed it, and Method explains the rules.
+  const NEWS_SORTS = [["trending", "Trending"], ["impact", "Most impactful"], ["insight", "Most insightful"], ["newest", "Newest"], ["oldest", "Oldest"]];
+  const NEWS_THEMES = [
+    ["Strategies and plans", /strateg|roadmap|action plan|national plan/i],
+    ["Laws and regulation", /\b(law|act|bill|decree|regulat\w*|legislat\w*)\b/i],
+    ["Data centres and compute", /data cent(re|er)|supercomput|ai factor|gpu|compute|gigafactor/i],
+    ["Partnerships and MoUs", /memorandum|\bmou\b|partnership|agreement|joint statement/i],
+    ["Skills and education", /skill|training|educat|school|universit|literacy|teacher|student/i],
+    ["AI in government services", /public service|government service|civil servant|e-government|chatbot|assistant|portal/i],
+    ["Rankings and indices", /\bindex\b|\brank|ranking/i],
+    ["Safety, ethics and misuse", /safety|ethic|deepfake|disinformation|misinformation|misuse|manipulat/i],
+    ["Investment and funding", /invest|\bfund|billion|million/i],
+    ["China and WAICO", /china|chinese|waico|shanghai/i],
+  ];
+  const DECIDED = /\b(adopt|approv|pass|enact|sign|promulgat|in force|took effect|launch|endors|ratif|unveil)/i;
+  const IMPACT_RULES = [
+    [5, "a law or binding rule", (t) => /\b(law|act|bill|decree|regulation|legislation)\b/i.test(t) && DECIDED.test(t)],
+    [4, "a strategy or policy decision", (t) => /\b(strateg\w*|polic\w*|roadmap|framework|guidelines?|action plan)\b/i.test(t) && DECIDED.test(t)],
+    [4, "billion-scale money", (t) => /\d\s?(billion|bn)\b/i.test(t)],
+    [2, "million-scale money", (t) => /\d\s?(million|mn)\b/i.test(t) && !/\d\s?(billion|bn)\b/i.test(t)],
+    [3, "a new public body", (t) => /\b(ministry|authority|agency|council|office|institute|commission|unit|centre|center)\b/i.test(t) && /\b(creat|establish|set up|new|appoint)/i.test(t)],
+    [2, "compute infrastructure", (t) => /data cent(re|er)|supercomput|ai factor|gpu|gigafactor|campus/i.test(t)],
+    [2, "an international agreement", (t) => /memorandum|\bmou\b|agreement|partnership|treaty|joint statement|declaration/i.test(t)],
+    [-1.5, "an event or training", (t) => /\b(workshop|seminar|conference|summit|webinar|course|forum|panel|hackathon)\b/i.test(t)],
+  ];
+  const INSIGHT_RULES = [
+    [3, "data or an assessment", (t) => /\b(index|ranks?|ranking|ranked|score[sd]?|survey|report|study|assessment|readiness|audit|evaluation)\b/i.test(t)],
+    [1.5, "a percentage", (t) => /\d+(\.\d+)?\s?(%|per ?cent)/i.test(t)],
+    [1, "a comparison", (t) => /\b(first|only|largest|lowest|highest|leads?|behind|ahead of|top)\b/i.test(t)],
+  ];
+  const LEVEL_BONUS = { verified: 1.5, corroborated: 0.75, single: 0, dataset: 0.75 };
+  function rankNews(items, mode) {
+    const now = dateValue(D.meta.asOf);
+    const daysAgo = (x) => Math.max(0, (now - (dateValue(x.date) ?? now)) * 365);
+    const text = (x) => `${x.title}. ${x.summary}`;
+    if (mode === "newest" || mode === "oldest") {
+      const out = [...items].sort((a, b) => byDateDesc(a.x, b.x));
+      return { list: (mode === "oldest" ? out.reverse() : out).map((r) => ({ ...r, why: null })), themes: [] };
+    }
+    if (mode === "trending") {
+      // A theme's heat is the recency-weighted number of items on it; an item trends when it is recent and on hot themes.
+      const heat = new Map(NEWS_THEMES.map(([name]) => [name, 0]));
+      const themesOf = (x) => NEWS_THEMES.filter(([, re]) => re.test(text(x))).map(([name]) => name);
+      for (const { x } of items) for (const th of themesOf(x)) heat.set(th, heat.get(th) + Math.exp(-daysAgo(x) / 30));
+      const maxHeat = Math.max(1e-9, ...heat.values());
+      const scored = items.map((r) => {
+        const ths = themesOf(r.x).sort((a, b) => heat.get(b) - heat.get(a));
+        const warm = ths.reduce((t, th) => t + heat.get(th) / maxHeat, 0);
+        const score = Math.exp(-daysAgo(r.x) / 21) * (1 + warm) + LEVEL_BONUS[r.x.level] * 0.1;
+        return { ...r, score, why: ths.length ? [`Trending: ${ths.slice(0, 2).join(", ").toLowerCase()}`] : ["Recent"] };
+      }).sort((a, b) => b.score - a.score);
+      const recent = (name) => items.filter(({ x }) => daysAgo(x) <= 60 && NEWS_THEMES.find(([n]) => n === name)[1].test(text(x))).length;
+      const themes = [...heat].sort((a, b) => b[1] - a[1]).slice(0, 5).map(([name]) => ({ name, n: recent(name) })).filter((t) => t.n > 0);
+      return { list: scored, themes };
+    }
+    const rules = mode === "impact" ? IMPACT_RULES : INSIGHT_RULES;
+    const scored = items.map((r) => {
+      const t = text(r.x);
+      const hits = rules.filter(([, , test]) => test(t));
+      let score = hits.reduce((s, [w]) => s + w, 0) + LEVEL_BONUS[r.x.level];
+      const why = hits.filter(([w]) => w > 0).map(([, label]) => label);
+      if (mode === "insight") {
+        // Concrete figures (not years or dates) make an item more informative, up to three.
+        const figures = new Set((t.replace(/\b(19|20)\d{2}\b/g, " ").match(/\d[\d.,]*/g) || []).filter((v) => v.length > 1 || +v > 1)).size;
+        score += Math.min(3, figures) * 0.75;
+        if (figures) why.push("specific figures");
+        if (r.x.note) { score += 1.5; why.push("a caveat or source disagreement noted"); }
+      }
+      score += Math.exp(-daysAgo(r.x) / 365) * 0.5; // ties go to the more recent item
+      if (r.x.level !== "single") why.push(LEVELS[r.x.level].label);
+      return { ...r, score, why: [`${mode === "impact" ? "Impact" : "Insight"}: ${why.join(", ") || "no strong signals"}`] };
+    }).sort((a, b) => b.score - a.score);
+    return { list: scored, themes: [] };
+  }
+
   function renderNews() {
-    const items = N.flatMap((n) => n.news.filter(isRecent).map((x) => ({ x, n }))).sort((a, b) => byDateDesc(a.x, b.x));
-    let nation = "all", level = "all";
+    const items = N.flatMap((n) => n.news.filter(isRecent).map((x) => ({ x, n })));
+    let nation = "all", level = "all", theme = null;
+    if (!NEWS_SORTS.some(([k]) => k === state.newsSort)) state.newsSort = "newest";
     const list = el("div", { class: "card" });
-    const row2 = el("div", { class: "filters", role: "group", "aria-label": "Filter by verification level" });
+    const row2 = el("div", { class: "filters", role: "group", "aria-label": "Filter by number of sources" });
+    const sortRow = el("div", { class: "filters news-sort", role: "group", "aria-label": "Sort the news" });
+    const themeRow = el("div", { class: "news-themes" });
     const select = el("select", { class: "select", "aria-label": "Filter by nation" });
     const draw = () => {
       const opts = [["all", "All nations in region"], ...N.filter(inRegion).sort((a, b) => a.name.localeCompare(b.name)).map((n) => [n.id, `${n.flag} ${n.name}`])];
       if (!opts.some(([k]) => k === nation)) nation = "all";
       select.replaceChildren(...opts.map(([k, lab]) => el("option", { value: k, selected: k === nation }, lab)));
-      row2.replaceChildren(...[["all", "Any verification"], ...["verified", "corroborated", "single"].map((k) => [k, `${LEVELS[k].icon} ${LEVELS[k].label}`])].map(([k, lab]) =>
+      row2.replaceChildren(...[["all", "Any number of sources"], ...["verified", "corroborated", "single"].map((k) => [k, LEVELS[k].label])].map(([k, lab]) =>
         el("button", { class: "chip-btn", type: "button", "aria-pressed": String(level === k), onclick: () => { level = k; draw(); } }, lab)));
-      const shown = items.filter(({ x, n }) => inRegion(n) && (nation === "all" || n.id === nation) && (level === "all" || x.level === level));
-      list.replaceChildren(...(shown.length ? shown.map(({ x, n }) => newsItem(x, n, true)) : [el("p", { class: "muted" }, "No items match these filters.")]));
+      sortRow.replaceChildren(el("span", { class: "filter-label" }, "Sort"),
+        ...NEWS_SORTS.flatMap(([k, lab], i) => [i === 3 ? el("span", { class: "sort-sep", "aria-hidden": "true" }) : null,
+          el("button", { class: "chip-btn", type: "button", "aria-pressed": String(state.newsSort === k), onclick: () => { state.newsSort = k; theme = null; draw(); } }, lab)]).filter(Boolean));
+      const pool = items.filter(({ x, n }) => inRegion(n) && (nation === "all" || n.id === nation) && (level === "all" || x.level === level));
+      const ranked = rankNews(pool, state.newsSort);
+      const themeRe = theme ? NEWS_THEMES.find(([name]) => name === theme)[1] : null;
+      const shown = themeRe ? ranked.list.filter(({ x }) => themeRe.test(`${x.title}. ${x.summary}`)) : ranked.list;
+      themeRow.replaceChildren(...(ranked.themes.length ? [el("span", { class: "muted small" }, "Hot topics, last 60 days:"),
+        ...ranked.themes.map((t) => el("button", { class: "chip-btn small", type: "button", "aria-pressed": String(theme === t.name), onclick: () => { theme = theme === t.name ? null : t.name; draw(); } }, `${t.name} · ${t.n}`))] : []));
+      list.replaceChildren(...(shown.length ? shown.map(({ x, n, why }) => newsItem(x, n, true, why)) : [el("p", { class: "muted" }, "No items match these filters.")]));
     };
     select.addEventListener("change", () => { nation = select.value; draw(); });
     draw();
     view.replaceChildren(
       el("h1", {}, "News feed"),
-      el("p", { class: "summary ink2" }, `${items.length} developments since January 2024 across ${N.length} nations, newest first. Research cut-off ${fmtDate(D.meta.asOf)}.`),
-      el("section", { class: "section" }, regionFilter(draw), el("div", { class: "filters" }, select), row2, list));
+      el("p", { class: "summary ink2" }, `${items.length} developments since January 2024 across ${N.length} nations. Research cut-off ${fmtDate(D.meta.asOf)}.`),
+      el("section", { class: "section" }, sortRow,
+        el("p", { class: "muted small news-sort-note" }, "Trending, impactful and insightful are worked out from each item's text, sources and date; there is no click or popularity data. Each item says why it ranked. See Method."),
+        themeRow, regionFilter(draw), el("div", { class: "filters" }, select), row2, list));
   }
 
   // ---------------------------------------------------------------- collaborations (country to country)
@@ -1155,15 +1245,15 @@
       el("p", { class: "summary" }, "How the facts on this site were researched and checked, and what the badges mean."),
       el("div", { class: "tally" },
         tally("Claims", String(claims.length), `across ${N.length} nations`),
-        tally("✓✓✓ Verified", String(cnt("verified")), "3+ independent sources"),
-        tally("✓✓ Corroborated", String(cnt("corroborated")), "2 independent sources"),
-        tally("! Single source", String(cnt("single")), "flagged on the claim")),
+        tally("3+ sources", String(cnt("verified")), "independent sources agree"),
+        tally("2 sources", String(cnt("corroborated")), "independent sources agree"),
+        tally("1 source", String(cnt("single")), "flagged on the claim")),
       el("h2", {}, `Why these ${N.length} nations`),
       el("p", {}, `The site covers every sovereign state with fewer than 15 million people except Israel, plus Kosovo and the Holy See. Territories are not included. Coverage spans Europe (${grp("Europe")}, including the South Caucasus), the Middle East (${grp("Middle East")}), Asia-Pacific (${grp("Asia-Pacific")}), Africa (${grp("Africa")}) and the Americas (${grp("Americas")}). The first six (Singapore, Estonia, UAE, Rwanda, Uruguay, Malta) have the deepest profiles. The rest have 1–5 key facts each.`),
       el("h2", {}, "How each claim was checked"),
       el("ul", {},
         el("li", {}, "Each claim was researched across multiple searches and cross-checked against primary sources (government sites, official releases, the publishers' own reports) and independent coverage."),
-        el("li", {}, "A claim is ✓✓✓ Verified only when at least three independent sources confirm it, ✓✓ Corroborated with two, and ! Single source with one. Pages from the same organisation, or articles that republish another outlet's text word for word, count as one source."),
+        el("li", {}, "Each claim's badge says how many independent sources confirm it: 3+ sources, 2 sources or 1 source. Pages from the same organisation, or articles that republish another outlet's text word for word, count as one source, so the badge can show fewer sources than the links listed."),
         el("li", {}, "Which sources count: government and parliament sites, international organisations, established news outlets, law firms and recognised research bodies. Third-party AI-policy tracker sites, auto-generated regulation explainers, compliance-vendor blogs and personal blogs are not used, because they are not independent evidence."),
         el("li", {}, "Where sources disagree (dates, counts, names), the claim gives the best-supported version and the disagreement is shown in a Note."),
         el("li", {}, "Index figures (Oxford Insights, Microsoft, World Bank, Stanford AI Index) were read directly from the publisher's own report, PDF table or API.")),
@@ -1174,6 +1264,13 @@
         el("li", {}, "Every mismatch was reviewed by hand against the most relevant passage of the page."),
         el("li", {}, "Pages that block automated access were opened in a browser where possible. Pages behind bot challenges (for example Bloomberg and gov.mt) were not bypassed. Readable independent coverage was found to replace them."),
         el("li", {}, "Where no readable source could confirm a detail, the detail was removed or the badge was lowered.")),
+      el("h2", {}, "How the news feed ranks items"),
+      el("p", {}, "The news feed can be sorted by date or by three kinds of relevance. The site has no click or popularity data, so relevance is worked out from each item's own text, sources and date, and every ranked item lists the signals that placed it."),
+      el("ul", {},
+        el("li", {}, "Trending: items are grouped into themes (strategies, laws, data centres, partnerships, skills, AI in government services, rankings, safety and misuse, investment, China and WAICO). A theme is hot when many recent items are about it, weighted towards the last month. An item trends when it is recent and on hot themes."),
+        el("li", {}, "Most impactful: points for a law or binding rule adopted, a strategy or policy decision, billion- or million-scale money, a new public body, compute infrastructure or an international agreement, minus a little for events and trainings; plus a bonus for more independent sources."),
+        el("li", {}, "Most insightful: points for data or an assessment (indices, rankings, surveys, reports), percentages, comparisons, specific figures and a noted caveat or source disagreement; plus a bonus for more independent sources."),
+        el("li", {}, "These are simple keyword rules, not a judgement of importance. Read the item, not the rank.")),
       el("h2", {}, "The last 19 nations (21 October 2026)"),
       el("ul", {},
         el("li", {}, "To cover every sovereign state under 15 million people (Israel aside), 19 were added: Timor-Leste, Vanuatu, Samoa, Kiribati, Micronesia, the Marshall Islands, Nauru, Tuvalu, Turkmenistan, Cuba, Dominica, Saint Vincent and the Grenadines, South Sudan, the Central African Republic, Eritrea, Guinea-Bissau, Equatorial Guinea, Kosovo and the Holy See. Territories are not included."),

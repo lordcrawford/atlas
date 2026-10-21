@@ -4,9 +4,11 @@
 
 | Badge | Meaning |
 |---|---|
-| ✓✓✓ **Verified** | At least 3 independent sources agree on the substance of the claim |
-| ✓✓ **Corroborated** | 2 independent sources agree |
-| ! **Single source** | Only 1 source found. Shown, but flagged |
+| **3+ sources** (green) | At least 3 independent sources agree on the substance of the claim |
+| **2 sources** (blue) | 2 independent sources agree |
+| **1 source** (amber) | Only 1 source found. Shown, but flagged |
+
+The badge counts independent sources, so it can be lower than the number of links listed (two pages from one organisation count once). In the data files the levels are still called `verified`, `corroborated` and `single`.
 
 Pages from the same organisation count as **one** source. Primary sources (government releases, official documents, the publisher's own report) were preferred, then checked against independent coverage (news outlets, law firms, research bodies).
 
@@ -77,6 +79,16 @@ Region-by-region searches for 10–20 October 2026 added nine news items, each c
 - Tracker, vendor-explainer and personal-blog sources were removed. 65 claims kept other credible sources (badges recalculated), about 10 were re-sourced, and 28, mostly "country X has no AI law" statements only trackers supported, were deleted. Summaries were edited to match.
 - Corrected: Panama (strategy approved by Cabinet on 11 August 2026; an unverified resolution number removed), Sweden (an October 2025 inquiry proposing PTS as lead authority, not June 2026 interim authorities), Slovenia (National AI Strategy to 2030 adopted 5 March 2026), Greece (Daedalus not yet in full service), Georgia (news summary), and a Singapore MAS item whose cited OECD page no longer exists.
 - Removed as unconfirmable without trackers: Hungary's 2026 decree moving AI supervision, Croatia's missed AI Act deadline, Malta's "72 actions", and several exact dates and decree numbers (Czechia, Slovakia, Congo, Maldives).
+
+## News feed ranking
+
+The news feed sorts by date (newest or oldest) or by one of three relevance orders. There is no click or popularity data, so relevance is computed from each item's own text, sources and date, and each ranked item shows the signals behind its place:
+
+- **Trending:** items are matched to themes (strategies, laws, data centres and compute, partnerships, skills, AI in government services, rankings, safety and misuse, investment, China and WAICO). A theme's heat is the number of items on it, weighted by recency (roughly a 30-day decay). An item's score is its own recency (roughly a 3-week decay) times one plus the heat of its themes. The hottest themes over the last 60 days are shown as filters.
+- **Most impactful:** keyword points for a law or binding rule adopted (5), a strategy or policy decision (4), billion-scale money (4), a new public body (3), million-scale money, compute infrastructure or an international agreement (2 each), minus 1.5 for events and trainings, plus a bonus for 2 or 3+ independent sources.
+- **Most insightful:** points for data or an assessment such as an index, ranking, survey or report (3), a percentage (1.5), a comparison (1), up to three specific figures (0.75 each) and a noted caveat or source disagreement (1.5), plus the same source bonus.
+
+These are simple rules, not editorial judgements of importance.
 
 ## The last 19 nations (21 October 2026)
 
