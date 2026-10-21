@@ -23,17 +23,6 @@ window.ATLAS.places = {
   oecd: { name: "OECD (Paris)", flag: "🌐", geo: [2.27, 48.86] },
 };
 
-// Partner groups for the Alignment view (editorial). Outside partners are listed by key; nations on the site
-// fall in by region, with the Gulf states split out. Group agreements count toward their host unless overridden.
-window.ATLAS.partnerBlocs = {
-  order: ["us", "china", "europe", "gulf", "asia", "africa", "americas", "global", "other"],
-  labels: { us: "United States", china: "China", europe: "Europe", gulf: "Gulf states", asia: "Asia-Pacific", africa: "Africa", americas: "Americas", global: "Global forums", other: "Other" },
-  places: { us: "us", cn: "china", waico: "china", fr: "europe", it: "europe", gb: "europe", pl: "europe", ua: "europe", coe: "europe", au: "asia", tw: "asia", my: "asia", in: "asia", kr: "asia", jp: "asia", asean: "asia", cl: "americas", oecd: "global" },
-  gulf: ["ae", "qa", "bh", "kw", "om"],
-  regions: { "Europe": "europe", "Asia-Pacific": "asia", "Africa": "africa", "Americas": "americas", "Middle East": "other" },
-  groups: { bletchley: "global", gpai: "global" },
-};
-
 window.ATLAS.collaborations = [
   {
     id: "ae-us", kind: "bilateral", date: "2025-05-15",
