@@ -1464,7 +1464,7 @@
       el("ul", {},
         el("li", {}, `This is a snapshot as of ${fmtDate(D.meta.asOf)}. The news feed does not update itself.`),
         el("li", {}, "Summaries and 'stance' lines are editorial synthesis, not quotations."),
-        el("li", {}, "Profiles, saved items and review notes are kept only in this browser. They don't sync between devices, and clearing site data deletes them."),
+        el("li", {}, "Profiles, saved items and review notes are kept in this browser and don't sync between devices. The site never deletes a note (earlier versions are kept), and the Saved page can back everything up to a file on your computer, which survives clearing the browser's data."),
         el("li", {}, "Programme-reported figures are the programmes' own numbers, not independent evaluations. Government-aligned outlets are labelled where relevant."),
         el("li", {}, "Map boundaries come from Natural Earth (110m scale). They are approximate and don't imply any position on disputed borders."),
         el("li", {}, "Disclosure: this dashboard was compiled by Claude, an AI model made by Anthropic. Anthropic is party to agreements described here (Rwanda MOU, Estonia AI Leap talks). Those claims rely on both parties' public statements.")),
@@ -1474,83 +1474,210 @@
   // ---------------------------------------------------------------- profiles, saved items and review marks
   // Everything is kept in this browser's localStorage (no server yet): a list of profiles with salted
   // password hashes, and per profile the saved items and review marks (read & vetted / seems suspicious + note).
+  // Nothing the user writes is ever deleted by the app: an edited or cleared note keeps its earlier text in
+  // `history`, emptied marks are kept (hidden) with that history, recent snapshots of the whole profile are kept,
+  // and restores merge rather than replace. The profile can also be mirrored to a file on disk (see Backup).
   const Store = (() => {
     const K_PROFILES = "atlas-profiles", K_USER = "atlas-user";
     const read = (k, d) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch { return d; } };
     const write = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch { return false; } };
     const hash = (salt, pw) => window.atlasGate.sha256(`${salt}:${pw}`);
+    const newSalt = () => [...crypto.getRandomValues(new Uint8Array(16))].map((b) => b.toString(16).padStart(2, "0")).join("");
     const idOf = (name) => name.trim().toLowerCase();
+    const now = () => new Date().toISOString();
     let user = read(K_USER, null);
     if (user && !read(K_PROFILES, {})[user]) user = null;
-    let data = null;
+    let data = null, lastError = null;
     const load = () => { data = user ? Object.assign({ saved: {}, marks: {} }, read(`atlas-data:${user}`, {})) : null; };
-    const save = () => { if (user) write(`atlas-data:${user}`, data); };
+    const SNAP_EVERY = 5 * 60 * 1000, SNAP_KEEP = 30, HISTORY_KEEP = 50;
+    const snapshots = () => read(`atlas-snapshots:${user}`, []);
+    const save = () => {
+      if (!user) return;
+      const ok = write(`atlas-data:${user}`, data);
+      lastError = ok ? null : "This browser refused to save (storage full or blocked). Download a copy now so nothing is lost.";
+      // Keep a rolling set of snapshots, at most one every five minutes.
+      const snaps = snapshots();
+      if (ok && (!snaps.length || Date.now() - Date.parse(snaps[0].at) > SNAP_EVERY)) {
+        snaps.unshift({ at: now(), data: JSON.parse(JSON.stringify(data)) });
+        write(`atlas-snapshots:${user}`, snaps.slice(0, SNAP_KEEP));
+      }
+    };
     const listeners = new Set();
     const emit = (why) => listeners.forEach((fn) => fn(why));
+    // Ask the browser not to clear this site's storage to free up space (granted silently in most browsers).
+    const persist = () => { try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch {} };
+    // Merge two copies of a profile: every item from both is kept, the newer version of each wins, histories combine.
+    const mergeInto = (target, incoming) => {
+      for (const [k, v] of Object.entries(incoming.saved || {})) if (!target.saved[k] || (v.at || "") > (target.saved[k].at || "")) target.saved[k] = v;
+      for (const [k, v] of Object.entries(incoming.marks || {})) {
+        const cur = target.marks[k];
+        if (!cur) { target.marks[k] = v; continue; }
+        const [newer, older] = (v.at || "") > (cur.at || "") ? [v, cur] : [cur, v];
+        const seen = new Set(), history = [];
+        for (const h of [...(newer.history || []), ...(older.history || []), ...(older.note || older.status ? [{ note: older.note || "", status: older.status || null, at: older.at }] : [])]) {
+          const id = `${h.at}|${h.note}|${h.status}`;
+          if (!seen.has(id) && !(h.note === (newer.note || "") && h.status === (newer.status || null))) { seen.add(id); history.push(h); }
+        }
+        target.marks[k] = { ...newer, history: history.sort((a, b) => (b.at || "").localeCompare(a.at || "")).slice(0, HISTORY_KEEP) };
+      }
+    };
+    if (user) persist();
     load();
     return {
       user: () => user,
       displayName: () => (user ? read(K_PROFILES, {})[user].name : null),
       onChange: (fn) => listeners.add(fn),
+      lastError: () => lastError,
       create(name, pw) {
         const id = idOf(name), all = read(K_PROFILES, {});
         if (!/^[\w .-]{2,32}$/.test(name.trim())) return "Use 2–32 letters, numbers, spaces, dots or dashes.";
         if (all[id]) return "That name is taken on this browser. Sign in instead.";
         if (pw.length < 4) return "Use a password of at least 4 characters.";
-        const salt = [...crypto.getRandomValues(new Uint8Array(16))].map((b) => b.toString(16).padStart(2, "0")).join("");
-        all[id] = { name: name.trim(), salt, hash: hash(salt, pw), created: new Date().toISOString() };
+        const salt = newSalt();
+        all[id] = { name: name.trim(), salt, hash: hash(salt, pw), created: now() };
         if (!write(K_PROFILES, all)) return "This browser is not letting the site store anything (private mode?).";
-        user = id; write(K_USER, user); load(); emit("auth");
+        user = id; write(K_USER, user); load(); persist(); emit("auth");
         return null;
       },
       signIn(name, pw) {
         const p = read(K_PROFILES, {})[idOf(name)];
         if (!p || p.hash !== hash(p.salt, pw)) return "Name or password not recognised on this browser.";
-        user = idOf(name); write(K_USER, user); load(); emit("auth");
+        user = idOf(name); write(K_USER, user); load(); persist(); emit("auth");
+        return null;
+      },
+      // Profiles only exist in this browser, so a forgotten password can be replaced here; the notes are kept.
+      resetPassword(name, pw) {
+        const id = idOf(name), all = read(K_PROFILES, {});
+        if (!all[id]) return "No profile with that name on this browser.";
+        if (pw.length < 4) return "Use a password of at least 4 characters.";
+        const salt = newSalt();
+        all[id] = { ...all[id], salt, hash: hash(salt, pw) };
+        if (!write(K_PROFILES, all)) return "This browser is not letting the site store anything.";
+        user = id; write(K_USER, user); load(); persist(); emit("auth");
         return null;
       },
       signOut() { user = null; try { localStorage.removeItem(K_USER); } catch {} load(); emit("auth"); },
-      deleteProfile() {
-        const all = read(K_PROFILES, {});
-        delete all[user]; write(K_PROFILES, all);
-        try { localStorage.removeItem(`atlas-data:${user}`); } catch {}
-        this.signOut();
-      },
       data: () => data,
       isSaved: (key) => !!(data && data.saved[key]),
       toggleSave(key, snap) {
         if (data.saved[key]) delete data.saved[key];
-        else data.saved[key] = { ...snap, at: new Date().toISOString() };
+        else data.saved[key] = { ...snap, at: now() };
         save(); emit("data");
       },
       mark: (key) => (data && data.marks[key]) || null,
-      // patch: { status?: "vetted" | "sus" | null, note?: string }. A mark with no status and no note is dropped.
+      // patch: { status?: "vetted" | "sus" | null, note?: string }. The previous note and status go into history first.
       setMark(key, patch, snap) {
-        const m = { ...(data.marks[key] || {}), ...snap, ...patch, at: new Date().toISOString() };
-        if (!m.status && !(m.note || "").trim()) delete data.marks[key];
-        else data.marks[key] = m;
+        const old = data.marks[key] || {};
+        const next = { ...old, ...snap, ...patch, at: now() };
+        const changed = (next.note || "") !== (old.note || "") || (next.status || null) !== (old.status || null);
+        if (changed && (old.note || old.status)) next.history = [{ note: old.note || "", status: old.status || null, at: old.at }, ...(old.history || [])].slice(0, HISTORY_KEEP);
+        data.marks[key] = next;
         save(); emit("data");
       },
+      exportData: () => ({ format: "atlas-profile", version: 2, profile: user ? read(K_PROFILES, {})[user].name : null, exported: now(), saved: data.saved, marks: data.marks }),
+      // Restore from a downloaded or backed-up copy, or from a snapshot. Merges, so nothing current is lost.
+      importData(obj) {
+        if (!obj || typeof obj !== "object" || (!obj.saved && !obj.marks)) return "That file is not an Atlas backup.";
+        const before = Object.keys(data.saved).length + Object.keys(data.marks).length;
+        mergeInto(data, obj);
+        save(); emit("data");
+        return `Restored. ${Object.keys(data.saved).length + Object.keys(data.marks).length - before} items were added back; the rest were merged.`;
+      },
+      snapshots,
     };
   })();
+
+  // Mirror of the profile in a file on the user's computer, rewritten after every change. It survives clearing the
+  // browser's data. Needs the File System Access API (Chrome, Edge, Brave, Arc, Opera); the file handle is kept in
+  // IndexedDB, and browsers ask again for permission to write after a restart.
+  const Backup = (() => {
+    const supported = typeof window.showSaveFilePicker === "function";
+    let handle = null, status = "off", lastWrite = null, timer = null;
+    const listeners = new Set();
+    const emit = () => listeners.forEach((fn) => fn());
+    const db = () => new Promise((res, rej) => {
+      const r = indexedDB.open("atlas", 1);
+      r.onupgradeneeded = () => r.result.createObjectStore("kv");
+      r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error);
+    });
+    const kv = async (mode, fn) => {
+      const d = await db();
+      return new Promise((res, rej) => { const t = d.transaction("kv", mode); const q = fn(t.objectStore("kv")); t.oncomplete = () => res(q && q.result); t.onerror = () => rej(t.error); });
+    };
+    const key = () => `backup-file:${Store.user()}`;
+    async function writeNow() {
+      if (!handle || !Store.user()) return;
+      try {
+        const w = await handle.createWritable();
+        await w.write(JSON.stringify(Store.exportData(), null, 2));
+        await w.close();
+        lastWrite = new Date(); status = "ok";
+      } catch { status = "error"; }
+      emit();
+    }
+    return {
+      supported,
+      status: () => status, lastWrite: () => lastWrite, fileName: () => (handle ? handle.name : null),
+      onChange: (fn) => listeners.add(fn),
+      async init() {
+        handle = null; status = "off"; lastWrite = null;
+        if (supported && Store.user()) {
+          try {
+            handle = (await kv("readonly", (st) => st.get(key()))) || null;
+            if (handle) status = (await handle.queryPermission({ mode: "readwrite" })) === "granted" ? "ok" : "paused";
+            if (status === "ok") await writeNow();
+          } catch { handle = null; status = "off"; }
+        }
+        emit();
+      },
+      async choose() {
+        const name = `atlas-${(Store.displayName() || "profile").toLowerCase().replace(/[^a-z0-9]+/g, "-")}-backup.json`;
+        try { handle = await window.showSaveFilePicker({ suggestedName: name, types: [{ description: "Atlas backup", accept: { "application/json": [".json"] } }] }); }
+        catch { return; } // picker closed
+        try { await kv("readwrite", (st) => st.put(handle, key())); } catch {}
+        await writeNow();
+      },
+      async reconnect() {
+        if (!handle) return;
+        status = (await handle.requestPermission({ mode: "readwrite" })) === "granted" ? "ok" : "paused";
+        if (status === "ok") await writeNow(); else emit();
+      },
+      schedule() { if (status !== "ok") return; clearTimeout(timer); timer = setTimeout(writeNow, 800); },
+    };
+  })();
+  // Downloads are the backup in browsers without file access; remember when the last one was made.
+  const lastDownload = () => { try { return localStorage.getItem(`atlas-lastdownload:${Store.user()}`); } catch { return null; } };
+  function downloadBackup() {
+    const blob = new Blob([JSON.stringify(Store.exportData(), null, 2)], { type: "application/json" });
+    const a = el("a", { href: URL.createObjectURL(blob), download: `atlas-${slug(Store.displayName())}-${new Date().toISOString().slice(0, 10)}.json` });
+    document.body.append(a); a.click(); a.remove();
+    try { localStorage.setItem(`atlas-lastdownload:${Store.user()}`, new Date().toISOString()); } catch {}
+  }
+  // Changes not yet in any copy outside the browser (for browsers without the backup file).
+  const unbackedChanges = () => {
+    const d = Store.data(); if (!d) return 0;
+    const since = lastDownload() || "";
+    return [...Object.values(d.saved), ...Object.values(d.marks)].filter((x) => (x.at || "") > since).length;
+  };
 
   // Sign-in / create-profile dialog. `then` runs after a successful sign-in (e.g. the save the user clicked).
   function accountDialog(then, mode = "signin") {
     const dlg = el("dialog", { class: "acct-dialog", "aria-labelledby": "acctTitle" });
     let typedName = "";
     const draw = () => {
-      const creating = mode === "create";
+      const creating = mode === "create", resetting = mode === "reset";
       const err = el("p", { class: "acct-err", role: "alert", hidden: true });
       const field = (label, input) => el("div", { class: "acct-field" }, el("label", { class: "acct-label", for: input.id }, label), input);
       const name = el("input", { class: "acct-input", id: "acctName", autocomplete: "username", required: true, maxlength: "32", value: typedName });
       name.addEventListener("input", () => { typedName = name.value; });
       const pw = el("input", { class: "acct-input", id: "acctPw", type: "password", autocomplete: creating ? "new-password" : "current-password", required: true });
-      const pw2 = creating ? el("input", { class: "acct-input", id: "acctPw2", type: "password", autocomplete: "new-password", required: true }) : null;
+      const pw2 = creating || resetting ? el("input", { class: "acct-input", id: "acctPw2", type: "password", autocomplete: "new-password", required: true }) : null;
+      if (resetting) pw.setAttribute("autocomplete", "new-password");
       const tab = (m, label) => el("button", { class: "seg-btn", type: "button", "aria-pressed": String(mode === m), onclick: () => { if (mode !== m) { mode = m; draw(); } } }, label);
       const form = el("form", { method: "dialog", onsubmit: (e) => {
         e.preventDefault();
-        if (creating && pw.value !== pw2.value) { err.textContent = "The two passwords don't match."; err.hidden = false; return; }
-        const msg = creating ? Store.create(name.value, pw.value) : Store.signIn(name.value, pw.value);
+        if ((creating || resetting) && pw.value !== pw2.value) { err.textContent = "The two passwords don't match."; err.hidden = false; return; }
+        const msg = creating ? Store.create(name.value, pw.value) : resetting ? Store.resetPassword(name.value, pw.value) : Store.signIn(name.value, pw.value);
         if (msg) { err.textContent = msg; err.hidden = false; return; }
         dlg.close();
         if (then) then();
@@ -1558,14 +1685,17 @@
       } },
         el("button", { class: "acct-close", type: "button", "aria-label": "Close", onclick: () => dlg.close() }, "×"),
         el("div", { class: "acct-head" },
-          el("h2", { id: "acctTitle" }, creating ? "Create a profile" : "Welcome back"),
+          el("h2", { id: "acctTitle" }, creating ? "Create a profile" : resetting ? "Set a new password" : "Welcome back"),
           el("p", { class: "ink2 small" }, then ? "Sign in to save items and leave review notes." : "Save agreements, news and documents, and keep review notes.")),
-        el("div", { class: "seg acct-tabs", role: "group", "aria-label": "Sign in or create a profile" }, tab("signin", "Sign in"), tab("create", "Create profile")),
+        resetting ? el("p", { class: "small ink2" }, "Profiles live only in this browser, so you can set a new password here. Your saved items and notes are kept.")
+          : el("div", { class: "seg acct-tabs", role: "group", "aria-label": "Sign in or create a profile" }, tab("signin", "Sign in"), tab("create", "Create profile")),
         field("Name", name),
-        field("Password", pw),
-        creating ? field("Confirm password", pw2) : null,
+        field(resetting ? "New password" : "Password", pw),
+        creating || resetting ? field("Confirm password", pw2) : null,
         err,
-        el("button", { class: "acct-btn primary acct-submit", type: "submit" }, creating ? "Create profile" : "Sign in"),
+        el("button", { class: "acct-btn primary acct-submit", type: "submit" }, creating ? "Create profile" : resetting ? "Set password and sign in" : "Sign in"),
+        mode === "signin" ? el("button", { class: "linklike small acct-forgot", type: "button", onclick: () => { mode = "reset"; draw(); } }, "Forgot your password?")
+          : resetting ? el("button", { class: "linklike small acct-forgot", type: "button", onclick: () => { mode = "signin"; draw(); } }, "Back to sign in") : null,
         el("p", { class: "muted small acct-fine" }, "Profiles are stored only in this browser. Don't reuse a password from another site."));
       dlg.replaceChildren(form);
       (typedName ? pw : name).focus();
@@ -1589,8 +1719,12 @@
     }
     const d = Store.data();
     const n = Object.keys(d.saved).length + Object.keys(d.marks).length;
+    const bst = Backup.supported ? Backup.status() : (unbackedChanges() ? "download" : "ok-dl");
+    const backupLine = { ok: ["is-ok", "Backup file up to date"], paused: ["is-warn", "Backups paused: resume"], error: ["is-warn", "Backup failed: check"], off: ["is-warn", "Set up a backup"],
+      download: ["is-warn", `${unbackedChanges()} change${unbackedChanges() === 1 ? "" : "s"} not backed up`], "ok-dl": ["is-ok", "Backed up (download)"] }[bst];
     const panel = el("div", { class: "acct-menu", hidden: true },
       el("p", { class: "muted small" }, `Signed in as ${Store.displayName()}`),
+      el("a", { class: `nav-item acct-backup ${backupLine[0]}`, href: "#saved", onclick: () => close() }, backupLine[1]),
       el("a", { class: "nav-item", href: "#saved", onclick: () => close() }, "Saved & reviewed", n ? ` (${n})` : ""),
       el("button", { class: "nav-item linklike", type: "button", onclick: () => { close(); Store.signOut(); route(true); } }, "Sign out"));
     const btn = el("button", { class: "acct-open is-in", type: "button", "aria-expanded": "false", "aria-haspopup": "true", onclick: () => (panel.hidden ? open() : close()) },
@@ -1620,7 +1754,7 @@
   const MARKS = { vetted: { icon: "✓", label: "Read & vetted" }, sus: { icon: "⚠", label: "Seems suspicious" } };
   function itemActions(key, snap) {
     const box = el("div", { class: "ia" });
-    let editing = false;
+    let editing = false, showHistory = false;
     const draw = () => {
       const m = Store.mark(key);
       const markBtn = (k) => el("button", { class: `ia-btn ia-${k}`, type: "button", "aria-pressed": String(!!m && m.status === k), title: m && m.status === k ? `${MARKS[k].label}. Click to clear` : `Mark as ${MARKS[k].label.toLowerCase()}`,
@@ -1648,6 +1782,16 @@
             el("button", { class: "acct-btn primary small", type: "button", onclick: () => done(true) }, "Save note"),
             el("button", { class: "acct-btn small", type: "button", onclick: () => done(false) }, "Cancel"))));
       } else if (m && m.note) kids.push(el("p", { class: `ia-note ia-note-${m.status || "plain"}` }, m.note));
+      // Earlier versions of the note and mark, newest first, each restorable.
+      const hist = (m && m.history) || [];
+      if (hist.length && !editing) {
+        kids.push(el("details", { class: "ia-history", open: showHistory || null, ontoggle: (e) => { showHistory = e.target.open; } },
+          el("summary", {}, `Earlier versions (${hist.length})`),
+          el("ol", {}, hist.map((h) => el("li", {},
+            el("div", { class: "ia-history-meta" }, `${fmtDate((h.at || "").slice(0, 10))}${h.status ? ` · ${MARKS[h.status].label}` : ""}`,
+              el("button", { class: "linklike small", type: "button", onclick: () => { Store.setMark(key, { note: h.note || "", status: h.status || null }, snap); draw(); } }, "Restore")),
+            h.note ? el("p", { class: "ia-history-note" }, h.note) : el("p", { class: "muted small" }, "(no note)"))))));
+      }
       box.replaceChildren(...kids);
       const ta = box.querySelector("textarea");
       if (ta) ta.focus({ preventScroll: true });
@@ -1689,7 +1833,7 @@
         ["saved", "Saved", saved, "Nothing saved yet. Use ☆ on an agreement, a news item or a key document."],
         ["vetted", "Read & vetted", marks.filter(([, m]) => m.status === "vetted"), "Nothing marked ✓ yet."],
         ["sus", "Seems suspicious", marks.filter(([, m]) => m.status === "sus"), "Nothing flagged ⚠ yet."],
-        ["note", "Notes", marks.filter(([, m]) => (m.note || "").trim()), "No notes yet. Use ✎ on any agreement, news item or key document."],
+        ["note", "Notes", marks.filter(([, m]) => (m.note || "").trim() || (m.history || []).some((h) => h.note)), "No notes yet. Use ✎ on any agreement, news item or key document."],
       ];
       if (!tabs.some(([k]) => k === state.savedTab)) state.savedTab = "saved";
       const [, , list, empty] = tabs.find(([k]) => k === state.savedTab);
@@ -1699,21 +1843,75 @@
         el("div", { class: "card sv-list" }, list.length ? list.map(([k, x]) => entry(k, x)) : el("p", { class: "muted" }, empty)));
     };
     draw();
-    const download = () => {
-      const blob = new Blob([JSON.stringify({ profile: Store.displayName(), exported: new Date().toISOString(), ...d }, null, 2)], { type: "application/json" });
-      const a = el("a", { href: URL.createObjectURL(blob), download: `atlas-${slug(Store.displayName())}.json` });
-      document.body.append(a); a.click(); a.remove();
-    };
     view.replaceChildren(
       el("h1", {}, "Saved & reviewed"),
-      el("p", { class: "summary ink2" }, `${Store.displayName()}'s saved items and review notes. They are stored only in this browser.`),
+      el("p", { class: "summary ink2" }, `${Store.displayName()}'s saved items and review notes.`),
       body,
-      el("div", { class: "section sv-foot" },
-        el("button", { class: "acct-btn", type: "button", onclick: download }, "Download a copy (JSON)"),
-        el("button", { class: "acct-btn danger", type: "button", onclick: () => { if (confirm(`Delete the profile "${Store.displayName()}" and everything saved in it from this browser?`)) { Store.deleteProfile(); route(true); } } }, "Delete this profile")));
+      backupPanel());
+  }
+
+  // Backups and restores, on the Saved page. Redraws itself when the backup state changes.
+  let backupBox = null, backupMsg = "";
+  // After a restore, redraw the whole page so the lists show what came back, and keep the message.
+  const afterRestore = (text) => { backupMsg = text; route(true); };
+  function backupPanel() {
+    backupBox = el("section", { class: "section card bk" });
+    drawBackupPanel(true);
+    return backupBox;
+  }
+  // `initial` draws the panel before it is on the page; later calls only redraw it while it is shown.
+  function drawBackupPanel(initial) {
+    if (!backupBox || (!initial && !backupBox.isConnected) || !Store.user()) return;
+    const msg = el("p", { class: "small bk-msg", role: "status" }, backupMsg);
+    backupMsg = "";
+    const time = (d) => d.toLocaleString(undefined, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+    const st = Backup.status();
+    let fileRow;
+    if (!Backup.supported) {
+      const n = unbackedChanges(), last = lastDownload();
+      fileRow = el("p", { class: "small" }, `This browser can't keep a backup file up to date, so download a copy now and then. `,
+        last ? `Last download: ${time(new Date(last))}.` : "No copy downloaded yet.", n ? el("strong", {}, ` ${n} change${n === 1 ? "" : "s"} since then.`) : null);
+    } else if (st === "ok") {
+      fileRow = el("p", { class: "small bk-ok" }, `● Backing up every change to “${Backup.fileName()}” on this computer`, Backup.lastWrite() ? ` · last saved ${time(Backup.lastWrite())}` : "", ".");
+    } else if (st === "paused") {
+      fileRow = el("p", { class: "small bk-warn" }, `Backups to “${Backup.fileName()}” are paused until you allow it again (browsers ask after a restart). `,
+        el("button", { class: "acct-btn small primary", type: "button", onclick: () => Backup.reconnect() }, "Resume backups"));
+    } else if (st === "error") {
+      fileRow = el("p", { class: "small bk-warn" }, "The last write to the backup file failed (was it moved or deleted?). Choose the file again. ");
+    } else {
+      fileRow = el("p", { class: "small bk-warn" }, "No backup file yet. Pick a file on your computer and every change will be written to it, so your notes survive even if this browser's data is cleared.");
+    }
+    const fileInput = el("input", { type: "file", accept: ".json,application/json", hidden: true });
+    fileInput.addEventListener("change", async () => {
+      const f = fileInput.files[0]; if (!f) return;
+      let text;
+      try { text = Store.importData(JSON.parse(await f.text())); } catch { text = "Couldn't read that file. Pick a .json backup downloaded from this site."; }
+      afterRestore(text);
+    });
+    const snaps = Store.snapshots();
+    const snapSelect = el("select", { class: "select", "aria-label": "Earlier version" }, snaps.map((sn, i) => el("option", { value: String(i) }, time(new Date(sn.at)))));
+    backupBox.replaceChildren(...[
+      el("h2", {}, "Backups"),
+      el("p", { class: "muted small" }, "Notes are never deleted by the site: edited or cleared notes keep their earlier versions, and restoring always merges with what is here. Profiles live in this browser, so keep a copy outside it."),
+      Store.lastError() ? el("p", { class: "small bk-warn" }, Store.lastError()) : null,
+      fileRow,
+      el("div", { class: "acct-actions" },
+        Backup.supported ? el("button", { class: "acct-btn" + (st === "ok" ? "" : " primary"), type: "button", onclick: () => Backup.choose() }, st === "ok" ? "Use a different backup file" : "Choose a backup file") : null,
+        el("button", { class: "acct-btn" + (!Backup.supported ? " primary" : ""), type: "button", onclick: () => { downloadBackup(); drawBackupPanel(); } }, "Download a copy"),
+        el("button", { class: "acct-btn", type: "button", onclick: () => fileInput.click() }, "Restore from a file"), fileInput),
+      snaps.length ? el("div", { class: "bk-snaps" },
+        el("span", { class: "small" }, "Or bring back an earlier version saved in this browser:"), snapSelect,
+        el("button", { class: "acct-btn small", type: "button", onclick: () => afterRestore(Store.importData(snaps[+snapSelect.value].data)) }, "Restore")) : null,
+      msg].filter(Boolean));
   }
   // The header count follows every change. Pages redraw on sign-in and sign-out only, so a note being written stays open.
-  Store.onChange(renderAccount);
+  Store.onChange((why) => {
+    if (why === "data") Backup.schedule();
+    if (why === "auth") Backup.init();
+    renderAccount();
+    drawBackupPanel();
+  });
+  Backup.onChange(() => { renderAccount(); drawBackupPanel(); });
 
   // ---------------------------------------------------------------- routing
   const tabsEl = document.getElementById("tabs");
@@ -1806,5 +2004,6 @@
     addEventListener("hashchange", () => route());
     renderAccount();
     route();
+    Backup.init();
   });
 })();

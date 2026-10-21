@@ -23,7 +23,14 @@ Collaborations is the landing page. The site is behind a password gate (see belo
 The password gate (`gate.js`) and the profiles are client-side only, because the site is static files:
 
 - **Gate:** the page asks for the password before anything renders. The password is stored only as a SHA-256 hash, and "Remember on this device" keeps the browser unlocked; to ask for it again, clear the site's data in the browser. This keeps out casual visitors, but anyone who requests `data/*.js` directly can still read the data. For real protection, put the site behind the host's own access control (for example Cloudflare Access, Netlify or Vercel password protection, or HTTP basic auth on your own server). GitHub Pages cannot password-protect a site. To change the password, replace `PASS_HASH` in `gate.js` with the SHA-256 of the new one (`printf 'newpass' | shasum -a 256`).
-- **Profiles:** stored in this browser's `localStorage` (name, random salt, salted SHA-256 of the password, and per profile the saved items and marks). They do not sync across browsers or devices, clearing site data deletes them, and anyone with access to the browser can read them. Use a password you don't use anywhere else. Moving this to a database later means replacing the `Store` object in `app.js`.
+- **Profiles:** stored in this browser's `localStorage` (name, random salt, salted SHA-256 of the password, and per profile the saved items and marks). They do not sync across browsers, devices or site addresses. To keep notes safe:
+  - The site never deletes a note. Editing or clearing one keeps the earlier text under "Earlier versions", and each version can be restored. There is no "delete profile" button.
+  - It keeps up to 30 snapshots of each profile (at most one every five minutes), which can be restored from the Saved page.
+  - **Backup file:** in Chrome, Edge, Brave, Arc and Opera, "Choose a backup file" on the Saved page writes every change to a JSON file on the computer. That copy survives clearing the browser's data. Browsers ask for permission again after a restart ("Resume backups"). In Safari and Firefox, use "Download a copy" now and then; the profile menu counts the changes since the last download.
+  - "Restore from a file" (a backup file or a download) and snapshot restores merge with what is there: nothing current is removed, and the newer version of each item wins.
+  - A forgotten password can be reset in the sign-in box; the notes are kept.
+  - The site asks the browser to keep its storage (`navigator.storage.persist()`).
+  - Clearing site data, private windows and Safari's cleanup of sites not visited for a while still erase browser storage, which is why the backup file matters. A shared database would remove this risk; moving to one means replacing the `Store` object in `app.js`.
 
 Research cut-off: **20 October 2026** for news (a search across all regions for 10–20 October); full research to 10 October 2026 (12–14 October for the 57 nations added in the fourth to sixth batches, and 21 October for the 19 added last).
 
