@@ -547,18 +547,27 @@ html.is-locked body > :not(.gate):not(script) { display: none !important; }
 .acct-menu > p { margin-bottom: var(--s2); }
 .linklike { font: inherit; background: none; border: 0; padding: 0; color: var(--link); cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
 .nav-item.linklike { color: var(--ink); text-decoration: none; padding: 5px var(--s2); font-size: 14px; }
-.acct-dialog { width: min(400px, calc(100vw - 2 * var(--s4))); border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); color: var(--ink); padding: var(--s5); box-shadow: 0 24px 60px rgba(0, 0, 0, .25); }
-.acct-dialog::backdrop { background: rgba(0, 0, 0, .35); }
-.acct-dialog form { display: flex; flex-direction: column; gap: var(--s2); }
-.acct-dialog h2 { margin-bottom: var(--s1); }
-.acct-dialog form > p.muted { margin-bottom: var(--s2); }
+.acct-dialog { width: min(380px, calc(100vw - 2 * var(--s4))); border: 1px solid var(--border); border-radius: 16px; background: var(--surface); color: var(--ink); padding: var(--s6) var(--s5) var(--s5); box-shadow: 0 24px 64px rgba(0, 0, 0, .28); }
+.acct-dialog::backdrop { background: rgba(10, 10, 10, .55); backdrop-filter: blur(3px); }
+.acct-dialog form { position: relative; display: flex; flex-direction: column; gap: var(--s4); }
+.acct-close { position: absolute; top: calc(-1 * var(--s4)); right: calc(-1 * var(--s2)); width: 32px; height: 32px; border-radius: 50%; border: 0; background: none; color: var(--muted); font-size: 22px; line-height: 1; cursor: pointer; }
+.acct-close:hover { background: var(--surface-2); color: var(--ink); }
+.acct-head { display: flex; flex-direction: column; gap: var(--s1); padding-right: var(--s5); }
+.acct-head h2 { font-size: 22px; }
+.acct-tabs { display: flex; margin: 0; }
+.acct-tabs .seg-btn { flex: 1; font: inherit; font-size: 14px; font-weight: 550; border: 0; background: none; cursor: pointer; padding: 7px var(--s3); }
+.acct-tabs .seg-btn[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: var(--shadow), 0 0 0 1px var(--border); }
+.acct-field { display: flex; flex-direction: column; gap: 6px; }
+.acct-input { padding: 10px var(--s3); }
+.acct-submit { width: 100%; padding: 11px var(--s4); margin-top: var(--s1); }
+.acct-fine { text-align: center; }
+.acct-err { margin: calc(-1 * var(--s2)) 0 0; }
 .acct-actions { display: flex; flex-wrap: wrap; gap: var(--s2); margin-top: var(--s3); }
 .acct-btn { font: inherit; font-size: 14px; font-weight: 550; padding: 8px var(--s4); border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--surface); color: var(--ink); cursor: pointer; }
 .acct-btn:hover { background: var(--surface-2); }
 .acct-btn.primary { background: var(--ink); color: var(--surface); border-color: var(--ink); }
 .acct-btn.danger { color: #c0362c; }
 .acct-btn.small { font-size: 13px; padding: 5px var(--s3); }
-.acct-switch { margin-top: var(--s2); color: var(--ink-2); }
 
 /* ---------- save star, review marks and notes ---------- */
 .ia { margin-top: var(--s2); display: flex; flex-direction: column; gap: var(--s2); }

@@ -1541,12 +1541,16 @@
   // Sign-in / create-profile dialog. `then` runs after a successful sign-in (e.g. the save the user clicked).
   function accountDialog(then, mode = "signin") {
     const dlg = el("dialog", { class: "acct-dialog", "aria-labelledby": "acctTitle" });
+    let typedName = "";
     const draw = () => {
       const creating = mode === "create";
       const err = el("p", { class: "acct-err", role: "alert", hidden: true });
-      const name = el("input", { class: "acct-input", id: "acctName", autocomplete: "username", required: true, maxlength: "32" });
+      const field = (label, input) => el("div", { class: "acct-field" }, el("label", { class: "acct-label", for: input.id }, label), input);
+      const name = el("input", { class: "acct-input", id: "acctName", autocomplete: "username", required: true, maxlength: "32", value: typedName });
+      name.addEventListener("input", () => { typedName = name.value; });
       const pw = el("input", { class: "acct-input", id: "acctPw", type: "password", autocomplete: creating ? "new-password" : "current-password", required: true });
       const pw2 = creating ? el("input", { class: "acct-input", id: "acctPw2", type: "password", autocomplete: "new-password", required: true }) : null;
+      const tab = (m, label) => el("button", { class: "seg-btn", type: "button", "aria-pressed": String(mode === m), onclick: () => { if (mode !== m) { mode = m; draw(); } } }, label);
       const form = el("form", { method: "dialog", onsubmit: (e) => {
         e.preventDefault();
         if (creating && pw.value !== pw2.value) { err.textContent = "The two passwords don't match."; err.hidden = false; return; }
@@ -1556,24 +1560,24 @@
         if (then) then();
         route(true); // redraw so every icon on the page shows this profile's marks
       } },
-        el("h2", { id: "acctTitle" }, creating ? "Create a profile" : "Sign in"),
-        el("p", { class: "muted small" }, "A profile keeps your saved items and review notes. It lives only in this browser for now, so don't reuse a password from anywhere else."),
-        el("label", { class: "acct-label", for: "acctName" }, "Name"), name,
-        el("label", { class: "acct-label", for: "acctPw" }, "Password"), pw,
-        creating ? [el("label", { class: "acct-label", for: "acctPw2" }, "Password again"), pw2] : null,
+        el("button", { class: "acct-close", type: "button", "aria-label": "Close", onclick: () => dlg.close() }, "×"),
+        el("div", { class: "acct-head" },
+          el("h2", { id: "acctTitle" }, creating ? "Create a profile" : "Welcome back"),
+          el("p", { class: "ink2 small" }, then ? "Sign in to save items and leave review notes." : "Save agreements, news and documents, and keep review notes.")),
+        el("div", { class: "seg acct-tabs", role: "group", "aria-label": "Sign in or create a profile" }, tab("signin", "Sign in"), tab("create", "Create profile")),
+        field("Name", name),
+        field("Password", pw),
+        creating ? field("Confirm password", pw2) : null,
         err,
-        el("div", { class: "acct-actions" },
-          el("button", { class: "acct-btn primary", type: "submit" }, creating ? "Create profile" : "Sign in"),
-          el("button", { class: "acct-btn", type: "button", onclick: () => dlg.close() }, "Cancel")),
-        el("p", { class: "small acct-switch" }, creating ? "Already have a profile? " : "New here? ",
-          el("button", { class: "linklike", type: "button", onclick: () => { mode = creating ? "signin" : "create"; draw(); } }, creating ? "Sign in" : "Create a profile")));
+        el("button", { class: "acct-btn primary acct-submit", type: "submit" }, creating ? "Create profile" : "Sign in"),
+        el("p", { class: "muted small acct-fine" }, "Profiles are stored only in this browser. Don't reuse a password from another site."));
       dlg.replaceChildren(form);
-      requestAnimationFrame(() => name.focus());
+      (typedName ? pw : name).focus();
     };
-    draw();
     dlg.addEventListener("close", () => dlg.remove());
     document.body.append(dlg);
     dlg.showModal();
+    draw();
   }
   // Run fn if signed in, otherwise ask for a profile first.
   const needUser = (fn) => (Store.user() ? fn() : accountDialog(fn, "create"));
