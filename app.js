@@ -1403,7 +1403,7 @@
         tally("2 sources", String(cnt("corroborated")), "independent sources agree"),
         tally("1 source", String(cnt("single")), "flagged on the claim")),
       el("h2", {}, `Why these ${N.length} nations`),
-      el("p", {}, `The site covers every sovereign state with fewer than 15 million people except Israel, plus Kosovo and the Holy See. Territories are not included. Coverage spans Europe (${grp("Europe")}, including the South Caucasus), the Middle East (${grp("Middle East")}), Asia-Pacific (${grp("Asia-Pacific")}), Africa (${grp("Africa")}) and the Americas (${grp("Americas")}). The first six (Singapore, Estonia, UAE, Rwanda, Uruguay, Malta) have the deepest profiles. The rest have 1–5 key facts each.`),
+      el("p", {}, `The site covers sovereign states with fewer than 15 million people. Territories are not included. Coverage spans Europe (${grp("Europe")}, including the South Caucasus), the Middle East (${grp("Middle East")}), Asia-Pacific (${grp("Asia-Pacific")}), Africa (${grp("Africa")}) and the Americas (${grp("Americas")}). The first six (Singapore, Estonia, UAE, Rwanda, Uruguay, Malta) have the deepest profiles. The rest have 1–5 key facts each.`),
       el("h2", {}, "How each claim was checked"),
       el("ul", {},
         el("li", {}, "Each claim was researched across multiple searches and cross-checked against primary sources (government sites, official releases, the publishers' own reports) and independent coverage."),

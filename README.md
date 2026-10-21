@@ -1,6 +1,6 @@
 # Atlas
 
-An interactive dashboard on how **121 small nations** (every sovereign state under 15M people except Israel, plus Kosovo and the Holy See) are adopting and governing AI.
+An interactive dashboard on how **121 small nations** (sovereign states under 15M people) are adopting and governing AI.
 
 - **Europe (incl. South Caucasus):** Estonia, Malta, Denmark, Finland, Norway, Ireland, Luxembourg, Iceland, Lithuania, Slovenia, Cyprus, Switzerland, Sweden, Austria, Portugal, Greece, Latvia, Albania, Georgia, Armenia, Belgium, Czechia, Hungary, Croatia, Slovakia, Bulgaria, Serbia, Montenegro, Azerbaijan, Bosnia and Herzegovina, North Macedonia, Moldova, Belarus, Liechtenstein, Andorra, Monaco, San Marino, Kosovo, Holy See (Vatican City)
 - **Middle East:** UAE, Qatar, Bahrain, Jordan, Kuwait, Oman, Lebanon, Palestine
