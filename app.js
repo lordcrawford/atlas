@@ -864,11 +864,13 @@
   function keyDocuments(n) {
     const docs = (D.docs || {})[n.id] || [];
     const body = docs.length
-      ? el("div", { class: "kd-list" }, docs.map((d) => el("a", { class: "kd", href: d.u, target: "_blank", rel: "noopener noreferrer" },
+      ? el("div", { class: "kd-list" }, docs.map((d) => el("div", { class: "kd" },
           el("span", { class: "kd-kind" }, d.kind),
-          el("span", { class: "kd-title" }, d.t, " ↗"),
+          el("a", { class: "kd-title", href: d.u, target: "_blank", rel: "noopener noreferrer" }, d.t, " ↗"),
           el("span", { class: "kd-meta" }, [d.by, d.year].filter(Boolean).join(" · ")),
-          d.note ? el("span", { class: "kd-note" }, d.note) : null)))
+          d.note ? el("span", { class: "kd-note" }, d.note) : null,
+          // Where the file is published, so readers can see its context.
+          d.from ? el("span", { class: "kd-from" }, "From: ", el("a", { href: d.from.u, target: "_blank", rel: "noopener noreferrer" }, d.from.t, " ↗")) : null)))
       : el("p", { class: "muted" }, "No official AI strategy or AI law document is listed for this nation yet.");
     return el("section", { class: "section" },
       sectionHead("Key documents", docs.length ? `The ${docs.length === 1 ? "document" : "two documents"} to read first on ${n.name}'s approach to AI.` : "Official strategies and laws, when there are any."),
