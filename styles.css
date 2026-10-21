@@ -593,3 +593,9 @@ html.is-locked body > :not(.gate):not(script) { display: none !important; }
 .news-themes:empty { display: none; }
 .chip-btn.small { font-size: 12px; padding: 3px 10px; }
 .news-why { font-size: 12px; color: var(--muted); margin-top: var(--s1); }
+
+/* ---------- saved page toggle ---------- */
+.sv-tabs { margin: 0 0 var(--s4); max-width: 100%; overflow-x: auto; }
+.sv-tabs .seg-btn { font: inherit; font-size: 14px; font-weight: 550; border: 0; background: none; cursor: pointer; white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; }
+.sv-tabs .seg-btn[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: var(--shadow), 0 0 0 1px var(--border); }
+.sv-count { font-size: 12px; font-weight: 600; color: var(--muted); }

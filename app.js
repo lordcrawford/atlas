@@ -21,7 +21,7 @@
   };
 
   // Overview state (kept across navigation within a visit)
-  const state = { region: "All", colorBy: "rank", sortKey: "rank", sortDir: 1, newsSort: "newest" };
+  const state = { region: "All", colorBy: "rank", sortKey: "rank", sortDir: 1, newsSort: "newest", savedTab: "saved" };
 
   // ---------------------------------------------------------------- helpers
   function el(tag, attrs, ...kids) {
@@ -1517,28 +1517,28 @@
     }
     const d = Store.data();
     const TYPES = { collab: "Agreement", news: "News", doc: "Key document" };
-    let filter = "all";
     const body = el("div", { class: "section" });
     const entry = (key, x) => el("article", { class: "sv-item" },
       el("div", { class: "sv-top" }, el("span", { class: "kd-kind" }, TYPES[x.type] || "Item"), el("span", { class: "muted small" }, x.sub)),
       el("a", { class: "sv-title", href: x.href }, x.title),
       x.ext ? el("a", { class: "src", href: x.ext, target: "_blank", rel: "noopener noreferrer" }, domain(x.ext), " ↗") : null,
       itemActions(key, { type: x.type, title: x.title, sub: x.sub, href: x.href, ext: x.ext }));
+    // One list at a time, chosen with a toggle. "Notes only" (a note with no ✓ or ⚠) appears only when there are any.
     const draw = () => {
       const saved = Object.entries(d.saved).sort((a, b) => b[1].at.localeCompare(a[1].at));
       const marks = Object.entries(d.marks).sort((a, b) => b[1].at.localeCompare(a[1].at));
-      const groups = [
+      const tabs = [
         ["saved", "Saved", saved, "Nothing saved yet. Use ☆ on an agreement, a news item or a key document."],
         ["vetted", "Read & vetted", marks.filter(([, m]) => m.status === "vetted"), "Nothing marked ✓ yet."],
         ["sus", "Seems suspicious", marks.filter(([, m]) => m.status === "sus"), "Nothing flagged ⚠ yet."],
-        ["note", "Notes only", marks.filter(([, m]) => !m.status), null],
-      ];
-      const chips = el("div", { class: "filters", role: "group", "aria-label": "Show" },
-        [["all", `Everything`], ...groups.filter((g) => g[2].length || g[0] !== "note").map(([k, lab, l]) => [k, `${lab} · ${l.length}`])].map(([k, lab]) =>
-          el("button", { class: "chip-btn", type: "button", "aria-pressed": String(filter === k), onclick: () => { filter = k; draw(); } }, lab)));
-      body.replaceChildren(chips, ...groups.filter(([k, , l]) => (filter === "all" ? l.length || k !== "note" : filter === k)).map(([, lab, l, empty]) =>
-        el("section", { class: "section" }, sectionHead(lab),
-          el("div", { class: "card sv-list" }, l.length ? l.map(([k, x]) => entry(k, x)) : el("p", { class: "muted" }, empty)))));
+        ["note", "Notes only", marks.filter(([, m]) => !m.status), ""],
+      ].filter(([k, , l]) => k !== "note" || l.length);
+      if (!tabs.some(([k]) => k === state.savedTab)) state.savedTab = "saved";
+      const [, , list, empty] = tabs.find(([k]) => k === state.savedTab);
+      body.replaceChildren(
+        el("div", { class: "seg sv-tabs", role: "group", "aria-label": "Show" }, tabs.map(([k, lab, l]) =>
+          el("button", { class: "seg-btn", type: "button", "aria-pressed": String(state.savedTab === k), onclick: () => { state.savedTab = k; draw(); } }, lab, el("span", { class: "sv-count" }, String(l.length))))),
+        el("div", { class: "card sv-list" }, list.length ? list.map(([k, x]) => entry(k, x)) : el("p", { class: "muted" }, empty)));
     };
     draw();
     const download = () => {
