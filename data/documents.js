@@ -9,7 +9,7 @@ window.ATLAS.docs = {
   ],
   ee: [
     { t: "Eesti.ai national AI programme", kind: "Programme", year: "2026", by: "Government Office", u: "https://riigikantselei.ee/en/news/government-launched-eestiai-initiative-together-leading-entrepreneurs" },
-    { t: "EU AI Act (Regulation (EU) 2024/1689)", kind: "Law", year: "2024", by: "European Union", u: "https://eur-lex.europa.eu/eli/reg/2024/1689/oj", note: "Applies directly in every EU member state." },
+    { t: "EU AI Act (Regulation (EU) 2024/1689)", kind: "Law", year: "2024", by: "European Commission", u: "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai", note: "Applies directly in every EU member state. The Commission page links to the full legal text." },
   ],
   ae: [
     { t: "UAE Strategy for Artificial Intelligence (to 2031)", kind: "Strategy", year: "2017", by: "UAE Government", u: "https://u.ae/en/about-the-uae/strategies-initiatives-and-awards/strategies-plans-and-visions/Ai/uae-strategy-for-artificial-intelligence" },
@@ -23,15 +23,15 @@ window.ATLAS.docs = {
   ],
   mt: [
     { t: "Malta: The Ultimate AI Launchpad (national AI strategy)", kind: "Strategy", year: "2019", by: "Government of Malta (via OECD.AI)", u: "https://oecd.ai/en/dashboards/policy-initiatives/the-ultimate-ai-launchpad-a-strategy-and-vision-for-artificial-intelligence-in-malta-2030-2591" },
-    { t: "EU AI Act (Regulation (EU) 2024/1689)", kind: "Law", year: "2024", by: "European Union", u: "https://eur-lex.europa.eu/eli/reg/2024/1689/oj", note: "Applies directly in every EU member state." },
+    { t: "EU AI Act (Regulation (EU) 2024/1689)", kind: "Law", year: "2024", by: "European Commission", u: "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai", note: "Applies directly in every EU member state. The Commission page links to the full legal text." },
   ],
   dk: [
     { t: "Strategic Approach to Artificial Intelligence", kind: "Strategy", year: "2024", by: "Ministry of Digital Affairs", u: "https://www.english.digmin.dk/Media/638719220318136690/Stategic%20Approach%20to%20Artificial%20Intelligence.pdf" },
-    { t: "EU AI Act (Regulation (EU) 2024/1689)", kind: "Law", year: "2024", by: "European Union", u: "https://eur-lex.europa.eu/eli/reg/2024/1689/oj", note: "Applies directly in every EU member state." },
+    { t: "EU AI Act (Regulation (EU) 2024/1689)", kind: "Law", year: "2024", by: "European Commission", u: "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai", note: "Applies directly in every EU member state. The Commission page links to the full legal text." },
   ],
   fi: [
     { t: "Finland's AI strategy: country report", kind: "Report", year: "2017–2019", by: "European Commission AI Watch", u: "https://ai-watch.ec.europa.eu/countries/finland/finland-ai-strategy-report_en" },
-    { t: "EU AI Act (Regulation (EU) 2024/1689)", kind: "Law", year: "2024", by: "European Union", u: "https://eur-lex.europa.eu/eli/reg/2024/1689/oj", note: "Applies directly in every EU member state." },
+    { t: "EU AI Act (Regulation (EU) 2024/1689)", kind: "Law", year: "2024", by: "European Commission", u: "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai", note: "Applies directly in every EU member state. The Commission page links to the full legal text." },
   ],
   no: [
     { t: "National Strategy for Artificial Intelligence", kind: "Strategy", year: "2020", by: "Ministry of Local Government and Modernisation (via OECD.AI)", u: "https://wp.oecd.ai/app/uploads/2021/12/Norway_National_Strategy_for_Artificial_Intelligence_2020.pdf" },
@@ -39,7 +39,7 @@ window.ATLAS.docs = {
   ],
   ie: [
     { t: "Refreshed National AI Strategy", kind: "Strategy", year: "2024", by: "Department of Enterprise", u: "https://enterprise.gov.ie/en/news-and-events/department-news/2024/november/06112024.html" },
-    { t: "EU AI Act (Regulation (EU) 2024/1689)", kind: "Law", year: "2024", by: "European Union", u: "https://eur-lex.europa.eu/eli/reg/2024/1689/oj", note: "Applies directly in every EU member state." },
+    { t: "EU AI Act (Regulation (EU) 2024/1689)", kind: "Law", year: "2024", by: "European Commission", u: "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai", note: "Applies directly in every EU member state. The Commission page links to the full legal text." },
   ],
   lu: [
     { t: "Luxembourg's AI Strategy", kind: "Strategy", year: "2025", by: "Government of Luxembourg", u: "https://gouvernement.lu/dam-assets/images-documents/actualites/2025/05/16-strategies-ai-donnees-quantum/2024115332-ministere-etat-strategy-ai-en-bat-acc-ua.pdf" },
@@ -50,11 +50,11 @@ window.ATLAS.docs = {
   ],
   lt: [
     { t: "National AI Strategic Guidelines 2026–2035", kind: "Strategy", year: "2026", by: "Ministry of the Economy and Innovation", u: "https://eimin.lrv.lt/public/canonical/1780915035/6723/National%20Artificial%20Intelligence%20Strategic%20Guidelines%20of%20Lithuania%20for%202026%E2%80%932035_.pdf" },
-    { t: "EU AI Act (Regulation (EU) 2024/1689)", kind: "Law", year: "2024", by: "European Union", u: "https://eur-lex.europa.eu/eli/reg/2024/1689/oj", note: "Applies directly in every EU member state." },
+    { t: "EU AI Act (Regulation (EU) 2024/1689)", kind: "Law", year: "2024", by: "European Commission", u: "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai", note: "Applies directly in every EU member state. The Commission page links to the full legal text." },
   ],
   si: [
     { t: "National Programme for AI", kind: "Strategy", year: "2025", by: "Government of Slovenia", u: "https://www.gov.si/assets/ministrstva/MDP/National_Programme_for_AI_2025.pdf" },
-    { t: "EU AI Act (Regulation (EU) 2024/1689)", kind: "Law", year: "2024", by: "European Union", u: "https://eur-lex.europa.eu/eli/reg/2024/1689/oj", note: "Applies directly in every EU member state." },
+    { t: "EU AI Act (Regulation (EU) 2024/1689)", kind: "Law", year: "2024", by: "European Commission", u: "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai", note: "Applies directly in every EU member state. The Commission page links to the full legal text." },
   ],
   cy: [
     { t: "Cyprus AI strategy: country report", kind: "Report", year: "2020", by: "European Commission AI Watch", u: "https://ai-watch.ec.europa.eu/countries/cyprus/cyprus-ai-strategy-report_en" },
@@ -95,23 +95,23 @@ window.ATLAS.docs = {
   ],
   se: [
     { t: "Sweden's AI Strategy and action plan", kind: "Strategy", year: "2026", by: "Ministry of Finance", u: "https://www.government.se/information-material/2026/02/swedens-ai-strategy/" },
-    { t: "EU AI Act (Regulation (EU) 2024/1689)", kind: "Law", year: "2024", by: "European Union", u: "https://eur-lex.europa.eu/eli/reg/2024/1689/oj", note: "Applies directly in every EU member state." },
+    { t: "EU AI Act (Regulation (EU) 2024/1689)", kind: "Law", year: "2024", by: "European Commission", u: "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai", note: "Applies directly in every EU member state. The Commission page links to the full legal text." },
   ],
   at: [
     { t: "Artificial Intelligence Mission Austria 2030 (AIM AT 2030)", kind: "Strategy", year: "2021", by: "Government of Austria (via EU Digital Skills Platform)", u: "https://digital-skills-jobs.europa.eu/en/initiatives/national-strategies/austria-artificial-intelligence-mission-2030-aim-2030" },
-    { t: "EU AI Act (Regulation (EU) 2024/1689)", kind: "Law", year: "2024", by: "European Union", u: "https://eur-lex.europa.eu/eli/reg/2024/1689/oj", note: "Applies directly in every EU member state." },
+    { t: "EU AI Act (Regulation (EU) 2024/1689)", kind: "Law", year: "2024", by: "European Commission", u: "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai", note: "Applies directly in every EU member state. The Commission page links to the full legal text." },
   ],
   pt: [
     { t: "AI Portugal 2030", kind: "Strategy", year: "2019", by: "Government of Portugal (via OECD.AI)", u: "https://wp.oecd.ai/app/uploads/2021/12/Portugal_AI_Portugal_2030_2019-2030.pdf" },
-    { t: "EU AI Act (Regulation (EU) 2024/1689)", kind: "Law", year: "2024", by: "European Union", u: "https://eur-lex.europa.eu/eli/reg/2024/1689/oj", note: "Applies directly in every EU member state." },
+    { t: "EU AI Act (Regulation (EU) 2024/1689)", kind: "Law", year: "2024", by: "European Commission", u: "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai", note: "Applies directly in every EU member state. The Commission page links to the full legal text." },
   ],
   gr: [
     { t: "Blueprint for Greece's AI Transformation", kind: "Strategy", year: "2024", by: "Special Secretariat of Foresight", u: "https://foresight.gov.gr/wp-content/uploads/2024/11/Blueprint_GREECES_AI_TRANSFORMATION.pdf" },
-    { t: "EU AI Act (Regulation (EU) 2024/1689)", kind: "Law", year: "2024", by: "European Union", u: "https://eur-lex.europa.eu/eli/reg/2024/1689/oj", note: "Applies directly in every EU member state." },
+    { t: "EU AI Act (Regulation (EU) 2024/1689)", kind: "Law", year: "2024", by: "European Commission", u: "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai", note: "Applies directly in every EU member state. The Commission page links to the full legal text." },
   ],
   lv: [
     { t: "Latvia AI strategy: country report", kind: "Report", year: "2020", by: "European Commission AI Watch", u: "https://ai-watch.ec.europa.eu/countries/latvia-0/latvia-ai-strategy-report_en" },
-    { t: "EU AI Act (Regulation (EU) 2024/1689)", kind: "Law", year: "2024", by: "European Union", u: "https://eur-lex.europa.eu/eli/reg/2024/1689/oj", note: "Applies directly in every EU member state." },
+    { t: "EU AI Act (Regulation (EU) 2024/1689)", kind: "Law", year: "2024", by: "European Commission", u: "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai", note: "Applies directly in every EU member state. The Commission page links to the full legal text." },
   ],
   om: [
     { t: "Oman AI and Digital Future Program 2024–2026", kind: "Programme", year: "2024", by: "Ministry of Transport, Communications and IT", u: "https://mtcit.gov.om/media-4/news-announcements-11/news-85/oman-ai-digital-future-program-20242026-171" },
@@ -127,26 +127,26 @@ window.ATLAS.docs = {
   ],
   be: [
     { t: "AI 4 Belgium (national AI strategy)", kind: "Strategy", year: "2019", by: "AI4Belgium coalition (via OECD.AI)", u: "https://oecd.ai/en/dashboards/policy-initiatives/ai-4-belgium-3862" },
-    { t: "EU AI Act (Regulation (EU) 2024/1689)", kind: "Law", year: "2024", by: "European Union", u: "https://eur-lex.europa.eu/eli/reg/2024/1689/oj", note: "Applies directly in every EU member state." },
+    { t: "EU AI Act (Regulation (EU) 2024/1689)", kind: "Law", year: "2024", by: "European Commission", u: "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai", note: "Applies directly in every EU member state. The Commission page links to the full legal text." },
   ],
   cz: [
     { t: "National AI Strategy of the Czech Republic 2030", kind: "Strategy", year: "2024", by: "Ministry of Industry and Trade (via OECD.AI)", u: "https://oecd.ai/en/dashboards/policy-initiatives/national-ai-strategy-of-the-czech-republic-2030-6563" },
-    { t: "EU AI Act (Regulation (EU) 2024/1689)", kind: "Law", year: "2024", by: "European Union", u: "https://eur-lex.europa.eu/eli/reg/2024/1689/oj", note: "Applies directly in every EU member state." },
+    { t: "EU AI Act (Regulation (EU) 2024/1689)", kind: "Law", year: "2024", by: "European Commission", u: "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai", note: "Applies directly in every EU member state. The Commission page links to the full legal text." },
   ],
   hu: [
     { t: "Hungary's AI Strategy (to 2030)", kind: "Strategy", year: "2020", by: "Government of Hungary (via OECD.AI)", u: "https://oecd.ai/en/dashboards/policy-initiatives/hungarys-ai-strategy-8439" },
-    { t: "EU AI Act (Regulation (EU) 2024/1689)", kind: "Law", year: "2024", by: "European Union", u: "https://eur-lex.europa.eu/eli/reg/2024/1689/oj", note: "Applies directly in every EU member state." },
+    { t: "EU AI Act (Regulation (EU) 2024/1689)", kind: "Law", year: "2024", by: "European Commission", u: "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai", note: "Applies directly in every EU member state. The Commission page links to the full legal text." },
   ],
   hr: [
-    { t: "EU AI Act (Regulation (EU) 2024/1689)", kind: "Law", year: "2024", by: "European Union", u: "https://eur-lex.europa.eu/eli/reg/2024/1689/oj", note: "Applies directly in every EU member state." },
+    { t: "EU AI Act (Regulation (EU) 2024/1689)", kind: "Law", year: "2024", by: "European Commission", u: "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai", note: "Applies directly in every EU member state. The Commission page links to the full legal text." },
   ],
   sk: [
     { t: "Action Plan for the Digital Transformation of Slovakia", kind: "Plan", year: "2019", by: "Government of Slovakia (via OECD.AI)", u: "https://oecd.ai/en/dashboards/policy-initiatives/action-plan-for-digital-transformation-of-slovakia-5360" },
-    { t: "EU AI Act (Regulation (EU) 2024/1689)", kind: "Law", year: "2024", by: "European Union", u: "https://eur-lex.europa.eu/eli/reg/2024/1689/oj", note: "Applies directly in every EU member state." },
+    { t: "EU AI Act (Regulation (EU) 2024/1689)", kind: "Law", year: "2024", by: "European Commission", u: "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai", note: "Applies directly in every EU member state. The Commission page links to the full legal text." },
   ],
   bg: [
     { t: "Bulgaria AI strategy: country report", kind: "Report", year: "2020", by: "European Commission AI Watch", u: "https://ai-watch.ec.europa.eu/countries/bulgaria/bulgaria-ai-strategy-report_en" },
-    { t: "EU AI Act (Regulation (EU) 2024/1689)", kind: "Law", year: "2024", by: "European Union", u: "https://eur-lex.europa.eu/eli/reg/2024/1689/oj", note: "Applies directly in every EU member state." },
+    { t: "EU AI Act (Regulation (EU) 2024/1689)", kind: "Law", year: "2024", by: "European Commission", u: "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai", note: "Applies directly in every EU member state. The Commission page links to the full legal text." },
   ],
   rs: [
     { t: "Strategy for the Development of AI 2025–2030", kind: "Strategy", year: "2025", by: "Government of Serbia", u: "https://ai.gov.rs/vest/en/1296/serbia-adopts-strategy-for-the-development-of-artificial-intelligence-for-the-period-20252030.php" },
