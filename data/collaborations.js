@@ -53,12 +53,14 @@ window.ATLAS.collaborations = [
     title: "UAE–France AI framework and 1 GW data centre",
     short: "AI framework and 1 GW data centre",
     a: "ae", b: "fr",
-    text: "France and the UAE signed an AI cooperation framework that includes a 1-gigawatt AI data centre in France, the core of an AI campus worth €30–50 billion, alongside cooperation on chips and talent.",
-    level: "corroborated",
+    text: "France and the UAE signed an AI cooperation framework on 6 February 2025 that includes a 1-gigawatt AI data centre in France, which the French presidency put at $30–50 billion of investment, alongside cooperation on chips, data centres and talent.",
+    level: "verified",
     sources: [
       { t: "Maginative - France and UAE partner on multi-billion dollar AI infrastructure project (6 Feb 2025)", u: "https://www.maginative.com/article/france-and-uae-partner-on-multi-billion-dollar-ai-infrastructure-project/" },
-      { t: "Middle East AI News - France, UAE deal to build 1 GW AI data centre", u: "https://www.middleeastainews.com/p/france-uae-1-gigawatt-data-centre-deal" },
+      { t: "AGBI (Reuters) - UAE and France to invest up to $50bn in AI data centre (7 Feb 2025)", u: "https://www.agbi.com/tech/2025/02/uae-and-france-to-invest-up-to-50bn-in-ai-data-centre-plan/" },
+      { t: "Computing - UAE to invest up to €50 billion in France's largest AI data centre (10 Feb 2025)", u: "https://www.computing.co.uk/news/2025/ai/uae-to-invest-50-billion-euros-in-french-ai-datacentre" },
     ],
+    note: "Reuters reports the figure in dollars; some outlets give it in euros.",
   },
   {
     id: "ae-it", kind: "bilateral", date: "2025-02",

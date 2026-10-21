@@ -391,7 +391,8 @@
           sources: [
             S("Morningstar / PR Newswire - Firebird opens the region's largest AI factory", "https://www.morningstar.com/news/pr-newswire/20260808ln22240/firebird-opens-the-regions-largest-ai-factory-and-announces-global-expansion"),
             S("The AI Insider - Firebird opens Armenia AI factory, plans 70,000-plus GPUs", "https://theaiinsider.tech/2026/08/09/firebird-opens-armenia-ai-factory-plans-70000-plus-nvidia-gpus-by-2027/"),
-            S("TechEdgeAI - Firebird launches NVIDIA AI factory in Armenia", "https://techedgeai.com/firebird-launches-nvidia-ai-factory-in-armenia-as-compute-race-accelerates/"),
+            S("Armenpress - 'The future is now,' Pashinyan says as Firebird opens AI megaproject (8 Aug 2026)", "https://armenpress.am/en/article/1257541"),
+            S("ARKA - Firebird AI factory financed by Ardshinbank officially opens in Armenia", "https://arka.am/en/news/technology/firebird-ai-factory-financed-by-ardshinbank-officially-opens-in-armenia/"),
           ],
           note: "The 70,000-GPU and 300 MW figures are targets, not current capacity.",
         },
@@ -404,7 +405,7 @@
           sources: [
             S("Morningstar / PR Newswire", "https://www.morningstar.com/news/pr-newswire/20260808ln22240/firebird-opens-the-regions-largest-ai-factory-and-announces-global-expansion"),
             S("The AI Insider", "https://theaiinsider.tech/2026/08/09/firebird-opens-armenia-ai-factory-plans-70000-plus-nvidia-gpus-by-2027/"),
-            S("TechEdgeAI", "https://techedgeai.com/firebird-launches-nvidia-ai-factory-in-armenia-as-compute-race-accelerates/"),
+            S("Armenpress", "https://armenpress.am/en/article/1257541"),
           ],
         },
       ],
@@ -745,7 +746,7 @@
           sources: [
             S("El Salvador in English - El Salvador pioneers AI law", "https://elsalvadorinenglish.com/2025/02/27/el-salvador-pioneers-global-innovation-with-groundbreaking-artificial-intelligence-law/"),
             S("US Trade.gov - El Salvador ICT: Artificial Intelligence Law", "https://www.trade.gov/market-intelligence/el-salvador-ict-artificial-intelligence-law"),
-            S("CryptoSlate - El Salvador to focus on open-source AI with new laws", "https://cryptoslate.com/el-salvador-to-focus-on-open-source-ai-development-with-new-laws-to-foster-innovation/"),
+            S("Diario El Mundo - Aprobada ley de Inteligencia Artificial (26 Feb 2025)", "https://diario.elmundo.sv/politica/aprobada-ley-inteligencia-artificial-desarrolladores-registrados-tendran-beneficios"),
           ],
         },
         {
@@ -754,7 +755,7 @@
           level: "corroborated",
           sources: [
             S("CryptoSlate - El Salvador sets AI goals with national lab launch amid NVIDIA deal", "https://cryptoslate.com/el-salvador-sets-ambitious-ai-goals-with-national-lab-launch-amid-nvidia-deal/"),
-            S("Cryptopolitan - El Salvador signs AI letter of intent with Nvidia", "https://www.cryptopolitan.com/el-salvador-signs-ai-loi-with-nvidia/"),
+            S("DCD - El Salvador becomes first country to receive sovereign quota of Nvidia B300 chips (mentions the letter of intent)", "https://www.datacenterdynamics.com/en/news/el-salvador-becomes-first-country-to-receive-sovereign-quota-of-nvidia-b300-chips/"),
           ],
         },
         {
@@ -890,12 +891,13 @@
         {
           topic: "Skills", date: "2026-09-10",
           text: "In September 2026 the government launched 'RD Inteligente', aiming to train one million Dominicans in AI, alongside 50,000 AI scholarships with Amazon Web Services to run until 2028.",
-          level: "verified",
+          level: "corroborated",
           sources: [
             S("Noticias SIN - Gobierno lanza 'RD Inteligente'", "https://noticiassin.com/pais/nacional/2026/09/10/gobierno-lanza-rd-inteligente-con-meta-de-capacitar-a-un-millon-de-dominicanos-en-inteligencia-artificial-2114297/"),
             S("Infobae - Gobierno dominicano y AWS lanzan 50,000 becas de IA", "https://www.infobae.com/republica-dominicana/2026/09/10/gobierno-dominicano-y-amazon-web-lanzan-50000-becas-de-inteligencia-artificial-mientras-crece-el-uso-empresarial-en-el-pais/"),
             S("Prensa Latina - Gobierno dominicano impulsa formación en IA", "https://www.prensa-latina.cu/2026/09/11/gobierno-dominicano-impulsa-formacion-en-inteligencia-artificial/"),
           ],
+          note: "The 50,000 AWS scholarships and the 2028 end date appear only in Infobae's report.",
         },
       ],
       news: [

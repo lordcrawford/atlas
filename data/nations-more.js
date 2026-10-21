@@ -183,9 +183,10 @@ window.ATLAS.nations.push(
       {
         topic: "Strategy", date: "2024-09-26",
         text: "Norway's national digitalisation strategy (September 2024) aims to make it the world's most digitalised country by 2030, including building a national AI infrastructure.",
-        level: "single",
+        level: "corroborated",
         sources: [
           { t: "Regjeringen - The Digital Norway of the Future, ch.1: the most digitalised country in the world", u: "https://www.regjeringen.no/en/documents/the-digital-norway-of-the-future/id3054645/?ch=2" },
+          { t: "Altinget - Tungs mål: Norge skal bli verdens mest digitaliserte land innen 2030 (26 Sep 2024)", u: "https://www.altinget.no/statogstyring/artikkel/foelg-fremleggingen-av-ny-digitaliseringsstrategi" },
         ],
       },
       {
@@ -709,8 +710,8 @@ window.ATLAS.nations.push(
     id: "bh", name: "Bahrain", flag: "🇧🇭", region: "Middle East / Gulf", group: "Middle East", geo: [50.58, 26.23], isoN: "048",
     stance: "First Gulf state to pass a standalone AI bill through a chamber, now stalled",
     summary:
-      "In April 2024 Bahrain's Shura Council unanimously passed a 38-article AI law with prison terms and fines. The government has since argued that existing laws already cover much of it, and the bill has not been enacted. Meanwhile, the e-government authority has issued a non-binding policy on government use of AI.",
-    glance: { firstStrategy: "2025 (gov. AI policy)", latestStrategy: "2025 (General Policy for AI v1.0)", newestBody: "—", newestBodyDate: "" },
+      "In April 2024 Bahrain's Shura Council unanimously passed a 38-article AI law with prison terms and fines. The government has since argued that existing laws already cover much of it, and the bill has not been enacted. Meanwhile, in July 2025 the e-government authority launched a National Policy for the Use of AI.",
+    glance: { firstStrategy: "2025 (gov. AI policy)", latestStrategy: "2025 (National Policy for the Use of AI)", newestBody: "—", newestBodyDate: "" },
     stats: { population: { v: 1600366, year: 2025 }, gdpPerCapita: { v: 30597, year: 2025 }, internet: { v: 100, year: 2024 } },
     oxford: { rank: 48, scores: [46.5, 58.04, 72.5, 83.37, 48.5, 49.08] },
     msAdoption: null,
@@ -733,13 +734,13 @@ window.ATLAS.nations.push(
         ],
       },
       {
-        topic: "Public sector", date: "2025",
-        text: "The Information & eGovernment Authority issued a non-binding General Policy for the Use of AI (v1.0) for government entities. It sets four pillars and eleven principles, including human decision-making.",
-        level: "single",
+        topic: "Public sector", date: "2025-07-27",
+        text: "On 27 July 2025 the Information & eGovernment Authority launched the National Policy for the Use of Artificial Intelligence, built on four pillars: legal compliance, AI use and adoption, public education and awareness, and local and international cooperation. It also adopted the GCC's Guiding Manual on the Ethics of AI Use.",
+        level: "corroborated",
         sources: [
+          { t: "iGA - Bahrain launches National AI Policy and adopts GCC ethics manual (27 Jul 2025)", u: "https://www.iga.gov.bh/en/article/bahrain-launches-national-ai-policy-and-adopts-gcc-ethics-manual" },
           { t: "Middle East AI News - Bahrain launches national AI policy", u: "https://www.middleeastainews.com/p/bahrain-launches-national-ai-policy" },
         ],
-        note: "Sources date it to May 2025 or 30 July 2025.",
       },
     ],
     news: [

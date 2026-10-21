@@ -552,7 +552,7 @@ window.ATLAS = {
             { t: "Fast Company Middle East - UAE to use AI to write and review laws", u: "https://fastcompanyme.com/?p=38052" },
             { t: "Mondaq / BSA - Smart legislation with human oversight", u: "https://webiis10.mondaq.com/new-technology/1695520/smart-legislation-with-human-oversight-a-legal-practitioners-reading-of-the-uaes-regulatory-intelligence-initiative" },
           ],
-          note: "The 70% figure is an official projection, not a measured result. No law drafted with the system has been publicly identified.",
+          note: "The 70% figure is an official projection, not a measured result, and of the sources only Fast Company Middle East reports it. No law drafted with the system has been publicly identified.",
         },
         {
           topic: "Education",
@@ -836,16 +836,14 @@ window.ATLAS = {
         },
         {
           topic: "Benchmark",
-          date: "2025-10-03",
-          text: "In the 2025 Latin American AI Index (ILIA), produced by ECLAC/CEPAL and Chile's CENIA and launched 3 October 2025, Uruguay ranked 3rd of 19 countries with 62.32 points, behind Chile (70.56) and Brazil (67.39). That puts it in the 'pioneer' tier, which requires a score above 60.",
+          date: "2026-10-20",
+          text: "In the 2026 Latin American AI Index (ILIA), produced by ECLAC/CEPAL and Chile's CENIA and launched on 20 October 2026, Uruguay ranked 3rd of 20 countries with 67.0 points, behind Chile (71.4) and Brazil (68.4). That keeps it in the 'pioneer' tier, which requires a score above 60.",
           level: "verified",
           sources: [
-            { t: "El Observador - Uruguay, among the AI pioneers in Latin America (4 Oct 2025)", u: "https://www.elobservador.com.uy/ciencia-y-tecnologia/uruguay-los-pioneros-la-inteligencia-artificial-america-latina-n6019501" },
-            { t: "El Comercio - ILIA 2025: how is Latin America doing in AI?", u: "https://www.elcomercio.com/opinion/ilia-2025-como-esta-america-latina-marco-benalcazar-columnista/" },
-            { t: "Revista Mercado - The countries leading AI in Latin America", u: "https://revistamercado.do/technology/artificial-intelligence/los-paises-que-lideran-la-revolucion-de-la-ia-en-latinoamerica/" },
-            { t: "CEPAL - ILIA 2025 launch event", u: "https://www.cepal.org/es/eventos/lanzamiento-indice-latinoamericano-inteligencia-artificial-2025" },
+            { t: "CENIA - ILIA 2026: 4th edition", u: "https://cenia.cl/2026/10/20/ilia-2026-4ta-edicion-revela-que-america-latina-y-el-caribe-se-juegan-su-futuro-en-ia-en-la-colaboracion-regional-para-datos-talento-y-computo/" },
+            { t: "la diaria - Uruguay integra el grupo de países pioneros en IA (Oct 2026)", u: "https://ladiaria.com.uy/futuro/articulo/2026/10/uruguay-integra-el-grupo-de-paises-pioneros-en-ia-y-lidera-la-adopcion-empresarial-en-la-region-segun-estudio/" },
+            { t: "TeleSemana - ILIA 2026 (20 Oct 2026)", u: "https://www.telesemana.com/blog/2026/10/20/ilia-2026-con-avances-y-oportunidades-america-latina-exhibe-brechas-de-soberania-tecnologica-y-de-infraestructura-en-la-carrera-global-de-la-ia/" },
           ],
-          note: "The study flags a gap: Uruguay has no AI doctoral programmes.",
         },
         {
           topic: "Partnerships",

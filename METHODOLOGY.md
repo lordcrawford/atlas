@@ -46,9 +46,15 @@ Six African nations (Libya, Congo, Gabon, Djibouti, Eswatini, Lesotho) were adde
 
 During this batch the overview's EU AI Act highlight was corrected. It had said Norway and Iceland were already bound through the EEA; the Act is still under scrutiny for incorporation into the EEA Agreement, so the highlight now counts EU members only and lists the EEA states as pending.
 
+## Reliability pass (20 Oct 2026)
+
+- Sources that block automated requests were re-read through archived copies on the Internet Archive's Wayback Machine where one existed, or opened in a browser. Bot checks were never bypassed; where a page stayed blocked (for example some Lithuanian, Finnish and Norwegian government pages behind Cloudflare), the claim was checked against its other sources, and a further source was added where one was needed.
+- Weaker sources were replaced where a stronger one exists: crypto-news sites for El Salvador's AI law and NVIDIA letter of intent (now Diario El Mundo and DCD), two AI-news newsletters for the France–UAE framework (now Reuters via AGBI and Computing), a newsletter for Bahrain's AI policy (now the iGA's own release, which also corrected the policy's name and date to the National Policy for the Use of AI, 27 July 2025), and small AI-news sites for the Firebird factory opening in Armenia (now Armenpress and ARKA). Norway's digitalisation strategy gained an Altinget report confirming its 26 September 2024 launch.
+- Details that turned out to rest on one outlet were flagged in a note or the badge was lowered: the AWS scholarships in the Dominican Republic and the UAE's 70% faster-lawmaking projection. Uruguay's Latin American AI Index fact now uses the 2026 edition, which has primary and independent sources.
+
 ## Key documents
 
-Each nation page lists up to two key documents: the national AI strategy or policy, an AI law, or official guidance. Links go to the document itself or to its official page; when the copy is hosted by OECD.AI, the EU's Digital Skills Platform or the European Commission's AI Watch rather than the issuing government, the entry says so. EU member states list the EU AI Act, which applies directly in each of them. Where no official AI strategy or law document could be found, the page says so rather than listing a news report. Every link was checked on 20 October 2026; a few government sites block automated checks and were opened in a browser instead. 47 nations have at least one document listed.
+Each nation page lists up to two key documents: the national AI strategy or policy, an AI law, or official guidance. Links go to the document itself or to its official page; when the copy is hosted by OECD.AI, the EU's Digital Skills Platform or the European Commission's AI Watch rather than the issuing government, the entry says so. EU member states list the EU AI Act, which applies directly in each of them. Where no official AI strategy or law document could be found, the page says so rather than listing a news report. Every link was checked on 20 October 2026; a few government sites block automated checks and were opened in a browser instead. 49 nations have at least one document listed.
 
 ## News update (20 Oct 2026)
 

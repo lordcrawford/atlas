@@ -1,6 +1,6 @@
 // Atlas: up to two key documents per nation (national AI strategies, laws, official guidance).
 // Links go to the document or its official page; 'via' names the site hosting it when that is not the issuer.
-// Every link was checked on 20 October 2026. Nations not listed have no official AI strategy or law document listed yet.
+// Every link was checked on 20 October 2026 (some in a browser, where sites block automated requests). Nations not listed have no official AI strategy or law document listed yet.
 
 window.ATLAS.docs = {
   sg: [
@@ -126,21 +126,22 @@ window.ATLAS.docs = {
     { t: "National AI Strategy (ENIA)", kind: "Strategy", year: "2023", by: "OGTIC (via OECD.AI)", u: "https://oecd.ai/en/dashboards/policy-initiatives/national-artificial-intelligence-strategy-enia" },
   ],
   be: [
+    { t: "AI 4 Belgium (national AI strategy)", kind: "Strategy", year: "2019", by: "AI4Belgium coalition (via OECD.AI)", u: "https://oecd.ai/en/dashboards/policy-initiatives/ai-4-belgium-3862" },
     { t: "EU AI Act (Regulation (EU) 2024/1689)", kind: "Law", year: "2024", by: "European Union", u: "https://eur-lex.europa.eu/eli/reg/2024/1689/oj", note: "Applies directly in every EU member state." },
   ],
   cz: [
-    { t: "Czech AI strategy: country report", kind: "Report", year: "2019–2024", by: "European Commission AI Watch", u: "https://ai-watch.ec.europa.eu/countries/czech-republic/czech-republic-ai-strategy-report_en" },
+    { t: "National AI Strategy of the Czech Republic 2030", kind: "Strategy", year: "2024", by: "Ministry of Industry and Trade (via OECD.AI)", u: "https://oecd.ai/en/dashboards/policy-initiatives/national-ai-strategy-of-the-czech-republic-2030-6563" },
     { t: "EU AI Act (Regulation (EU) 2024/1689)", kind: "Law", year: "2024", by: "European Union", u: "https://eur-lex.europa.eu/eli/reg/2024/1689/oj", note: "Applies directly in every EU member state." },
   ],
   hu: [
-    { t: "Hungary AI strategy 2020–2030: country report", kind: "Report", year: "2020", by: "European Commission AI Watch", u: "https://ai-watch.ec.europa.eu/countries/hungary/hungary-ai-strategy-report_en" },
+    { t: "Hungary's AI Strategy (to 2030)", kind: "Strategy", year: "2020", by: "Government of Hungary (via OECD.AI)", u: "https://oecd.ai/en/dashboards/policy-initiatives/hungarys-ai-strategy-8439" },
     { t: "EU AI Act (Regulation (EU) 2024/1689)", kind: "Law", year: "2024", by: "European Union", u: "https://eur-lex.europa.eu/eli/reg/2024/1689/oj", note: "Applies directly in every EU member state." },
   ],
   hr: [
     { t: "EU AI Act (Regulation (EU) 2024/1689)", kind: "Law", year: "2024", by: "European Union", u: "https://eur-lex.europa.eu/eli/reg/2024/1689/oj", note: "Applies directly in every EU member state." },
   ],
   sk: [
-    { t: "Slovakia AI strategy: country report", kind: "Report", year: "2019", by: "European Commission AI Watch", u: "https://ai-watch.ec.europa.eu/countries/slovakia/slovakia-ai-strategy-report_en" },
+    { t: "Action Plan for the Digital Transformation of Slovakia", kind: "Plan", year: "2019", by: "Government of Slovakia (via OECD.AI)", u: "https://oecd.ai/en/dashboards/policy-initiatives/action-plan-for-digital-transformation-of-slovakia-5360" },
     { t: "EU AI Act (Regulation (EU) 2024/1689)", kind: "Law", year: "2024", by: "European Union", u: "https://eur-lex.europa.eu/eli/reg/2024/1689/oj", note: "Applies directly in every EU member state." },
   ],
   bg: [
@@ -167,5 +168,11 @@ window.ATLAS.docs = {
   ],
   sm: [
     { t: "Council of Europe Framework Convention on AI", kind: "Treaty", year: "2024", by: "Council of Europe", u: "https://www.coe.int/en/web/artificial-intelligence/the-framework-convention-on-artificial-intelligence", note: "San Marino was among the first signatories." },
+  ],
+  ly: [
+    { t: "National Artificial Intelligence Strategy of Libya 2025–2030", kind: "Strategy", year: "2025", by: "General Information Authority (via OECD.AI)", u: "https://oecd.ai/en/dashboards/policy-initiatives/national-artificial-intelligence-strategy-of-libya-2025-2030" },
+  ],
+  az: [
+    { t: "Artificial Intelligence Strategy of the Republic of Azerbaijan 2025–2028", kind: "Strategy", year: "2025", by: "President of the Republic of Azerbaijan", u: "https://static.president.az/upload/Files/2025/03/19/5a0fb1886a7316cb1b95458f366c1bd6_3415396.pdf", note: "In Azerbaijani." },
   ],
 };
