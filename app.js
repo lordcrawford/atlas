@@ -74,6 +74,10 @@
     try { return new URL(u).hostname.replace(/^www\./, ""); } catch { return u; }
   }
   const byId = (id) => N.find((n) => n.id === id);
+  // Kosovo and the Holy See are not in the Oxford Insights index; the Holy See has no World Bank data.
+  const rankOf = (n) => (n.oxford ? n.oxford.rank : null);
+  const rankText = (n) => (n.oxford ? `#${n.oxford.rank}` : "not ranked");
+  const byRank = (a, b) => (rankOf(a) ?? 999) - (rankOf(b) ?? 999);
   const shortName = (n) => (n.name === "United Arab Emirates" ? "UAE" : n.name);
   const median = (arr) => {
     const a = [...arr].sort((x, y) => x - y);
@@ -129,7 +133,7 @@
   function nationTip(n) {
     return [
       el("div", { class: "tv" }, `${n.flag} ${n.name}`),
-      el("div", { class: "tl" }, `AI readiness #${n.oxford.rank} of ${OXFORD_TOTAL}`),
+      el("div", { class: "tl" }, n.oxford ? `AI readiness #${n.oxford.rank} of ${OXFORD_TOTAL}` : "Not in the Oxford Insights readiness index"),
       el("div", { class: "tl small" }, `First AI strategy: ${n.glance.firstStrategy}`),
       el("div", { class: "tl small", style: "margin-top:4px" }, "Click to open profile"),
     ];
@@ -166,9 +170,9 @@
   const METRICS = {
     rank: {
       label: "AI readiness rank",
-      value: (n) => n.oxford.rank,
-      t: (n) => (110 - n.oxford.rank) / 103, // #7 -> ~1, #110 -> 0
-      lo: "#101", hi: "#7", loLabel: "Lower readiness", hiLabel: "Higher readiness",
+      value: rankOf,
+      t: (n) => (n.oxford ? (195 - n.oxford.rank) / 188 : null), // #7 -> 1, #195 -> 0
+      lo: "#195", hi: "#7", loLabel: "Lower readiness", hiLabel: "Higher readiness",
       source: "oxford",
     },
   };
@@ -180,6 +184,8 @@
     if (!window.WORLD_TOPO || !window.topojson || !window.d3) return null;
     const fc = topojson.feature(WORLD_TOPO, WORLD_TOPO.objects.countries);
     fc.features = fc.features.filter((f) => f.id !== "010"); // drop Antarctica
+    // Natural Earth gives Kosovo no ISO number; match it by the code used in data/ (XKX).
+    for (const f of fc.features) if (f.id == null && f.properties && f.properties.name === "Kosovo") f.id = "XKX";
     WORLD = fc;
     return WORLD;
   }
@@ -362,7 +368,7 @@
       markerLayer.replaceChildren(...markers.map((m, i) => {
         const [x, y] = scr[i];
         m.x = x; m.y = y;
-        const g = s("g", { class: "map-marker" + (hovered === m.n.id ? " is-hover" : ""), tabindex: "0", role: "link", "aria-label": `${m.n.name}: readiness rank ${m.n.oxford.rank}` });
+        const g = s("g", { class: "map-marker" + (hovered === m.n.id ? " is-hover" : ""), tabindex: "0", role: "link", "aria-label": `${m.n.name}: readiness rank ${rankText(m.n)}` });
         g.append(s("circle", { cx: x, cy: y, r: 6, fill: colorFor(m.n), stroke: "var(--surface)", "stroke-width": 2 }));
         if (show && x > -20 && x < W + 20 && y > -20 && y < H + 20) {
           const label = shortName(m.n), w = label.length * 7.2 + 4, h = 14;
@@ -416,6 +422,7 @@
         `${metric.loLabel} ${metric.lo}`,
         el("span", { class: "ramp" }, [0.05, 0.3, 0.55, 0.8, 1].map((t) => el("i", { style: `background:${rampAt(t)}` }))),
         `${metric.hi} ${metric.hiLabel}`),
+      shown.some((n) => !n.oxford) ? el("span", {}, el("i", { style: "background:var(--na)" }), "Not ranked") : null,
       el("span", {}, el("i", { style: "background:var(--land)" }), "Not covered"));
 
     box.append(
@@ -423,7 +430,7 @@
       el("div", { class: "map-stage" }, el("div", { class: "chart map-wrap" }, svg), zoomControls(zoom), hintEl));
     box.append(el("div", { class: "chart-foot" },
       tableToggle(box, () => table(["Nation", "Region", "Readiness rank"],
-        [...shown].sort((a, b) => a.oxford.rank - b.oxford.rank).map((n) => [n.name, n.group, `#${n.oxford.rank}`]), [2])),
+        [...shown].sort(byRank).map((n) => [n.name, n.group, rankText(n)]), [2])),
       el("span", { class: "muted small" }, "· Source:"), sourceChips([S[metric.source]])));
     return box;
   }
@@ -432,11 +439,11 @@
 
   // ---------------------------------------------------------------- charts
   function pillarBars(n) {
-    const med = PILLARS.map((_, i) => median(N.map((x) => x.oxford.scores[i])));
+    const med = PILLARS.map((_, i) => median(N.filter((x) => x.oxford).map((x) => x.oxford.scores[i])));
     const labelW = 190, plotW = 440, rowH = 36, barH = 20, T = 6, B = 24;
     const W = labelW + plotW + 60, H = T + PILLARS.length * rowH + B;
     const x = (v) => labelW + (v / 100) * plotW;
-    const svg = s("svg", { viewBox: `0 0 ${W} ${H}`, width: W, role: "img", "aria-label": `${n.name} Oxford Insights pillar scores versus the median of all ${N.length} nations` });
+    const svg = s("svg", { viewBox: `0 0 ${W} ${H}`, width: W, role: "img", "aria-label": `${n.name} Oxford Insights pillar scores versus the median of the nations here` });
     for (let t = 0; t <= 100; t += 25) {
       svg.append(s("line", { x1: x(t), x2: x(t), y1: T, y2: H - B, class: t === 0 ? "axis" : "grid" }));
       svg.append(s("text", { x: x(t), y: H - 6, "text-anchor": "middle", class: "t-muted" }, String(t)));
@@ -463,7 +470,7 @@
         el("span", {}, el("i", { style: "background:var(--ink);width:2px;height:12px" }), `Median of all ${N.length} nations`)),
       el("div", { class: "chart" }, svg));
     box.append(el("div", { class: "chart-foot" },
-      tableToggle(box, () => table(["Pillar", n.name, `Median of ${N.length}`], PILLARS.map((p, i) => [p, n.oxford.scores[i].toFixed(2), med[i].toFixed(2)]), [1, 2])),
+      tableToggle(box, () => table(["Pillar", n.name, "Median"], PILLARS.map((p, i) => [p, n.oxford.scores[i].toFixed(2), med[i].toFixed(2)]), [1, 2])),
       el("span", { class: "muted small" }, " · Source:"), sourceChips([S.oxford])));
     return box;
   }
@@ -602,8 +609,8 @@
       { h: "First AI strategy", key: "first", get: (n) => n.glance.firstStrategy },
       { h: "Latest strategy", key: "latest", get: (n) => n.glance.latestStrategy },
       { h: "Newest AI body", key: "body", get: (n) => n.glance.newestBodyDate || "", cell: (n) => (n.glance.newestBody === "—" ? "—" : `${n.glance.newestBody} (${fmtDate(n.glance.newestBodyDate)})`) },
-      { h: "Readiness rank", key: "rank", num: true, get: (n) => n.oxford.rank, cell: (n) => `#${n.oxford.rank}` },
-      { h: "Internet users", key: "net", num: true, get: (n) => n.stats.internet.v, cell: (n) => `${n.stats.internet.v.toFixed(0)}%` },
+      { h: "Readiness rank", key: "rank", num: true, get: (n) => rankOf(n) ?? 999, cell: rankText },
+      { h: "Internet users", key: "net", num: true, get: (n) => (n.stats.internet ? n.stats.internet.v : -1), cell: (n) => (n.stats.internet ? `${n.stats.internet.v.toFixed(0)}%` : "n/a") },
     ];
     const wrap = el("div", {});
     const draw = () => {
@@ -687,33 +694,35 @@
       el("button", { class: "chip-btn", type: "button", "aria-pressed": String(t === active), onclick: () => { active = t; drawFilters(); drawFacts(); } }, t)));
     drawFilters(); drawFacts();
 
-    const ms = n.msAdoption;
+    const ms = n.msAdoption, st = n.stats;
     const tiles = el("div", { class: "tiles" },
-      tile("Population", compact(n.stats.population.v), `${fmtInt(n.stats.population.v)} (${n.stats.population.year})`, S.wbPop),
-      tile("GDP per capita", `$${fmtInt(n.stats.gdpPerCapita.v)}`, `current US$, ${n.stats.gdpPerCapita.year}`, S.wbGdp),
-      tile("Internet users", `${n.stats.internet.v.toFixed(1)}%`, `of population, ${n.stats.internet.year}`, S.wbNet),
-      tile("AI readiness rank", `#${n.oxford.rank}`, `of ${OXFORD_TOTAL} · Oxford Insights 2025`, S.oxford),
+      st.population ? tile("Population", compact(st.population.v), `${fmtInt(st.population.v)} (${st.population.year})`, st.population.src || S.wbPop) : tile("Population", "—", "Not reported by the World Bank", S.wbPop),
+      st.gdpPerCapita ? tile("GDP per capita", `$${fmtInt(st.gdpPerCapita.v)}`, `current US$, ${st.gdpPerCapita.year}`, S.wbGdp) : tile("GDP per capita", "—", "Not reported by the World Bank", S.wbGdp),
+      st.internet ? tile("Internet users", `${st.internet.v.toFixed(1)}%`, `of population, ${st.internet.year}`, S.wbNet) : tile("Internet users", "—", "Not reported by the World Bank", S.wbNet),
+      n.oxford ? tile("AI readiness rank", `#${n.oxford.rank}`, `of ${OXFORD_TOTAL} · Oxford Insights 2025`, S.oxford) : tile("AI readiness rank", "—", "Not in the Oxford Insights index", S.oxford),
       ms
         ? tile("Uses generative AI", `${(ms.q2_2026 ?? ms.h2_2025).toFixed(1)}%`, ms.q2_2026 ? `working-age, Q2 2026 · world #${ms.rankLatest}` : "working-age, H2 2025", ms.q2_2026 ? S.msQ2 : S.msH2)
         : tile("Uses generative AI", "—", "Not reported separately by Microsoft", S.msH2));
     if (ms && ms.regional) tiles.lastChild.querySelector(".s").textContent = `${ms.regionLabel || "West Africa"} regional estimate, H2 2025`;
 
-    const ranked = [...N].sort((a, b) => a.oxford.rank - b.oxford.rank);
+    // Unranked nations sort after the ranked ones, alphabetically.
+    const ranked = [...N].sort((a, b) => byRank(a, b) || a.name.localeCompare(b.name));
     const pos = ranked.indexOf(n);
+    const nRanked = N.filter((x) => x.oxford).length;
     view.replaceChildren(
       el("section", { class: "country-top" },
         el("div", { class: "country-head" },
           el("span", { class: "flag", "aria-hidden": "true" }, n.flag),
           el("div", {}, el("h1", {}, n.name), el("p", { class: "stance" }, `${n.region} · ${n.stance}`),
-            el("p", { class: "muted small", style: "margin-top:6px" }, `#${pos + 1} of ${N.length} nations here by readiness rank`))),
+            el("p", { class: "muted small", style: "margin-top:6px" }, n.oxford ? `#${pos + 1} of the ${nRanked} nations here in the Oxford Insights readiness index` : "Not in the Oxford Insights readiness index"))),
         locatorMap(n)),
       el("p", { class: "summary" }, n.summary),
       el("p", { class: "muted small", style: "margin-top:6px" }, "This summary is an editorial synthesis of the sourced facts below."),
       el("section", { class: "section" }, tiles),
       keyDocuments(n),
-      el("section", { class: "section" },
-        sectionHead("Readiness profile", `Oxford Insights 2025 pillar scores vs the median of all ${N.length} nations.`),
-        el("div", { class: "card" }, pillarBars(n))),
+      ...(n.oxford ? [el("section", { class: "section" },
+        sectionHead("Readiness profile", `Oxford Insights 2025 pillar scores vs the median of the ${nRanked} nations here that it ranks.`),
+        el("div", { class: "card" }, pillarBars(n)))] : []),
       ...nationPartners(n),
       el("section", { class: "section" },
         sectionHead("Policy & governance facts", `Newest first. ${n.facts.filter(isRecent).length} since 2024, plus earlier background on request.`),
@@ -782,6 +791,16 @@
     const mx = (p1[0] + p2[0]) / 2, my = (p1[1] + p2[1]) / 2, dx = p2[0] - p1[0], dy = p2[1] - p1[1];
     return `M${p1[0]},${p1[1]} Q${mx - dy * bow},${my + dx * bow} ${p2[0]},${p2[1]}`;
   };
+  // The same between two [lon, lat] points. A route across the date line (e.g. Fiji to Samoa) would otherwise
+  // run the whole width of the map, so it is drawn as two short lines leaving each point towards the nearer edge.
+  // `center` is the longitude the projection is rotated to face, which moves the map's edge.
+  const relLon = (lon, center) => ((lon - center + 540) % 360) - 180;
+  const geoArc = (proj, a, b, bow, center = 0) => {
+    const ra = relLon(a[0], center), rb = relLon(b[0], center);
+    if (Math.abs(ra - rb) <= 180) return arc(proj(a), proj(b), bow);
+    const lat = (a[1] + b[1]) / 2, edge = (r) => proj([center + (r > 0 ? 179.9 : -179.9), lat]);
+    return `${arc(proj(a), edge(ra), bow)} ${arc(proj(b), edge(rb), -bow)}`;
+  };
   // A country "pill": flag and name, linking to the nation page when the country is on this site.
   const pill = (p, host) => el(p.nation ? "a" : "span", { class: "cpill" + (p.nation ? "" : " is-outside"), href: p.nation ? `#${p.key}` : null, title: p.nation ? `Open ${p.name}` : `${p.name} (not one of the nations on this site)` },
     el("span", { class: "cpill-flag", "aria-hidden": "true" }, p.flag), p.name, host ? el("span", { class: "cpill-host" }, COLLAB_BODIES.has(p.key) ? "coordinator" : "host") : null);
@@ -814,10 +833,12 @@
     const W = 560, H = 320;
     const keys = [...new Set(links.map(([, k]) => k))].filter((k) => party(k));
     const pts = [n.geo, ...keys.map((k) => party(k).geo)];
-    // Frame the nation and its partners, padded so short hops still show their surroundings.
-    const lons = pts.map((p) => p[0]), lats = pts.map((p) => p[1]), pad = 10;
-    const box = { type: "MultiPoint", coordinates: [[Math.max(-179.9, Math.min(...lons) - pad), Math.max(-58, Math.min(...lats) - pad)], [Math.min(179.9, Math.max(...lons) + pad), Math.min(78, Math.max(...lats) + pad)]] };
-    const proj = d3.geoNaturalEarth1().fitExtent([[56, 26], [W - 56, H - 26]], box);
+    // Frame the nation and its partners, padded so short hops still show their surroundings. The map is turned
+    // to face the nation, so Pacific neighbours across the date line (e.g. Samoa and Fiji) sit side by side.
+    const c = n.geo[0];
+    const lons = pts.map((p) => relLon(p[0], c)), lats = pts.map((p) => p[1]), pad = 10;
+    const box = { type: "MultiPoint", coordinates: [[c + Math.max(-179.9, Math.min(...lons) - pad), Math.max(-58, Math.min(...lats) - pad)], [c + Math.min(179.9, Math.max(...lons) + pad), Math.min(78, Math.max(...lats) + pad)]] };
+    const proj = d3.geoNaturalEarth1().rotate([-c, 0]).fitExtent([[56, 26], [W - 56, H - 26]], box);
     const path = d3.geoPath(proj);
     const svg = s("svg", { viewBox: `0 0 ${W} ${H}`, width: W, role: "img", class: "np-map",
       "aria-label": `Map of ${n.name}'s AI partners: ${keys.map((k) => party(k).name).join(", ")}.` });
@@ -830,7 +851,7 @@
     for (const [c, k] of links) {
       const p = party(k);
       if (!p) continue;
-      svg.append(s("path", { d: arc(home, proj(p.geo), c.kind === "bilateral" ? 0.2 : 0.1), class: `collab-line np-line ${c.kind}` }, s("title", {}, `${c.short}: ${p.name}`)));
+      svg.append(s("path", { d: geoArc(proj, n.geo, p.geo, c.kind === "bilateral" ? 0.2 : 0.1, n.geo[0]), class: `collab-line np-line ${c.kind}` }, s("title", {}, `${c.short}: ${p.name}`)));
     }
     const label = (xy, text, strong) => {
       const flip = xy[0] > W - 120;
@@ -912,7 +933,7 @@
         for (const [k1, k2] of pairs) {
           const a = party(k1), b = party(k2);
           if (!a || !b) continue;
-          const d = arc(proj(a.geo), proj(b.geo), c.kind === "bilateral" ? 0.2 : 0.08);
+          const d = geoArc(proj, a.geo, b.geo, c.kind === "bilateral" ? 0.2 : 0.08);
           const vis = s("path", { d, class: `collab-line ${c.kind}`, "vector-effect": "non-scaling-stroke" });
           const hit = s("path", { d, class: "collab-hit", "vector-effect": "non-scaling-stroke", "data-id": c.id });
           hit.addEventListener("pointermove", (e) => { if (!svg.classList.contains("is-dragging")) showTip(e, [el("div", { class: "tv" }, c.short || c.title), el("div", { class: "tl" }, partiesOf(c).map((p) => p.name).join(c.kind === "bilateral" ? " ⟷ " : ", ")), el("div", { class: "tl small", style: "margin-top:4px" }, "Click for details")]); });
@@ -1138,7 +1159,7 @@
         tally("✓✓ Corroborated", String(cnt("corroborated")), "2 independent sources"),
         tally("! Single source", String(cnt("single")), "flagged on the claim")),
       el("h2", {}, `Why these ${N.length} nations`),
-      el("p", {}, `Every nation here has under 15 million people and a visible AI programme or policy debate. Coverage spans Europe (${grp("Europe")}, including the South Caucasus), the Middle East (${grp("Middle East")}), Asia-Pacific (${grp("Asia-Pacific")}), Africa (${grp("Africa")}) and the Americas (${grp("Americas")}). The first six (Singapore, Estonia, UAE, Rwanda, Uruguay, Malta) have the deepest profiles. The rest have 2–5 key facts each.`),
+      el("p", {}, `The site covers every sovereign state with fewer than 15 million people except Israel, plus Kosovo and the Holy See. Territories are not included. Coverage spans Europe (${grp("Europe")}, including the South Caucasus), the Middle East (${grp("Middle East")}), Asia-Pacific (${grp("Asia-Pacific")}), Africa (${grp("Africa")}) and the Americas (${grp("Americas")}). The first six (Singapore, Estonia, UAE, Rwanda, Uruguay, Malta) have the deepest profiles. The rest have 1–5 key facts each.`),
       el("h2", {}, "How each claim was checked"),
       el("ul", {},
         el("li", {}, "Each claim was researched across multiple searches and cross-checked against primary sources (government sites, official releases, the publishers' own reports) and independent coverage."),
@@ -1153,9 +1174,15 @@
         el("li", {}, "Every mismatch was reviewed by hand against the most relevant passage of the page."),
         el("li", {}, "Pages that block automated access were opened in a browser where possible. Pages behind bot challenges (for example Bloomberg and gov.mt) were not bypassed. Readable independent coverage was found to replace them."),
         el("li", {}, "Where no readable source could confirm a detail, the detail was removed or the badge was lowered.")),
+      el("h2", {}, "The last 19 nations (21 October 2026)"),
+      el("ul", {},
+        el("li", {}, "To cover every sovereign state under 15 million people (Israel aside), 19 were added: Timor-Leste, Vanuatu, Samoa, Kiribati, Micronesia, the Marshall Islands, Nauru, Tuvalu, Turkmenistan, Cuba, Dominica, Saint Vincent and the Grenadines, South Sudan, the Central African Republic, Eritrea, Guinea-Bissau, Equatorial Guinea, Kosovo and the Holy See. Territories are not included."),
+        el("li", {}, "Every source was fetched and checked by hand; pages that block automated requests were read in a browser or from an Internet Archive copy. Several of these nations have little or no public AI activity, and their pages say so rather than padding them out."),
+        el("li", {}, "Oxford Insights does not rank Kosovo or the Holy See, and the World Bank has no data for the Holy See, so their pages show no figure there."),
+        el("li", {}, "Collaborations: Cuba added to WAICO, Dominica and Saint Vincent and the Grenadines to the CARICOM roadmap, and a new Pacific Islands Forum AI principles group.")),
       el("h2", {}, "Collaborations check (21 October 2026)"),
       el("ul", {},
-        el("li", {}, `Every agreement was re-read to confirm it is an AI agreement between governments, with sources that say so. ${(D.collaborations || []).length} remain.`),
+        el("li", {}, "Every agreement was re-read to confirm it is an AI agreement between governments, with sources that say so. 48 remained."),
         el("li", {}, "Removed: Laos–China health AI (the Lao ministry's partners were Chinese companies, not the Chinese government), Haiti–Malaysia (a telecom regulators' memorandum, not about AI) and the SICA regional entry (a digital-strategy presidency, not an AI agreement)."),
         el("li", {}, "Corrected: Serbia added to WAICO (it signed the founding agreement in Shanghai in July 2026), and the CARICOM entry now describes COTED's July 2026 endorsement of the UNESCO Caribbean AI Policy Roadmap, flagged as resting on one source.")),
       el("h2", {}, "Third audit (20 October 2026)"),

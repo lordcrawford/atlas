@@ -78,6 +78,16 @@ Region-by-region searches for 10–20 October 2026 added nine news items, each c
 - Corrected: Panama (strategy approved by Cabinet on 11 August 2026; an unverified resolution number removed), Sweden (an October 2025 inquiry proposing PTS as lead authority, not June 2026 interim authorities), Slovenia (National AI Strategy to 2030 adopted 5 March 2026), Greece (Daedalus not yet in full service), Georgia (news summary), and a Singapore MAS item whose cited OECD page no longer exists.
 - Removed as unconfirmable without trackers: Hungary's 2026 decree moving AI supervision, Croatia's missed AI Act deadline, Malta's "72 actions", and several exact dates and decree numbers (Czechia, Slovakia, Congo, Maldives).
 
+## The last 19 nations (21 October 2026)
+
+To cover every sovereign state under 15 million people, 19 more were added: Timor-Leste, Vanuatu, Samoa, Kiribati, Micronesia, the Marshall Islands, Nauru, Tuvalu, Turkmenistan, Cuba, Dominica, Saint Vincent and the Grenadines, South Sudan, the Central African Republic, Eritrea, Guinea-Bissau, Equatorial Guinea, Kosovo and the Holy See. Israel stays excluded, and territories (such as Puerto Rico, Greenland and Hong Kong) are not included. The list was built from the World Bank's population data (economies under 15 million, minus territories), plus the Holy See, which the World Bank does not cover.
+
+- Index figures were read from the publishers' own files: Oxford Insights ranks and pillar scores from the validated 2025 report's table, Microsoft's H2 2025 figures from its report appendix, and World Bank figures from its API. Oxford Insights does not rank Kosovo or the Holy See, and the World Bank has no data for the Holy See; their pages say so instead of showing a number. Microsoft figures for South Sudan, Eritrea, the Central African Republic, Guinea-Bissau and Turkmenistan are shared regional estimates and are labelled as such.
+- Every source was fetched and its key details checked by hand. Pages that block automated requests (Diario de Cuba, Ecofin, Natural Resources Canada) were read in a browser or from an Internet Archive copy, and say so in a note. Republished copies (PINA's copy of a World Bank release, a UN legal database's summary of a gazette) count as one source with the original.
+- Two regional decisions are shared by several of these nations: the Pacific Islands Forum's endorsement of AI principles (September 2026, also added as a group on the Collaborations tab) and the African Union's Continental AI Strategy (July 2024).
+- Left out: a reported AI centre of excellence in the Central African Republic, found only on a press-review site that republishes other outlets; a claim that Nauru has a "national digital transformation strategy", which no government source confirmed; the Marshall Islands' 2025 digital identity law, whose official text could not be read; and Dominica's membership of the World AI Cooperation Organization, which Chinese state media implied but did not state.
+- Collaborations: Cuba was added to WAICO (Reuters names it among the 29 founding signatories), Dominica and Saint Vincent and the Grenadines were added to the CARICOM roadmap entry as CARICOM members, and a Pacific Islands Forum AI principles group was added.
+
 ## Collaborations tab
 
 The Collaborations tab lists only agreements between governments: two-country deals (memorandums, joint centres, compute or research agreements) and groups of countries (shared supercomputers, treaties, regional bodies). Deals with companies and projects run by development agencies are not on this tab; they stay on the nation pages.
@@ -108,7 +118,7 @@ All ~340 source URLs were requested programmatically. Broken links (404) were re
 
 ## Limits
 
-- The 96 nations added after the first six have 2–5 key facts each, not full profiles.
+- The 115 nations added after the first six have 1–5 key facts each, not full profiles. Some of the smallest (Eritrea, the Marshall Islands, Micronesia, Nauru) have almost no public AI activity, and their pages say so rather than padding them out.
 - Microsoft reports one shared figure for several West African countries (Benin, Sierra Leone, Togo, Liberia, Mauritania) for Guyana, Suriname, Venezuela and French Guiana, for Congo and its Central African neighbours, for Tajikistan, and for Burundi. Nation pages label these as regional estimates.
 - Map boundaries are Natural Earth 110m. They are approximate and don't imply any position on disputed borders. Tiny states are shown as dots.
 - This is a snapshot. Full research ran to 10 Oct 2026 (12–14 Oct for the last three batches). A news update on 20 Oct 2026 searched each region for developments from 10 to 20 October and added nine items; it was not an exhaustive nation-by-nation search, so smaller nations may have recent news that is not here. The news feed does not update itself.

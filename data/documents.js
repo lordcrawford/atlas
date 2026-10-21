@@ -156,4 +156,17 @@ window.ATLAS.docs = {
   az: [
     { t: "Artificial Intelligence Strategy of the Republic of Azerbaijan 2025–2028", kind: "Strategy", year: "2025", by: "President of the Republic of Azerbaijan", u: "https://static.president.az/upload/Files/2025/03/19/5a0fb1886a7316cb1b95458f366c1bd6_3415396.pdf", note: "In Azerbaijani.", from: { t: "President of Azerbaijan", u: "https://static.president.az/" } },
   ],
+  ws: [
+    { t: "National ICT Policy 2025/26–2030/31", kind: "Policy", year: "2026", by: "Ministry of Communications and Information Technology", u: "https://mcit.gov.ws/wp-content/uploads/2026/04/Samoa-National-ICT-Policy-2026.pdf", note: "Not an AI strategy; it commits to rules for emerging technologies such as AI and to AI skills in the public service.", from: { t: "MCIT: launch of the National ICT Policy and Cybersecurity Strategy", u: "https://mcit.gov.ws/official-launch-of-the-national-ict-policy-national-cybersecurity-strategy/" } },
+  ],
+  gw: [
+    { t: "Decree 10/2025 approving the National Digital Transformation Strategy 2025–2030 (ENTD.GW)", kind: "Strategy", year: "2025", by: "Council of Ministers (Boletim da República)", u: "http://faolex.fao.org/docs/pdf/gbs235634.pdf", note: "In Portuguese. A digital strategy that mentions AI, not an AI strategy. The gazette copy is hosted by FAO's FAOLEX database.", from: { t: "UNEP LEAP: Decree No. 10/2025", u: "https://leap.unep.org/en/countries/gw/national-legislation/decree-no-102025-approving-national-strategy-digital" } },
+  ],
+  xk: [
+    { t: "EU AI Act Readiness Assessment: The Republic of Kosovo", kind: "Assessment", year: "2026", by: "Office of the Prime Minister (with GIZ)", u: "https://kryeministri.rks-gov.net/wp-content/uploads/2026/06/EU-AI-Act-Readiness-Assessment-Republic-of-Kosovo_ENG.docx", note: "Word document. Kosovo has no AI strategy or law; this gap analysis is the main official AI document.", from: { t: "Office of the Prime Minister of Kosovo", u: "https://kryeministri.rks-gov.net/" } },
+  ],
+  va: [
+    { t: "Magnifica Humanitas: on safeguarding the human person in the time of artificial intelligence", kind: "Encyclical", year: "2026", by: "Pope Leo XIV", u: "https://www.vatican.va/content/leo-xiv/en/encyclicals/documents/20260515-magnifica-humanitas.html", note: "Published as a web page on vatican.va.", from: { t: "Holy See Press Office bulletin, 25 May 2026", u: "https://press.vatican.va/content/salastampa/en/bollettino/pubblico/2026/05/25/260525e.html" } },
+    { t: "Antiqua et Nova: Note on the Relationship Between Artificial Intelligence and Human Intelligence", kind: "Guidance", year: "2025", by: "Dicasteries for the Doctrine of the Faith and for Culture and Education", u: "https://www.vatican.va/roman_curia/congregations/cfaith/documents/rc_ddf_doc_20250128_antiqua-et-nova_en.html", note: "Published as a web page on vatican.va." },
+  ],
 };
