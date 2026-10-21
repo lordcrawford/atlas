@@ -1438,8 +1438,7 @@
     const panel = el("div", { class: "acct-menu", hidden: true },
       el("p", { class: "muted small" }, `Signed in as ${Store.displayName()}`),
       el("a", { class: "nav-item", href: "#saved", onclick: () => close() }, "Saved & reviewed", n ? ` (${n})` : ""),
-      el("button", { class: "nav-item linklike", type: "button", onclick: () => { close(); Store.signOut(); route(true); } }, "Sign out"),
-      el("button", { class: "nav-item linklike", type: "button", onclick: () => window.atlasGate.lock() }, "Lock the site"));
+      el("button", { class: "nav-item linklike", type: "button", onclick: () => { close(); Store.signOut(); route(true); } }, "Sign out"));
     const btn = el("button", { class: "acct-open is-in", type: "button", "aria-expanded": "false", "aria-haspopup": "true", onclick: () => (panel.hidden ? open() : close()) },
       el("span", { class: "acct-avatar", "aria-hidden": "true" }, Store.displayName().slice(0, 1).toUpperCase()), Store.displayName());
     const outside = (e) => { if (!accountEl.contains(e.target)) close(); };

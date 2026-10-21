@@ -51,11 +51,6 @@
     if (g) g.remove();
     waiting.splice(0).forEach((fn) => fn());
   }
-  function lock() {
-    try { localStorage.removeItem(KEY); sessionStorage.removeItem(KEY); } catch {}
-    location.reload();
-  }
-
   function showGate() {
     const form = document.createElement("form");
     form.id = "gate";
@@ -89,7 +84,6 @@
 
   window.atlasGate = {
     sha256,
-    lock,
     // Runs fn now if the site is unlocked, otherwise once the password is entered.
     ready(fn) { if (unlocked) fn(); else waiting.push(fn); },
   };
