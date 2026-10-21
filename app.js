@@ -795,36 +795,9 @@
       ].filter(Boolean));
     };
     view.replaceChildren(head,
-      el("section", { class: "section" }, sectionHead("Highlights", "Key takeaways, computed from the data below."), highlights()),
       el("div", { class: "section filter-bar" }, el("span", { class: "filter-label" }, "Region"), regionFilter(drawBody)),
       body);
     drawBody();
-  }
-
-  function highlights() {
-    const valid = N.filter((n) => n.msAdoption && !n.msAdoption.regional);
-    const ranked = [...N].sort((a, b) => a.oxford.rank - b.oxford.rank);
-    const best = ranked[0], worst = ranked[ranked.length - 1];
-    const lowUse = [...valid].sort((a, b) => a.msAdoption.h2_2025 - b.msAdoption.h2_2025)[0];
-    const euAct = N.filter((n) => /\(EU\)/.test(n.region)).length;
-    const eea = N.filter((n) => /\(EEA\)/.test(n.region)).map((n) => n.name);
-    const newBodies = N.filter((n) => n.facts.some((f) => f.topic === "Institutions" && /^2026/.test(f.date))).length;
-    const ae = byId("ae"), sg = byId("sg");
-    const mig = D.meta.aiIndex.netMigration;
-    const topMig = Object.entries(mig).sort((a, b) => b[1] - a[1])[0];
-    const items = [
-      { v: `${ae.msAdoption.q2_2026}%`, t: `of working-age people in the UAE use generative AI, the world's highest. Singapore is second at ${sg.msAdoption.q2_2026}%.`, src: [S.msQ2] },
-      { v: `${lowUse.msAdoption.h2_2025}%`, t: `is the lowest separately reported AI use in this set (${lowUse.name}). Where internet access is limited, AI use stays low.`, src: [S.msH2] },
-      { v: `#${best.oxford.rank}–#${worst.oxford.rank}`, t: `is the AI-readiness range across these ${N.length} nations, from ${best.name} to ${worst.name}, out of ${OXFORD_TOTAL} countries.`, src: [S.oxford] },
-      { v: `${topMig[1]}`, t: `net AI workers gained per 10,000 LinkedIn members in ${byId(topMig[0]).name}, the highest AI talent inflow of any country tracked.`, src: [S.aiIndex] },
-      { v: `${euAct} of ${N.length}`, t: `are EU members bound by the EU AI Act. ${eea.join(", ").replace(/, ([^,]*)$/, " and $1")} (EEA) will be once it is added to the EEA Agreement. The rest set their own rules.`, src: [S.fliAct] },
-      { v: `${newBodies}`, t: "nations here set up a new national AI institution in 2026, from the UAE's AI & Data Authority to Rwanda's AI Agency and Ireland's AI Office.", src: [] },
-    ];
-    return el("div", { class: "highlights" }, items.map((h) =>
-      el("div", { class: "hl" },
-        el("div", { class: "hl-v" }, h.v),
-        el("p", { class: "hl-t" }, h.t),
-        h.src.length ? el("div", { class: "hl-src" }, sourceChips(h.src)) : el("div", { class: "hl-src muted small" }, "Derived from the sourced facts on this site"))));
   }
 
   function talentChart(list) {
@@ -1560,7 +1533,7 @@
       el("h2", {}, "Limits"),
       el("ul", {},
         el("li", {}, `This is a snapshot as of ${fmtDate(D.meta.asOf)}. The news feed does not update itself.`),
-        el("li", {}, "Summaries and 'stance' lines are editorial synthesis, not quotations. Highlights are computed from the sourced data."),
+        el("li", {}, "Summaries and 'stance' lines are editorial synthesis, not quotations."),
         el("li", {}, "Programme-reported figures are the programmes' own numbers, not independent evaluations. Government-aligned outlets are labelled where relevant."),
         el("li", {}, "Map boundaries come from Natural Earth (110m scale). They are approximate and don't imply any position on disputed borders."),
         el("li", {}, "Disclosure: this dashboard was compiled by Claude, an AI model made by Anthropic. Anthropic is party to agreements described here (Rwanda MOU, Estonia AI Leap talks). Those claims rely on both parties' public statements.")),
