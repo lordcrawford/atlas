@@ -639,7 +639,7 @@
     const item = (name, what, ...links) => el("li", { class: "ds-item" },
       el("div", { class: "ds-name" }, name), el("p", { class: "ink2 small" }, what), el("div", { class: "ds-links" }, links));
     return el("section", { class: "section" },
-      sectionHead("Where to find the wider data", "The readiness rank above is the only index figure kept here. For rankings, usage and talent data across all countries, go to the people who measure it."),
+      sectionHead("Where to find the wider data"),
       el("ul", { class: "card ds-list" },
         item("Oxford Insights · Government AI Readiness Index", "Readiness scores and pillar breakdowns for 195 governments. Source of the rank in the table.",
           link("Index page", "https://oxfordinsights.com/ai-readiness/government-ai-readiness-index-2025/"), link("2025 report (PDF)", S.oxford.u)),
