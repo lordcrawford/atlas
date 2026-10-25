@@ -161,12 +161,7 @@
     const idx = Math.round(Math.max(0, Math.min(1, t)) * (RAMP.length - 1));
     return isDark() ? RAMP[RAMP.length - 1 - idx] : RAMP[idx];
   }
-  const rampColor = (score) => rampAt((score - 25) / 75);
-  function inkOn(hex) {
-    const c = hex.match(/\w\w/g).map((h) => parseInt(h, 16) / 255).map((v) => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4));
-    const L = 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
-    return L > 0.36 ? "#0b0b0b" : "#ffffff";
-  }
+
   const METRICS = {
     rank: {
       label: "AI readiness rank",
@@ -434,8 +429,6 @@
       el("span", { class: "muted small" }, "· Source:"), sourceChips([S[metric.source]])));
     return box;
   }
-  let mapSlot = null;
-  function rerenderMap() { if (mapSlot) mapSlot.replaceChildren(worldMap()); }
 
   // ---------------------------------------------------------------- charts
   function pillarBars(n) {
@@ -585,7 +578,7 @@
     const drawBody = () => {
       hideTip();
       const list = filtered();
-      mapSlot = el("div", {}, worldMap());
+      const mapSlot = el("div", {}, worldMap());
       body.replaceChildren(...[
         el("section", { class: "section" },
           sectionHead("Where they are", "Hover a country or dot for its numbers, click to open its profile. Picking a region zooms in."),

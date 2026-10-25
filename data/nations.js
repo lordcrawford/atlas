@@ -27,37 +27,13 @@ window.ATLAS = {
         t: "Oxford Insights - Government AI Readiness Index 2025 (validated Jan 2026 report, full rankings p.59-68)",
         u: "https://oxfordinsights.com/wp-content/uploads/2026/01/2025-Government-AI-Readiness-Index-Report_01_26.pdf",
       },
-      fliAct: {
-        t: "Future of Life Institute - AI Act national implementation plans (EEA status)",
-        u: "https://artificialintelligenceact.eu/national-implementation-plans/",
-      },
-      oxfordPage: {
-        t: "Oxford Insights - Government AI Readiness Index 2025 (index page)",
-        u: "https://oxfordinsights.com/ai-readiness/government-ai-readiness-index-2025/",
-      },
       msH2: {
         t: "Microsoft - Global AI Adoption in 2025: A Widening Digital Divide (H2 2025 report, appendix)",
         u: "https://www.microsoft.com/en-us/research/wp-content/uploads/2026/01/Microsoft-AI-Diffusion-Report-2025-H2.pdf",
       },
-      msBlog: {
-        t: "Microsoft On the Issues - Global AI adoption in 2025 (8 Jan 2026)",
-        u: "https://blogs.microsoft.com/on-the-issues/2026/01/08/global-ai-adoption-in-2025/",
-      },
       msQ2: {
         t: "Microsoft Source EMEA - New Microsoft data: AI adoption continues to rise (22 Sep 2026, Q2 2026 data)",
         u: "https://news.microsoft.com/source/emea/2026/09/new-microsoft-data-ai-adoption-continues-to-rise-switzerland-remains-well-above-the-global-average/",
-      },
-      wamQ1: {
-        t: "WAM - Microsoft: UAE ranks first globally in AI adoption (Q1 2026)",
-        u: "https://www.wam.ae/en/article/c03y6ol-microsoft-uae-ranks-first-globally-adoption",
-      },
-      trQ1: {
-        t: "Telecom Review - UAE leads global AI uptake as usage crosses 70% milestone (Microsoft Q1 2026)",
-        u: "https://www.telecomreview.com/articles/reports-and-coverage/29184-uae-leads-global-ai-uptake-as-usage-crosses-70-milestone/",
-      },
-      meaiQ2: {
-        t: "Middle East AI News - UAE retains top world AI use ranking",
-        u: "https://www.middleeastainews.com/p/uae-retains-top-world-ai-use-ranking",
       },
       aiIndex: {
         t: "Stanford HAI - AI Index Report 2026, ch. 4.4 (LinkedIn AI talent data, Figs 4.4.21 & 4.4.23)",
@@ -76,15 +52,6 @@ window.ATLAS = {
         u: "https://data.worldbank.org/indicator/IT.NET.USER.ZS",
       },
     },
-    // Stanford HAI AI Index Report 2026, LinkedIn data (Figures 4.4.21 and 4.4.23). Both charts show the top 15 economies only,
-    // so nations outside the top 15 have no value here (not zero).
-    aiIndex: {
-      talentConcentration: { sg: 1.82, lu: 1.6, ie: 1.31, ch: 1.25, fi: 1.23, ee: 1.15, lt: 1.1, cy: 0.95 },
-      netMigration: { lu: 5.23, ae: 4.4, ch: 1.72, sg: 1.36, at: 0.9, cy: 0.62, dk: 0.45 },
-      reference: { talentTop: ["Israel", 2.1], migrationUS: ["United States", 1.22] },
-    },
-    // Reference row for the readiness chart
-    usReference: { name: "United States (rank 1)", scores: [92.5, 91.77, 82.5, 92.87, 88.16, 78.28] },
   },
 
   nations: [
