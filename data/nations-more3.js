@@ -25,7 +25,6 @@
             S("Anadolu Agency - Belgium unveils new AI strategy (16 Sep 2026)", "https://www.aa.com.tr/en/science-technology/belgium-unveils-new-ai-strategy-to-strengthen-national-control/4058986"),
             S("BTA - Belgium works on tightening its AI strategy (16 Sep 2026)", "https://www.bta.bg/en/news/world/1205277-belgium-works-on-tightening-its-strategy-for-use-of-artificial-intelligence"),
             S("F4Media - Belgium approves updated national AI strategy", "https://f4media.az/en/belgium-approves-updated-national-artificial-intelligence-strategy/"),
-            S("MENAFN - Belgium strengthens national AI strategy", "https://menafn.com/1111677679/Belgium-Strengthens-National-AI-Strategy-to-Boost-Control"),
           ],
         },
         {
@@ -33,7 +32,6 @@
           text: "Matz said 42% of Belgians already use generative AI and 34.5% of Belgian businesses have adopted AI.",
           level: "corroborated",
           sources: [
-            S("MENAFN - Belgium strengthens national AI strategy", "https://menafn.com/1111677679/Belgium-Strengthens-National-AI-Strategy-to-Boost-Control"),
             S("F4Media - Belgium approves updated national AI strategy", "https://f4media.az/en/belgium-approves-updated-national-artificial-intelligence-strategy/"),
             S("Anadolu Agency - Belgium unveils new AI strategy (16 Sep 2026)", "https://www.aa.com.tr/en/science-technology/belgium-unveils-new-ai-strategy-to-strengthen-national-control/4058986"),
           ],
@@ -114,7 +112,7 @@
           text: "Czechia released its first National AI Strategy in May 2019, building on its Innovation Strategy 2019–2030.",
           level: "single",
           sources: [
-            S("EC AI Watch - Czech Republic AI strategy report", "https://ai-watch.ec.europa.eu/countries/czech-republic/czech-republic-ai-strategy-report_en"),
+            S("EC AI Watch - Czech Republic AI strategy report (Internet Archive copy; the page has since been removed)", "https://web.archive.org/web/20260515052500/https://ai-watch.ec.europa.eu/countries/czech-republic/czech-republic-ai-strategy-report_en"),
           ],
         },
       ],
@@ -152,31 +150,32 @@
       msAdoption: { h1_2025: 27.9, h2_2025: 29.8, q1_2026: null, q2_2026: null, rankLatest: null },
       facts: [
         {
-          topic: "Regulation", date: "2025-12-01",
-          text: "Act LXXV of 2025, implementing the EU AI Act, took effect on 1 December 2025. It sets up Hungary's market-surveillance and notification framework and a single point of contact, and creates the Hungarian Artificial Intelligence Council to give strategic guidance.",
+          topic: "Regulation", date: "2025-11",
+          text: "Hungary implemented the EU AI Act through Act LXXV of 2025 and Government Decree 344/2025, in force from late 2025. The National Accreditation Authority is the notifying authority, the Minister of Enterprise Development is the market-surveillance authority and single point of contact, the central bank supervises AI in financial services, and the Act creates a Hungarian AI Council to advise the government.",
           level: "corroborated",
           sources: [
-            S("CADE - Hungary's AI implementation law enters into force", "https://cadeproject.org/updates/hungarys-ai-implementation-law-enters-into-force/"),
-            S("Grant Thornton Hungary - New AI authorities on the horizon", "https://grantthornton.hu/en/news/what-should-we-do-about-ai-now-new-authorities-on-the-horizon"),
+            S("CMS (law firm) - Hungary implements institutional framework for EU AI Act (6 Nov 2025)", "https://cms.law/en/hun/legal-updates/hungary-implements-institutional-framework-for-eu-ai-act"),
+            S("Chambers and Partners - Artificial Intelligence 2026: Hungary, Trends and Developments (DANUBIA Legal)", "https://practiceguides.chambers.com/practice-guides/artificial-intelligence-2026/hungary/trends-and-developments"),
           ],
+          note: "Chambers gives the start date as '31 November 2025', which does not exist; the exact day was not confirmed by a source that meets this site's rules. The CMS page was read in a browser.",
         },
         {
           topic: "Strategy", date: "2020-09",
           text: "In September 2020 the government published Hungary's National AI Strategy for 2020–2030.",
           level: "single",
           sources: [
-            S("EC AI Watch - Hungary AI strategy report", "https://ai-watch.ec.europa.eu/countries/hungary/hungary-ai-strategy-report_en"),
+            S("EC AI Watch - Hungary AI strategy report (Internet Archive copy; the page has since been removed)", "https://web.archive.org/web/20260725165737/https://ai-watch.ec.europa.eu/countries/hungary/hungary-ai-strategy-report_en"),
           ],
         },
       ],
       news: [
         {
-          date: "2025-12-01", title: "Hungary's AI Act implementation law takes effect",
+          date: "2025-11", title: "Hungary's AI Act implementation law takes effect",
           summary: "Act LXXV of 2025 set up national supervision, a single point of contact and the Hungarian AI Council.",
           level: "corroborated",
           sources: [
-            S("CADE", "https://cadeproject.org/updates/hungarys-ai-implementation-law-enters-into-force/"),
-            S("Grant Thornton Hungary", "https://grantthornton.hu/en/news/what-should-we-do-about-ai-now-new-authorities-on-the-horizon"),
+            S("CMS (law firm) - Hungary implements institutional framework for EU AI Act (6 Nov 2025)", "https://cms.law/en/hun/legal-updates/hungary-implements-institutional-framework-for-eu-ai-act"),
+            S("Chambers and Partners - Artificial Intelligence 2026: Hungary, Trends and Developments (DANUBIA Legal)", "https://practiceguides.chambers.com/practice-guides/artificial-intelligence-2026/hungary/trends-and-developments"),
           ],
         },
       ],
@@ -259,7 +258,7 @@
           text: "Slovakia's Strategy of the Digital Transformation of Slovakia 2030, approved in 2019, set out the country's approach to AI, backed by an action plan.",
           level: "corroborated",
           sources: [
-            S("EC AI Watch - Slovakia AI strategy report", "https://ai-watch.ec.europa.eu/countries/slovakia/slovakia-ai-strategy-report_en"),
+            S("EC AI Watch - Slovakia AI strategy report (Internet Archive copy; the page has since been removed)", "https://web.archive.org/web/20260422015853/https://ai-watch.ec.europa.eu/countries/slovakia/slovakia-ai-strategy-report_en"),
             S("OECD - Slovak Republic country note, EU Coordinated Plan on AI (Oct 2025, PDF)", "https://www.oecd.org/content/dam/oecd/en/publications/reports/2025/10/progress-in-implementing-the-european-union-coordinated-plan-on-artificial-intelligence-volume-1-country-notes_b0385317/slovak-republic_02443328/5b824a40-en.pdf"),
           ],
         },
@@ -312,7 +311,7 @@
           text: "The Bulgarian government published its national AI strategy in December 2020, drafted by the Ministry of Transport, IT and Communications from a framework by the Bulgarian Academy of Sciences.",
           level: "single",
           sources: [
-            S("EC AI Watch - Bulgaria AI strategy report", "https://ai-watch.ec.europa.eu/countries/bulgaria/bulgaria-ai-strategy-report_en"),
+            S("EC AI Watch - Bulgaria AI strategy report (Internet Archive copy; the page has since been removed)", "https://web.archive.org/web/20260515052251/https://ai-watch.ec.europa.eu/countries/bulgaria/bulgaria-ai-strategy-report_en"),
           ],
         },
         {
@@ -429,10 +428,9 @@
         {
           topic: "Readiness", date: "2024",
           text: "A 2024 UNDP AI Landscape Assessment found Montenegro's government at the 'systematic' phase as a user of AI, scoring 2.4 out of 5, and noted the country had no national AI strategy.",
-          level: "verified",
+          level: "corroborated",
           sources: [
             S("UNDP - AI Landscape Assessment: Montenegro (PDF)", "https://www.undp.org/sites/g/files/zskgke326/files/2025-05/eng_undp-aila_montenegro.pdf"),
-            S("Digital Watch - AILA Montenegro 2024 report", "https://dig.watch/resource/the-artificial-intelligence-landscape-assessment-aila-montenegro-2024-report"),
             S("Rona Legal - AI law in Montenegro (Aug 2026)", "https://www.ronalegal.com/en/blog/ai-law-montenegro-what-applies-today"),
           ],
         },
@@ -479,7 +477,6 @@
             S("News.az - Azerbaijan approves AI Strategy for 2025–2028 (19 Mar 2025)", "https://news.az/news/azerbaijan-approves-ai-strategy-for-2025-2028"),
             S("Trend.az - Azerbaijan prioritizes its AI strategy (19 Mar 2025)", "https://www.trend.az/azerbaijan/politics/4020812.html"),
             S("UTB - Azerbaijan's AI Strategy for 2025–2028", "https://utb.az/azerbaijans-ai-strategy-for-2025-2028/"),
-            S("Digital Watch - AI Strategy of Azerbaijan 2025–2028", "https://dig.watch/resource/the-artificial-intelligence-strategy-of-the-republic-of-azerbaijan-for-2025-2028"),
           ],
         },
       ],
@@ -511,11 +508,10 @@
         {
           topic: "Regulation", date: "2026-09-28",
           text: "A draft regulation on the Ethics of AI was published on 28 September 2026 for public comment until 13 October 2026. It would require labels on AI-generated text, images, video and audio, and keep developers and users responsible for AI errors.",
-          level: "verified",
+          level: "corroborated",
           sources: [
             S("AKIpress - Kyrgyzstan drafts ethics code for AI (28 Sep 2026)", "https://akipress.com/news:921519"),
             S("Akchabar - Kyrgyzstan proposes new rules for chatbots and neural networks", "https://www.akchabar.kg/en/news/s-vami-govorit-ii-v-kirgizstane-predlagayut-novie-pravila-dlya-chat-botov-i-nejrosetej-dyzizrvsassxpmhh"),
-            S("Digital Watch - Kyrgyzstan proposes AI ethics rules (1 Oct 2026)", "https://dig.watch/updates/kyrgyzstan-proposes-ai-ethics-accountability"),
           ],
           note: "Sources disagree on which body issued the draft: AKIpress names the Ministry of Digital Development and Innovative Technologies, while Akchabar says that ministry was abolished in April 2026.",
         },
@@ -534,11 +530,10 @@
         {
           date: "2026-09-28", title: "Draft AI ethics rules published",
           summary: "The draft requires AI-content labelling and human accountability for AI errors; comments close on 13 October 2026.",
-          level: "verified",
+          level: "corroborated",
           sources: [
             S("AKIpress", "https://akipress.com/news:921519"),
             S("Akchabar", "https://www.akchabar.kg/en/news/s-vami-govorit-ii-v-kirgizstane-predlagayut-novie-pravila-dlya-chat-botov-i-nejrosetej-dyzizrvsassxpmhh"),
-            S("Digital Watch", "https://dig.watch/updates/kyrgyzstan-proposes-ai-ethics-accountability"),
           ],
         },
       ],
@@ -780,10 +775,9 @@
         {
           topic: "Institutions", date: "2026-09-23",
           text: "On 23 September 2026 the National Commission on Research, Science and Technology (NCRST) opened a National AI Institute. Its four centres correspond to weaknesses found in Namibia's 2025 AI Readiness Assessment.",
-          level: "verified",
+          level: "corroborated",
           sources: [
             S("iAfrica - Namibia opens National AI Institute (2 Oct 2026)", "https://iafrica.com/namibia-opens-national-ai-institute-built-around-four-gaps-its-own-assessment-found/"),
-            S("Africa AI News - Namibia launches National AI Institute", "https://www.africaainews.com/p/namibia-launches-national-ai-institute"),
             S("The Brief - Namibia targets AI to improve government service delivery", "https://thebrief.com.na/2026/09/namibia-targets-ai-to-improve-government-service-delivery/"),
           ],
         },
@@ -800,11 +794,10 @@
         {
           date: "2026-09-23", title: "Namibia opens National AI Institute",
           summary: "ICT Minister Emma Theofelus said digital government is a key area where home-grown AI capability can help.",
-          level: "verified",
+          level: "corroborated",
           sources: [
             S("The Brief", "https://thebrief.com.na/2026/09/namibia-targets-ai-to-improve-government-service-delivery/"),
             S("iAfrica", "https://iafrica.com/namibia-opens-national-ai-institute-built-around-four-gaps-its-own-assessment-found/"),
-            S("Africa AI News", "https://www.africaainews.com/p/namibia-launches-national-ai-institute"),
           ],
         },
       ],
@@ -983,10 +976,9 @@
         {
           topic: "Strategy", date: "2024",
           text: "The Ministry of Digital Transformation, Innovation and Modernisation of the Administration drew up a National AI Strategy in 2024. OECD.AI lists it as covering 2024–2029 with five priorities: skills, research and innovation, data governance, ethical AI and uses in sectors such as health, education and agriculture.",
-          level: "corroborated",
+          level: "single",
           sources: [
             S("OECD.AI - National AI Strategy of Mauritania 2024–2029", "https://oecd.ai/en/dashboards/policy-initiatives/national-artificial-intelligence-strategy-of-mauritania-2024-2029"),
-            S("Digital Watch - National AI Strategy of Mauritania 2025–2029 (Draft 3, May 2024)", "https://dig.watch/resource/the-national-artificial-intelligence-strategy-of-mauritania-for-2025-2029-draft-3"),
           ],
           note: "A May 2024 draft was titled 2025–2029 and listed six priorities.",
         },
@@ -1034,6 +1026,15 @@
       ],
       news: [
         {
+          date: "2026-10-20", title: "Honduras 26.2 in the 2026 Latin American AI Index",
+          summary: "Honduras scored 26.2 out of 100 in the fourth Latin American AI Index (ILIA), published by Chile's CENIA and ECLAC on 20 October, in the 'explorers' group of countries below 35 points and the lowest in Central America among those ranked.",
+          level: "corroborated",
+          sources: [
+            S("Bloomberg Línea - Los países de América Latina más preparados para la IA, según ranking de Cepal (22 Oct 2026)", "https://www.bloomberglinea.com/tecnologia/los-paises-de-america-latina-mas-preparados-para-la-inteligencia-artificial-segun-ranking-de-cepal/"),
+            S("Revista E&N - Ranking de Centroamérica en el Índice Latinoamericano de IA de CEPAL 2026 (21 Oct 2026)", "https://www.revistaeyn.com/inteligencia-eyn/ranking-de-centroamerica-en-el-indice-latinoamericano-de-ia-de-cepal-2026-FL32395716"),
+          ],
+        },
+        {
           date: "2026-06-10", title: "Government and IDB to build AI tool against red tape",
           summary: "The tool will analyse laws, regulations and procedures to find and remove bureaucratic barriers.",
           level: "corroborated",
@@ -1076,6 +1077,15 @@
         },
       ],
       news: [
+        {
+          date: "2026-10-20", title: "Trinidad and Tobago enters the Latin American AI Index",
+          summary: "Trinidad and Tobago was included for the first time in the fourth Latin American AI Index (ILIA), published by Chile's CENIA and ECLAC on 20 October, scoring 35.5 out of 100, the lowest score in the 'adopters' group.",
+          level: "corroborated",
+          sources: [
+            S("CENIA - ILIA 2026: 4th edition of the Latin American AI Index (20 Oct 2026, Spanish)", "https://cenia.cl/2026/10/20/ilia-2026-4ta-edicion-revela-que-america-latina-y-el-caribe-se-juegan-su-futuro-en-ia-en-la-colaboracion-regional-para-datos-talento-y-computo/"),
+            S("Bloomberg Línea - Los países de América Latina más preparados para la IA, según ranking de Cepal (22 Oct 2026)", "https://www.bloomberglinea.com/tecnologia/los-paises-de-america-latina-mas-preparados-para-la-inteligencia-artificial-segun-ranking-de-cepal/"),
+          ],
+        },
         {
           date: "2025-11-26", title: "National AI readiness assessment launched",
           summary: "The assessment covers governance, policy, infrastructure, ethics, institutional capacity and inclusion, and will inform a national AI policy.",

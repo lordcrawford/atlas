@@ -23,7 +23,6 @@
           level: "verified",
           sources: [
             S("SMEX - Libya's new AI strategy celebrates participation, yet was built without it (22 Jul 2026)", "https://smex.org/libyas-new-ai-strategy-celebrates-participation-yet-was-built-without-it/"),
-            S("Africa AI News - Libya launches National AI Strategy with 35 initiatives", "https://www.africaainews.com/p/libya-launches-national-ai-strategy"),
             S("News Tunisia - Libya launches its AI strategy (2 Jun 2026)", "https://news-tunisia.tunisienumerique.com/libya-launches-its-ai-strategy-to-develop-digital-infrastructure/"),
             S("iAfrica - Libya adopts AI ethics charter and launches National AI Strategy 2026–2030", "https://iafrica.com/libya-adopts-ai-ethics-charter-and-launches-national-ai-strategy-2026-2030-with-35-initiatives-across-six-pillars/"),
           ],
@@ -55,7 +54,6 @@
           sources: [
             S("SMEX - Libya's new AI strategy celebrates participation, yet was built without it (22 Jul 2026)", "https://smex.org/libyas-new-ai-strategy-celebrates-participation-yet-was-built-without-it/"),
             S("News Tunisia - Libya launches its AI strategy (2 Jun 2026)", "https://news-tunisia.tunisienumerique.com/libya-launches-its-ai-strategy-to-develop-digital-infrastructure/"),
-            S("Africa AI News - Libya launches National AI Strategy with 35 initiatives", "https://www.africaainews.com/p/libya-launches-national-ai-strategy"),
             S("iAfrica - Libya adopts AI ethics charter and launches National AI Strategy 2026–2030", "https://iafrica.com/libya-adopts-ai-ethics-charter-and-launches-national-ai-strategy-2026-2030-with-35-initiatives-across-six-pillars/"),
           ],
         },
@@ -146,10 +144,10 @@
         {
           topic: "Strategy", date: "2026-04-08",
           text: "Libreville hosted Artificial Intelligence Days on 8–10 April 2026, with the UN Economic Commission for Africa, under the theme of AI, digital sovereignty and economic diversification.",
-          level: "corroborated",
+          level: "single",
           sources: [
-            S("UNECA - AID 2026 Gabon: Artificial Intelligence Days", "https://www.uneca.org/eca-events/aid-2026-gabon-artificial-intelligence-days-2026"),
-            S("UNECA - Concept note, Artificial Intelligence Days 2026 (PDF)", "https://www.uneca.org/eca-events/sites/default/files/resources/concept_note_jia-aid_gabon_2026.pdf"),
+            S("UNECA - AID 2026 Gabon: Artificial Intelligence Days (Internet Archive copy; the page has since been removed)", "https://web.archive.org/web/20260410160009/https://www.uneca.org/eca-events/aid-2026-gabon-artificial-intelligence-days-2026"),
+            S("UNECA - Concept note, Artificial Intelligence Days 2026 (PDF) (Internet Archive copy; the page has since been removed)", "https://web.archive.org/web/20260513042908/https://www.uneca.org/eca-events/sites/default/files/resources/concept_note_jia-aid_gabon_2026.pdf"),
           ],
           note: "Both links are UNECA pages, so they count as one source.",
         },
@@ -158,7 +156,7 @@
           text: "With UNESCO support Gabon ran an AI readiness assessment and set up a National Technical Committee for AI (CTN-IA) to prepare a national AI strategy.",
           level: "single",
           sources: [
-            S("UNECA - ECA and Gabon explore economic diversification through AI", "https://www.uneca.org/eca-events/stories/eca-and-gabon-explore-accelerating-economic-diversification-through-ai"),
+            S("UNECA - ECA and Gabon explore economic diversification through AI (Internet Archive copy; the page has since been removed)", "https://web.archive.org/web/20260116041037/https://www.uneca.org/eca-events/stories/eca-and-gabon-explore-accelerating-economic-diversification-through-ai"),
           ],
         },
       ],
@@ -190,7 +188,7 @@
         {
           topic: "Strategy", date: "2026-09-03",
           text: "At Djibouti's first National Forum on AI, on 2–3 September 2026, the government presented the broad directions of its first National AI Strategy for 2026–2030, covering governance, cybersecurity, skills, research, innovation and inclusion. President Guelleh said Djibouti aims to become a regional hub for AI in East Africa.",
-          level: "verified",
+          level: "corroborated",
           sources: [
             S("Djibouti Telecom - Djibouti's first National AI Forum (Sep 2026)", "https://international.djiboutitelecom.dj/djibouti-first-national-ai-forum/"),
             S("Dawan Africa - Djibouti aims to become regional AI hub, Guelleh says (2 Sep 2026)", "https://www.dawan.africa/news/djibouti-aims-to-become-regional-ai-hub-guelleh-says"),
@@ -222,7 +220,7 @@
         {
           date: "2026-09-03", title: "First National AI Forum sets out 2026–2030 strategy",
           summary: "President Guelleh called AI the strongest accelerator for Vision 2035 and set a goal of becoming a regional AI hub.",
-          level: "verified",
+          level: "corroborated",
           sources: [
             S("Djibouti Telecom - Djibouti's first National AI Forum (Sep 2026)", "https://international.djiboutitelecom.dj/djibouti-first-national-ai-forum/"),
             S("Dawan Africa - Djibouti aims to become regional AI hub, Guelleh says (2 Sep 2026)", "https://www.dawan.africa/news/djibouti-aims-to-become-regional-ai-hub-guelleh-says"),
@@ -254,19 +252,17 @@
         {
           topic: "Strategy", date: "2026-07-31",
           text: "Eswatini is developing a National AI Strategy aligned with the African Union's vision, alongside a combined Fourth and Fifth Industrial Revolution Strategy.",
-          level: "corroborated",
+          level: "single",
           sources: [
             S("UN Eswatini - Governing AI: ensuring innovation serves humanity (31 Jul 2026)", "https://eswatini.un.org/en/323031-governing-ai-ensuring-innovation-serves-humanity"),
-            S("Digital Watch - Eswatini", "https://dig.watch/countries/eswatini"),
           ],
         },
         {
           topic: "Ecosystem", date: "2024-11",
           text: "Eswatini held its first AI Indaba in November 2024, led by the ICT ministry and the Eswatini Academy of Sciences, focused on AI for youth employment, health and agriculture.",
-          level: "corroborated",
+          level: "single",
           sources: [
             S("UN Eswatini - Ministry of ICT explores AI for sustainable development (25 Nov 2024)", "https://eswatini.un.org/en/284410-un-eswatini-joins-ministry-ict-explore-artificial-intelligence-sustainable-development"),
-            S("Digital Watch - Eswatini", "https://dig.watch/countries/eswatini"),
           ],
         },
       ],
@@ -296,19 +292,17 @@
         {
           topic: "International", date: "2026-09-24",
           text: "Lesotho became the first country to implement the UN's Blueprint for National AI and Data Strategies, a framework to help governments move from writing AI strategies to carrying them out.",
-          level: "verified",
+          level: "corroborated",
           sources: [
             S("Ecofin Agency - Lesotho becomes first country to implement UN AI blueprint (24 Sep 2026)", "https://www.ecofinagency.com/news-digital/2409-59208-lesotho-becomes-first-country-to-implement-un-ai-blueprint"),
             S("Rio Times - Lesotho AI blueprint: first country to apply UN plan (24 Sep 2026)", "https://www.riotimesonline.com/lesotho-ai-blueprint-un-digital-cooperation-day-2026/"),
-            S("Africa AI News - Lesotho adopts UN AI blueprint", "https://www.africaainews.com/p/lesotho-adopts-un-ai-blueprint-south"),
           ],
         },
         {
           topic: "Strategy", date: "2026-08-17",
           text: "Lesotho published its Artificial Intelligence Policy and Implementation Plan on 17 August 2026. Led by the ICT ministry, it covers governance, legislation, AI capacity, infrastructure, productivity, inclusion and ethics, and international alignment.",
-          level: "corroborated",
+          level: "single",
           sources: [
-            S("CADE - Lesotho moves from AI policy to national strategy", "https://cadeproject.org/updates/lesotho-moves-from-ai-policy-to-national-strategy-and-digital-infrastructure-planning/"),
             S("OECD.AI - Lesotho AI Policy and Implementation Plan", "https://oecd.ai/en/dashboards/policy-initiatives/artificial-intelligence-policy-and-implementation-plan"),
           ],
           note: "OECD.AI still listed the policy as proposed or under development when checked.",
@@ -316,9 +310,8 @@
         {
           topic: "Strategy", date: "2026-08-21",
           text: "From 17 to 21 August 2026 the ICT ministry and the UN held a workshop in Maseru to develop a National AI Strategy and a Data Centre Blueprint that turn the policy into a roadmap.",
-          level: "verified",
+          level: "corroborated",
           sources: [
-            S("CADE - Lesotho moves from AI policy to national strategy", "https://cadeproject.org/updates/lesotho-moves-from-ai-policy-to-national-strategy-and-digital-infrastructure-planning/"),
             S("ITWeb Africa - Lesotho accelerates AI roadmap (Aug 2026)", "https://itweb.africa/article/lesotho-accelerate-ai-roadmap/6GxRKqYQ1gkqb3Wj"),
             S("TechAfrica News - Lesotho begins work on national AI strategy and data centre blueprint (18 Aug 2026)", "https://techafricanews.com/2026/08/18/lesotho-begins-work-on-national-ai-strategy-and-data-centre-blueprint/"),
           ],
@@ -328,11 +321,10 @@
         {
           date: "2026-09-24", title: "Lesotho first to apply UN AI blueprint",
           summary: "The blueprint helps governments move from AI strategy to implementation, with a focus on compute, data and skills.",
-          level: "verified",
+          level: "corroborated",
           sources: [
             S("Ecofin Agency", "https://www.ecofinagency.com/news-digital/2409-59208-lesotho-becomes-first-country-to-implement-un-ai-blueprint"),
             S("Rio Times", "https://www.riotimesonline.com/lesotho-ai-blueprint-un-digital-cooperation-day-2026/"),
-            S("Africa AI News", "https://www.africaainews.com/p/lesotho-adopts-un-ai-blueprint-south"),
           ],
         },
       ],

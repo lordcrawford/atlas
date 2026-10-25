@@ -60,11 +60,10 @@ window.ATLAS.nations.push(
       {
         date: "2026-10-08", title: "Deepfake 'right to your own face' bill goes to parliament",
         summary: "This follows a June 2025 political agreement. Culture minister Zenia Stampe is now promoting the bill, and enforcement would run through the EU Digital Services Act.",
-        level: "verified",
+        level: "corroborated",
         sources: [
           { t: "Euronews", u: "https://www.euronews.com/2026/10/08/denmark-introduces-a-bill-protecting-peoples-faces-and-voices-from-deepfakes" },
           { t: "EC IP Helpdesk", u: "https://intellectual-property-helpdesk.ec.europa.eu/news-events/news/denmarks-proposed-copyright-rules-deepfakes-2026-06-01_en" },
-          { t: "CADE", u: "https://cadeproject.org/updates/denmark-proposes-landmark-law-to-protect-citizens-from-deepfake-misuse/" },
         ],
       },
     ],
@@ -84,11 +83,10 @@ window.ATLAS.nations.push(
       {
         topic: "Strategy", date: "2017",
         text: "Finland's first AI strategy, 'Finland's Age of Artificial Intelligence' (Ministry of Economic Affairs and Employment, 2017), aimed to make Finland a leading country in applying AI. Follow-up reports came in 2018 and 2019.",
-        level: "verified",
+        level: "corroborated",
         sources: [
           { t: "European Commission (AI Watch, 2019) - Finland AI strategy country report (PDF)", u: "https://knowledge4policy.ec.europa.eu/sites/default/files/finland-ai-strategy-report.pdf" },
-          { t: "EC AI Watch - Finland AI strategy report", u: "https://ai-watch.ec.europa.eu/countries/finland/finland-ai-strategy-report_en" },
-          { t: "Digital Watch - Finland's Age of Artificial Intelligence", u: "https://dig.watch/resource/finlands-age-of-artificial-intelligence" },
+          { t: "EC AI Watch - Finland AI strategy report (Internet Archive copy; the page has since been removed)", u: "https://web.archive.org/web/20261012174200/https://ai-watch.ec.europa.eu/countries/finland/finland-ai-strategy-report_en" },
         ],
         note: "Sources date it to October 2017 (interim report) or December 2017 (publication).",
       },
@@ -97,10 +95,10 @@ window.ATLAS.nations.push(
         text: "Finland's Act on the Supervision of Certain AI Systems (1377/2025) took effect on 1 January 2026. Traficom is the single point of contact and runs the sandbox, sector regulators supervise their own fields, and a National Sanctions Board can impose fines.",
         level: "verified",
         sources: [
+          { t: "Finlex - Act 1377/2025 on the supervision of certain AI systems (official text, Finnish, published 29 Dec 2025)", u: "https://www.finlex.fi/api/media/statute/898466/mainPdf/main.pdf" },
           { t: "Bird & Bird - AI Regulatory Horizon Tracker: Finland", u: "https://www.twobirds.com/en/capabilities/artificial-intelligence/ai-legal-services/ai-regulatory-horizon-tracker/finland" },
           { t: "Hannes Snellman - Government proposal on implementing the AI Act", u: "https://www.hannessnellman.com/news-and-views/blog/draft-government-proposal-on-the-implementation-of-eus-ai-act-published/" },
           { t: "VLO Law Firm - AI Regulation in Finland 2026", u: "https://vlolawfirm.com/trackers/ai-regulation-finland" },
-          { t: "ArtificialIntelligenceAct.eu - National implementation plans (Finland: Law 1377/2025, in force 1 Jan 2026)", u: "https://artificialintelligenceact.eu/national-implementation-plans/" },
         ],
       },
       {
@@ -166,7 +164,7 @@ window.ATLAS.nations.push(
         sources: [
           { t: "National Strategy for AI (2020), English PDF via OECD.AI", u: "https://wp.oecd.ai/app/uploads/2021/12/Norway_National_Strategy_for_Artificial_Intelligence_2020.pdf" },
           { t: "Telenor - Telenor sets a good example on AI upskilling", u: "https://www.telenor.com/media/newsroom/telenor-sets-a-good-example-on-ai-upskilling/" },
-          { t: "EC AI Watch - Norway AI strategy report", u: "https://ai-watch.ec.europa.eu/countries/norway/norway-ai-strategy-report_en" },
+          { t: "EC AI Watch - Norway AI strategy report (Internet Archive copy; the page has since been removed)", u: "https://web.archive.org/web/20260515045056/https://ai-watch.ec.europa.eu/countries/norway/norway-ai-strategy-report_en" },
         ],
       },
       {
@@ -534,7 +532,7 @@ window.ATLAS.nations.push(
         text: "The Council of Ministers approved Cyprus's first national AI strategy in January 2020. It has five priorities: talent, business competitiveness, public services, national data spaces, and ethical, reliable AI.",
         level: "corroborated",
         sources: [
-          { t: "EC AI Watch - Cyprus AI strategy report", u: "https://ai-watch.ec.europa.eu/countries/cyprus/cyprus-ai-strategy-report_en" },
+          { t: "EC AI Watch - Cyprus AI strategy report (Internet Archive copy; the page has since been removed)", u: "https://web.archive.org/web/20260422021722/https://ai-watch.ec.europa.eu/countries/cyprus/cyprus-ai-strategy-report_en" },
           { t: "Legal 500 - Artificial intelligence in Cyprus", u: "https://www.legal500.com/intelligence/cyprus/technology/artificial-intelligence-in-cyprus" },
         ],
       },
@@ -550,10 +548,9 @@ window.ATLAS.nations.push(
       {
         topic: "Regulation", date: "2025-01",
         text: "Cyprus named its EU AI Act authorities in January 2025. The Commissioner of Communications is notifying authority, main market-surveillance authority and single point of contact, and the data-protection commissioner covers prohibited practices and certain high-risk areas.",
-        level: "corroborated",
+        level: "single",
         sources: [
           { t: "Gov.cy (Deputy Ministry of Research, Innovation and Digital Policy) - AI Act page", u: "https://www.gov.cy/dmrid/en/uncategorized/regulation-eu-2024-1689-establishing-harmonised-rules-on-artificial-intelligence-ai-act/" },
-          { t: "ArtificialIntelligenceAct.eu - National implementation plans", u: "https://artificialintelligenceact.eu/national-implementation-plans/" },
         ],
       },
       {
@@ -612,10 +609,9 @@ window.ATLAS.nations.push(
       {
         topic: "Treaties", date: "2025-02-12",
         text: "In February 2025 the Federal Council decided to bring the Council of Europe AI Convention into Swiss law, with any legal changes kept as sector-specific as possible. A consultation draft of the necessary laws was due by the end of 2026.",
-        level: "corroborated",
+        level: "single",
         sources: [
           { t: "Swissinfo - Swiss government wants to adopt Council of Europe AI conventions", u: "https://www.swissinfo.ch/eng/swiss-politics/federal-council-wants-to-adopt-ai-conventions-of-the-council-of-europe/88864836" },
-          { t: "Grant Thornton - Federal Council wants to ratify the AI Convention", u: "https://www.grantthornton.ch/en/insights/federal-council-ai-convention-finance-challenges/" },
         ],
         note: "One unverified blog says the draft has slipped to early 2027.",
       },
@@ -648,12 +644,22 @@ window.ATLAS.nations.push(
     id: "qa", name: "Qatar", flag: "🇶🇦", region: "Middle East / Gulf", group: "Middle East", geo: [51.53, 25.29], isoN: "634",
     stance: "Sovereign-wealth-led: national AI company and a $20bn infrastructure venture",
     summary:
-      "Qatar published one of the region's first national AI strategies in 2019, drafted by the Qatar Computing Research Institute. Its recent moves are mostly financial. The sovereign fund QIA launched Qai, a national AI company, and a $20 billion AI-infrastructure joint venture with Brookfield in December 2025. Government adoption runs through the communications ministry's Digital Agenda 2030.",
-    glance: { firstStrategy: "2019", latestStrategy: "2019 (under Digital Agenda 2030)", newestBody: "Qai (national AI company)", newestBodyDate: "2025-12" },
+      "Qatar published one of the region's first national AI strategies in 2019, drafted by the Qatar Computing Research Institute. Its recent moves are mostly financial. The sovereign fund QIA launched Qai, a national AI company, and a $20 billion AI-infrastructure joint venture with Brookfield in December 2025. Government adoption runs through the communications ministry's Digital Agenda 2030. In October 2026 it set up a National Center for AI inside the communications ministry to lead national AI strategy and policy.",
+    glance: { firstStrategy: "2019", latestStrategy: "2019 (under Digital Agenda 2030)", newestBody: "National Center for AI", newestBodyDate: "2026-10-19" },
     stats: { population: { v: 2972215, year: 2025 }, gdpPerCapita: { v: 72525, year: 2025 }, internet: { v: 98.1, year: 2024 } },
     oxford: { rank: 54, scores: [80.5, 57.95, 77.5, 62.82, 44.54, 38.95] },
     msAdoption: { h1_2025: 35.7, h2_2025: 38.3, q1_2026: null, q2_2026: null, rankLatest: null },
     facts: [
+      {
+        topic: "Institutions", date: "2026-10-19",
+        text: "On 19 October 2026 the Emir ratified Cabinet Decision No. 34 of 2026, which creates a National Center for AI inside the Ministry of Communications and Information Technology. Reporting directly to the minister and made up of three departments, it is to prepare the national AI strategy and oversee it, develop AI policy and regulation, and run AI platforms and partnerships. The Cabinet had approved the draft in September 2025.",
+        level: "verified",
+        sources: [
+          { t: "The Peninsula - Amir ratifies decision to establish National Center for AI (20 Oct 2026)", u: "https://thepeninsulaqatar.com/article/20/10/2026/amir-ratifies-decision-to-establish-national-center-for-ai" },
+          { t: "Gulf Times - MCIT to reorganise structure (20 Oct 2026)", u: "https://www.gulf-times.com/article/736202/qatar/mcit-to-reorganise-structure" },
+          { t: "Marhaba Qatar - HH the Amir ratifies MCIT restructuring, establishes National Center for AI (20 Oct 2026)", u: "https://marhaba.qa/hh-the-amir-ratifies-mcit-restructuring-establishes-national-center-for-ai/" },
+        ],
+      },
       {
         topic: "Strategy", date: "2019",
         text: "Qatar launched its National AI Strategy at QITCOM 2019. It was based on a blueprint from the Qatar Computing Research Institute (part of HBKU) and tied to Qatar National Vision 2030.",
@@ -686,6 +692,16 @@ window.ATLAS.nations.push(
       },
     ],
     news: [
+      {
+        date: "2026-10-19", title: "National Center for AI established",
+        summary: "The Emir ratified the decision creating a National Center for AI within the communications ministry, to lead the national AI strategy, policy and partnerships.",
+        level: "verified",
+        sources: [
+          { t: "The Peninsula - Amir ratifies decision to establish National Center for AI (20 Oct 2026)", u: "https://thepeninsulaqatar.com/article/20/10/2026/amir-ratifies-decision-to-establish-national-center-for-ai" },
+          { t: "Gulf Times - MCIT to reorganise structure (20 Oct 2026)", u: "https://www.gulf-times.com/article/736202/qatar/mcit-to-reorganise-structure" },
+          { t: "Marhaba Qatar - HH the Amir ratifies MCIT restructuring, establishes National Center for AI (20 Oct 2026)", u: "https://marhaba.qa/hh-the-amir-ratifies-mcit-restructuring-establishes-national-center-for-ai/" },
+        ],
+      },
       {
         date: "2026-09", title: "Qatar pushes agentic AI into core government operations",
         summary: "MCIT officials described cloud infrastructure as the base for agentic AI in government and opened an innovation lab for developers.",
@@ -736,10 +752,9 @@ window.ATLAS.nations.push(
       {
         topic: "Public sector", date: "2025-07-27",
         text: "On 27 July 2025 the Information & eGovernment Authority launched the National Policy for the Use of Artificial Intelligence, built on four pillars: legal compliance, AI use and adoption, public education and awareness, and local and international cooperation. It also adopted the GCC's Guiding Manual on the Ethics of AI Use.",
-        level: "corroborated",
+        level: "single",
         sources: [
           { t: "iGA - Bahrain launches National AI Policy and adopts GCC ethics manual (27 Jul 2025)", u: "https://www.iga.gov.bh/en/article/bahrain-launches-national-ai-policy-and-adopts-gcc-ethics-manual" },
-          { t: "Middle East AI News - Bahrain launches national AI policy", u: "https://www.middleeastainews.com/p/bahrain-launches-national-ai-policy" },
         ],
       },
     ],
@@ -747,9 +762,8 @@ window.ATLAS.nations.push(
       {
         date: "2025", title: "Government AI-use policy issued while AI bill stalls",
         summary: "Until a law passes, AI activity falls under the 2018 personal data protection law and general cybercrime law.",
-        level: "corroborated",
+        level: "single",
         sources: [
-          { t: "Middle East AI News", u: "https://www.middleeastainews.com/p/bahrain-launches-national-ai-policy" },
           { t: "News of Bahrain", u: "https://www.newsofbahrain.com/bahrain/105401.html" },
         ],
       },
@@ -770,11 +784,10 @@ window.ATLAS.nations.push(
       {
         topic: "Strategy", date: "2023",
         text: "The Cabinet approved Jordan's AI Strategy and Implementation Plan 2023–2027, which follows the 2020 AI policy. It lays out 68 projects, with priorities in health, education, social protection and employment.",
-        level: "verified",
+        level: "corroborated",
         sources: [
           { t: "Jordan News - Cabinet approves Jordan's AI strategy for 2023–2027", u: "https://www.jordannews.jo/Section-109/News/Cabinet-approves-Jordan-s-AI-strategy-for-2023-2027-23644" },
           { t: "MoDEE - Jordan's AI Strategy and Implementation Plan (PDF)", u: "https://www.modee.gov.jo/ebv4.0/root_storage/en/eb_list_page/40435648.pdf" },
-          { t: "Digital Watch - Jordanian AI Strategy 2023–2027", u: "https://dig.watch/resource/jordanian-artificial-intelligence-strategy-and-implementation-plan-2023-2027" },
         ],
       },
       {
@@ -798,6 +811,15 @@ window.ATLAS.nations.push(
       },
     ],
     news: [
+      {
+        date: "2026-09-15", title: "Jordan's first AI compute platform goes live in Aqaba",
+        summary: "Aqaba Digital Hub, which runs Jordan's largest data centre, launched Klstrai, the country's first platform dedicated to AI computing, giving government bodies, companies, start-ups and developers access to AI computing inside Jordan without buying their own hardware.",
+        level: "corroborated",
+        sources: [
+          { t: "Petra (Jordan News Agency) - Klstrai, Jordan's first AI compute platform, hosted and operational at Aqaba Digital Hub (15 Sep 2026)", u: "https://petra.gov.jo/en/news/klstrai-jordans-first-ai-compute-platform-hosted-operational-at-aqaba-digital-hub" },
+          { t: "ICE - Italian Trade Agency - Aqaba Digital Hub launches Jordan's first AI computing platform (16 Sep 2026)", u: "https://www.ice.it/it/news/notizie-dal-mondo/309092" },
+        ],
+      },
       {
         date: "2026-08-09", title: "AI used to detect water-network leaks",
         summary: "The digital-economy and water ministers reviewed an AI project to monitor networks and reduce water loss, a priority in one of the world's most water-scarce countries.",
@@ -955,11 +977,10 @@ window.ATLAS.nations.push(
       {
         topic: "Institutions", date: "2025-06",
         text: "The 2025–26 budget created a dedicated AI Unit at the Ministry of IT, Communication and Innovation, along with an AI start-up programme and tax deductions for AI investment by MSMEs.",
-        level: "verified",
+        level: "corroborated",
         sources: [
           { t: "EDB Mauritius - Budget 2025-2026: Artificial Intelligence", u: "https://edbmauritius.org/newsroom/budget-2025-2026-artificial-intelligence" },
           { t: "iAfrica - Mauritius bets on AI in 2025–2026 budget", u: "https://iafrica.com/mauritius-bets-on-artificial-intelligence-to-drive-digital-economy-in-2025-2026-budget/" },
-          { t: "Africa AI News - New Mauritius budget confirms AI core to economic strategy", u: "https://www.africaainews.com/p/new-mauritius-budget-confirms-ai" },
         ],
       },
       {
@@ -1014,7 +1035,6 @@ window.ATLAS.nations.push(
         sources: [
           { t: "Ecofin - Benin approves a national AI strategy", u: "https://www.ecofinagency.com/telecom/2401-44198-benin-approves-a-national-artificial-intelligence-strategy" },
           { t: "OECD.AI - National AI and Big Data Strategy 2023–2027", u: "https://oecd.ai/en/dashboards/policy-initiatives/national-artificial-intelligence-and-big-data-strategy-2023-2027" },
-          { t: "Digital Watch - SNIAM of Benin", u: "https://dig.watch/resource/the-national-strategy-for-artificial-intelligence-and-big-data-sniam-of-benin" },
           { t: "Government of Benin - National AI and Big Data Strategy (PDF)", u: "https://innovation.gouv.bj/assets/documents/national-artificial-intelligence-and-big-data-strategy-1682673348.pdf" },
         ],
         note: "Budget conversions vary (about US$7.8M).",
@@ -1108,7 +1128,7 @@ window.ATLAS.nations.push(
       {
         topic: "Institutions", date: "2023-08",
         text: "Jamaica set up a National AI Task Force under the Office of the Prime Minister in August 2023 to research and recommend a national AI policy. Its recommendations report was published in 2024.",
-        level: "verified",
+        level: "corroborated",
         sources: [
           { t: "OPM - Jamaica launches landmark UNESCO readiness report", u: "https://opm.gov.jm/jamaica-takes-the-lead-on-ai-government-launches-landmark-unesco-readiness-report/" },
           { t: "JIS - Government to set up AI Task Force", u: "https://jis.gov.jm/government-to-set-up-ai-task-force/" },
@@ -1134,6 +1154,14 @@ window.ATLAS.nations.push(
       },
     ],
     news: [
+      {
+        date: "2026-10-20", title: "Jamaica 32.4 in the 2026 Latin American AI Index",
+        summary: "Jamaica scored 32.4 out of 100 in the fourth Latin American AI Index (ILIA), published by Chile's CENIA and ECLAC on 20 October, in the 'explorers' group of countries below 35 points.",
+        level: "single",
+        sources: [
+          { t: "Bloomberg Línea - Los países de América Latina más preparados para la IA, según ranking de Cepal (22 Oct 2026)", u: "https://www.bloomberglinea.com/tecnologia/los-paises-de-america-latina-mas-preparados-para-la-inteligencia-artificial-segun-ranking-de-cepal/" },
+        ],
+      },
       {
         date: "2026-08-16", title: "Public consultation on national AI rules due to open",
         summary: "The Task Force chair said a consultation website would launch by 11 September before the framework is finalised. Its launch could not be confirmed.",

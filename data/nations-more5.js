@@ -113,7 +113,7 @@
         {
           topic: "Strategy", date: "2026-04-28",
           text: "The Ministry of Economic Development and Digitalization began drafting a government decree for a National Programme on AI and Data Management for 2026–2030, which later went to public consultation.",
-          level: "verified",
+          level: "corroborated",
           sources: [
             S("Logos Press - Moldova plans national AI strategy for 2026–2030 (28 Apr 2026)", "https://logos-pres.md/en/news/moldova-wants-to-move-from-consuming-technology-to-building-its-own-ai/"),
             S("Moldpres - Moldova presented AI priorities at Black Sea parliamentary meeting", "https://www.moldpres.md/eng/politics/moldova-presented-artificial-intelligence-priorities-at-parliamentary-meeting-of-black-sea-region-states"),
@@ -214,18 +214,20 @@
         {
           topic: "Strategy", date: "2026-04-14",
           text: "On 14 April 2026 the government adopted a non-binding AI strategy for the public administration (KI-Strategie der Liechtensteinischen Landesverwaltung), covering the government's own use of AI.",
-          level: "single",
+          level: "corroborated",
           sources: [
             S("Innovando - Liechtenstein's government adopts AI strategy for the public administration", "https://en.innovando.news/Liechtenstein-to-bring-to-the-public-machine/"),
+            S("Lex Mundi AI Legislative Guide - Liechtenstein (Marxer Attorneys, updated 4 May 2026)", "https://www.lexmundi.com/guides/ai-legislative-guide/jurisdictions/europe/liechtenstein/"),
           ],
         },
         {
           topic: "Regulation", date: "2026",
-          text: "The EU AI Act is marked as EEA-relevant but is still under scrutiny for incorporation into the EEA Agreement, so it does not yet apply in Liechtenstein. Liechtenstein, Norway and Iceland take part in EU AI Board meetings as observers.",
+          text: "The EU AI Act is marked as EEA-relevant but is still under scrutiny for incorporation into the EEA Agreement, so it does not yet apply in Liechtenstein, which takes part in EU AI Board meetings as an observer. The Office for Digital Innovation, set up on 1 April 2025, coordinates the work.",
           level: "single",
           sources: [
-            S("Future of Life Institute - Overview of AI Act national implementation plans", "https://artificialintelligenceact.eu/national-implementation-plans/"),
+            S("Lex Mundi AI Legislative Guide - Liechtenstein (Marxer Attorneys, updated 4 May 2026)", "https://www.lexmundi.com/guides/ai-legislative-guide/jurisdictions/europe/liechtenstein/"),
           ],
+          note: "Read in a browser. EFTA's own status page sits behind a bot check and was not read.",
         },
       ],
       news: [
@@ -423,10 +425,9 @@
         {
           topic: "Regulation", date: "2026-05-01",
           text: "At the Media Summit 2026, ICT Secretary Steven Matainaho outlined a sovereign AI framework including a National AI Register, sovereign data governance, and new laws: a National Artificial Intelligence Act and a Data Governance and Protection Act.",
-          level: "corroborated",
+          level: "single",
           sources: [
             S("DICT PNG - Secretary outlines sovereign AI framework (1 May 2026)", "https://www.ict.gov.pg/dict-secretary-outlines-sovereign-ai-framework-building-a-unified-digital-system-for-safe-ai-use-media-summit-2026/"),
-            S("Digital Watch - Papua New Guinea plans AI framework centred on data sovereignty (5 May 2026)", "https://dig.watch/updates/papua-new-guinea-ai-data-sovereignty"),
           ],
         },
         {
@@ -450,10 +451,9 @@
         {
           date: "2026-03-22", title: "Draft sovereign AI strategy released for consultation",
           summary: "The strategy treats AI as a capability on trusted national digital rails rather than a standalone technology.",
-          level: "corroborated",
+          level: "single",
           sources: [
             S("DICT PNG", "https://www.ict.gov.pg/png-releases-draft-national-sovereign-digital-transformation-and-ai-strategy-for-public-consultation/"),
-            S("Digital Watch", "https://dig.watch/updates/papua-new-guinea-ai-data-sovereignty"),
           ],
         },
       ],
@@ -464,7 +464,7 @@
       id: "to", name: "Tonga", flag: "🇹🇴", region: "Pacific", group: "Asia-Pacific", geo: [-175.2, -21.14], isoN: "776",
       stance: "Data laws first: new privacy and e-transactions acts in 2025, with no AI-specific rules",
       summary:
-        "Tonga has no AI law or AI-specific framework. It passed a Privacy Act and an Electronic Transactions Act in 2025, which now set the ground rules for data-driven systems, including AI. Its parliament has joined regional and global discussions on AI governance.",
+        "Tonga has no AI law or AI-specific framework. In August 2025 its Legislative Assembly passed a Privacy Bill, alongside bills on health information and digital identification, which set ground rules for data-driven systems, including AI. Its parliament has joined regional and global discussions on AI governance.",
       glance: { firstStrategy: "—", latestStrategy: "—", newestBody: "—", newestBodyDate: "" },
       stats: { population: { v: 103742, year: 2025 }, gdpPerCapita: { v: 6547, year: 2025 }, internet: { v: 67.4, year: 2024 } },
       oxford: { rank: 156, scores: [4.0, 32.5, 7.39, 27.91, 24.07, 32.69] },
@@ -472,10 +472,10 @@
       facts: [
         {
           topic: "Regulation", date: "2025",
-          text: "Tonga passed the Privacy Act 2025, a comprehensive personal data protection framework, and the Electronic Transactions Act 2025. It has no dedicated AI law.",
+          text: "On 6 August 2025 the Legislative Assembly passed the Privacy Bill 2025 by 17 votes to 0, together with a Personal Health Information Protection Bill and a Civil Registration and Digital Identification Bill.",
           level: "single",
           sources: [
-            S("Digital Watch - Tonga", "https://dig.watch/countries/tonga"),
+            S("Matangi Tonga - House closes for General Election campaign (11 Aug 2025)", "https://matangitonga.to/print/38216"),
           ],
         },
         {
@@ -505,10 +505,9 @@
         {
           topic: "Disaster response", date: "2025-11-19",
           text: "UNESCO selected EDiSON, an AI-supported disaster risk management system developed by SAP Japan and an Oita University venture, for use in Solomon Islands.",
-          level: "corroborated",
+          level: "single",
           sources: [
             S("SAP News - SAP and UNESCO launch AI-assisted disaster risk system in Solomon Islands (19 Nov 2025)", "https://news.sap.com/2025/11/sap-unesco-launch-ai-assisted-disaster-risk-management-system-solomon-islands/"),
-            S("Digital Watch - UNESCO and SAP selected EDiSON for Solomon Islands (20 Nov 2025)", "https://dig.watch/updates/unesco-and-sap-selected-the-ai-system-edison-for-the-solomon-islands"),
           ],
         },
       ],
@@ -516,10 +515,9 @@
         {
           date: "2025-11-19", title: "AI disaster system selected for Solomon Islands",
           summary: "EDiSON merges real-time and historical data to help authorities act during cyclones and floods.",
-          level: "corroborated",
+          level: "single",
           sources: [
             S("SAP News", "https://news.sap.com/2025/11/sap-unesco-launch-ai-assisted-disaster-risk-management-system-solomon-islands/"),
-            S("Digital Watch", "https://dig.watch/updates/unesco-and-sap-selected-the-ai-system-edison-for-the-solomon-islands"),
           ],
         },
       ],
@@ -620,6 +618,14 @@
         },
       ],
       news: [
+        {
+          date: "2026-10-20", title: "Bolivia 26.4 in the 2026 Latin American AI Index",
+          summary: "Bolivia scored 26.4 out of 100 in the fourth Latin American AI Index (ILIA), published by Chile's CENIA and ECLAC on 20 October, in the 'explorers' group of countries below 35 points.",
+          level: "single",
+          sources: [
+            S("Bloomberg Línea - Los países de América Latina más preparados para la IA, según ranking de Cepal (22 Oct 2026)", "https://www.bloomberglinea.com/tecnologia/los-paises-de-america-latina-mas-preparados-para-la-inteligencia-artificial-segun-ranking-de-cepal/"),
+          ],
+        },
         {
           date: "2025-10", title: "Senate passes AI bill",
           summary: "The bill bans manipulative AI, social scoring and mass facial recognition without a court order, and names AGETIC as regulator.",
@@ -1064,10 +1070,9 @@
         {
           topic: "Regulation", date: "2026-09",
           text: "Saint Kitts and Nevis has no dedicated AI legislation. Laws on data protection, electronic transactions, cybercrime and consumer protection offer only partial guidance; across 13 Caribbean states reviewed, none had an AI-specific regulatory framework.",
-          level: "corroborated",
+          level: "single",
           sources: [
             S("Commonwealth Lawyers Association - AI and the law: a St Kitts and Nevis case study (Sep 2026)", "https://www.commonwealthlawyers.com/cla/ai-and-the-law-why-readiness-must-precede-expansion-a-st-christopher-st-kitts-and-nevis-case-study-by-edisha-k-greene/"),
-            S("Cullen International - AI regulation and policy are at an early stage in the Caribbean (Sep 2026)", "https://www.cullen-international.com/news/2026/09/Artificial-intelligence-regulation-and-policy-are-at-an-early-stage-in-the-Caribbean.html"),
           ],
         },
         {

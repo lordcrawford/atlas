@@ -23,7 +23,7 @@
           level: "corroborated",
           sources: [
             S("Government of Sweden - National approach to AI (2018, PDF via OECD.AI)", "https://wp.oecd.ai/app/uploads/2021/12/Sweden_National_Approach_to_Artificial_Intelligence_2018.pdf"),
-            S("EC AI Watch - Sweden AI strategy report", "https://ai-watch.ec.europa.eu/countries/sweden/sweden-ai-strategy-report_en"),
+            S("EC AI Watch - Sweden AI strategy report (Internet Archive copy; the page has since been removed)", "https://web.archive.org/web/20261001043717/https://ai-watch.ec.europa.eu/countries/sweden/sweden-ai-strategy-report_en"),
           ],
         },
         {
@@ -81,9 +81,8 @@
         {
           topic: "Strategy", date: "2021",
           text: "Austria's national AI strategy, 'Artificial Intelligence Mission Austria 2030' (AIM AT 2030), was published in 2021. It sets three goals: human-centred AI for the common good, Austria as a research location, and competitiveness.",
-          level: "corroborated",
+          level: "single",
           sources: [
-            S("Digital Watch - Austria's AI Mission 2030", "https://dig.watch/resource/austrias-artificial-intelligence-mission-2030-aim-at-2030"),
             S("EU Digital Skills & Jobs - Austria AIM AT 2030", "https://digital-skills-jobs.europa.eu/en/initiatives/national-strategies/austria-artificial-intelligence-mission-2030-aim-2030"),
           ],
         },
@@ -245,17 +244,18 @@
           level: "corroborated",
           sources: [
             S("VARAM - Minister Pūce: AI solutions should boost economic productivity", "https://www.varam.gov.lv/en/article/minister-puce-artificial-intelligence-solutions-should-be-used-boost-economic-productivity"),
-            S("EC AI Watch - Latvia AI strategy report", "https://ai-watch.ec.europa.eu/countries/latvia-0/latvia-ai-strategy-report_en"),
+            S("EC AI Watch - Latvia AI strategy report (Internet Archive copy; the page has since been removed)", "https://web.archive.org/web/20260608023305/https://ai-watch.ec.europa.eu/countries/latvia-0/latvia-ai-strategy-report_en"),
           ],
         },
         {
-          topic: "Institutions", date: "2025-03",
-          text: "Latvia's Artificial Intelligence Centre Law (2025) set up a National AI Centre to connect government, industry and universities, with the option of running an AI sandbox.",
-          level: "single",
+          topic: "Institutions", date: "2025-03-06",
+          text: "On 6 March 2025 the Saeima passed the Artificial Intelligence Centre Law in its final reading (73 votes to 9). It set up a National AI Centre as a foundation of three ministries, the ICT industry association and the universities' association, to be established by 31 March, with the right to run a regulatory sandbox for testing AI systems.",
+          level: "corroborated",
           sources: [
-            S("BDO / AI & Partners - AI Ecosystem Brief: Latvia 2025 (PDF)", "https://www.bdo.lv/getmedia/c0cbedae-bc27-42ea-bbe4-2c11d5d5a85e/Report-AI-Ecosystem-Brief-Latvia-2025-10-16.pdf"),
+            S("LSM English (Latvian Public Media) - Latvia to set up AI Center by end of March (6 Mar 2025)", "https://eng.lsm.lv/article/politics/saeima/06.03.2025-latvia-to-set-up-ai-center-by-end-of-march.a590506/"),
+            S("Research Latvia (Labs of Latvia) - National Artificial Intelligence Center will be established in Latvia (6 Mar 2025)", "https://researchlatvia.gov.lv/en/national-artificial-intelligence-center-will-be-established-latvia"),
           ],
-          note: "Sources give the law's adoption date as either January or March 2025.",
+          note: "LSM was read in a browser because it blocks automated requests.",
         },
         {
           topic: "Regulation", date: "2025-02",
@@ -268,11 +268,12 @@
       ],
       news: [
         {
-          date: "2025-03", title: "National AI Centre created by law",
+          date: "2025-03-06", title: "National AI Centre created by law",
           summary: "Latvia chose a dedicated national centre to coordinate AI between the state, business and academia.",
-          level: "single",
+          level: "corroborated",
           sources: [
-            S("BDO / AI & Partners", "https://www.bdo.lv/getmedia/c0cbedae-bc27-42ea-bbe4-2c11d5d5a85e/Report-AI-Ecosystem-Brief-Latvia-2025-10-16.pdf"),
+            S("LSM English (Latvian Public Media) - Latvia to set up AI Center by end of March (6 Mar 2025)", "https://eng.lsm.lv/article/politics/saeima/06.03.2025-latvia-to-set-up-ai-center-by-end-of-march.a590506/"),
+            S("Research Latvia (Labs of Latvia) - National Artificial Intelligence Center will be established in Latvia (6 Mar 2025)", "https://researchlatvia.gov.lv/en/national-artificial-intelligence-center-will-be-established-latvia"),
           ],
         },
       ],
@@ -771,6 +772,17 @@
       ],
       news: [
         {
+          date: "2026-10-20", title: "El Salvador joins the AI Index adopters",
+          summary: "El Salvador scored 37.9 out of 100 in the fourth Latin American AI Index (ILIA), published by Chile's CENIA and ECLAC on 20 October, entering the 'adopters' group (35 to 60 points) for the first time.",
+          level: "verified",
+          sources: [
+            S("CENIA - ILIA 2026: 4th edition of the Latin American AI Index (20 Oct 2026, Spanish)", "https://cenia.cl/2026/10/20/ilia-2026-4ta-edicion-revela-que-america-latina-y-el-caribe-se-juegan-su-futuro-en-ia-en-la-colaboracion-regional-para-datos-talento-y-computo/"),
+            S("Bloomberg Línea - Los países de América Latina más preparados para la IA, según ranking de Cepal (22 Oct 2026)", "https://www.bloomberglinea.com/tecnologia/los-paises-de-america-latina-mas-preparados-para-la-inteligencia-artificial-segun-ranking-de-cepal/"),
+            S("Infobae - Lo que el Índice Latinoamericano de IA expone sobre El Salvador (21 Oct 2026)", "https://www.infobae.com/el-salvador/2026/10/21/lo-que-el-indice-latinoamericano-de-inteligencia-artificial-expone-sobre-las-fortalezas-y-las-brechas-de-el-salvador-frente-a-sus-vecinos-centroamericanos/"),
+            S("Revista E&N - Ranking de Centroamérica en el Índice Latinoamericano de IA de CEPAL 2026 (21 Oct 2026)", "https://www.revistaeyn.com/inteligencia-eyn/ranking-de-centroamerica-en-el-indice-latinoamericano-de-ia-de-cepal-2026-FL32395716"),
+          ],
+        },
+        {
           date: "2026-05-15", title: "National AI Strategy published",
           summary: "It is built around innovation, sovereignty, human potential and 'abundance', with a deliberately minimal regulatory posture.",
           level: "single",
@@ -809,6 +821,16 @@
         },
       ],
       news: [
+        {
+          date: "2026-10-20", title: "Panama 39.3 in the 2026 Latin American AI Index",
+          summary: "In the fourth Latin American AI Index (ILIA), published by Chile's CENIA and ECLAC on 20 October, Panama scored 39.3 out of 100, placing it among the 'adopters' (35 to 60 points), behind Costa Rica and the Dominican Republic.",
+          level: "verified",
+          sources: [
+            S("CENIA - ILIA 2026: 4th edition of the Latin American AI Index (20 Oct 2026, Spanish)", "https://cenia.cl/2026/10/20/ilia-2026-4ta-edicion-revela-que-america-latina-y-el-caribe-se-juegan-su-futuro-en-ia-en-la-colaboracion-regional-para-datos-talento-y-computo/"),
+            S("Bloomberg Línea - Los países de América Latina más preparados para la IA, según ranking de Cepal (22 Oct 2026)", "https://www.bloomberglinea.com/tecnologia/los-paises-de-america-latina-mas-preparados-para-la-inteligencia-artificial-segun-ranking-de-cepal/"),
+            S("Revista E&N - Ranking de Centroamérica en el Índice Latinoamericano de IA de CEPAL 2026 (21 Oct 2026)", "https://www.revistaeyn.com/inteligencia-eyn/ranking-de-centroamerica-en-el-indice-latinoamericano-de-ia-de-cepal-2026-FL32395716"),
+          ],
+        },
         {
           date: "2026-09-23", title: "Panama pitches itself to Google, Meta, NVIDIA, Microsoft and Anthropic",
           summary: "Officials presented investment opportunities to AI companies in New York.",
@@ -849,6 +871,14 @@
         },
       ],
       news: [
+        {
+          date: "2026-10-20", title: "Paraguay 32.6 in the 2026 Latin American AI Index",
+          summary: "Paraguay scored 32.6 out of 100 in the fourth Latin American AI Index (ILIA), published by Chile's CENIA and ECLAC on 20 October, in the 'explorers' group of countries below 35 points.",
+          level: "single",
+          sources: [
+            S("Bloomberg Línea - Los países de América Latina más preparados para la IA, según ranking de Cepal (22 Oct 2026)", "https://www.bloomberglinea.com/tecnologia/los-paises-de-america-latina-mas-preparados-para-la-inteligencia-artificial-segun-ranking-de-cepal/"),
+          ],
+        },
         {
           date: "2026-06-26", title: "Paraguay signs Joint Declaration on AI Opportunities in Washington",
           summary: "The ICT minister signed at the Pax Silica summit, committing to innovation-friendly regulation and infrastructure.",

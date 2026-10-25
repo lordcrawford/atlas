@@ -367,6 +367,14 @@
       ],
       news: [
         {
+          date: "2026-10-20", title: "Cuba 30.9 in the 2026 Latin American AI Index",
+          summary: "Cuba scored 30.9 out of 100 in the fourth Latin American AI Index (ILIA), published by Chile's CENIA and ECLAC on 20 October, in the 'explorers' group of countries below 35 points (28.69 in 2025).",
+          level: "single",
+          sources: [
+            S("Bloomberg Línea - Los países de América Latina más preparados para la IA, según ranking de Cepal (22 Oct 2026)", "https://www.bloomberglinea.com/tecnologia/los-paises-de-america-latina-mas-preparados-para-la-inteligencia-artificial-segun-ranking-de-cepal/"),
+          ],
+        },
+        {
           date: "2026-07-16", title: "Cuba a founding member of the World AI Cooperation Organization",
           summary: "Cuba was one of 29 countries to sign the founding agreement of the China-based body in Shanghai.",
           level: "single",

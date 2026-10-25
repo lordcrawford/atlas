@@ -181,10 +181,9 @@ window.ATLAS.collaborations = [
     short: "AI Innovation Cooperation Center",
     a: "la", b: "cn",
     text: "On 23 February 2025 China's Guangxi region and Laos agreed to jointly build a China–Laos AI Innovation Cooperation Center in Vientiane.",
-    level: "corroborated",
+    level: "single",
     sources: [
       { t: "China Daily (Xinhua) - China, Laos to jointly build AI innovation cooperation center (25 Feb 2025)", u: "https://chinadailyhk.com/article/605417" },
-      { t: "Lingua Sinica - China and Laos build AI Innovation Cooperation Center", u: "https://lingua-sinica.org/dispatch/china-and-laos-build-ai-innovation-cooperation-center/" },
     ],
   },
   {
@@ -250,7 +249,6 @@ window.ATLAS.collaborations = [
       { t: "Pestalozzi - Federal Council outlines a lean regulatory approach", u: "https://pestalozzilaw.com/en/insights/news/legal-insights/switzerland-sets-its-course-on-ai-legislation-federal-council-out-lines-a-lean-regulatory-approach/?simple_view=true" },
       { t: "Sidley - New pathway of regulating AI in Switzerland", u: "https://datamatters.sidley.com/2025/04/07/new-pathway-of-regulating-artificial-intelligence-in-switzerland-competitive-edge-or-challenge/" },
       { t: "CMS Expert Guide - AI regulation in Switzerland", u: "https://cms.law/en/int/expert-guides/ai-regulation-scanner/switzerland" },
-      { t: "CADE - Uruguay becomes first Latin American country to sign global AI treaty (2 Sep 2025)", u: "https://cadeproject.org/updates/uruguay-becomes-first-latin-american-country-to-sign-global-ai-treaty/" },
     ],
     note: "The first-signatory list is from the Council of Europe page (read in a browser); Switzerland and Uruguay come from their own sources.",
   },
@@ -515,10 +513,9 @@ window.ATLAS.collaborations = [
     short: "SCO AI memorandum",
     hub: "kg", members: ["tj", "cn"],
     text: "At the Shanghai Cooperation Organisation summit in Bishkek, member states signed a memorandum on cooperation in artificial intelligence on 1 September 2026, at Kyrgyzstan's initiative, alongside a concept for regional data centres and computing capacity.",
-    level: "verified",
+    level: "corroborated",
     sources: [
       { t: "Trend - Kyrgyzstan proposes joint AI projects across key sectors within SCO", u: "https://www.trend.az/casia/kyrgyzstan/4225223.html" },
-      { t: "CADE Project - SCO expands cooperation on AI, computing and information security (2 Sep 2026)", u: "https://cadeproject.org/?p=155184" },
       { t: "The Diplomatic Insight - SCO leaders sign agreements on security, AI, energy and connectivity", u: "https://thediplomaticinsight.com/sco-leaders-sign-agreements-security-ai-energy-connectivity/" },
     ],
     note: "Only Kyrgyzstan, Tajikistan and China are shown; the SCO has more member states.",

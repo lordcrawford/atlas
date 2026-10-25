@@ -13,7 +13,7 @@
 
 window.ATLAS = {
   meta: {
-    asOf: "2026-10-20",
+    asOf: "2026-10-24",
     pillars: [
       "Policy Capacity",
       "AI Infrastructure",
@@ -78,7 +78,7 @@ window.ATLAS = {
           topic: "Strategy",
           date: "2019",
           text: "Singapore published its first National AI Strategy (NAIS) in 2019.",
-          level: "verified",
+          level: "corroborated",
           sources: [
             { t: "MDDI - DPM Lawrence Wong speech launching NAIS 2.0 (4 Dec 2023)", u: "https://www.mddi.gov.sg/newsroom/041223/" },
             { t: "MDDI - NAIS 2 to uplift Singapore's social and economic potential", u: "https://www.mddi.gov.sg/newsroom/04122023/" },
@@ -191,12 +191,20 @@ window.ATLAS = {
       ],
       news: [
         {
-          date: "2026-10-14", title: "Anthropic signs AI safety MOU with Singapore",
-          summary: "Anthropic opened a Singapore office and signed a memorandum of understanding with the Ministry of Digital Development and Information, covering AI model evaluation, safety research and incident response, and research on AI adoption and its impact.",
+          date: "2026-10-21", title: "S$45 million for AI in manufacturing",
+          summary: "Enterprise Singapore set aside more than S$45 million over three years for Catalytic AI Solutions, ready-to-deploy AI tools for manufacturing SMEs (design, quotation processing, quality inspection, scheduling and predictive maintenance), with costs shared with the companies. Minister of State Gan Siow Huang announced it at ITAP 2026 on 21 October.",
           level: "corroborated",
           sources: [
+            { t: "Ministry of Energy, Trade and Industry - Opening address by MOS Gan Siow Huang at ITAP 2026 (21 Oct 2026)", u: "https://www.meti.gov.sg/newsroom/opening-address-by-minister-of-state-for-energy--trade-and-industry-gan-siow-huang-at-industrial-transformation-asia-pacific--itap--2026/" },
+            { t: "The Star (Bernama) - Singapore allocates over S$45mil to boost AI in manufacturing (21 Oct 2026)", u: "https://www.thestar.com.my/business/business-news/2026/10/21/singapore-allocates-over-s45mil-to-boost-ai-in-manufacturing" },
+          ],
+        },
+        {
+          date: "2026-10-14", title: "Anthropic signs AI safety MOU with Singapore",
+          summary: "Anthropic opened a Singapore office and signed a memorandum of understanding with the Ministry of Digital Development and Information, covering AI model evaluation, safety research and incident response, and research on AI adoption and its impact.",
+          level: "single",
+          sources: [
             { t: "Marketing-Interactive - Anthropic opens SG office, partners govt on AI safety", u: "https://www.marketing-interactive.com/anthropic-opens-sg-office-partners-govt-on-ai-safety" },
-            { t: "Devdiscourse (ANI) - Anthropic opens office in Singapore, partners with government on AI safety and adoption (14 Oct 2026)", u: "https://www.devdiscourse.com/article/business/3992335-anthropic-opens-office-in-singapore-partners-with-government-on-ai-safety-and-adoption" },
           ],
         },
         {
@@ -231,11 +239,10 @@ window.ATLAS = {
           title: "Singapore stays #2 worldwide for AI use (64.3%)",
           summary:
             "Microsoft's Q2 2026 AI Diffusion data puts generative-AI use among working-age Singaporeans at 64.3%, second only to the UAE.",
-          level: "verified",
+          level: "corroborated",
           sources: [
             { t: "Microsoft Source EMEA (22 Sep 2026)", u: "https://news.microsoft.com/source/emea/2026/09/new-microsoft-data-ai-adoption-continues-to-rise-switzerland-remains-well-above-the-global-average/" },
             { t: "MediaPost - Microsoft Tracks AI Adoption Rates", u: "https://www.mediapost.com/publications/article/418164/microsoft-tracks-ai-adoption-rates-us-ranking-s.html" },
-            { t: "Middle East AI News - UAE retains top world AI use ranking", u: "https://www.middleeastainews.com/p/uae-retains-top-world-ai-use-ranking" },
           ],
         },
         {
@@ -373,7 +380,7 @@ window.ATLAS = {
           topic: "Economy",
           date: "2026-04-08",
           text: "On 8 April 2026 the Eesti.ai council approved 15 high-impact AI projects. Each must show measurable gains in time, cost or quality.",
-          level: "corroborated",
+          level: "single",
           sources: [
             { t: "Government Office - Eesti.ai initiative", u: "https://riigikantselei.ee/en/supporting-government-and-prime-minister/eestiai-initiative" },
             { t: "Government Office - Michal: Estonia aims to become a world leader in the use of AI", u: "https://www.riigikantselei.ee/en/news/michal-estonia-aims-become-world-leader-use-artificial-intelligence" },
@@ -425,7 +432,7 @@ window.ATLAS = {
           date: "2026-04-08",
           title: "Eesti.ai council approves 15 flagship AI projects",
           summary: "The projects aim to speed up AI adoption, and each must show measurable time, cost or quality gains.",
-          level: "corroborated",
+          level: "single",
           sources: [
             { t: "Government Office", u: "https://riigikantselei.ee/en/supporting-government-and-prime-minister/eestiai-initiative" },
             { t: "Government Office news", u: "https://www.riigikantselei.ee/en/news/michal-estonia-aims-become-world-leader-use-artificial-intelligence" },
@@ -479,10 +486,9 @@ window.ATLAS = {
           topic: "Strategy",
           date: "2019-04",
           text: "The UAE launched its AI strategy in October 2017 under the Centennial 2071 vision. In April 2019 the Cabinet adopted the detailed National Artificial Intelligence Strategy 2031, an eight-objective plan to make the UAE a global AI leader by 2031.",
-          level: "corroborated",
+          level: "single",
           sources: [
             { t: "The National - UAE Cabinet approves national AI strategy (21 Apr 2019)", u: "https://thenational-the-national-prod.cdn.arcpublishing.com/uae/government/uae-cabinet-approves-national-artificial-intelligence-strategy-1.851964" },
-            { t: "Access Partnership - The UAE's bid to champion the AI revolution", u: "https://accesspartnership.com/leading-by-example-the-uaes-bid-to-champion-the-ai-revolution/" },
           ],
           note: "Sources sometimes conflate the October 2017 launch with the April 2019 Cabinet adoption of the full 2031 document. Both dates are correct for different steps.",
         },
@@ -540,7 +546,6 @@ window.ATLAS = {
           level: "verified",
           sources: [
             { t: "Capacity - OpenAI to open first international Stargate data centre in UAE", u: "https://capacityglobal.com/news/openai-to-open-first-international-stargate-data-centre-in-uae/" },
-            { t: "Middle East AI News - Tech leaders unite to build Stargate UAE", u: "https://www.middleeastainews.com/p/tech-leaders-build-stargate-uae" },
             { t: "Gulf News - First phase of 200MW to complete by 2026", u: "https://gulfnews.com/business/markets/stargate-uae-first-phase-of-200mw-to-complete-by-2026-1.500310364" },
             { t: "The Tech Capital - First 200MW will come online in 2026, says G42 chief", u: "https://thetechcapital.com/first-200mw-of-stargate-uae-will-come-online-in-2026-says-g42-chief/" },
             { t: "Gulf Construction Online - G42's AI infrastructure cluster set for 2026 handover", u: "https://gulfconstructiononline.com/ArticleTA/329356/g42-s-prime-ai-infrastructure-cluster-set-for-2026-handover" },
@@ -576,11 +581,10 @@ window.ATLAS = {
           date: "2026-09-22",
           title: "UAE extends world lead in AI use to 73.3%",
           summary: "Microsoft's Q2 2026 figures put working-age generative-AI use in the UAE at 73.3%, up from 70.1% in Q1. The global figure is 18.8%.",
-          level: "verified",
+          level: "corroborated",
           sources: [
             { t: "Microsoft Source EMEA", u: "https://news.microsoft.com/source/emea/2026/09/new-microsoft-data-ai-adoption-continues-to-rise-switzerland-remains-well-above-the-global-average/" },
             { t: "The National - UAE pulls ahead in global ranking on AI adoption", u: "https://www.thenationalnews.com/news/uae/2026/09/25/uae-pulls-ahead-in-global-ranking-on-ai-adoption/" },
-            { t: "Middle East AI News", u: "https://www.middleeastainews.com/p/uae-retains-top-world-ai-use-ranking" },
           ],
         },
         {
@@ -599,9 +603,8 @@ window.ATLAS = {
           title: "UAE becomes first country above 70% AI usage",
           summary: "Microsoft's Q1 2026 data put the UAE at 70.1%, with Singapore second at 63.4%.",
           note: "The UAE figure appears in all three sources. Singapore's 63.4% appears in Telecom Review's coverage.",
-          level: "verified",
+          level: "corroborated",
           sources: [
-            { t: "Middle East AI News - UAE leads the world in AI adoption with 70%", u: "https://www.middleeastainews.com/p/uae-leads-the-world-in-ai-adoption" },
             { t: "MENA Startup Digest - UAE claims top spot for AI adoption at 70%", u: "https://menastartupdigest.com/?p=38700" },
             { t: "Telecom Review - UAE leads global AI uptake as usage crosses 70% milestone", u: "https://www.telecomreview.com/articles/reports-and-coverage/29184-uae-leads-global-ai-uptake-as-usage-crosses-70-milestone/" },
           ],
@@ -643,9 +646,8 @@ window.ATLAS = {
           topic: "Strategy",
           date: "2023-04-20",
           text: "Rwanda's Cabinet approved the National AI Policy on 20 April 2023. The Ministry of ICT and Innovation (MINICT) developed it with RURA, GIZ FAIR Forward, C4IR Rwanda and The Future Society.",
-          level: "corroborated",
+          level: "single",
           sources: [
-            { t: "Access Partnership - Rwandan government approves National AI Policy", u: "https://accesspartnership.com/access-alert-rwandan-government-approves-national-ai-policy" },
             { t: "KT Press - Cabinet approves new AI agency (recaps the April 2023 policy)", u: "https://www.ktpress.rw/2026/06/rwandas-ai-ambition-takes-shape-as-cabinet-approves-new-agency/" },
           ],
         },
@@ -710,6 +712,14 @@ window.ATLAS = {
         },
       ],
       news: [
+        {
+          date: "2026-10-22", title: "National AI Agency being brought into operation",
+          summary: "Minister of State for ICT and Innovation Yves Iradukunda said the new government-owned AI agency is being brought into operation through 2026 to coordinate work previously spread across several institutions, with a technical unit, the 'AI Factory', to build and test applications with private-sector partners.",
+          level: "single",
+          sources: [
+            { t: "The Korea Herald - Rwanda can be Korea's AI entry point to Africa: minister (22 Oct 2026)", u: "https://www.koreaherald.com/article/10911470" },
+          ],
+        },
         {
           date: "2026-07",
           title: "Rwanda co-chairs Africa AI Council; convenes AI Partners Roundtable",
@@ -781,7 +791,7 @@ window.ATLAS = {
           topic: "Strategy",
           date: "2019",
           text: "AGESIC, Uruguay's e-government agency, developed an AI Strategy for Digital Government in 2019. It ran public consultations on nine general principles (April 2019) and on the strategy itself later that year.",
-          level: "corroborated",
+          level: "single",
           sources: [
             { t: "AGESIC - Consulta pública: IA para el Gobierno Digital (2 Apr 2019)", u: "https://www.gub.uy/agencia-gobierno-electronico-sociedad-informacion-conocimiento/comunicacion/noticias/consulta-publica-inteligencia-artificial-para-gobierno-digital-0" },
             { t: "AGESIC - Estrategia IA (PDF, Spanish version)", u: "https://www.gub.uy/agencia-gobierno-electronico-sociedad-informacion-conocimiento/sites/agencia-gobierno-electronico-sociedad-informacion-conocimiento/files/documentos/publicaciones/Estrategia%20IA%20-%20versi%C3%B3n%20espa%C3%B1ol.pdf" },
