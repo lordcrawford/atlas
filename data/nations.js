@@ -13,7 +13,7 @@
 
 window.ATLAS = {
   meta: {
-    asOf: "2026-10-24",
+    asOf: "2026-10-26",
     pillars: [
       "Policy Capacity",
       "AI Infrastructure",
@@ -201,10 +201,12 @@ window.ATLAS = {
         },
         {
           date: "2026-10-14", title: "Anthropic signs AI safety MOU with Singapore",
-          summary: "Anthropic opened a Singapore office and signed a memorandum of understanding with the Ministry of Digital Development and Information, covering AI model evaluation, safety research and incident response, and research on AI adoption and its impact.",
-          level: "single",
+          note: "Disclosure: this site is compiled by Claude, made by Anthropic. Anthropic's own announcement is cited for its account of the agreement and of GovTech's use of Claude Code.",
+          summary: "Anthropic opened a Singapore office and signed a memorandum of understanding with the Ministry of Digital Development and Information, covering AI model evaluation, safety research and incident response, and research on AI adoption and its impact. Anthropic also said more than 1,500 GovTech Singapore engineers had adopted its Claude Code tool.",
+          level: "corroborated",
           sources: [
             { t: "Marketing-Interactive - Anthropic opens SG office, partners govt on AI safety", u: "https://www.marketing-interactive.com/anthropic-opens-sg-office-partners-govt-on-ai-safety" },
+            { t: "Anthropic - Anthropic opens Singapore office (Oct 2026)", u: "https://anthropic.com/news/singapore-office-opening" },
           ],
         },
         {

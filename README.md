@@ -32,7 +32,7 @@ The password gate (`gate.js`) and the profiles are client-side only, because the
   - The site asks the browser to keep its storage (`navigator.storage.persist()`).
   - Clearing site data, private windows and Safari's cleanup of sites not visited for a while still erase browser storage, which is why the backup file matters. A shared database would remove this risk; moving to one means replacing the `Store` object in `app.js`.
 
-Research cut-off: **24 October 2026** for news (searches across all regions for 10–24 October); fourth full audit 24 October 2026; full research to 10 October 2026 (12–14 October for the 57 nations added in the fourth to sixth batches, and 21 October for the 19 added last).
+Research cut-off: **26 October 2026** for news (searches across all regions for 10–26 October); fifth full audit 26 October 2026; full research to 10 October 2026 (12–14 October for the 57 nations added in the fourth to sixth batches, and 21 October for the 19 added last).
 
 ## Run it
 

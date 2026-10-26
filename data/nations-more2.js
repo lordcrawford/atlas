@@ -880,6 +880,16 @@
           ],
         },
         {
+          date: "2026-10-23", title: "Paraguay formally joins Pax Silica",
+          summary: "Foreign Minister Rubén Ramírez Lezcano signed the US-led Pax Silica declaration at the State Department in Washington, making Paraguay its 26th signatory, four months after it took part in the June summit.",
+          level: "verified",
+          sources: [
+            S("Diario HOY - EEUU da la bienvenida a Paraguay al acuerdo Pax Silica de IA (23 Oct 2026)", "https://www.hoy.com.py/nacionales/2026/10/23/eeuu-da-la-bienvenida-a-paraguay-al-acuerdo-pax-silica-de-ia"),
+            S("DPL News - Paraguay se suma a Pax Silica, la iniciativa de IA de EE. UU. (26 Oct 2026)", "https://dplnews.com/paraguay-se-suma-pax-silica/"),
+            S("Prensa Mercosur - Paraguay se suma a Pax Silica para atraer inversiones en IA (24 Oct 2026)", "https://prensamercosur.org/2026/10/24/paraguay-se-suma-a-pax-silica-para-atraer-inversiones-en-inteligencia-artificial-y-tecnologia"),
+          ],
+        },
+        {
           date: "2026-06-26", title: "Paraguay signs Joint Declaration on AI Opportunities in Washington",
           summary: "The ICT minister signed at the Pax Silica summit, committing to innovation-friendly regulation and infrastructure.",
           level: "corroborated",
