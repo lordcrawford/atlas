@@ -18,7 +18,7 @@
       msAdoption: { h1_2025: 12.7, h2_2025: 13.7, q1_2026: null, q2_2026: null, rankLatest: null },
       facts: [
         {
-          topic: "Strategy", date: "2026-06-01",
+          topic: "Strategy & readiness", date: "2026-06-01",
           text: "On 1 June 2026, at a ceremony in Tripoli, Prime Minister Abdulhamid Dbeibah launched the National AI Strategy 2026–2030 and adopted a National Charter on AI Ethics. The strategy sets out 35 initiatives across six pillars.",
           level: "verified",
           sources: [
@@ -28,7 +28,7 @@
           ],
         },
         {
-          topic: "Strategy", date: "2026-06-01",
+          topic: "Strategy & readiness", date: "2026-06-01",
           text: "Its 2030 targets include training 10,000 public employees in advanced technologies, supporting 100 AI start-ups, automating 50% of government transactions and digitising 70% of paper records.",
           level: "corroborated",
           sources: [
@@ -38,7 +38,7 @@
           ],
         },
         {
-          topic: "Governance", date: "2026-07-22",
+          topic: "Society & ethics", date: "2026-07-22",
           text: "The digital rights group SMEX argued that the strategy celebrates participation but was built without it, and that its planned ethics oversight body would not be independent of the Council of Ministers.",
           level: "single",
           sources: [
@@ -72,7 +72,7 @@
       msAdoption: { h1_2025: 7.0, h2_2025: 7.8, q1_2026: null, q2_2026: null, rankLatest: null, regional: true, regionLabel: "Central Africa" },
       facts: [
         {
-          topic: "Strategy", date: "2026-05-06",
+          topic: "Strategy & readiness", date: "2026-05-06",
           text: "The technical committee drafting Congo's national AI strategy held its first meeting on 6 May 2026 in Brazzaville, with UNDP support. A central pillar is digitising the national languages Lingala and Kituba for speech recognition, translation and AI tools.",
           level: "corroborated",
           sources: [
@@ -90,7 +90,7 @@
           ],
         },
         {
-          topic: "Research", date: "2024",
+          topic: "Research & models", date: "2024",
           text: "Congo hosts the African Research Centre on Artificial Intelligence (CARIA), launched with the UN Economic Commission for Africa.",
           level: "single",
           sources: [
@@ -123,7 +123,7 @@
       msAdoption: { h1_2025: 12.3, h2_2025: 13.4, q1_2026: null, q2_2026: null, rankLatest: null },
       facts: [
         {
-          topic: "Infrastructure", date: "2026-07-03",
+          topic: "Compute & infrastructure", date: "2026-07-03",
           text: "On 3 July 2026 President Brice Clotaire Oligui Nguema inaugurated Gabon's first national Tier III data centre, in the Nkok special economic zone near Libreville. ST Digital built it for 8 billion CFA francs (about $14 million); about 95% of Gabon's data is currently hosted abroad.",
           level: "corroborated",
           sources: [
@@ -142,7 +142,7 @@
           ],
         },
         {
-          topic: "Strategy", date: "2026-04-08",
+          topic: "Strategy & readiness", date: "2026-04-08",
           text: "Libreville hosted Artificial Intelligence Days on 8–10 April 2026, with the UN Economic Commission for Africa, under the theme of AI, digital sovereignty and economic diversification.",
           level: "single",
           sources: [
@@ -152,7 +152,7 @@
           note: "Both links are UNECA pages, so they count as one source.",
         },
         {
-          topic: "Regulation", date: "2024",
+          topic: "Strategy & readiness", date: "2024",
           text: "With UNESCO support Gabon ran an AI readiness assessment and set up a National Technical Committee for AI (CTN-IA) to prepare a national AI strategy.",
           level: "single",
           sources: [
@@ -186,7 +186,7 @@
       msAdoption: null,
       facts: [
         {
-          topic: "Strategy", date: "2026-09-03",
+          topic: "Strategy & readiness", date: "2026-09-03",
           text: "At Djibouti's first National Forum on AI, on 2–3 September 2026, the government presented the broad directions of its first National AI Strategy for 2026–2030, covering governance, cybersecurity, skills, research, innovation and inclusion. President Guelleh said Djibouti aims to become a regional hub for AI in East Africa.",
           level: "corroborated",
           sources: [
@@ -197,7 +197,7 @@
           note: "The outline of the 2026–2030 strategy is reported by Djibouti Telecom, citing the national news agency; the Dawan Africa reports confirm the forum and the President's hub goal.",
         },
         {
-          topic: "Strategy", date: "2026-01",
+          topic: "Strategy & readiness", date: "2026-01",
           text: "In January 2026, ESCWA and the digital ministry held a consultative workshop to review the draft national AI strategy ahead of its adoption. The work built on a UNESCO readiness assessment.",
           level: "verified",
           sources: [
@@ -208,7 +208,7 @@
           note: "Sources name the ministry differently (Digital Economy and Innovation; National Education, Innovation and Digital Development).",
         },
         {
-          topic: "Education", date: "2025-10",
+          topic: "Skills & education", date: "2025-10",
           text: "Djibouti launched an AI training programme for education inspectors as part of its 2025–2026 continuous training plan.",
           level: "single",
           sources: [
@@ -250,7 +250,7 @@
           ],
         },
         {
-          topic: "Strategy", date: "2026-07-31",
+          topic: "Strategy & readiness", date: "2026-07-31",
           text: "Eswatini is developing a National AI Strategy aligned with the African Union's vision, alongside a combined Fourth and Fifth Industrial Revolution Strategy.",
           level: "single",
           sources: [
@@ -258,7 +258,7 @@
           ],
         },
         {
-          topic: "Ecosystem", date: "2024-11",
+          topic: "Strategy & readiness", date: "2024-11",
           text: "Eswatini held its first AI Indaba in November 2024, led by the ICT ministry and the Eswatini Academy of Sciences, focused on AI for youth employment, health and agriculture.",
           level: "single",
           sources: [
@@ -299,7 +299,7 @@
           ],
         },
         {
-          topic: "Strategy", date: "2026-08-17",
+          topic: "Strategy & readiness", date: "2026-08-17",
           text: "Lesotho published its Artificial Intelligence Policy and Implementation Plan on 17 August 2026. Led by the ICT ministry, it covers governance, legislation, AI capacity, infrastructure, productivity, inclusion and ethics, and international alignment.",
           level: "single",
           sources: [
@@ -308,7 +308,7 @@
           note: "OECD.AI still listed the policy as proposed or under development when checked.",
         },
         {
-          topic: "Strategy", date: "2026-08-21",
+          topic: "Strategy & readiness", date: "2026-08-21",
           text: "From 17 to 21 August 2026 the ICT ministry and the UN held a workshop in Maseru to develop a National AI Strategy and a Data Centre Blueprint that turn the policy into a roadmap.",
           level: "corroborated",
           sources: [

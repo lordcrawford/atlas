@@ -9,6 +9,8 @@
   const PILLARS = D.meta.pillars;
   const OXFORD_TOTAL = 195;
   const GROUPS = ["Europe", "Middle East", "Asia-Pacific", "Africa", "Americas"];
+  // The ten fact topics, in the order the filter shows them.
+  const TOPICS = ["Strategy & readiness", "Regulation", "Institutions", "Compute & infrastructure", "Skills & education", "Public sector", "International", "Economy", "Research & models", "Society & ethics"];
   const view = document.getElementById("view");
   const tip = document.getElementById("tooltip");
   const SVGNS = "http://www.w3.org/2000/svg";
@@ -21,7 +23,7 @@
   };
 
   // Overview state (kept across navigation within a visit)
-  const state = { region: "All", colorBy: "rank", sortKey: "rank", sortDir: 1, newsSort: "newest", savedTab: "saved" };
+  const state = { region: "All", colorBy: "rank", tableView: "basics", sortKey: "rank", sortDir: 1, newsSort: "newest", savedTab: "saved" };
 
   // ---------------------------------------------------------------- helpers
   function el(tag, attrs, ...kids) {
@@ -135,6 +137,7 @@
       el("div", { class: "tv" }, `${n.flag} ${n.name}`),
       el("div", { class: "tl" }, n.oxford ? `AI readiness #${n.oxford.rank} of ${OXFORD_TOTAL}` : "Not in the Oxford Insights readiness index"),
       el("div", { class: "tl small" }, `First AI strategy: ${n.glance.firstStrategy}`),
+      fieldOf(state.colorBy) ? el("div", { class: "tl" }, `${fieldOf(state.colorBy).label}: ${codeOf(n, state.colorBy).label}`) : null,
       el("div", { class: "tl small", style: "margin-top:4px" }, "Click to open profile"),
     ];
   }
@@ -171,6 +174,64 @@
       source: "oxford",
     },
   };
+
+  // ---------------------------------------------------------------- governance model (data/models.js)
+  // Four coded fields per nation. The first three values of a field take the three categorical colours, a
+  // fourth ("more than one") a dark neutral, and the last ("none on record") the same grey as unranked nations.
+  const MODEL = D.model || { fields: [], refs: {}, codes: {} };
+  const MODEL_FIELDS = MODEL.fields.map((f) => ({ ...f, values: f.values.map(([v, label, def], i, all) => ({ v, label, def,
+    color: i === all.length - 1 ? "var(--na)" : i < 3 ? `var(--cat-${i + 1})` : "var(--cat-mix)" })) }));
+  const fieldOf = (key) => MODEL_FIELDS.find((f) => f.key === key);
+  const CODES = new Map();
+  // A nation's code for one field: its value (label, rule, colour) and what it rests on. A basis entry is the
+  // start of a fact on the nation's page, "@id" for an agreement, or "#key" for a membership in MODEL.refs.
+  function codeOf(n, key) {
+    const ck = `${n.id}:${key}`;
+    if (CODES.has(ck)) return CODES.get(ck);
+    const f = fieldOf(key), raw = (MODEL.codes[n.id] || {})[key] || [];
+    const val = f.values.find((x) => x.v === raw[0]) || f.values[f.values.length - 1];
+    const basis = raw.slice(1).map((b) => {
+      if (b[0] === "@") { const c = (D.collaborations || []).find((x) => x.id === b.slice(1)); return c ? { kind: "agreement", text: c.short || c.title, href: `#collab/${c.id}` } : null; }
+      if (b[0] === "#") { const r = MODEL.refs[b.slice(1)]; return r ? { kind: "ref", text: r.text, source: r.source } : null; }
+      const i = n.facts.findIndex((x) => x.text.startsWith(b));
+      return i < 0 ? null : { kind: "fact", text: n.facts[i].text, href: `#${n.id}/f${i}` };
+    });
+    if (basis.includes(null)) console.warn(`Atlas model: a basis for ${n.id}.${key} no longer matches a fact or agreement`);
+    const code = { field: f, ...val, basis: basis.filter(Boolean) };
+    CODES.set(ck, code);
+    return code;
+  }
+  // Where a reader should land to check a code: its first fact or agreement, else the nation's page.
+  const evidenceHref = (n, key) => (codeOf(n, key).basis.find((b) => b.href) || { href: `#${n.id}` }).href;
+  const swatch = (color) => el("i", { class: "sw", style: `background:${color}` });
+  const codeChip = (code) => el("span", { class: "code-chip", title: code.def }, swatch(code.color), code.label);
+  // Counts of nations per value of a field, as a segmented bar with a legend.
+  function shareBar(key, list) {
+    const f = fieldOf(key), groups = f.values.map((val) => ({ ...val, n: list.filter((x) => codeOf(x, key).v === val.v).length })).filter((g) => g.n);
+    return el("div", { class: "share" },
+      el("div", { class: "levelbar share-bar", role: "img", "aria-label": groups.map((g) => `${g.label}: ${g.n}`).join(", ") },
+        groups.map((g) => el("span", { style: `flex:${g.n};background:${g.color}`, title: `${g.label}: ${g.n}` }))),
+      el("div", { class: "legend" }, groups.map((g) => el("span", { title: g.def }, swatch(g.color), `${g.label}: ${g.n}`))));
+  }
+  // The card on a nation's page: each field, its value, the rule behind the value, and the facts it rests on.
+  function modelCard(n) {
+    if (!MODEL.codes[n.id]) return [];
+    const row = (f) => {
+      const c = codeOf(n, f.key);
+      return el("div", { class: "gm-row" },
+        el("div", { class: "gm-field" }, el("div", { class: "gm-label" }, f.label), el("div", { class: "gm-q" }, f.q)),
+        el("div", { class: "gm-value" },
+          el("div", { class: "gm-chip" }, codeChip(c)),
+          el("p", { class: "gm-def" }, c.def),
+          c.basis.length ? el("ul", { class: "gm-basis" }, c.basis.map((b) => el("li", {},
+            b.kind === "fact" ? el("a", { href: b.href }, b.text.length > 110 ? `${b.text.slice(0, 108).replace(/\s+\S*$/, "")}…` : b.text)
+              : b.kind === "agreement" ? el("a", { href: b.href }, `Agreement: ${b.text}`)
+              : el("span", {}, b.text, b.source ? [" ", el("a", { class: "src", href: b.source.u, target: "_blank", rel: "noopener noreferrer", title: b.source.t }, domain(b.source.u), " ↗")] : null)))) : null));
+    };
+    return [el("section", { class: "section" },
+      sectionHead("Governance model", `How Atlas codes ${n.name}'s approach so it can be compared with other nations. Each code is an editorial reading of the sourced facts it lists; the rules are in Method.`),
+      el("div", { class: "card gm" }, MODEL_FIELDS.map(row)))];
+  }
 
   // ---------------------------------------------------------------- map
   let WORLD = null;
@@ -552,17 +613,18 @@
 
   function worldMap() {
     const box = el("div", {});
-    const metric = METRICS[state.colorBy];
+    // Shaded by the readiness rank (a blue scale) or by one field of the governance model (one colour per value).
+    const field = fieldOf(state.colorBy), metric = METRICS.rank;
     const shown = filtered();
     const isoMap = new Map(N.map((n) => [n.isoN, n]));
-    const colorFor = (n) => { const t = metric.t(n); return t == null ? "var(--na)" : rampAt(t); };
+    const colorFor = (n) => { if (field) return codeOf(n, field.key).color; const t = metric.t(n); return t == null ? "var(--na)" : rampAt(t); };
     const sq = narrowScreen(), W = sq ? 420 : 960, H = sq ? 420 : 560;
     const HOME = { lon: 18, lat: 24, k: 1 };
     const regional = state.region !== "All";
     // "Home" is the whole world (the globe facing Europe and Africa), or the chosen region filling the frame.
     const goHome = (g, ms) => (regional ? g.fitPoints(shown.map((n) => n.geo), { ms, padPx: sq ? 44 : 80, maxK: 6 }) : g.flyTo(HOME, ms));
     const globe = createGlobe({ W, H, maxK: 14, view0: state.mapView || HOME, home: (g) => goHome(g, 600),
-      label: `Map of the ${shown.length} nations, coloured by ${metric.label}.`,
+      label: `Map of the ${shown.length} nations, coloured by ${field ? field.label.toLowerCase() : metric.label}.`,
       fills: (f) => { const n = isoMap.get(f.id); return n && inRegion(n) ? { fill: colorFor(n), class: "map-nation", id: n.id } : null; } });
     if (!globe) {
       box.append(el("p", { class: "muted" }, "Map libraries failed to load."));
@@ -572,7 +634,7 @@
     // A dot at every capital, in screen space so it keeps its size while zooming; tiny states stay visible.
     let hovered = null;
     const markers = shown.map((n) => {
-      const g = s("g", { class: "map-marker", tabindex: "0", role: "link", "aria-label": `${n.name}: readiness rank ${rankText(n)}` });
+      const g = s("g", { class: "map-marker", tabindex: "0", role: "link", "aria-label": field ? `${n.name}: ${codeOf(n, field.key).label}` : `${n.name}: readiness rank ${rankText(n)}` });
       const dot = s("circle", { r: 5.5 }), text = s("text", { class: "map-label" }, shortName(n));
       dot.style.fill = colorFor(n);
       g.append(dot, text);
@@ -637,19 +699,24 @@
     else { globe.draw(); goHome(globe, 900); }
 
     const legend = el("div", { class: "legend map-legend" },
-      el("span", { class: "ramp-key" },
-        `${metric.loLabel} ${metric.lo}`,
-        el("span", { class: "ramp" }, [0.05, 0.3, 0.55, 0.8, 1].map((t) => el("i", { style: `background:${rampAt(t)}` }))),
-        `${metric.hi} ${metric.hiLabel}`),
-      shown.some((n) => !n.oxford) ? el("span", {}, el("i", { style: "background:var(--na)" }), "Not ranked") : null,
+      field
+        ? field.values.map((val) => { const k = shown.filter((n) => codeOf(n, field.key).v === val.v).length; return k ? el("span", { title: val.def }, swatch(val.color), `${val.label} · ${k}`) : null; })
+        : [el("span", { class: "ramp-key" },
+            `${metric.loLabel} ${metric.lo}`,
+            el("span", { class: "ramp" }, [0.05, 0.3, 0.55, 0.8, 1].map((t) => el("i", { style: `background:${rampAt(t)}` }))),
+            `${metric.hi} ${metric.hiLabel}`),
+          shown.some((n) => !n.oxford) ? el("span", {}, el("i", { style: "background:var(--na)" }), "Not ranked") : null],
       el("span", {}, el("i", { style: "background:var(--land)" }), "Not covered"));
     box.append(
-      el("div", { class: "map-head" }, el("span", { class: "muted small" }, `Shaded by ${metric.label} (Oxford Insights 2025)`), legend),
+      el("div", { class: "map-head" }, el("span", { class: "muted small" }, field ? `${field.label}: ${field.q}` : `Shaded by ${metric.label} (Oxford Insights 2025)`), legend),
       globe.node);
+    const order = (n) => field.values.findIndex((val) => val.v === codeOf(n, field.key).v);
     box.append(el("div", { class: "chart-foot" },
-      tableToggle(box, () => table(["Nation", "Region", "Readiness rank"],
-        [...shown].sort(byRank).map((n) => [n.name, n.group, rankText(n)]), [2])),
-      el("span", { class: "muted small" }, "· Source:"), sourceChips([S[metric.source]])));
+      tableToggle(box, () => (field
+        ? table(["Nation", "Region", field.label], [...shown].sort((a, b) => order(a) - order(b) || a.name.localeCompare(b.name)).map((n) => [n.name, n.group, codeChip(codeOf(n, field.key))]))
+        : table(["Nation", "Region", "Readiness rank"], [...shown].sort(byRank).map((n) => [n.name, n.group, rankText(n)]), [2]))),
+      el("span", { class: "muted small" }, "· Source:"),
+      field ? el("span", { class: "muted small" }, "Atlas coding of the sourced facts on each nation's page. Rules in ", el("a", { href: "#method" }, "Method"), ".") : sourceChips([S[metric.source]])));
     return box;
   }
 
@@ -711,8 +778,8 @@
   }
 
   // ---------------------------------------------------------------- shared blocks
-  function factItem(f, older) {
-    return el("article", { class: "fact" + (older ? " is-older" : "") },
+  function factItem(f, older, id) {
+    return el("article", { class: "fact" + (older ? " is-older" : ""), id },
       el("div", { class: "fact-date" }, fmtDate(f.date)),
       el("div", {},
         f.topic ? el("span", { class: "fact-topic" }, f.topic) : null,
@@ -794,15 +861,31 @@
     const drawBody = () => {
       hideTip();
       const list = filtered();
-      const mapSlot = el("div", {}, worldMap());
+      // The map can be shaded by the readiness rank or by any field of the governance model.
+      const mapSlot = el("div", {}), shadeRow = el("div", { class: "filters shade-by", role: "group", "aria-label": "Shade the map by" });
+      const drawMap = () => {
+        hideTip();
+        shadeRow.replaceChildren(el("span", { class: "filter-label" }, "Shade by"), ...[["rank", "Readiness rank"], ...MODEL_FIELDS.map((f) => [f.key, f.label])].map(([k, t]) =>
+          el("button", { class: "chip-btn small", type: "button", "aria-pressed": String(state.colorBy === k), onclick: () => { state.colorBy = k; drawMap(); } }, t)));
+        mapSlot.replaceChildren(worldMap());
+      };
+      drawMap();
+      // The table shows either strategy and readiness columns or the four model codes.
+      const tableSlot = el("div", {}), viewRow = el("div", { class: "filters", role: "group", "aria-label": "Table columns" });
+      const drawTable = () => {
+        viewRow.replaceChildren(...[["basics", "Strategy and readiness"], ["model", "Governance model"]].map(([k, t]) =>
+          el("button", { class: "chip-btn small", type: "button", "aria-pressed": String(state.tableView === k), onclick: () => { state.tableView = k; drawTable(); } }, t)));
+        tableSlot.replaceChildren(expandable((k) => compareTable(list, k), list.length, { limit: 10, hint: "in this sort order" }));
+      };
+      drawTable();
       body.replaceChildren(...[
         el("section", { class: "section" },
-          sectionHead("Where they are", "Drag the map to look around. Hover a country or dot for its numbers, click to open its profile. Picking a region moves the map to it. The 3D and 2D buttons switch between a globe and a flat map."),
-          el("div", { class: "card" }, mapSlot,
+          sectionHead("Where they are", "Drag the map to look around. Hover a country or dot for its numbers, click to open its profile. Picking a region moves the map to it. Shade it by readiness or by governance model; the 3D and 2D buttons switch between a globe and a flat map."),
+          el("div", { class: "card" }, shadeRow, mapSlot,
             el("p", { class: "note" }, "Singapore, Malta, Bahrain, Mauritius and other small states are too small to draw as shapes, so every nation is also marked with a dot at its capital. Use 'Show as table' to see all of them at once."))),
         el("section", { class: "section" },
           sectionHead("At a glance", "Click a column header to sort; the top rows follow the sort."),
-          el("div", { class: "card compare" }, expandable((k) => compareTable(list, k), list.length, { limit: 10, hint: "in this sort order" }), sourceLine("oxford", "wbNet"))),
+          el("div", { class: "card compare" }, viewRow, tableSlot, sourceLine("oxford", "wbNet"))),
         dataSources(),
       ]);
     };
@@ -813,9 +896,13 @@
   }
 
   function compareTable(list, limit = Infinity) {
-    const cols = [
+    const nameCols = [
       { h: "Nation", key: "name", get: (n) => n.name, cell: (n) => el("a", { href: `#${n.id}` }, `${n.flag} ${n.name}`) },
       { h: "Region", key: "group", get: (n) => n.group },
+    ];
+    // Model columns sort in codebook order, so nations with the same code sit together.
+    const cols = state.tableView === "model" ? [...nameCols, ...MODEL_FIELDS.map((f) => ({ h: f.label, key: `m:${f.key}`,
+      get: (n) => f.values.findIndex((val) => val.v === codeOf(n, f.key).v), cell: (n) => codeChip(codeOf(n, f.key)) }))] : [...nameCols,
       { h: "First AI strategy", key: "first", get: (n) => n.glance.firstStrategy },
       { h: "Latest strategy", key: "latest", get: (n) => n.glance.latestStrategy },
       { h: "Newest AI body", key: "body", get: (n) => n.glance.newestBodyDate || "", cell: (n) => (n.glance.newestBody === "—" ? "—" : `${n.glance.newestBody} (${fmtDate(n.glance.newestBodyDate)})`) },
@@ -824,7 +911,7 @@
     ];
     const wrap = el("div", {});
     const draw = () => {
-      const col = cols.find((c) => c.key === state.sortKey) || cols[5];
+      const col = cols.find((c) => c.key === state.sortKey) || cols.find((c) => c.key === "rank") || cols[0];
       const rows = [...list].sort((a, b) => {
         const x = col.get(a), y = col.get(b);
         return (x < y ? -1 : x > y ? 1 : 0) * state.sortDir;
@@ -881,27 +968,31 @@
       sectionHead("Key documents", docs.length ? `The ${docs.length === 1 ? "document" : "two documents"} to read first on ${n.name}'s approach to AI.` : "Official strategies and laws, when there are any."),
       el("div", { class: "card" }, body));
   }
-  function renderNation(n) {
-    const topics = ["All", ...new Set(n.facts.map((f) => f.topic))];
+  // `focus` is the part of the address after the nation, e.g. "f3" in #sg/f3: open on that fact and mark it.
+  function renderNation(n, focus) {
+    const topics = ["All", ...TOPICS.filter((t) => n.facts.some((f) => f.topic === t)), ...new Set(n.facts.map((f) => f.topic).filter((t) => !TOPICS.includes(t)))];
     let active = "All";
     const list = el("div", { class: "facts" });
-    let showOlder = false;
+    const target = /^f\d+$/.test(focus || "") ? n.facts[+focus.slice(1)] : null;
+    let showOlder = !!target && !isRecent(target);
+    const item = (older) => (f) => factItem(f, older, `fact-${n.facts.indexOf(f)}`);
     const drawFacts = () => {
       const pool = n.facts.filter((f) => active === "All" || f.topic === active).sort(byDateDesc);
       const recent = pool.filter(isRecent), older = pool.filter((f) => !isRecent(f));
-      const kids = recent.map(factItem);
+      const kids = recent.map(item(false));
       if (!recent.length) kids.push(el("p", { class: "muted empty" }, "No developments since 2024 in this topic."));
       if (older.length) {
         kids.push(el("div", { class: "older-toggle" },
           el("button", { type: "button", class: "table-toggle", "aria-expanded": String(showOlder), onclick: () => { showOlder = !showOlder; drawFacts(); } },
             showOlder ? "Hide earlier background" : `Show earlier background (${older.length} before 2024)`)));
-        if (showOlder) kids.push(...older.map((f) => factItem(f, true)));
+        if (showOlder) kids.push(...older.map(item(true)));
       }
       list.replaceChildren(...kids);
     };
     const filterRow = el("div", { class: "filters topic-filter", role: "group", "aria-label": "Filter facts by topic" });
     const drawFilters = () => filterRow.replaceChildren(...topics.map((t) =>
-      el("button", { class: "chip-btn", type: "button", "aria-pressed": String(t === active), onclick: () => { active = t; drawFilters(); drawFacts(); } }, t)));
+      el("button", { class: "chip-btn", type: "button", "aria-pressed": String(t === active), onclick: () => { active = t; drawFilters(); drawFacts(); } },
+        `${t} · ${t === "All" ? n.facts.length : n.facts.filter((f) => f.topic === t).length}`)));
     drawFilters(); drawFacts();
 
     const ms = n.msAdoption, st = n.stats;
@@ -929,6 +1020,7 @@
       el("p", { class: "summary" }, n.summary),
       el("p", { class: "muted small", style: "margin-top:6px" }, "This summary is an editorial synthesis of the sourced facts below."),
       el("section", { class: "section" }, tiles),
+      ...modelCard(n),
       keyDocuments(n),
       ...(n.oxford ? [el("section", { class: "section" },
         sectionHead("Readiness profile", `Oxford Insights 2025 pillar scores vs the median of the ${nRanked} nations here that it ranks.`),
@@ -948,6 +1040,10 @@
         pos > 0 ? el("a", { href: `#${ranked[pos - 1].id}` }, `← ${ranked[pos - 1].flag} ${ranked[pos - 1].name}`) : el("span", {}),
         pos < ranked.length - 1 ? el("a", { href: `#${ranked[pos + 1].id}` }, `${ranked[pos + 1].flag} ${ranked[pos + 1].name} →`) : el("span", {})),
     );
+    if (target) requestAnimationFrame(() => {
+      const node = document.getElementById(`fact-${n.facts.indexOf(target)}`);
+      if (node) { node.classList.add("is-target"); node.scrollIntoView({ block: "center" }); }
+    });
   }
   function tile(label, value, sub, src) {
     return el("div", { class: "tile" },
@@ -1447,6 +1543,85 @@
         el("span", {}, el("i", { class: "key-line group" }), "Group: lines run to the host")));
   }
 
+  // ---------------------------------------------------------------- findings (#findings)
+  // What the coded model shows across all nations. Every number is counted from the data when the page is drawn,
+  // and every group opens to the nations behind it, each linked to the fact or agreement its code rests on.
+  function renderFindings() {
+    const total = N.length;
+    const cnt = (key, v) => N.filter((n) => codeOf(n, key).v === v).length;
+    const of = (key, v) => N.filter((n) => codeOf(n, key).v === v);
+    const median = (xs) => { const a = xs.filter((x) => x != null).sort((x, y) => x - y); return a.length ? a[Math.floor((a.length - 1) / 2)] : null; };
+    const nchip = (n, href, extra) => el("a", { class: "nchip", href }, `${n.flag} ${n.name}`, extra ? el("span", { class: "nchip-x" }, extra) : null);
+    // The nations behind each value of a field, each linking to what its code rests on.
+    const evidence = (key, { skip = [], extra } = {}) => el("details", { class: "fd-evidence" },
+      el("summary", {}, "See the nations behind each number"),
+      fieldOf(key).values.filter((val) => !skip.includes(val.v)).map((val) => {
+        const list = of(key, val.v).sort((a, b) => a.name.localeCompare(b.name));
+        return list.length ? el("div", { class: "fd-group" },
+          el("h3", {}, swatch(val.color), `${val.label} · ${list.length}`),
+          el("p", { class: "muted small" }, val.def),
+          el("div", { class: "nchips" }, list.map((n) => nchip(n, evidenceHref(n, key), extra && extra(n))))) : null;
+      }));
+    const onMap = (key) => el("button", { type: "button", class: "table-toggle", onclick: () => { state.colorBy = key; location.hash = "overview"; } }, `Show ${fieldOf(key).label.toLowerCase()} on the map →`);
+    const finding = (i, claim, ...body) => el("section", { class: "card fd" }, el("div", { class: "fd-num" }, String(i)), el("div", { class: "fd-body" }, el("h2", {}, claim), body));
+
+    // 3: size and income by approach
+    const gdp = (n) => (n.stats.gdpPerCapita ? n.stats.gdpPerCapita.v : null), pop = (n) => (n.stats.population ? n.stats.population.v : null);
+    const sizeRows = fieldOf("posture").values.map((val) => {
+      const list = of("posture", val.v);
+      return [el("span", {}, swatch(val.color), val.label), String(list.length), compact(median(list.map(pop))), `$${fmtInt(median(list.map(gdp)))}`, `#${median(list.map(rankOf))}`];
+    });
+    // 4: compute, with income
+    const hasCompute = N.filter((n) => codeOf(n, "compute").v !== "none");
+    const medGdp = (v) => `$${fmtInt(median(of("compute", v).map(gdp)))}`;
+    const allIn = (v, group) => of("compute", v).every((n) => n.group === group);
+    // 5: outside bodies
+    const OUTSIDE = /UNESCO|UNDP|World Bank/;
+    const helped = N.map((n) => ({ n, i: n.facts.findIndex((f) => OUTSIDE.test(f.text)) })).filter((x) => x.i >= 0);
+    const helpedIn = (v) => helped.filter((x) => codeOf(x.n, "posture").v === v).length;
+    // 6: agreements
+    const collabs = D.collaborations || [];
+    const partyTo = (c, id) => c.a === id || c.b === id || c.hub === id || (c.members || []).includes(id);
+    const inAny = N.filter((n) => collabs.some((c) => partyTo(c, n.id)));
+    const inPair = N.filter((n) => collabs.some((c) => c.kind === "bilateral" && partyTo(c, n.id)));
+    const multi = of("bloc", "multi").map((n) => n.name);
+
+    view.replaceChildren(el("article", { class: "findings" },
+      el("h1", {}, "Findings"),
+      el("p", { class: "summary" }, `What the data on this site shows about how ${total} small nations govern AI, in six claims.`),
+      el("p", { class: "note fd-note" }, "Each nation is coded on four questions: what leads its AI policy, where its rules come from, where its compute comes from, and which outside power it is tied to. The codes are editorial readings of the sourced facts, the rules are in ", el("a", { href: "#method" }, "Method"), ", and every count below is recalculated from the data. “None on record” means this site has no sourced fact, which is not proof that nothing exists."),
+
+      finding(1, "Few small nations write their own AI rules.",
+        el("p", {}, `${cnt("route", "own")} of ${total} have an AI law or bill of their own. ${cnt("route", "eu")} take the EU AI Act as members of the EU or the EEA, ${cnt("route", "regional")} sit under a regional body's framework or a treaty, and ${cnt("route", "none")} have no AI rules on record. For most small states the question is which outside rulebook to live under, not what to write.`),
+        shareBar("route", N), el("div", { class: "fd-foot" }, onMap("route")), evidence("route")),
+
+      finding(2, "Most lead with a strategy, not a law.",
+        el("p", {}, `${cnt("posture", "adopt")} nations lead with adoption: a national strategy, programme or investment to use and build AI. ${cnt("posture", "regulate")} lead with binding rules. ${cnt("posture", "align")} have no strategy or law of their own yet and are aligning with an outside framework or working from an assessment led by a body such as UNESCO or UNDP, and ${cnt("posture", "absent")} have no AI policy yet.`),
+        shareBar("posture", N), el("div", { class: "fd-foot" }, onMap("posture")), evidence("posture")),
+
+      finding(3, "The smaller and poorer the state, the more its AI policy is written elsewhere, or not at all.",
+        el("p", {}, "Nations that lead with their own strategy or rules are larger and richer, and rank higher on government AI readiness, than those that are aligning with outside frameworks. Those with no AI policy yet are the smallest and poorest."),
+        table(["Approach", "Nations", "Median population", "Median GDP per capita", "Median readiness rank"], sizeRows, [1, 2, 3, 4]),
+        el("p", { class: "muted small fd-src" }, "Population and GDP per capita: World Bank. Readiness rank: Oxford Insights 2025, of ", String(OXFORD_TOTAL), " governments; unranked nations are left out of that median. ", sourceChips([S.wbPop, S.wbGdp, S.oxford]))),
+
+      finding(4, "Owning compute is for the rich. The rest share it or bring in a partner.",
+        el("p", {}, `${hasCompute.length} nations have an AI computing facility or plan on record. ${cnt("compute", "shared")} share one${allIn("shared", "Europe") ? ", all of them in Europe, through EuroHPC AI Factories or a consortium supercomputer" : ""}. ${cnt("compute", "own")} have a national facility of their own (median GDP per capita ${medGdp("own")}), and ${cnt("compute", "foreign")} rely on a foreign company, government or donor (median ${medGdp("foreign")}).`),
+        shareBar("compute", hasCompute),
+        el("p", { class: "muted small fd-src" }, `The other ${total - hasCompute.length} have nothing on record. That partly reflects gaps in this site's facts, so read this finding as a pattern among the ${hasCompute.length}, not a census.`),
+        el("div", { class: "fd-foot" }, onMap("compute")), evidence("compute", { skip: ["none"], extra: (n) => (gdp(n) ? `$${compact(gdp(n))}` : null) })),
+
+      finding(5, "Outside bodies often hold the pen.",
+        el("p", {}, `${helped.length} nations have a fact on this site in which UNESCO, UNDP or the World Bank takes part, most often by running the readiness assessment or helping to draft the strategy. They include ${helpedIn("align")} of the ${cnt("posture", "align")} nations coded as aligning and ${helpedIn("absent")} of the ${cnt("posture", "absent")} with no AI policy yet.`),
+        el("details", { class: "fd-evidence" }, el("summary", {}, "See the nations and the facts"),
+          el("div", { class: "nchips" }, helped.sort((a, b) => a.n.name.localeCompare(b.n.name)).map((x) => nchip(x.n, `#${x.n.id}/f${x.i}`))))),
+
+      finding(6, "Small states cooperate in groups more than in pairs, and few are tied to more than one big power.",
+        el("p", {}, `${inAny.length} of ${total} are party to at least one AI agreement between governments, but only ${inPair.length} have a two-country deal; the other ${inAny.length - inPair.length} appear only in groups such as CARICOM, the Pacific Islands Forum or the Council of Europe convention. On ties to the big powers, ${cnt("bloc", "eu")} are tied to Europe, ${cnt("bloc", "us")} to the United States and ${cnt("bloc", "cn")} to China. ${multi.length ? `Only ${multi.length} are tied to more than one: ${multi.join(", ")}.` : ""}`),
+        shareBar("bloc", N.filter((n) => codeOf(n, "bloc").v !== "none")),
+        el("p", { class: "muted small fd-src" }, `The other ${cnt("bloc", "none")} have no such tie on record. Deals with other partners, such as the Gulf states, India, Japan or South Korea, are on the `, el("a", { href: "#collab" }, "Collaborations"), " page."),
+        el("div", { class: "fd-foot" }, onMap("bloc")), evidence("bloc", { skip: ["none"] }))));
+  }
+
   function renderMethod() {
     const claims = allClaims();
     const cnt = (lv) => claims.filter((c) => c.level === lv).length;
@@ -1470,6 +1645,15 @@
         el("li", {}, "Which sources count: government and parliament sites, international organisations, established news outlets, law firms and recognised research bodies. Third-party AI-policy tracker sites, auto-generated regulation explainers, compliance-vendor blogs and personal blogs are not used, because they are not independent evidence."),
         el("li", {}, "Where sources disagree (dates, counts, names), the claim gives the best-supported version and the disagreement is shown in a Note."),
         el("li", {}, "Index figures (Oxford Insights, Microsoft, World Bank, Stanford AI Index) were read directly from the publisher's own report, PDF table or API.")),
+      el("h2", {}, "The coded governance model"),
+      el("p", {}, "To compare nations, each one is coded on four questions: what leads its AI policy, where its AI rules come from, where its computing power comes from, and which outside power it is tied to. The Overview map and table can show any of the four, and the Findings page counts them."),
+      el("div", { class: "card codebook" }, table(["Question", "Code", "Rule"], MODEL_FIELDS.flatMap((f) => f.values.map((val, i) => [i ? "" : el("span", {}, el("strong", {}, f.label), el("br", {}), f.q), el("span", { class: "code-chip" }, swatch(val.color), val.label), val.def])))),
+      el("ul", {},
+        el("li", {}, "A code is an editorial reading of the sourced facts on the nation's page, not a fact in itself. The Governance model card on each nation's page lists the facts, agreements or memberships each code rests on, so a reader can check it and disagree."),
+        el("li", {}, "Approach is the one judgement call: it is read from the balance of the nation's record. Rules, compute and bloc follow fixed rules. For rules, a law or bill of its own comes first, then the EU AI Act, then a regional framework or treaty. Memberships of the EU, the EEA, the African Union, CARICOM, the Pacific Islands Forum and ASEAN are taken as given."),
+        el("li", {}, "Bloc is counted only from institutional ties and government agreements listed on this site: EU or EEA membership, the Council of Europe convention or EU-led alignment work for Europe; a government AI agreement for the United States; a government agreement or a China-led AI body for China. Deals with single European states, Gulf states, India, Japan or South Korea are not counted as a bloc."),
+        el("li", {}, "“None on record” means this site holds no sourced fact. For compute especially, that is often a gap in the site's coverage, not proof that a country has none."),
+        el("li", {}, `Facts are filed under ten topics (${TOPICS.join(", ")}), merged in November 2026 from more than 40 one-off labels so that the same kind of fact can be compared across nations.`)),
       el("h2", {}, "The full audit (10 October 2026)"),
       el("p", {}, `After the first build, every claim on the site was re-checked against its sources:`),
       el("ul", {},
@@ -2033,23 +2217,26 @@
   }
   function renderTabs(key) {
     const current = byId(key);
-    const isCollab = key === "collab" || (!current && !["news", "overview", "method", "saved"].includes(key));
+    const isCollab = key === "collab" || (!current && !["news", "overview", "findings", "method", "saved"].includes(key));
     tabsEl.replaceChildren(
       el("a", { class: "tab", href: "#collab", "aria-current": isCollab ? "page" : null }, "Collaborations"),
       nationMenu(current),
       el("a", { class: "tab", href: "#news", "aria-current": key === "news" ? "page" : null }, "News"),
       el("a", { class: "tab", href: "#overview", "aria-current": key === "overview" ? "page" : null }, "Overview"),
+      el("a", { class: "tab", href: "#findings", "aria-current": key === "findings" ? "page" : null }, "Findings"),
       el("a", { class: "tab", href: "#method", "aria-current": key === "method" ? "page" : null }, "Method"));
   }
   function route(keepScroll) {
     if (document.documentElement.classList.contains("is-locked")) return;
     hideTip();
     const key = (location.hash || "#collab").slice(1);
-    renderTabs(key.startsWith("collab/") ? "collab" : key);
-    const n = byId(key);
-    if (n) { renderNation(n); document.title = `${n.name} — Atlas`; }
+    const [head, sub] = key.split("/");
+    renderTabs(key.startsWith("collab/") ? "collab" : head);
+    const n = byId(head);
+    if (n) { renderNation(n, sub); document.title = `${n.name} — Atlas`; }
     else if (key === "news") { renderNews(); document.title = "News — Atlas"; }
     else if (key === "overview") { renderOverview(); document.title = "Overview — Atlas"; }
+    else if (key === "findings") { renderFindings(); document.title = "Findings — Atlas"; }
     else if (key === "method") { renderMethod(); document.title = "Method — Atlas"; }
     else if (key === "saved") { renderSaved(); document.title = "Saved & reviewed — Atlas"; }
     // Collaborations is the landing page, and unknown addresses fall back to it.

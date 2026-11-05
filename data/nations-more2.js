@@ -18,7 +18,7 @@
       msAdoption: { h1_2025: 31.2, h2_2025: 33.3, q1_2026: null, q2_2026: null, rankLatest: null },
       facts: [
         {
-          topic: "Strategy", date: "2018-05",
+          topic: "Strategy & readiness", date: "2018-05",
           text: "Sweden's first AI policy, the 'National approach to artificial intelligence', was published in May 2018. It covers education, research, innovation and use, and frameworks and infrastructure.",
           level: "corroborated",
           sources: [
@@ -27,7 +27,7 @@
           ],
         },
         {
-          topic: "Strategy", date: "2026-02-25",
+          topic: "Strategy & readiness", date: "2026-02-25",
           text: "Sweden published a national AI strategy and action plan in February 2026, aiming to be among the world's top ten nations in AI.",
           level: "single",
           sources: [
@@ -35,7 +35,7 @@
           ],
         },
         {
-          topic: "Strategy", date: "2024-11",
+          topic: "Strategy & readiness", date: "2024-11",
           text: "The government's AI Commission delivered a roadmap of 75 proposals. They include an extra €1.5 billion or so for AI over five years and a task force under the Prime Minister's Office to speed implementation.",
           level: "single",
           sources: [
@@ -79,7 +79,7 @@
       msAdoption: { h1_2025: 29.1, h2_2025: 31.4, q1_2026: null, q2_2026: null, rankLatest: null },
       facts: [
         {
-          topic: "Strategy", date: "2021",
+          topic: "Strategy & readiness", date: "2021",
           text: "Austria's national AI strategy, 'Artificial Intelligence Mission Austria 2030' (AIM AT 2030), was published in 2021. It sets three goals: human-centred AI for the common good, Austria as a research location, and competitiveness.",
           level: "single",
           sources: [
@@ -118,7 +118,7 @@
       msAdoption: { h1_2025: 22.4, h2_2025: 24.2, q1_2026: null, q2_2026: null, rankLatest: null },
       facts: [
         {
-          topic: "Strategy", date: "2019",
+          topic: "Strategy & readiness", date: "2019",
           text: "Portugal's national AI strategy, 'AI Portugal 2030', was published in 2019 as part of the INCoDe.2030 digital-skills initiative.",
           level: "corroborated",
           sources: [
@@ -129,7 +129,7 @@
           note: "Sources give February, April or June 2019 for the launch.",
         },
         {
-          topic: "Models", date: "2026-07-01",
+          topic: "Research & models", date: "2026-07-01",
           text: "Portugal released Amália, an open large language model for European Portuguese, in July 2026. The model, training data and code are all open, and it builds on the European EuroLLM-9B model.",
           level: "verified",
           sources: [
@@ -140,7 +140,7 @@
           note: "Reported funding varies (about €5.5M vs €7M by 2027).",
         },
         {
-          topic: "Models", date: "2024-11",
+          topic: "Research & models", date: "2024-11",
           text: "Prime Minister Luís Montenegro first announced the national LLM at Web Summit in November 2024.",
           level: "single",
           sources: [
@@ -184,7 +184,7 @@
       msAdoption: { h1_2025: 17.7, h2_2025: 19.1, q1_2026: null, q2_2026: null, rankLatest: null },
       facts: [
         {
-          topic: "Strategy", date: "2024-11",
+          topic: "Strategy & readiness", date: "2024-11",
           text: "In November 2024 a high-level advisory committee chaired by MIT professor Constantinos Daskalakis published the 'Blueprint for Greece's AI Transformation', which sets eight principles and six flagship programmes.",
           level: "corroborated",
           sources: [
@@ -194,7 +194,7 @@
           ],
         },
         {
-          topic: "Education", date: "2025-09-05",
+          topic: "Skills & education", date: "2025-09-05",
           text: "On 5 September 2025 OpenAI and the Greek government launched 'OpenAI for Greece', bringing ChatGPT Edu into secondary schools and supporting start-ups, with the Onassis Foundation and Endeavor Greece.",
           level: "verified",
           sources: [
@@ -204,7 +204,7 @@
           ],
         },
         {
-          topic: "Compute", date: "2024-12",
+          topic: "Compute & infrastructure", date: "2024-12",
           text: "Pharos, the Greek AI Factory, was selected in December 2024 as one of the EU's first seven AI Factories. It has a €30 million budget split equally between EuroHPC and Greece.",
           level: "corroborated",
           sources: [
@@ -239,7 +239,7 @@
       msAdoption: null,
       facts: [
         {
-          topic: "Strategy", date: "2020-02-04",
+          topic: "Strategy & readiness", date: "2020-02-04",
           text: "On 4 February 2020 Latvia adopted the report 'On the Development of Artificial Intelligence Solutions', its first government AI policy document, prepared by VARAM.",
           level: "corroborated",
           sources: [
@@ -303,7 +303,7 @@
           note: "Sources describe her formal status differently ('minister', 'cabinet member'). How far tender decisions have actually moved to the system was not reported.",
         },
         {
-          topic: "Public services", date: "2025-01",
+          topic: "Public sector", date: "2025-01",
           text: "Before the appointment, Diella worked from January 2025 as a virtual assistant on the e-Albania government services platform.",
           level: "corroborated",
           sources: [
@@ -338,7 +338,7 @@
       msAdoption: { h1_2025: 17.3, h2_2025: 18.2, q1_2026: null, q2_2026: null, rankLatest: null },
       facts: [
         {
-          topic: "Readiness", date: "2025-09-26",
+          topic: "Strategy & readiness", date: "2025-09-26",
           text: "An AI readiness assessment based on UNESCO's methodology, backed by the EU and run with PMCG, began in Georgia in September 2025 to identify institutional and regulatory gaps.",
           level: "single",
           sources: [
@@ -348,7 +348,7 @@
           note: "Both links are from the implementing organisation (one source).",
         },
         {
-          topic: "Strategy", date: "2026-10",
+          topic: "Strategy & readiness", date: "2026-10",
           text: "Georgia was reported in October 2026 to be developing a national AI strategy and seeking closer EU research ties.",
           level: "single",
           sources: [S("Georgia Today - EU-Georgia collaboration is a win-win for AI research", "https://georgiatoday.ge/eu-georgia-collaboration-is-a-win-win-for-ai-research-and-innovation/")],
@@ -376,7 +376,7 @@
       msAdoption: { h1_2025: 6.2, h2_2025: 6.6, q1_2026: null, q2_2026: null, rankLatest: null },
       facts: [
         {
-          topic: "Compute", date: "2025-06",
+          topic: "Compute & infrastructure", date: "2025-06",
           text: "In June 2025 Firebird announced a $500 million AI factory project in Armenia with the Armenian government and NVIDIA, for launch in 2026.",
           level: "corroborated",
           sources: [
@@ -386,7 +386,7 @@
           ],
         },
         {
-          topic: "Compute", date: "2026-08-08",
+          topic: "Compute & infrastructure", date: "2026-08-08",
           text: "Firebird opened the AI factory in Hrazdan on 8 August 2026, with remarks from Prime Minister Nikol Pashinyan and NVIDIA's Jensen Huang. It plans to scale beyond 70,000 GPUs and 300 MW by the end of 2027.",
           level: "verified",
           sources: [
@@ -424,7 +424,7 @@
       msAdoption: { h1_2025: 17.7, h2_2025: 19.1, q1_2026: null, q2_2026: null, rankLatest: null },
       facts: [
         {
-          topic: "Strategy", date: "2025",
+          topic: "Strategy & readiness", date: "2025",
           text: "Kuwait's national AI strategy was still described as forthcoming in 2026. It is expected to align the roles of existing regulators under a unified framework for AI oversight and data governance.",
           level: "single",
           sources: [
@@ -472,7 +472,7 @@
       msAdoption: { h1_2025: 22.6, h2_2025: 24.2, q1_2026: null, q2_2026: null, rankLatest: null },
       facts: [
         {
-          topic: "Strategy", date: "2024-09",
+          topic: "Strategy & readiness", date: "2024-09",
           text: "In 2024 Oman launched a National Programme for AI and Advanced Digital Technologies (2024–2026) under Vision 2040, upgrading a 2022 executive programme.",
           level: "corroborated",
           sources: [
@@ -510,7 +510,7 @@
       msAdoption: { h1_2025: 12.6, h2_2025: 14.3, q1_2026: null, q2_2026: null, rankLatest: null },
       facts: [
         {
-          topic: "Strategy", date: "2025-02",
+          topic: "Strategy & readiness", date: "2025-02",
           text: "Mongolia's Ministry of Digital Development, Innovation and Communications worked with UNDP in 2025 to develop a national strategy for AI and big data, starting with a readiness assessment.",
           level: "single",
           sources: [
@@ -518,7 +518,7 @@
           ],
         },
         {
-          topic: "Models", date: "2025",
+          topic: "Research & models", date: "2025",
           text: "Egune AI builds large language models specialised in the Mongolian language and culture, and received a $3.5 million investment from Golomt Bank.",
           level: "corroborated",
           sources: [
@@ -553,7 +553,7 @@
       msAdoption: null,
       facts: [
         {
-          topic: "Governance", date: "2025-04-11",
+          topic: "Regulation", date: "2025-04-11",
           text: "AITI issued a voluntary, risk-based Guide on AI Governance and Ethics for Brunei Darussalam in April 2025, drawing on the ASEAN Guide on AI Governance and Ethics.",
           level: "verified",
           sources: [
@@ -563,7 +563,7 @@
           ],
         },
         {
-          topic: "Governance", date: "2026-05-01",
+          topic: "Regulation", date: "2026-05-01",
           text: "AITI published a second edition of the guide in 2026, after a public consultation that began in November 2025.",
           level: "single",
           sources: [S("The Star - Brunei ramps up efforts to ensure ethical AI practices (1 May 2026)", "https://www.thestar.com.my/aseanplus/aseanplus-news/2026/05/01/brunei-ramps-up-efforts-to-ensure-ethical-ai-practices")],
@@ -591,7 +591,7 @@
       msAdoption: { h1_2025: 12.3, h2_2025: 12.7, q1_2026: null, q2_2026: null, rankLatest: null },
       facts: [
         {
-          topic: "Strategy", date: "2021",
+          topic: "Strategy & readiness", date: "2021",
           text: "Tunisia's national AI Roadmap, a non-binding plan, ran from 2021 to 2025. OECD.AI lists it as complete.",
           level: "single",
           sources: [
@@ -630,7 +630,7 @@
       msAdoption: { h1_2025: 12.8, h2_2025: 13.7, q1_2026: null, q2_2026: null, rankLatest: null },
       facts: [
         {
-          topic: "Strategy", date: "2025-08",
+          topic: "Strategy & readiness", date: "2025-08",
           text: "In August 2025 the government said it was finalising a National AI Policy following a UNESCO AI readiness assessment.",
           level: "single",
           sources: [
@@ -663,7 +663,7 @@
       msAdoption: { h1_2025: 8.7, h2_2025: 9.3, q1_2026: null, q2_2026: null, rankLatest: null, regional: true },
       facts: [
         {
-          topic: "Readiness", date: "2025-10",
+          topic: "Strategy & readiness", date: "2025-10",
           text: "In October 2025 the Ministry of Communication, Technology and Innovation and the World Bank launched a national AI readiness assessment covering compute, skills, and policy and regulation.",
           level: "corroborated",
           sources: [
@@ -672,7 +672,7 @@
           ],
         },
         {
-          topic: "Strategy", date: "2026-05",
+          topic: "Strategy & readiness", date: "2026-05",
           text: "In May 2026 the government held stakeholder consultations on a national AI strategy being developed with the World Bank Group.",
           level: "single",
           sources: [
@@ -707,7 +707,7 @@
       msAdoption: { h1_2025: 8.7, h2_2025: 9.3, q1_2026: null, q2_2026: null, rankLatest: null, regional: true },
       facts: [
         {
-          topic: "Strategy", date: "2025-12",
+          topic: "Strategy & readiness", date: "2025-12",
           text: "In December 2025 Togo was reported to be drafting a national AI strategy to guide AI use in public administration.",
           level: "single",
           sources: [S("Togo First - Togo drafts national strategy to guide the use of AI", "https://www.togofirst.com/en/itc/0112-17691-togo-drafts-national-strategy-to-guide-the-use-of-artificial-intelligence")],
@@ -751,7 +751,7 @@
           ],
         },
         {
-          topic: "Partnerships", date: "2025-04",
+          topic: "Compute & infrastructure", date: "2025-04",
           text: "In April 2025 El Salvador signed a letter of intent with NVIDIA to develop sovereign AI capabilities, including a first national AI lab.",
           level: "corroborated",
           sources: [
@@ -760,7 +760,7 @@
           ],
         },
         {
-          topic: "Strategy", date: "2026-05-15",
+          topic: "Strategy & readiness", date: "2026-05-15",
           text: "ANIA published a National AI Strategy on 15 May 2026. The government says it aims for AI to contribute to 20% of GDP.",
           level: "corroborated",
           sources: [
@@ -805,7 +805,7 @@
       msAdoption: { h1_2025: 20.3, h2_2025: 21.5, q1_2026: null, q2_2026: null, rankLatest: null },
       facts: [
         {
-          topic: "Strategy", date: "2026-08-11",
+          topic: "Strategy & readiness", date: "2026-08-11",
           text: "Panama's Cabinet Council approved the National AI Strategy on 11 August 2026, alongside a national strategy for microelectronics and semiconductors.",
           level: "single",
           sources: [
@@ -852,7 +852,7 @@
       msAdoption: { h1_2025: 10.1, h2_2025: 11.0, q1_2026: null, q2_2026: null, rankLatest: null },
       facts: [
         {
-          topic: "Compute", date: "2026-05",
+          topic: "Compute & infrastructure", date: "2026-05",
           text: "In May 2026 Paraguay and Taiwan signed a memorandum to develop sovereign AI infrastructure. The first stage is a 10 MW data centre, estimated by the ICT ministry at about US$300 million.",
           level: "corroborated",
           sources: [
@@ -862,7 +862,7 @@
           note: "One international outlet reported US$200M. The US$300M figure is from official communications.",
         },
         {
-          topic: "Strategy", date: "2026-07",
+          topic: "Strategy & readiness", date: "2026-07",
           text: "Paraguay has a ministry AI roadmap but no formally approved national AI strategy.",
           level: "single",
           sources: [
@@ -913,7 +913,7 @@
       msAdoption: { h1_2025: 22.0, h2_2025: 22.7, q1_2026: null, q2_2026: null, rankLatest: null },
       facts: [
         {
-          topic: "Strategy", date: "2023-10-11",
+          topic: "Strategy & readiness", date: "2023-10-11",
           text: "President Luis Abinader launched the National AI Strategy (ENIA) on 11 October 2023, led by OGTIC as a priority project of the National Innovation Policy 2030.",
           level: "verified",
           sources: [
@@ -923,13 +923,13 @@
           ],
         },
         {
-          topic: "Strategy", date: "2025",
+          topic: "Strategy & readiness", date: "2025",
           text: "OGTIC acknowledged delays in implementing ENIA, citing technical and financial constraints and weak coordination. Pending items include updating the data-protection law and creating a regulatory sandbox committee.",
           level: "single",
           sources: [S("Acento - ¿En qué quedó la Estrategia de IA de República Dominicana?", "https://acento.com.do/actualidad/en-que-quedo-la-estrategia-de-inteligencia-artificial-de-republica-dominicana-9533130.html")],
         },
         {
-          topic: "Skills", date: "2026-09-10",
+          topic: "Skills & education", date: "2026-09-10",
           text: "In September 2026 the government launched 'RD Inteligente', aiming to train one million Dominicans in AI, alongside 50,000 AI scholarships with Amazon Web Services to run until 2028.",
           level: "corroborated",
           sources: [

@@ -16,7 +16,7 @@ window.ATLAS.nations.push(
     msAdoption: { h1_2025: 26.6, h2_2025: 28.7, q1_2026: null, q2_2026: null, rankLatest: null },
     facts: [
       {
-        topic: "Strategy", date: "2024",
+        topic: "Strategy & readiness", date: "2024",
         text: "Denmark's 2024 Strategic Approach to AI builds on its 2019 National Strategy for AI. It sets up a Digital Taskforce for AI for 2024–27 to drive large-scale AI deployment across the public sector.",
         level: "corroborated",
         sources: [
@@ -25,7 +25,7 @@ window.ATLAS.nations.push(
         ],
       },
       {
-        topic: "Compute", date: "2024-10-23",
+        topic: "Compute & infrastructure", date: "2024-10-23",
         text: "Gefion, Denmark's AI supercomputer, was inaugurated on 23 October 2024 by King Frederik X and NVIDIA's Jensen Huang. It is an NVIDIA DGX SuperPOD with 1,528 H100 GPUs, run by the Danish Centre for AI Innovation, which was set up by the Novo Nordisk Foundation and the Export and Investment Fund of Denmark.",
         level: "verified",
         sources: [
@@ -45,7 +45,7 @@ window.ATLAS.nations.push(
         note: "The sources disagree on the national supplementing law. One cites Act No. 467 of 14 May 2025 as in force. Bird & Bird reports that a later replacement bill was halted by the Danish election.",
       },
       {
-        topic: "Deepfakes", date: "2026-10-08",
+        topic: "Regulation", date: "2026-10-08",
         text: "Denmark is introducing a bill to amend its Copyright Act so that people can stop the sharing of realistic digital imitations of their face and voice without consent. Protection would last 50 years after death, and satire and parody would be exempt.",
         level: "verified",
         sources: [
@@ -81,7 +81,7 @@ window.ATLAS.nations.push(
     msAdoption: { h1_2025: 25.6, h2_2025: 27.3, q1_2026: null, q2_2026: null, rankLatest: null },
     facts: [
       {
-        topic: "Strategy", date: "2017",
+        topic: "Strategy & readiness", date: "2017",
         text: "Finland's first AI strategy, 'Finland's Age of Artificial Intelligence' (Ministry of Economic Affairs and Employment, 2017), aimed to make Finland a leading country in applying AI. Follow-up reports came in 2018 and 2019.",
         level: "corroborated",
         sources: [
@@ -102,7 +102,7 @@ window.ATLAS.nations.push(
         ],
       },
       {
-        topic: "Compute", date: "2025-12-02",
+        topic: "Compute & infrastructure", date: "2025-12-02",
         text: "The LUMI AI Factory, the largest of the EU's AI Factories, opened its main hub on 2 December 2025 at Aalto University's Otaniemi campus. CSC coordinates it on behalf of Finland, Czechia, Denmark, Estonia, Norway and Poland.",
         level: "verified",
         sources: [
@@ -113,7 +113,7 @@ window.ATLAS.nations.push(
         ],
       },
       {
-        topic: "Compute", date: "2025",
+        topic: "Compute & infrastructure", date: "2025",
         text: "In 2025 the government backed a Nokia-led consortium's expression of interest to host one of the EU's planned AI gigafactories in Finland, potentially alongside the LUMI AI Factory in Kajaani.",
         level: "corroborated",
         sources: [
@@ -158,7 +158,7 @@ window.ATLAS.nations.push(
     msAdoption: { h1_2025: 45.3, h2_2025: 46.4, q1_2026: null, q2_2026: null, rankLatest: null },
     facts: [
       {
-        topic: "Strategy", date: "2020-01-14",
+        topic: "Strategy & readiness", date: "2020-01-14",
         text: "Norway's National Strategy for Artificial Intelligence was presented on 14 January 2020 by the Ministry of Local Government and Modernisation, with a foreword by Digitalisation Minister Nikolai Astrup.",
         level: "verified",
         sources: [
@@ -168,7 +168,7 @@ window.ATLAS.nations.push(
         ],
       },
       {
-        topic: "Funding", date: "2023-09",
+        topic: "Economy", date: "2023-09",
         text: "The government committed at least NOK 1 billion over five years to research on AI and digital technology.",
         level: "corroborated",
         sources: [
@@ -179,7 +179,7 @@ window.ATLAS.nations.push(
         note: "As of April 2025, reporting said no funding decisions had yet been made.",
       },
       {
-        topic: "Strategy", date: "2024-09-26",
+        topic: "Strategy & readiness", date: "2024-09-26",
         text: "Norway's national digitalisation strategy (September 2024) aims to make it the world's most digitalised country by 2030, including building a national AI infrastructure.",
         level: "corroborated",
         sources: [
@@ -224,7 +224,7 @@ window.ATLAS.nations.push(
     msAdoption: { h1_2025: 41.7, h2_2025: 44.6, q1_2026: null, q2_2026: null, rankLatest: null },
     facts: [
       {
-        topic: "Strategy", date: "2024-11-06",
+        topic: "Strategy & readiness", date: "2024-11-06",
         text: "On 6 November 2024 the government published a refresh of its 2021 national AI strategy, 'AI – Here for Good'. It is organised into seven strands and adds measures such as a regulatory sandbox and support for SMEs.",
         level: "verified",
         sources: [
@@ -281,7 +281,7 @@ window.ATLAS.nations.push(
     msAdoption: null,
     facts: [
       {
-        topic: "Strategy", date: "2019-05-24",
+        topic: "Strategy & readiness", date: "2019-05-24",
         text: "Luxembourg's first national AI strategy, 'Artificial Intelligence: a strategic vision for Luxembourg', was presented on 24 May 2019 by Prime Minister Xavier Bettel and Deputy PM Étienne Schneider. It called itself a 'living document' to be updated over time.",
         level: "corroborated",
         sources: [
@@ -290,7 +290,7 @@ window.ATLAS.nations.push(
         ],
       },
       {
-        topic: "Strategy", date: "2025-05-16",
+        topic: "Strategy & readiness", date: "2025-05-16",
         text: "In May 2025 Luxembourg published its AI strategy, 'Accelerating digital sovereignty 2030', alongside data and quantum strategies. It aims to make the country a hub for human-centred AI.",
         level: "verified",
         sources: [
@@ -301,7 +301,7 @@ window.ATLAS.nations.push(
         ],
       },
       {
-        topic: "Compute", date: "2026",
+        topic: "Compute & infrastructure", date: "2026",
         text: "The national AI Factory is built around the MeluXina-AI supercomputer. Its estimated cost of €112 million is split equally between the EuroHPC Joint Undertaking and the Luxembourg state.",
         level: "corroborated",
         sources: [
@@ -348,7 +348,7 @@ window.ATLAS.nations.push(
     msAdoption: null,
     facts: [
       {
-        topic: "Language", date: "2023-03",
+        topic: "Research & models", date: "2023-03",
         text: "Iceland partnered with OpenAI to improve GPT-4's Icelandic, at the initiative of the then President, as part of a national effort to keep the language viable in the AI era.",
         level: "verified",
         sources: [
@@ -358,7 +358,7 @@ window.ATLAS.nations.push(
         ],
       },
       {
-        topic: "Strategy", date: "2021-04",
+        topic: "Strategy & readiness", date: "2021-04",
         text: "Iceland's AI policy came from a five-person committee appointed by the Prime Minister's Office in October 2020, which reported in April 2021. It gives special attention to Icelandic language technology.",
         level: "single",
         sources: [
@@ -398,7 +398,7 @@ window.ATLAS.nations.push(
         note: "The Baltic Times describes the planned roles; the ministry's page on the Seimas vote blocks automated reading and could not be checked, so this rests on one readable source.",
       },
       {
-        topic: "Strategy", date: "2026",
+        topic: "Strategy & readiness", date: "2026",
         text: "The Ministry of Economy and Innovation drew up National AI Strategic Guidelines for 2026–2035, built on four strands: people, infrastructure and data, society, and the economy. It estimates about €10 billion in added value over the decade.",
         level: "single",
         sources: [
@@ -409,7 +409,7 @@ window.ATLAS.nations.push(
         note: "Only the EU portal could be read during the audit. The ministry's pages block automated access, though search results quote them giving €10.1bn. No formal government resolution adopting the guidelines was found.",
       },
       {
-        topic: "Language", date: "2024-08",
+        topic: "Research & models", date: "2024-08",
         text: "Neurotechnology released the first open-source large language models built for Lithuanian (Llama 2 based, 7B and 13B parameters) in August 2024.",
         level: "verified",
         sources: [
@@ -444,7 +444,7 @@ window.ATLAS.nations.push(
     msAdoption: { h1_2025: 24.6, h2_2025: 26.5, q1_2026: null, q2_2026: null, rankLatest: null },
     facts: [
       {
-        topic: "Strategy", date: "2026-03-05",
+        topic: "Strategy & readiness", date: "2026-03-05",
         text: "On 5 March 2026 the government adopted the National Strategy for AI until 2030 (NsUI 2030). It sets five strategic goals, including sovereign AI, wider AI use in the economy and public sector, and safe and responsible use. The digital transformation ministry has nine months to prepare an action plan with measures, a timetable and funding.",
         level: "corroborated",
         sources: [
@@ -454,7 +454,7 @@ window.ATLAS.nations.push(
         note: "Added in the 14 Oct 2026 re-audit; the page previously listed this strategy as unconfirmed.",
       },
       {
-        topic: "Research", date: "2021-03-29",
+        topic: "Research & models", date: "2021-03-29",
         text: "On 29 March 2021, UNESCO's Director-General and Slovenia's President inaugurated IRCAI, the International Research Centre on AI, in Ljubljana. It is the first such centre under UNESCO's auspices and is hosted by the Jožef Stefan Institute.",
         level: "corroborated",
         sources: [
@@ -464,7 +464,7 @@ window.ATLAS.nations.push(
         ],
       },
       {
-        topic: "Strategy", date: "2021-05",
+        topic: "Strategy & readiness", date: "2021-05",
         text: "Slovenia's National Programme for AI (NpAI) was adopted in May 2021 to run until 2025, with a budget of about €110 million. It has been extended into 2026.",
         level: "verified",
         sources: [
@@ -484,7 +484,7 @@ window.ATLAS.nations.push(
         ],
       },
       {
-        topic: "Compute", date: "2026",
+        topic: "Compute & infrastructure", date: "2026",
         text: "The Slovenian AI Factory (SLAIF), co-funded by EuroHPC and Slovenia, was officially launched in Ljubljana in 2026. Its new supercomputer, due in early 2027, will replace Vega.",
         level: "corroborated",
         sources: [
@@ -528,7 +528,7 @@ window.ATLAS.nations.push(
     msAdoption: null,
     facts: [
       {
-        topic: "Strategy", date: "2020-01",
+        topic: "Strategy & readiness", date: "2020-01",
         text: "The Council of Ministers approved Cyprus's first national AI strategy in January 2020. It has five priorities: talent, business competitiveness, public services, national data spaces, and ethical, reliable AI.",
         level: "corroborated",
         sources: [
@@ -554,7 +554,7 @@ window.ATLAS.nations.push(
         ],
       },
       {
-        topic: "Strategy", date: "2026-07",
+        topic: "Strategy & readiness", date: "2026-07",
         text: "The taskforce's draft National AI Strategy went to public consultation in July 2026, with comments due by 31 August. It has eight objectives, ranging from making Cyprus a trusted AI jurisdiction to building sovereign capabilities.",
         level: "verified",
         sources: [
@@ -589,7 +589,7 @@ window.ATLAS.nations.push(
     msAdoption: { h1_2025: 32.4, h2_2025: 34.8, q1_2026: null, q2_2026: null, rankLatest: null },
     facts: [
       {
-        topic: "Governance", date: "2020-11-25",
+        topic: "Regulation", date: "2020-11-25",
         text: "In November 2020 the Federal Council adopted seven Guidelines on AI for the federal administration, covering human-centred design, transparency, accountability, safety and more. They do not bind the private sector.",
         level: "single",
         sources: [
@@ -607,7 +607,7 @@ window.ATLAS.nations.push(
         ],
       },
       {
-        topic: "Treaties", date: "2025-02-12",
+        topic: "International", date: "2025-02-12",
         text: "In February 2025 the Federal Council decided to bring the Council of Europe AI Convention into Swiss law, with any legal changes kept as sector-specific as possible. A consultation draft of the necessary laws was due by the end of 2026.",
         level: "single",
         sources: [
@@ -616,7 +616,7 @@ window.ATLAS.nations.push(
         note: "One unverified blog says the draft has slipped to early 2027.",
       },
       {
-        topic: "Models", date: "2025-09-02",
+        topic: "Research & models", date: "2025-09-02",
         text: "EPFL, ETH Zurich and the Swiss National Supercomputing Centre released Apertus in September 2025. It is a fully open LLM (8B and 70B parameters, more than 1,000 languages), with weights, training-data recipes and documentation all public.",
         level: "verified",
         sources: [
@@ -661,7 +661,7 @@ window.ATLAS.nations.push(
         ],
       },
       {
-        topic: "Strategy", date: "2019",
+        topic: "Strategy & readiness", date: "2019",
         text: "Qatar launched its National AI Strategy at QITCOM 2019. It was based on a blueprint from the Qatar Computing Research Institute (part of HBKU) and tied to Qatar National Vision 2030.",
         level: "corroborated",
         sources: [
@@ -671,7 +671,7 @@ window.ATLAS.nations.push(
         note: "Sources list the six pillars differently. Gulf Times: talent, data access, employment, wealth creation, 'AI+X', ethics.",
       },
       {
-        topic: "Investment", date: "2025-12-09",
+        topic: "Economy", date: "2025-12-09",
         text: "QIA launched Qai, a national AI company, and formed a $20 billion AI-infrastructure joint venture with Brookfield covering Qatar and selected overseas markets.",
         level: "verified",
         sources: [
@@ -682,7 +682,7 @@ window.ATLAS.nations.push(
         ],
       },
       {
-        topic: "Partnerships", date: "2025-02",
+        topic: "Economy", date: "2025-02",
         text: "Qatar's Ministry of Communications and IT signed a long-term partnership with Scale AI in February 2025 to support its Digital Agenda 2030.",
         level: "corroborated",
         sources: [
@@ -782,7 +782,7 @@ window.ATLAS.nations.push(
     msAdoption: { h1_2025: 25.4, h2_2025: 27.0, q1_2026: null, q2_2026: null, rankLatest: null },
     facts: [
       {
-        topic: "Strategy", date: "2023",
+        topic: "Strategy & readiness", date: "2023",
         text: "The Cabinet approved Jordan's AI Strategy and Implementation Plan 2023–2027, which follows the 2020 AI policy. It lays out 68 projects, with priorities in health, education, social protection and employment.",
         level: "corroborated",
         sources: [
@@ -791,7 +791,7 @@ window.ATLAS.nations.push(
         ],
       },
       {
-        topic: "Skills", date: "2026-06-30",
+        topic: "Skills & education", date: "2026-06-30",
         text: "Jordan launched an 'AI for Government Leaders' programme and aims to train 15,000 civil servants by 2027. Over 9,000 had already been trained, and the AI teaching assistant 'Siraj' had passed 1.3 million users.",
         level: "single",
         sources: [
@@ -801,7 +801,7 @@ window.ATLAS.nations.push(
         note: "Both links are from the state news agency (one source).",
       },
       {
-        topic: "Partnerships", date: "2026",
+        topic: "Economy", date: "2026",
         text: "Jordan's digital-economy ministry signed an MOU with Saudi AI company HUMAIN at LEAP 2026, covering Arabic AI models and public-sector AI.",
         level: "corroborated",
         sources: [
@@ -841,7 +841,7 @@ window.ATLAS.nations.push(
     msAdoption: { h1_2025: 37.6, h2_2025: 40.5, q1_2026: null, q2_2026: null, rankLatest: null },
     facts: [
       {
-        topic: "Strategy", date: "2025-07-08",
+        topic: "Strategy & readiness", date: "2025-07-08",
         text: "New Zealand released its first national AI strategy, 'Investing with confidence', on 8 July 2025. It confirms a light-touch, principles-based approach aimed at private-sector adoption and rules out a standalone AI act for now.",
         level: "verified",
         sources: [
@@ -895,7 +895,7 @@ window.ATLAS.nations.push(
     msAdoption: null,
     facts: [
       {
-        topic: "Strategy", date: "2025",
+        topic: "Strategy & readiness", date: "2025",
         text: "GovTech published a 'National AI Strategy 2025' aimed at advancing Gross National Happiness. It names eight focus areas, including agriculture, tourism, green energy, education and health, and three enablers. It was awaiting formal approval by the GovTech Commission.",
         level: "corroborated",
         sources: [
@@ -914,7 +914,7 @@ window.ATLAS.nations.push(
         ],
       },
       {
-        topic: "Compute", date: "2026-06-20",
+        topic: "Compute & infrastructure", date: "2026-06-20",
         text: "SATO Technologies signed a non-binding letter of intent with the GMC Authority for a hydro-powered AI compute campus. It starts at 5 MW, with up to 100 MW reserved and a possible expansion to 500 MW.",
         level: "verified",
         sources: [
@@ -953,7 +953,7 @@ window.ATLAS.nations.push(
     msAdoption: null,
     facts: [
       {
-        topic: "Strategy", date: "2018",
+        topic: "Strategy & readiness", date: "2018",
         text: "Mauritius was an early African mover, with an AI strategy published in 2018. It covered six sectors (agriculture, health, FinTech, transport, manufacturing, ocean economy) and proposed a Mauritius AI Council. The OECD judges its follow-through limited.",
         level: "verified",
         sources: [
@@ -964,7 +964,7 @@ window.ATLAS.nations.push(
         note: "Research ICT Africa dates it 2018/2019.",
       },
       {
-        topic: "Strategy", date: "2026-04-09",
+        topic: "Strategy & readiness", date: "2026-04-09",
         text: "Mauritius launched its National AI Strategy 2025–2029, 'AI for Mauritius' (AIM), together with the FAIR ethics guidelines, in April 2026. Cabinet had adopted them in February 2026, and UNDP provided support. The strategy sets six priorities, including trusted AI governance and public services.",
         level: "corroborated",
         sources: [
@@ -984,7 +984,7 @@ window.ATLAS.nations.push(
         ],
       },
       {
-        topic: "Skills", date: "2026-06-19",
+        topic: "Skills & education", date: "2026-06-19",
         text: "The 2026–27 budget (19 June 2026) made AI the first of seven strategic pillars. It pledged to train 50,000 people in practical AI skills, including 8,000 secondary-school teachers.",
         level: "verified",
         sources: [
@@ -1029,7 +1029,7 @@ window.ATLAS.nations.push(
     msAdoption: { h1_2025: 8.7, h2_2025: 9.3, q1_2026: null, q2_2026: null, rankLatest: null, regional: true },
     facts: [
       {
-        topic: "Strategy", date: "2023-01-18",
+        topic: "Strategy & readiness", date: "2023-01-18",
         text: "On 18 January 2023 the Council of Ministers adopted the National Strategy for AI and Big Data 2023–2027 (SNIAM): four programmes and 123 actions, budgeted at about 4.68 billion CFA francs.",
         level: "verified",
         sources: [
@@ -1075,7 +1075,7 @@ window.ATLAS.nations.push(
     msAdoption: { h1_2025: 25.1, h2_2025: 26.5, q1_2026: null, q2_2026: null, rankLatest: null },
     facts: [
       {
-        topic: "Strategy", date: "2024-10-24",
+        topic: "Strategy & readiness", date: "2024-10-24",
         text: "MICITT launched the National AI Strategy (ENIA) 2024–2027 on 24 October 2024, the first AI public policy in Central America. Its goals include regulatory frameworks, skills, R&D and better public services.",
         level: "verified",
         sources: [
@@ -1136,7 +1136,7 @@ window.ATLAS.nations.push(
         ],
       },
       {
-        topic: "Strategy", date: "2026-02-19",
+        topic: "Strategy & readiness", date: "2026-02-19",
         text: "Minister Andrew Wheatley convened the reconstituted 23-member Task Force on 19 February 2026, tasking it with drafting a national AI policy and reviewing the legal framework. The draft was promised by November 2026.",
         level: "verified",
         sources: [
@@ -1146,7 +1146,7 @@ window.ATLAS.nations.push(
         ],
       },
       {
-        topic: "Benchmark", date: "2026-01",
+        topic: "Strategy & readiness", date: "2026-01",
         text: "In Oxford Insights' 2025 index, Jamaica ranked 99th globally (up from 122nd in 2024), the highest in the Caribbean. Oxford attributes the rise to 'the publication of a new AI strategy'.",
         level: "dataset",
         note: "This sits awkwardly with the government's own account: its national AI policy was still in draft in 2026. Oxford may be referring to the Task Force's published recommendations.",

@@ -18,7 +18,7 @@
       msAdoption: { h1_2025: 33.5, h2_2025: 36.0, q1_2026: null, q2_2026: null, rankLatest: null },
       facts: [
         {
-          topic: "Strategy", date: "2026-09-16",
+          topic: "Strategy & readiness", date: "2026-09-16",
           text: "On 16 September 2026 the federal government adopted an updated national AI strategy. Digitalisation Minister Vanessa Matz said it should let AI create value for Belgium while the country keeps control of it. Measures include reforming the Strategic Committee on AI and a 'sovereignty grid' for public procurement.",
           level: "verified",
           sources: [
@@ -28,7 +28,7 @@
           ],
         },
         {
-          topic: "Adoption", date: "2026-09-16",
+          topic: "Economy", date: "2026-09-16",
           text: "Matz said 42% of Belgians already use generative AI and 34.5% of Belgian businesses have adopted AI.",
           level: "corroborated",
           sources: [
@@ -45,7 +45,7 @@
           ],
         },
         {
-          topic: "Strategy", date: "2022",
+          topic: "Strategy & readiness", date: "2022",
           text: "Belgium's first national AI strategy, the National Convergence Plan for the Development of AI, was approved in 2022. Flanders and Wallonia run their own AI plans alongside it.",
           level: "corroborated",
           sources: [
@@ -81,7 +81,7 @@
       msAdoption: { h1_2025: 26.0, h2_2025: 27.8, q1_2026: null, q2_2026: null, rankLatest: null },
       facts: [
         {
-          topic: "Infrastructure", date: "2025-10",
+          topic: "Compute & infrastructure", date: "2025-10",
           text: "In October 2025 the EuroHPC Joint Undertaking selected the Czech AI Factory (CZAI), led by VSB – Technical University of Ostrava with the IT4Innovations supercomputing centre. It was officially launched in Ostrava on 12 May 2026.",
           level: "verified",
           sources: [
@@ -100,7 +100,7 @@
           ],
         },
         {
-          topic: "Strategy", date: "2024-07",
+          topic: "Strategy & readiness", date: "2024-07",
           text: "In July 2024 the government approved the National AI Strategy of the Czech Republic 2030 (NAIS 2030), drafted by the Ministry of Industry and Trade, setting priorities to 2030 across seven areas.",
           level: "single",
           sources: [
@@ -108,7 +108,7 @@
           ],
         },
         {
-          topic: "Strategy", date: "2019-05",
+          topic: "Strategy & readiness", date: "2019-05",
           text: "Czechia released its first National AI Strategy in May 2019, building on its Innovation Strategy 2019–2030.",
           level: "single",
           sources: [
@@ -160,7 +160,7 @@
           note: "Chambers gives the start date as '31 November 2025', which does not exist; the exact day was not confirmed by a source that meets this site's rules. The CMS page was read in a browser.",
         },
         {
-          topic: "Strategy", date: "2020-09",
+          topic: "Strategy & readiness", date: "2020-09",
           text: "In September 2020 the government published Hungary's National AI Strategy for 2020–2030.",
           level: "single",
           sources: [
@@ -193,7 +193,7 @@
       msAdoption: { h1_2025: 21.8, h2_2025: 23.7, q1_2026: null, q2_2026: null, rankLatest: null },
       facts: [
         {
-          topic: "Strategy", date: "2026",
+          topic: "Strategy & readiness", date: "2026",
           text: "Croatia is preparing a National Plan for the Development of AI to 2032, with an action plan for 2026–2028. In 2026 Prime Minister Andrej Plenković said the government would adopt it soon.",
           level: "corroborated",
           sources: [
@@ -202,7 +202,7 @@
           ],
         },
         {
-          topic: "Strategy", date: "2025-10",
+          topic: "Strategy & readiness", date: "2025-10",
           text: "An OECD country note in October 2025 found Croatia had no finalised, officially published national AI strategy and was relying on the Digital Croatia Strategy 2032.",
           level: "single",
           sources: [
@@ -226,7 +226,7 @@
       msAdoption: { h1_2025: 22.1, h2_2025: 23.8, q1_2026: null, q2_2026: null, rankLatest: null },
       facts: [
         {
-          topic: "Infrastructure", date: "2026-03-31",
+          topic: "Compute & infrastructure", date: "2026-03-31",
           text: "The national supercomputer Perun went into full operation at the Slovak Academy of Sciences on 31 March 2026. It combines two computing systems and is designed for AI model training as well as simulation.",
           level: "verified",
           sources: [
@@ -254,7 +254,7 @@
           ],
         },
         {
-          topic: "Strategy", date: "2019",
+          topic: "Strategy & readiness", date: "2019",
           text: "Slovakia's Strategy of the Digital Transformation of Slovakia 2030, approved in 2019, set out the country's approach to AI, backed by an action plan.",
           level: "corroborated",
           sources: [
@@ -288,7 +288,7 @@
       msAdoption: { h1_2025: 25.4, h2_2025: 27.3, q1_2026: null, q2_2026: null, rankLatest: null },
       facts: [
         {
-          topic: "Infrastructure", date: "2025-03-12",
+          topic: "Compute & infrastructure", date: "2025-03-12",
           text: "On 12 March 2025 Bulgaria was selected to host one of six new EU AI Factories. BRAIN++, a €90 million project by Sofia Tech Park and INSAIT, centres on a new AI-optimised Discoverer++ supercomputer, with construction starting in 2026.",
           level: "verified",
           sources: [
@@ -298,7 +298,7 @@
           ],
         },
         {
-          topic: "Adoption", date: "2025",
+          topic: "Economy", date: "2025",
           text: "In 2025, 8.55% of Bulgarian enterprises used AI, compared with 19.95% across the EU.",
           level: "single",
           sources: [
@@ -307,7 +307,7 @@
           note: "The analysis draws on Eurostat data.",
         },
         {
-          topic: "Strategy", date: "2020-12",
+          topic: "Strategy & readiness", date: "2020-12",
           text: "The Bulgarian government published its national AI strategy in December 2020, drafted by the Ministry of Transport, IT and Communications from a framework by the Bulgarian Academy of Sciences.",
           level: "single",
           sources: [
@@ -315,7 +315,7 @@
           ],
         },
         {
-          topic: "Research", date: "2024-03",
+          topic: "Research & models", date: "2024-03",
           text: "INSAIT announced BgGPT, an open Bulgarian-language AI model with 7 billion parameters, in January 2024 and made it free for public use in March 2024.",
           level: "verified",
           sources: [
@@ -362,7 +362,7 @@
           ],
         },
         {
-          topic: "Strategy", date: "2025-01-10",
+          topic: "Strategy & readiness", date: "2025-01-10",
           text: "In January 2025 the government adopted the Strategy for the Development of AI for 2025–2030, on the proposal of the Ministry of Science. It covers legislation, AI education and skills, research and innovation, infrastructure and public-sector use.",
           level: "verified",
           sources: [
@@ -372,7 +372,7 @@
           ],
         },
         {
-          topic: "Strategy", date: "2019",
+          topic: "Strategy & readiness", date: "2019",
           text: "Serbia adopted its first AI strategy, for 2020–2025, in 2019.",
           level: "verified",
           sources: [
@@ -417,7 +417,7 @@
           note: "The price comes from the UNOPS release only.",
         },
         {
-          topic: "Strategy", date: "2025-05",
+          topic: "Strategy & readiness", date: "2025-05",
           text: "In May 2025 a Ministry of Public Administration official said the government was pushing for a national AI strategy by the end of 2025. In August 2026 a 2026–2030 strategy was still in preparation, and the ministry had set up an AI directorate.",
           level: "corroborated",
           sources: [
@@ -426,7 +426,7 @@
           ],
         },
         {
-          topic: "Readiness", date: "2024",
+          topic: "Strategy & readiness", date: "2024",
           text: "A 2024 UNDP AI Landscape Assessment found Montenegro's government at the 'systematic' phase as a user of AI, scoring 2.4 out of 5, and noted the country had no national AI strategy.",
           level: "corroborated",
           sources: [
@@ -470,7 +470,7 @@
           ],
         },
         {
-          topic: "Strategy", date: "2025-03-19",
+          topic: "Strategy & readiness", date: "2025-03-19",
           text: "On 19 March 2025 President Aliyev approved the AI Strategy of the Republic of Azerbaijan for 2025–2028 by decree. Priority sectors include agriculture, healthcare, transport and education.",
           level: "verified",
           sources: [
@@ -561,7 +561,7 @@
           ],
         },
         {
-          topic: "Skills", date: "2026-09",
+          topic: "Skills & education", date: "2026-09",
           text: "In September 2026 the UAE and Lebanon launched the 'One Million Lebanese AI Experts' initiative on the sidelines of the UN General Assembly, to train one million people in generative AI and prompt engineering.",
           level: "corroborated",
           sources: [
@@ -570,7 +570,7 @@
           ],
         },
         {
-          topic: "Adoption", date: "2026-09",
+          topic: "Economy", date: "2026-09",
           text: "Lebanese leaders say about 27% of Lebanese use AI.",
           level: "corroborated",
           sources: [
@@ -613,7 +613,7 @@
       msAdoption: { h1_2025: 6.0, h2_2025: 6.7, q1_2026: null, q2_2026: null, rankLatest: null },
       facts: [
         {
-          topic: "Strategy", date: "2026-09-23",
+          topic: "Strategy & readiness", date: "2026-09-23",
           text: "At its September 2026 monthly meeting the government agreed in principle to a draft National AI Strategy for 2026–2035, but told the Ministry of Technology and Communications to revise it with more focus on infrastructure, databases and personnel.",
           level: "single",
           sources: [
@@ -631,7 +631,7 @@
           ],
         },
         {
-          topic: "Readiness", date: "2026-01-27",
+          topic: "Strategy & readiness", date: "2026-01-27",
           text: "On 27 January 2026 Laos presented its UNESCO AI Ethics Readiness Assessment (RAM) report and said the findings would guide its first National AI Strategy.",
           level: "verified",
           sources: [
@@ -665,7 +665,7 @@
       msAdoption: null,
       facts: [
         {
-          topic: "Information", date: "2026-09-24",
+          topic: "Society & ethics", date: "2026-09-24",
           text: "Deputy Prime Minister Manoa Kamikamica said Fiji had started work on a framework to tackle misinformation and disinformation, with AI one of the drivers.",
           level: "single",
           sources: [
@@ -673,7 +673,7 @@
           ],
         },
         {
-          topic: "Ecosystem", date: "2024-10-29",
+          topic: "Economy", date: "2024-10-29",
           text: "The Ministry of Trade said it would set up more AI hubs to make Fiji a centre for innovation.",
           level: "single",
           sources: [
@@ -681,7 +681,7 @@
           ],
         },
         {
-          topic: "Strategy", date: "2024-03-16",
+          topic: "Strategy & readiness", date: "2024-03-16",
           text: "Deputy Prime Minister and Communications Minister Manoa Kamikamica said the government was setting up an AI governance framework as part of its cybersecurity and national digital strategy work.",
           level: "single",
           sources: [
@@ -721,7 +721,7 @@
       msAdoption: null,
       facts: [
         {
-          topic: "Ecosystem", date: "2026-05-18",
+          topic: "Institutions", date: "2026-05-18",
           text: "On 18 May 2026 Minister Ali Ihusaan launched the National AI and Data Competency Center (Maldives AI Lab), set up by MindCo and the Bank of Maldives under the government's Maldives 2.0 agenda.",
           level: "corroborated",
           sources: [
@@ -730,7 +730,7 @@
           ],
         },
         {
-          topic: "Readiness", date: "2025-08",
+          topic: "Strategy & readiness", date: "2025-08",
           text: "In mid-2025 the Maldives published its first national AI Readiness Assessment, produced with UNESCO. It found gaps in fixed broadband, digital literacy outside Greater Malé and cybersecurity.",
           level: "single",
           sources: [
@@ -738,7 +738,7 @@
           ],
         },
         {
-          topic: "Strategy", date: "2024-10",
+          topic: "Strategy & readiness", date: "2024-10",
           text: "In October 2024 President Muizzu, on the Cabinet's recommendation, ordered a masterplan for using AI in economic development. It is to include a legal framework for AI, with the homeland security and technology ministry and the economic development ministry leading.",
           level: "corroborated",
           sources: [
@@ -815,7 +815,7 @@
       msAdoption: null,
       facts: [
         {
-          topic: "Strategy", date: "2026-04-28",
+          topic: "Strategy & readiness", date: "2026-04-28",
           text: "On 28 April 2026 the government launched work on a Data Strategy for Public Administration and a dedicated national AI strategy, at a meeting led by Digital Economy Minister Olavo Correia.",
           level: "verified",
           sources: [
@@ -826,7 +826,7 @@
           note: "Sources differ on Correia's title: Digital Economy Minister, or Deputy Prime Minister and Finance Minister with the digital economy portfolio.",
         },
         {
-          topic: "Data", date: "2025-04-24",
+          topic: "Strategy & readiness", date: "2025-04-24",
           text: "A conference in Praia on 23–24 April 2025 launched work on Cabo Verde's first National Data Strategy, framed around the age of AI.",
           level: "single",
           sources: [
@@ -860,7 +860,7 @@
       msAdoption: null,
       facts: [
         {
-          topic: "Education", date: "2026-07",
+          topic: "Skills & education", date: "2026-07",
           text: "Cabinet approved the National AI in Education Framework 2026–2030, developed by the Ministry of Education with World Bank technical support. It sets up a National AI in Education Steering Committee to coordinate the rollout and approve AI tools for schools.",
           level: "corroborated",
           sources: [
@@ -910,7 +910,7 @@
           ],
         },
         {
-          topic: "Strategy", date: "2023",
+          topic: "Strategy & readiness", date: "2023",
           text: "The National Digital Economy Master Plan 2023–2033 aims to build AI capability and recommends creating a National Artificial Intelligence Research Centre.",
           level: "single",
           sources: [
@@ -934,7 +934,7 @@
       msAdoption: { h1_2025: 8.7, h2_2025: 9.3, q1_2026: null, q2_2026: null, rankLatest: null, regional: true, regionLabel: "West Africa" },
       facts: [
         {
-          topic: "Skills", date: "2025-08-07",
+          topic: "Skills & education", date: "2025-08-07",
           text: "Liberia launched its 2025 Artificial Intelligence Challenge at the EJS Ministerial Complex in Monrovia, under the patronage of President Joseph Boakai and First Lady Kartumu Boakai, to build local AI talent.",
           level: "single",
           sources: [
@@ -966,7 +966,7 @@
       msAdoption: { h1_2025: 8.7, h2_2025: 9.3, q1_2026: null, q2_2026: null, rankLatest: null, regional: true, regionLabel: "West Africa" },
       facts: [
         {
-          topic: "Infrastructure", date: "2026-06-08",
+          topic: "Compute & infrastructure", date: "2026-06-08",
           text: "Mauritania and the World Bank agreed additional financing to extend the West Africa Regional Digital Integration Program (WARDIP) to AI infrastructure. Mauritania's original WARDIP share was $60 million.",
           level: "single",
           sources: [
@@ -974,7 +974,7 @@
           ],
         },
         {
-          topic: "Strategy", date: "2024",
+          topic: "Strategy & readiness", date: "2024",
           text: "The Ministry of Digital Transformation, Innovation and Modernisation of the Administration drew up a National AI Strategy in 2024. OECD.AI lists it as covering 2024–2029 with five priorities: skills, research and innovation, data governance, ethical AI and uses in sectors such as health, education and agriculture.",
           level: "single",
           sources: [
@@ -1058,7 +1058,7 @@
       msAdoption: null,
       facts: [
         {
-          topic: "Readiness", date: "2025-11-26",
+          topic: "Strategy & readiness", date: "2025-11-26",
           text: "On 26 November 2025 the ministry, with UNDP and UNESCO, launched a National AI Assessment combining UNESCO's Readiness Assessment Methodology and UNDP's AI Landscape Assessment.",
           level: "corroborated",
           sources: [
@@ -1110,7 +1110,7 @@
       msAdoption: null,
       facts: [
         {
-          topic: "Labour", date: "2026-10-04",
+          topic: "Economy", date: "2026-10-04",
           text: "Prime Minister Mottley announced that the government would assess the impact of AI on the Barbadian workforce.",
           level: "single",
           sources: [
@@ -1153,7 +1153,7 @@
       msAdoption: null,
       facts: [
         {
-          topic: "Skills", date: "2026-06-10",
+          topic: "Skills & education", date: "2026-06-10",
           text: "Labour Minister Pia Glover-Rolle set out a plan to build an AI-literate workforce combining skills training, regulatory safeguards and workforce development.",
           level: "single",
           sources: [
@@ -1161,7 +1161,7 @@
           ],
         },
         {
-          topic: "Strategy", date: "2025-06-19",
+          topic: "Strategy & readiness", date: "2025-06-19",
           text: "Parliamentary secretary Wayde Watson told the 2025–26 budget debate that the government was writing an AI white paper and policy document for Cabinet approval, aiming to make the Bahamas a first mover in the Caribbean.",
           level: "corroborated",
           sources: [
@@ -1194,7 +1194,7 @@
       msAdoption: { h1_2025: 8.3, h2_2025: 9.0, q1_2026: null, q2_2026: null, rankLatest: null, regional: true, regionLabel: "Northern South America" },
       facts: [
         {
-          topic: "Security", date: "2026-05-22",
+          topic: "Public sector", date: "2026-05-22",
           text: "President Irfaan Ali announced that Guyana is moving to an AI-powered, data-driven policing architecture, with decentralised police outposts and integrated databases.",
           level: "single",
           sources: [
@@ -1202,7 +1202,7 @@
           ],
         },
         {
-          topic: "Health", date: "2026-04-23",
+          topic: "Public sector", date: "2026-04-23",
           text: "Health Minister Frank Anthony set out plans to integrate AI into medical practice and public health, moving towards predictive, data-driven healthcare.",
           level: "single",
           sources: [

@@ -46,7 +46,7 @@
       msAdoption: null,
       facts: [
         {
-          topic: "Strategy", date: "2026-04-17",
+          topic: "Strategy & readiness", date: "2026-04-17",
           text: "In April 2026 the Ministry of Transport and Communications held a two-day public consultation in Dili on the draft Digital Transformation Strategy 2026–2036. Its topics include rules for emerging technologies such as artificial intelligence.",
           level: "single",
           sources: [S("Tatoli - Govt holds public consultation on Timor-Leste's Digital Transformation Strategy 2026–2036 (17 Apr 2026)", "https://en.tatoli.tl/2026/04/17/govt-holds-public-consultation-on-timor-lestes-digital-transformation-strategy-2026-2036/20/")],
@@ -60,7 +60,7 @@
           note: "From the announcement before the event; no report of its outcome was found.",
         },
         {
-          topic: "Science", date: "2026-08-24",
+          topic: "Research & models", date: "2026-08-24",
           text: "Prime Minister Xanana Gusmão opened the government-funded Science for Development Summit in Dili on 24 August 2026, naming AI as an example of how new technologies could widen access to knowledge, for instance by giving health workers access to specialist advice.",
           level: "corroborated",
           sources: [
@@ -91,7 +91,7 @@
       msAdoption: null,
       facts: [
         {
-          topic: "Strategy", date: "2026-07",
+          topic: "Strategy & readiness", date: "2026-07",
           text: "At the Forum ICT Ministers Meeting in July 2026, Vanuatu said it is procuring the development of its National AI Strategy and asked that regional technical help complement national work rather than duplicate it. It supported the regional AI principles while calling for the protection of Pacific cultural and traditional knowledge from use in AI systems without free, prior and informed consent to be made an enforceable requirement.",
           level: "single",
           sources: [S("Vanuatu Daily Post - Connectivity, resilience and AI governance: Vanuatu's message to Pacific ICT Ministers (4 Aug 2026)", "https://www.dailypost.vu/news/connectivity-resilience-and-ai-governance-vanuatus-message-to-pacific-ict-ministers/article_85aeeb09-45be-5f22-96ca-16f665455b0b.html")],
@@ -126,7 +126,7 @@
       msAdoption: null,
       facts: [
         {
-          topic: "Strategy", date: "2026-04-17",
+          topic: "Strategy & readiness", date: "2026-04-17",
           text: "On 17 April 2026 the government launched the National ICT Policy 2025/26–2030/31 together with a National Cybersecurity Strategy. The policy commits to setting and updating rules for emerging technologies such as AI, to supporting businesses to invest in AI, and to specialist training in data and AI for public servants.",
           level: "single",
           sources: [
@@ -136,7 +136,7 @@
           note: "Both sources are the ministry's own, so they count as one.",
         },
         {
-          topic: "Governance", date: "2025",
+          topic: "Society & ethics", date: "2025",
           text: "In 2025 the Ministry of Communications and Information Technology and UNDP held a workshop on AI trust and safety. According to UNDP, it raised questions of digital sovereignty, such as how Samoa can keep ownership of its digital technology and data.",
           level: "single",
           sources: [S("UNDP Samoa - Samoa in the age of AI (24 Feb 2026)", "https://www.undp.org/samoa/stories/samoa-age-ai")],
@@ -165,7 +165,7 @@
       msAdoption: null,
       facts: [
         {
-          topic: "Infrastructure", date: "2025-07",
+          topic: "Compute & infrastructure", date: "2025-07",
           text: "The East Micronesia Cable, funded by Australia, Japan and the United States, landed in South Tarawa in July 2025, giving it its first submarine fibre connection. NEC completed the 2,250 km system, which links Tarawa, Nauru and Kosrae to Pohnpei, in May 2026.",
           level: "corroborated", sources: EMC,
         },
@@ -176,7 +176,7 @@
           sources: [S("World Bank - Project Appraisal Document: Kiribati Digital Government Project (3 May 2022, PDF)", "https://documents1.worldbank.org/curated/en/852781653593751829/pdf/Kiribati-Digital-Government-Project.pdf")],
         },
         {
-          topic: "Strategy", date: "2019",
+          topic: "Strategy & readiness", date: "2019",
           text: "Kiribati's National ICT Policy 2019 says the government is encouraging new technologies such as blockchain, artificial intelligence, big data analytics and the Internet of Things for education, health, finance and other sectors.",
           level: "single",
           sources: [S("Government of Kiribati - National ICT Policy 2019 (PDF, copy hosted by UNIDIR's Cyber Policy Portal)", "https://database.cyberpolicyportal.org/api/files/1664377388298feiubzabnbu.pdf")],
@@ -198,7 +198,7 @@
       msAdoption: null,
       facts: [
         {
-          topic: "Infrastructure", date: "2025-08",
+          topic: "Compute & infrastructure", date: "2025-08",
           text: "The East Micronesia Cable, funded by Australia, Japan and the United States, landed in Kosrae in August 2025, the state's first submarine fibre connection, linking it to the existing cable landing in Pohnpei. NEC completed the 2,250 km system in May 2026.",
           level: "corroborated", sources: [EMC_KOSRAE, EMC[1]],
         },
@@ -245,7 +245,7 @@
       msAdoption: null,
       facts: [
         {
-          topic: "Infrastructure", date: "2025-08-09",
+          topic: "Compute & infrastructure", date: "2025-08-09",
           text: "The East Micronesia Cable, funded by Australia, Japan and the United States, landed in Nauru on 9 August 2025, the island's first submarine fibre connection. NEC completed the 2,250 km system linking Tarawa, Nauru and Kosrae to Pohnpei in May 2026.",
           level: "corroborated", sources: EMC,
         },
@@ -266,13 +266,13 @@
       msAdoption: null,
       facts: [
         {
-          topic: "Digital government", date: "2026-05",
+          topic: "Public sector", date: "2026-05",
           text: "Tuvalu's Digital Nation project has three parts: a Digital Twin built by scanning the country's 124 islands and islets, a Digital Ark cloud platform holding scans of important objects, values and stories, and e-government services. Community consultations on what to preserve continued in 2026.",
           level: "single",
           sources: [S("Global Voices - Tuvalu aims to become a 'Digital Nation' amid rising sea levels (27 May 2026)", "https://globalvoices.org/2026/05/27/tuvalu-aims-to-become-a-digital-nation-amid-rising-sea-levels/")],
         },
         {
-          topic: "Infrastructure", date: "2025-10-24",
+          topic: "Compute & infrastructure", date: "2025-10-24",
           text: "Tuvalu switched on its first submarine cable, the Tuvalu Vaka Cable, on 24 October 2025. It was funded by Australia, the United States, Taiwan, New Zealand and Japan, with Google including Tuvalu in its Central Pacific Connect system.",
           level: "single",
           sources: [S("Devpolicy Blog (ANU) - The Tuvalu Vaka Cable: building connectivity and a Digital Nation (4 Dec 2025)", "https://devpolicy.org/the-tuvalu-vaka-cable-building-connectivity-and-a-digital-nation-20251204/")],
@@ -295,7 +295,7 @@
       msAdoption: { h1_2025: 5.1, h2_2025: 5.6, q1_2026: null, q2_2026: null, rankLatest: null, regional: true, regionLabel: "Central Asia" },
       facts: [
         {
-          topic: "Strategy", date: "2026-05-20",
+          topic: "Strategy & readiness", date: "2026-05-20",
           text: "With UNDP support, the Ministry of Communications is preparing a National AI Strategy for 2026–2028. A seminar in March 2026 assessed the national digital ecosystem and policy priorities, and on 20 May 2026 a workshop of government institutions and experts reviewed and validated the key findings of the draft.",
           level: "corroborated",
           sources: [
@@ -306,7 +306,7 @@
           note: "The two UNDP pages count as one source.",
         },
         {
-          topic: "Skills", date: "2026-07-07",
+          topic: "Skills & education", date: "2026-07-07",
           text: "On 7–8 July 2026 the UN's Asian and Pacific Training Centre for ICT ran a two-day course in Ashgabat for senior officials on AI governance, including the government's role in shaping the National AI Strategy.",
           level: "single",
           sources: [S("UN APCICT - AI Essentials for Policymakers and Civil Servants, Ashgabat, 7–8 July 2026 (course note, PDF)", "https://unapcict.org/sites/default/files/2026-05/CN_AI%20Essential_Turkmenistan.pdf")],
@@ -335,7 +335,7 @@
       msAdoption: { h1_2025: 5.7, h2_2025: 6.1, q1_2026: null, q2_2026: null, rankLatest: null },
       facts: [
         {
-          topic: "Strategy", date: "2025-01-13",
+          topic: "Strategy & readiness", date: "2025-01-13",
           text: "On 13 January 2025 the Minister of Communications, Mayra Arevich, presented Cuba's strategy for the development and use of AI to President Miguel Díaz-Canel. It is part of the country's digital transformation policy. At the same meeting officials said the Ministry of Justice had issued more than two million certificates automatically since 2023, about 30% of the total.",
           level: "corroborated",
           sources: [
@@ -358,7 +358,7 @@
           sources: [S("Reuters (via Internazionale) - Twenty-nine countries sign agreement to establish global AI cooperation body (16 Jul 2026)", "https://www.internazionale.it/ultime-notizie-reuters/2026/07/16/twenty-nine-countries-sign-agreement-to-establish-global-ai-cooperation-body")],
         },
         {
-          topic: "Rankings", date: "2025-10",
+          topic: "Strategy & readiness", date: "2025-10",
           text: "The 2025 Latin American AI Index (ILIA), published by Chile's CENIA and ECLAC, placed Cuba 15th of 19 countries with 28.69 points out of 100, in its lowest group, 'explorers'.",
           level: "single",
           sources: [S("Diario de Cuba - Cuba ya tiene un 'Consorcio de Inteligencia Artificial' (1 Dec 2025, Spanish; Internet Archive copy)", "https://web.archive.org/web/20260103233206/https://diariodecuba.com/cuba/1764599268_64128.html")],
@@ -436,7 +436,7 @@
           sources: [S("World Bank - LAC AI Accelerator: An AI-Enabled Region (2 Jun 2026)", "https://www.worldbank.org/en/region/lac/brief/accelerator-lac")],
         },
         {
-          topic: "Politics", date: "2025-09-18",
+          topic: "Strategy & readiness", date: "2025-09-18",
           text: "Before the 2025 general election, Finance Minister Camillo Gonsalves said the governing Unity Labour Party would set out an AI policy in its manifesto. The party lost the 27 November 2025 election, in which the New Democratic Party won 14 of the 15 seats and Godwin Friday became prime minister.",
           level: "single",
           sources: [
@@ -474,7 +474,7 @@
           sources: [S("Eye Radio - East Africa agrees on 15 resolutions to advance AI (5 Apr 2026)", "https://www.eyeradio.org/east-africa-agrees-on-15-resolutions-to-advance-ai/")],
         },
         {
-          topic: "Skills", date: "2025-04-04",
+          topic: "Skills & education", date: "2025-04-04",
           text: "At the Global AI Summit on Africa in Kigali in April 2025, the information ministry's undersecretary said the government planned to integrate AI training into youth development programmes under upcoming World Bank projects, and that World Bank-funded fibre optic expansion could open the way for AI in education, health and agriculture.",
           level: "single",
           sources: [S("Eye Radio - South Sudan sets sight on AI investment with digital transformation: Official (4 Apr 2025)", "https://www.eyeradio.org/south-sudan-sets-sight-on-ai-investment-with-digital-transformation-official/")],
@@ -503,14 +503,14 @@
       msAdoption: { h1_2025: 7.0, h2_2025: 7.8, q1_2026: null, q2_2026: null, rankLatest: null, regional: true, regionLabel: "Central Africa" },
       facts: [
         {
-          topic: "Information integrity", date: "2026-07",
+          topic: "Society & ethics", date: "2026-07",
           text: "In July 2026 the High Council for Communication, the media regulator, publicly targeted apps used to make satirical AI-generated videos and audio of political leaders and called for sanctions against users who share them.",
           level: "single",
           sources: [S("Corbeau News Centrafrique - Le régime Touadéra déclare la guerre à l'Intelligence Artificielle (20 Jul 2026, French)", "https://corbeaunews-centrafrique.org/centrafrique-le-regime-touadera-declare-la-guerre-a-lintelligence-artificielle/")],
           note: "Corbeau News is an opposition outlet and its report is strongly critical of the government; only the reported actions are given here.",
         },
         {
-          topic: "Information integrity", date: "2026-09",
+          topic: "Society & ethics", date: "2026-09",
           text: "In September 2026 Anthropic reported that a Russian-speaking operator in Bangui had used its AI assistant, Claude, to support a pro-Russian influence operation and to track opposition figures.",
           level: "single",
           sources: [S("Mediacongo - Centrafrique : l'opposition surveillée à l'aide de l'IA (28 Sep 2026, French)", "https://www.mediacongo.net/article-actualite-167841_centrafrique_l_opposition_surveillee_a_l_aide_de_l_ia.html")],
@@ -547,7 +547,7 @@
       msAdoption: { h1_2025: 8.7, h2_2025: 9.3, q1_2026: null, q2_2026: null, rankLatest: null, regional: true, regionLabel: "West Africa" },
       facts: [
         {
-          topic: "Strategy", date: "2025-03-28",
+          topic: "Strategy & readiness", date: "2025-03-28",
           text: "Decree 10/2025, published in the official gazette on 28 March 2025, approved the National Digital Transformation Strategy 2025–2030 (ENTD.GW), drafted by the UN University's e-governance unit under contract from UNDP. It names AI among the emerging technologies broadband should enable, and says weak rules on data protection and transparency limit the safe and ethical use of AI.",
           level: "single",
           sources: [
@@ -573,7 +573,7 @@
       msAdoption: null,
       facts: [
         {
-          topic: "Infrastructure", date: "2026-07-09",
+          topic: "Compute & infrastructure", date: "2026-07-09",
           text: "On 9 July 2026 the state telecom operator GETESA signed a six-month agreement with Huawei to modernise the national mobile and internet network, days after adopting its 2026–2030 strategic plan. A technical audit had found shortcomings in bandwidth, network equipment and transmission capacity.",
           level: "corroborated",
           sources: [
@@ -626,7 +626,7 @@
       msAdoption: null,
       facts: [
         {
-          topic: "Ethics", date: "2026-05-25",
+          topic: "Society & ethics", date: "2026-05-25",
           text: "On 25 May 2026 the Vatican published Pope Leo XIV's first encyclical, Magnifica Humanitas, on safeguarding the human person in the time of artificial intelligence. It was signed on 15 May 2026, the 135th anniversary of Leo XIII's Rerum Novarum.",
           level: "verified",
           sources: [
@@ -646,7 +646,7 @@
           note: "The guidelines apply to Vatican City State's institutions, not to the whole Roman Curia.",
         },
         {
-          topic: "Ethics", date: "2025-01-28",
+          topic: "Society & ethics", date: "2025-01-28",
           text: "On 28 January 2025 the Dicasteries for the Doctrine of the Faith and for Culture and Education published Antiqua et Nova, a note on the relationship between artificial intelligence and human intelligence, approved by Pope Francis.",
           level: "single",
           sources: [S("Holy See - Antiqua et Nova: Note on the Relationship Between Artificial Intelligence and Human Intelligence (28 Jan 2025)", "https://www.vatican.va/roman_curia/congregations/cfaith/documents/rc_ddf_doc_20250128_antiqua-et-nova_en.html")],

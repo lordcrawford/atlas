@@ -15,7 +15,9 @@ Collaborations is the landing page. The site is behind a password gate (see belo
 - **Collaborations:** AI agreements between countries (49 in all: 33 two-country deals and 16 groups such as the LUMI supercomputer consortium, the Council of Europe AI convention, the Global Partnership on AI, CARICOM's endorsement of the Caribbean AI policy roadmap and the Pacific Islands Forum's AI principles). A compact list (flags, countries, a short label, the month) sits beside a 3D globe that shows every agreement as a faint route rising off the surface. Picking one, or letting the tour step through them every 3 seconds, turns the globe to its countries, shades them and opens one panel with the full description and sources. Search by country or topic, or click a country on the globe. Each agreement has its own link (`#collab/<id>`) that opens it with the tour paused. The **3D** and **2D** buttons in the map's corner switch every map on the site between the globe and a flat world map; the choice is remembered. Company deals and aid projects are left out.
 - **Overview:** a map shaded by readiness rank, shown as a 3D globe or a flat 2D map (drag to look around; region filters move it to a region), a sortable comparison table that keeps one index figure (the Oxford Insights readiness rank) for context, and links to the original sources for wider data (Oxford Insights, Microsoft's AI Diffusion reports, the Stanford AI Index, OECD.AI, the OECD Digital Economy Policy Platform and the World Bank). The readiness heatmap, the Microsoft AI-use charts and the Stanford talent chart were removed because they only re-plotted other people's data.- **Nation pages:** a zoomable locator map, stat tiles, the readiness profile against the median of all nations, a "Key documents" section (up to two official strategies, laws or guidance documents to read first), an "AI partners" section (a map from the nation to the governments it has AI agreements with, plus links to each agreement), facts newest first (with pre-2024 background behind a toggle), and news since 2024.
 - **News:** every development since January 2024, sortable by date or by relevance (one score combining trending, impact and insight, computed from each item's text, sources and date, with the reasons shown on each item), and filterable by region, nation and number of sources.
-- **Method:** verification rules, the full audit, corrections, and limits.
+- **Findings:** six claims about what the data shows (who writes their own rules, who leads with strategy, how size and income track approach, where compute comes from, the role of outside bodies, and bloc ties). Every number is counted from the data when the page is drawn, and each group opens to the nations behind it, linked to the fact or agreement its code rests on.
+- **Governance model:** each nation is coded on four questions: approach (rules first, adoption first, aligning, no AI policy yet), rules (own AI law or bill, EU AI Act, regional body or treaty, none on record), compute (national, shared, foreign partner, none on record) and bloc (Europe, United States, China, more than one, none on record). The nation page shows the codes with the facts they rest on, the Overview map can be shaded by any of them, and the Overview table has a Governance model view. The codes are editorial readings; the rules are in Method and `METHODOLOGY.md`.
+- **Method:** verification rules, the codebook for the governance model, the full audit, corrections, and limits.
 - **Profiles, saved items and review marks:** sign in (or create a profile) from the top bar. Every agreement, news item and key document has a ☆ to save it, a ✓ to mark it read and vetted, a ⚠ to flag it as suspicious, and a ✎ to add a note at any time (✓ and ⚠ also open the note box). The Saved & reviewed page (`#saved`, in the profile menu) has a toggle between Saved, Read & vetted, Seems suspicious and Notes, showing one list at a time, and can download a JSON copy.
 
 ## Password and profiles: what they do and don't protect
@@ -60,6 +62,7 @@ Then open http://localhost:8765. Opening `index.html` directly also works.
 | `data/nations-more5.js` | Data for 26 more nations (added sixth, including Saint Kitts and Nevis) |
 | `data/nations-more6.js` | Data for the last 19 (added 21 October 2026): the remaining sovereign states under 15M people, plus Kosovo and the Holy See |
 | `data/documents.js` | Up to two key documents per nation, each linking to the document or its official page |
+| `data/models.js` | The coded governance model: the codebook (`fields`), the four codes per nation and what each rests on (`codes`) |
 | `data/collaborations.js` | Country-to-country AI collaborations (`bilateral` pairs and `group` hubs with members), plus map positions for partner countries that are not on the site |
 | `vendor/` | d3-geo, d3-array, topojson-client and world-atlas (Natural Earth 110m), bundled so the map works offline |
 | `METHODOLOGY.md` | Verification rules |
@@ -71,7 +74,7 @@ Edit the matching file in `data/`. Each nation needs `group` (region), `geo` ([l
 ```js
 {
   date: "2026-06-14",            // YYYY, YYYY-MM or YYYY-MM-DD
-  topic: "Institutions",          // facts only; drives the topic filter
+  topic: "Institutions",          // facts only; one of the ten topics below
   text: "...",                    // facts use `text`; news uses `title` + `summary`
   level: "verified",              // verified (3+ sources) | corroborated (2) | single (1)
   sources: [{ t: "Title", u: "https://..." }],
@@ -80,3 +83,7 @@ Edit the matching file in `data/`. Each nation needs `group` (region), `geo` ([l
 ```
 
 Keep `level` honest: it must match the number of **independent** sources that agree. Two pages from the same organisation count as one.
+
+Fact topics are fixed at ten: Strategy & readiness, Regulation, Institutions, Compute & infrastructure, Skills & education, Public sector, International, Economy, Research & models, Society & ethics.
+
+A nation's codes live in `data/models.js`. Each is a value followed by what it rests on: the start of a fact's text on that nation's page, `"@id"` for an agreement, or `"#eu"`, `"#eea"`, `"#au"` for a membership. If a fact's opening words are edited, update the matching entry; the browser console warns when one no longer matches.

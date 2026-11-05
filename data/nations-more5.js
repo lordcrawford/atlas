@@ -36,7 +36,7 @@
           ],
         },
         {
-          topic: "Strategy", date: "2026-05",
+          topic: "Strategy & readiness", date: "2026-05",
           text: "As of May 2026 there was no formally adopted national AI strategy at state level. AI is mentioned only briefly in the 2021–2027 Development Strategy of the Federation of Bosnia and Herzegovina.",
           level: "single",
           sources: [
@@ -68,7 +68,7 @@
       msAdoption: null,
       facts: [
         {
-          topic: "Infrastructure", date: "2025-10-14",
+          topic: "Compute & infrastructure", date: "2025-10-14",
           text: "On 14 October 2025 Digital Transformation Minister Stefan Andonovski presented Vezilka, a National Centre for AI worth about €6 million, funded mainly by the EU through Horizon Europe and EuroHPC. It is an affiliated unit of the Pharos AI Factory in Greece, giving local users access to European supercomputers.",
           level: "corroborated",
           sources: [
@@ -77,7 +77,7 @@
           ],
         },
         {
-          topic: "Strategy", date: "2026",
+          topic: "Strategy & readiness", date: "2026",
           text: "North Macedonia has no standalone AI law, AI regulator or adopted national AI strategy. Work on a strategy began in 2021 but stalled; AI is instead a pillar of the SMART/MK 2030 ICT strategy.",
           level: "corroborated",
           sources: [
@@ -111,7 +111,7 @@
       msAdoption: { h1_2025: 16.6, h2_2025: 17.0, q1_2026: null, q2_2026: null, rankLatest: null },
       facts: [
         {
-          topic: "Strategy", date: "2026-04-28",
+          topic: "Strategy & readiness", date: "2026-04-28",
           text: "The Ministry of Economic Development and Digitalization began drafting a government decree for a National Programme on AI and Data Management for 2026–2030, which later went to public consultation.",
           level: "corroborated",
           sources: [
@@ -212,7 +212,7 @@
       msAdoption: null,
       facts: [
         {
-          topic: "Strategy", date: "2026-04-14",
+          topic: "Strategy & readiness", date: "2026-04-14",
           text: "On 14 April 2026 the government adopted a non-binding AI strategy for the public administration (KI-Strategie der Liechtensteinischen Landesverwaltung), covering the government's own use of AI.",
           level: "corroborated",
           sources: [
@@ -303,7 +303,7 @@
           ],
         },
         {
-          topic: "Strategy", date: "2019-04",
+          topic: "Strategy & readiness", date: "2019-04",
           text: "Prince Albert II launched Extended Monaco, the Principality's programme to apply digital technology across its economy and public services, in April 2019.",
           level: "single",
           sources: [
@@ -344,7 +344,7 @@
           note: "Read in a browser; the page blocks automated requests.",
         },
         {
-          topic: "Politics", date: "2025-04-28",
+          topic: "Regulation", date: "2025-04-28",
           text: "After Italy's Senate approved its AI bill, the political group La Serenissima called for San Marino to open a public debate on AI.",
           level: "single",
           sources: [
@@ -380,7 +380,7 @@
           ],
         },
         {
-          topic: "Strategy", date: "2022",
+          topic: "Strategy & readiness", date: "2022",
           text: "Tajikistan's 2022 National AI Strategy sets a target of up to 5% of GDP from AI-related economic activity by 2040.",
           level: "single",
           sources: [
@@ -431,7 +431,7 @@
           ],
         },
         {
-          topic: "Strategy", date: "2026-03-22",
+          topic: "Strategy & readiness", date: "2026-03-22",
           text: "On 22 March 2026 the acting ICT minister released a draft National Sovereign Digital Transformation and AI Strategy for public consultation.",
           level: "single",
           sources: [
@@ -479,7 +479,7 @@
           ],
         },
         {
-          topic: "Parliament", date: "2025-11",
+          topic: "International", date: "2025-11",
           text: "Tonga's Deputy Clerk of the Legislative Assembly attended a parliamentary conference in Kuala Lumpur on 28–30 November 2025 on global governance of AI.",
           level: "single",
           sources: [
@@ -503,7 +503,7 @@
       msAdoption: null,
       facts: [
         {
-          topic: "Disaster response", date: "2025-11-19",
+          topic: "Public sector", date: "2025-11-19",
           text: "UNESCO selected EDiSON, an AI-supported disaster risk management system developed by SAP Japan and an Oita University venture, for use in Solomon Islands.",
           level: "single",
           sources: [
@@ -567,7 +567,7 @@
       msAdoption: null,
       facts: [
         {
-          topic: "Skills", date: "2026-04-27",
+          topic: "Skills & education", date: "2026-04-27",
           text: "Prime Minister Mohammad Mustafa announced a National Council for Digital Economy and set targets including training 10,000 young people in AI-related skills, employing 1,000 graduates a year in the field, and digitising 50% of key government transactions within 18 months.",
           level: "single",
           sources: [
@@ -575,7 +575,7 @@
           ],
         },
         {
-          topic: "Strategy", date: "2026-08",
+          topic: "Strategy & readiness", date: "2026-08",
           text: "The Ministry of Telecommunications and Digital Economy launched a Public Policy Document for the Telecommunications and IT Sectors 2026–2028.",
           level: "single",
           sources: [
@@ -683,7 +683,7 @@
       msAdoption: null,
       facts: [
         {
-          topic: "Regional", date: "2026-07",
+          topic: "International", date: "2026-07",
           text: "Belize took the July–December 2026 presidency of the group implementing the Central American Integration System's Regional Digital Strategy, with cybersecurity and AI among its focus areas.",
           level: "single",
           sources: [
@@ -691,7 +691,7 @@
           ],
         },
         {
-          topic: "Justice", date: "2025-08-12",
+          topic: "Regulation", date: "2025-08-12",
           text: "Belize's Senior Courts issued Practice Direction No. 18 of 2025 on the ethical use of generative AI in court proceedings on 12 August 2025. Anyone using AI must disclose it in court submissions.",
           level: "corroborated",
           sources: [
@@ -724,7 +724,7 @@
       msAdoption: { h1_2025: 8.3, h2_2025: 9.0, q1_2026: null, q2_2026: null, rankLatest: null, regional: true, regionLabel: "Northern South America" },
       facts: [
         {
-          topic: "Readiness", date: "2026-08-27",
+          topic: "Strategy & readiness", date: "2026-08-27",
           text: "On 27 August 2026 Suriname held the introductory meeting for its AI Readiness Assessment, the first in the region to use UNESCO's updated RAM 2.0 method. It drew 106 participants from 67 institutions across 10 sectors.",
           level: "corroborated",
           sources: [
@@ -733,7 +733,7 @@
           ],
         },
         {
-          topic: "Strategy", date: "2023-09",
+          topic: "Strategy & readiness", date: "2023-09",
           text: "Suriname's National Digital Strategy 2023–2030 names AI and automation as major drivers of digital transformation in public services.",
           level: "single",
           sources: [
@@ -766,7 +766,7 @@
       msAdoption: { h1_2025: 7.1, h2_2025: 7.6, q1_2026: null, q2_2026: null, rankLatest: null },
       facts: [
         {
-          topic: "Strategy", date: "2026-08-10",
+          topic: "Strategy & readiness", date: "2026-08-10",
           text: "On 10 August 2026 several organisations, including ESIH and the Association for Responsible AI, signed an agreement to jointly develop a national roadmap for the responsible adoption of AI in Haiti.",
           level: "single",
           sources: [
@@ -774,7 +774,7 @@
           ],
         },
         {
-          topic: "Regulator", date: "2026-07-31",
+          topic: "Skills & education", date: "2026-07-31",
           text: "The telecoms regulator CONATEL held a training on generative AI, prompt engineering and AI tools for its staff on 29–31 July 2026.",
           level: "single",
           sources: [
@@ -815,7 +815,7 @@
       msAdoption: null,
       facts: [
         {
-          topic: "Education", date: "2026-01-26",
+          topic: "Skills & education", date: "2026-01-26",
           text: "Education and Digital Transformation Minister Kenson Casimir raised concerns about students using AI in CXC School-Based Assessments.",
           level: "single",
           sources: [
@@ -823,7 +823,7 @@
           ],
         },
         {
-          topic: "Productivity", date: "2024-10",
+          topic: "Economy", date: "2024-10",
           text: "The National Competitiveness and Productivity Council made AI the theme of its 2024 Productivity Awareness Week, under the title 'The AI Effect'.",
           level: "single",
           sources: [
@@ -897,7 +897,7 @@
       msAdoption: null,
       facts: [
         {
-          topic: "Regional", date: "2026-06",
+          topic: "International", date: "2026-06",
           text: "Prime Minister Dickon Mitchell urged CARICOM to accelerate digital transformation to protect competitiveness, resilience and sovereignty, saying rules on digital trade, AI and data are evolving without meaningful small-state participation.",
           level: "verified",
           sources: [
@@ -915,7 +915,7 @@
           ],
         },
         {
-          topic: "Regional", date: "2025-10",
+          topic: "International", date: "2025-10",
           text: "Mitchell is CARICOM's lead head of government with responsibility for science and technology.",
           level: "single",
           sources: [
@@ -949,7 +949,7 @@
       msAdoption: { h1_2025: 6.4, h2_2025: 6.8, q1_2026: null, q2_2026: null, rankLatest: null, regional: true, regionLabel: "East Africa" },
       facts: [
         {
-          topic: "Strategy", date: "2026-04-21",
+          topic: "Strategy & readiness", date: "2026-04-21",
           text: "On 21–22 April 2026 a national workshop in Bujumbura validated the National AI Strategy for 2026–2030, led by the Ministry of Finance, Budget and Digital Economy with UNDP support.",
           level: "verified",
           sources: [
@@ -994,7 +994,7 @@
       msAdoption: null,
       facts: [
         {
-          topic: "Ecosystem", date: "2026-04",
+          topic: "Strategy & readiness", date: "2026-04",
           text: "The Comoros held its first national forum on artificial intelligence, reported by local newspapers on 2 April 2026.",
           level: "corroborated",
           sources: [
@@ -1028,7 +1028,7 @@
       msAdoption: null,
       facts: [
         {
-          topic: "Development", date: "2025-08-01",
+          topic: "International", date: "2025-08-01",
           text: "On 1 August 2025 UNDP and the Ministry of Foreign Affairs launched the 2025 Human Development Report, on people and possibilities in the age of AI, with a high-level panel on AI's opportunities and risks for São Tomé and Príncipe.",
           level: "single",
           sources: [
@@ -1037,7 +1037,7 @@
           note: "Read in a browser; the page blocks automated requests.",
         },
         {
-          topic: "Strategy", date: "2020",
+          topic: "Strategy & readiness", date: "2020",
           text: "A National Strategy for Digital Governance was prepared in 2020 with the UN University's e-governance unit.",
           level: "single",
           sources: [
@@ -1060,7 +1060,7 @@
       msAdoption: null,
       facts: [
         {
-          topic: "Politics", date: "2026-09-27",
+          topic: "International", date: "2026-09-27",
           text: "Nevis Premier and opposition leader Mark Brantley urged a coordinated Caribbean response to AI, crediting CARICOM's July 2026 endorsement of the UNESCO Caribbean AI Policy Roadmap. He noted that Nevis's earlier plan to teach coding in every school had been overtaken by AI tools.",
           level: "single",
           sources: [
