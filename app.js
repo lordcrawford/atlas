@@ -2337,10 +2337,10 @@
     const isCollab = key === "collab" || (!current && !["news", "overview", "findings", "method", "saved"].includes(key));
     tabsEl.replaceChildren(
       el("a", { class: "tab", href: "#collab", "aria-current": isCollab ? "page" : null }, "Collaborations"),
-      nationMenu(current),
       el("a", { class: "tab", href: "#news", "aria-current": key === "news" ? "page" : null }, "News"),
-      el("a", { class: "tab", href: "#overview", "aria-current": key === "overview" ? "page" : null }, "Overview"),
       el("a", { class: "tab", href: "#findings", "aria-current": key === "findings" ? "page" : null }, "Findings"),
+      nationMenu(current),
+      el("a", { class: "tab", href: "#overview", "aria-current": key === "overview" ? "page" : null }, "Overview"),
       el("a", { class: "tab", href: "#method", "aria-current": key === "method" ? "page" : null }, "Method"));
   }
   function route(keepScroll) {
