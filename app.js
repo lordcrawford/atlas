@@ -1251,11 +1251,14 @@
       sortSeg.replaceChildren(...NEWS_SORTS.map(([k, lab]) =>
         el("button", { class: "seg-btn", type: "button", "aria-pressed": String(state.newsSort === k), onclick: () => { state.newsSort = k; theme = null; draw(); } }, lab)));
       sortNote.textContent = state.newsSort === "relevance" ? "Relevance combines how much an item is trending, its likely impact and how insightful it is, worked out from its text, sources and date. There is no click or popularity data. Each card says why it ranked; the rules are in Method." : "";
-      sortNote.hidden = state.newsSort !== "relevance";
+      sortNote.textContent = `Items confirmed by 2 or more sources are listed first, then items with 1 source. ${sortNote.textContent}`.trim();
+      sortNote.hidden = false;
       const pool = items.filter(({ x, n }) => inRegion(n) && (nation === "all" || n.id === nation) && (level === "all" || x.level === level));
       const ranked = rankNews(pool, state.newsSort);
       const themeRe = theme ? NEWS_THEMES.find(([name]) => name === theme)[1] : null;
-      const shown = themeRe ? ranked.list.filter(({ x }) => themeRe.test(`${x.title}. ${x.summary}`)) : ranked.list;
+      const themed = themeRe ? ranked.list.filter(({ x }) => themeRe.test(`${x.title}. ${x.summary}`)) : ranked.list;
+      // Items confirmed by two or more independent sources come first; single-source items follow, in the same order.
+      const shown = [...themed.filter(({ x }) => x.level !== "single"), ...themed.filter(({ x }) => x.level === "single")];
       themeRow.replaceChildren(...(ranked.themes.length ? [el("span", { class: "filter-label" }, "Hot in the last 60 days"),
         ...ranked.themes.map((t) => el("button", { class: "chip-btn small", type: "button", "aria-pressed": String(theme === t.name), onclick: () => { theme = theme === t.name ? null : t.name; draw(); } }, `${t.name} · ${t.n}`))] : []));
       count.textContent = `${shown.length} ${shown.length === 1 ? "item" : "items"}`;
@@ -1783,7 +1786,7 @@
         el("li", {}, "Trending: items are grouped into themes (strategies, laws, data centres, partnerships, skills, AI in government services, rankings, safety and misuse, investment, China and WAICO). A theme is hot when many recent items are about it, weighted towards the last month; an item scores high when it is recent and on hot themes."),
         el("li", {}, "Impact: points for a law or binding rule adopted, a strategy or policy decision, billion- or million-scale money, a new public body, compute infrastructure or an international agreement, minus a little for events and trainings."),
         el("li", {}, "Insight: points for data or an assessment (indices, rankings, surveys, reports), percentages, comparisons, specific figures and a noted caveat or source disagreement."),
-        el("li", {}, "Items with more independent sources get a small bonus. These are simple keyword rules, not a judgement of importance.")),
+        el("li", {}, "Whatever the sort, items confirmed by two or more independent sources are listed before single-source items. Within relevance, more sources also earn a small bonus. These are simple keyword rules, not a judgement of importance.")),
       el("h2", {}, "The last 19 nations (21 October 2026)"),
       el("ul", {},
         el("li", {}, "To cover every sovereign state under 15 million people (Israel aside), 19 were added: Timor-Leste, Vanuatu, Samoa, Kiribati, Micronesia, the Marshall Islands, Nauru, Tuvalu, Turkmenistan, Cuba, Dominica, Saint Vincent and the Grenadines, South Sudan, the Central African Republic, Eritrea, Guinea-Bissau, Equatorial Guinea, Kosovo and the Holy See. Territories are not included."),

@@ -160,6 +160,8 @@ Region-by-region searches for 10–20 October 2026 added nine news items, each c
 
 ## News feed ranking
 
+In every sort (relevance, newest, oldest), items confirmed by two or more independent sources are listed first and single-source items after them (owner's request, 5 Nov 2026).
+
 The news feed sorts by date (newest or oldest) or by relevance. There is no click or popularity data, so relevance is computed from each item's own text, sources and date. It is the average of three signals, each scaled from 0 to 1 across the items being ranked, plus a small bonus for 2 or 3+ independent sources. Each item shows the signals that placed it.
 
 - **Trending:** items are matched to themes (strategies, laws, data centres and compute, partnerships, skills, AI in government services, rankings, safety and misuse, investment, China and WAICO). A theme's heat is the number of items on it, weighted by recency (roughly a 30-day decay). An item's trending score is its own recency (roughly a 3-week decay) times one plus the heat of its themes. The hottest themes over the last 60 days are shown as filters.
