@@ -491,8 +491,9 @@ window.ATLAS = {
           level: "single",
           sources: [
             { t: "The National - UAE Cabinet approves national AI strategy (21 Apr 2019)", u: "https://thenational-the-national-prod.cdn.arcpublishing.com/uae/government/uae-cabinet-approves-national-artificial-intelligence-strategy-1.851964" },
+            { t: "UAE Ministry of Foreign Affairs - Mohammed bin Rashid launches UAE Strategy for Artificial Intelligence (17 Oct 2017)", u: "https://www.mofa.gov.ae/en/mediahub/news/2019/2017/10/17/17-10-2017-uae-artificial-intelligence" },
           ],
-          note: "Sources sometimes conflate the October 2017 launch with the April 2019 Cabinet adoption of the full 2031 document. Both dates are correct for different steps.",
+          note: "Sources sometimes conflate the October 2017 launch with the April 2019 Cabinet adoption of the full 2031 document. Both dates are correct for different steps; each step rests on one of the two sources.",
         },
         {
           topic: "Economy",

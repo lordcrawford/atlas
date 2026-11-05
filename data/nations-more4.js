@@ -281,10 +281,10 @@
     // ------------------------------------------------------------------ LESOTHO
     {
       id: "ls", name: "Lesotho", flag: "🇱🇸", region: "Southern Africa", group: "Africa", geo: [27.48, -29.31], isoN: "426",
-      stance: "Policy first: an AI policy adopted in 2026, now turned into a strategy and compute plan with UN support",
+      stance: "Policy drafted, strategy under way: an AI policy validated in 2025, now being turned into a strategy and compute plan with UN support",
       summary:
-        "Lesotho published its Artificial Intelligence Policy and Implementation Plan on 17 August 2026. The same week the ICT ministry and the UN began a five-day workshop to build a National AI Strategy and a Data Centre Blueprint to put it into practice. In September 2026 Lesotho was reported as the first country to apply the UN's Blueprint for National AI and Data Strategies.",
-      glance: { firstStrategy: "2026 (AI Policy and Implementation Plan)", latestStrategy: "2026 (AI Policy); National AI Strategy in development", newestBody: "—", newestBodyDate: "" },
+        "Lesotho has drafted an Artificial Intelligence Policy and Implementation Plan, which more than 100 stakeholders validated in 2025; OECD.AI still lists it as under development. In August 2026 the ICT ministry and the UN held a five-day workshop to build a National AI Strategy and a Data Centre Blueprint to put it into practice. In September 2026 Lesotho was reported as the first country to apply the UN's Blueprint for National AI and Data Strategies.",
+      glance: { firstStrategy: "Draft (AI Policy, validated 2025)", latestStrategy: "National AI Strategy in development (2026)", newestBody: "—", newestBodyDate: "" },
       stats: { population: { v: 2363325, year: 2025 }, gdpPerCapita: { v: 1089, year: 2025 }, internet: { v: 51.8, year: 2024 } },
       oxford: { rank: 131, scores: [34.5, 28.79, 38.79, 36.83, 17.59, 25.63] },
       msAdoption: { h1_2025: 8.8, h2_2025: 9.1, q1_2026: null, q2_2026: null, rankLatest: null },
@@ -299,13 +299,15 @@
           ],
         },
         {
-          topic: "Strategy & readiness", date: "2026-08-17",
-          text: "Lesotho published its Artificial Intelligence Policy and Implementation Plan on 17 August 2026. Led by the ICT ministry, it covers governance, legislation, AI capacity, infrastructure, productivity, inclusion and ethics, and international alignment.",
-          level: "single",
+          topic: "Strategy & readiness", date: "2025",
+          text: "Lesotho's Artificial Intelligence Policy and Implementation Plan, led by the ICT ministry, covers governance and regulation, capacity building, digital infrastructure, AI in individual sectors, and ethical and human-rights safeguards. More than 100 stakeholders validated the policy in 2025. OECD.AI lists it as proposed or under development.",
+          level: "corroborated",
           sources: [
             S("OECD.AI - Lesotho AI Policy and Implementation Plan", "https://oecd.ai/en/dashboards/policy-initiatives/artificial-intelligence-policy-and-implementation-plan"),
+            S("ITWeb Africa - Lesotho to accelerate AI roadmap", "https://itweb.africa/article/lesotho-accelerate-ai-roadmap/6GxRKqYQ1gkqb3Wj"),
+            S("TechAfrica News - Lesotho begins work on National AI Strategy and Data Centre Blueprint (18 Aug 2026)", "https://techafricanews.com/2026/08/18/lesotho-begins-work-on-national-ai-strategy-and-data-centre-blueprint/"),
           ],
-          note: "OECD.AI still listed the policy as proposed or under development when checked.",
+          note: "Corrected on 5 November 2026: this entry used to say the policy was published on 17 August 2026. No source says that; 17 August was the start of the strategy workshop. The two news reports agree on the 2025 validation; OECD.AI gives the content and status.",
         },
         {
           topic: "Strategy & readiness", date: "2026-08-21",

@@ -242,6 +242,14 @@
     fc.features = fc.features.filter((f) => f.id !== "010"); // drop Antarctica
     // Natural Earth gives Kosovo no ISO number; match it by the code used in data/ (XKX).
     for (const f of fc.features) if (f.id == null && f.properties && f.properties.name === "Kosovo") f.id = "XKX";
+    // A bounding circle per country (centre and angular radius), so the globe can skip countries on its far side.
+    const noop = () => {};
+    for (const f of fc.features) {
+      const c = d3.geoCentroid(f);
+      let r = 0;
+      d3.geoStream(f, { point(x, y) { r = Math.max(r, d3.geoDistance(c, [x, y])); }, lineStart: noop, lineEnd: noop, polygonStart: noop, polygonEnd: noop, sphere: noop });
+      f.cap = { c, r };
+    }
     WORLD = fc;
     return WORLD;
   }
@@ -281,45 +289,58 @@
     fb = d3.geoPath(flat0).bounds(world);
     const s0 = flat0.scale(), t0 = flat0.translate();
     const flatProj = d3.geoNaturalEarth1().scale(s0).translate(t0).precision(0.5).clipExtent([[-2, -2], [W + 2, HF + 2]]);
-    const path = d3.geoPath(proj);
     const view = { ...view0 };
     // In flat mode `fv` is the point of the unzoomed map that sits in the middle of the frame.
     const fv = { x: cx, y: HF / 2 };
     let flat = false, h = H, R = R0, rotate = d3.geoRotation([-view.lon, -view.lat]);
 
-    // ---- drawing: shadow, glow, sea, graticule, land, edge shading and highlight, then the caller's layers
-    const stop = (offset, color, alpha) => s("stop", { offset, style: `stop-color:${color};stop-opacity:${alpha}` });
+    // ---- drawing. The sphere, sea and countries are painted on a canvas, which stays smooth while the map
+    // moves; an SVG laid over it holds the caller's routes, dots and labels and takes the pointer.
+    const canvas = el("canvas", { class: "globe-canvas", "aria-hidden": "true" }), ctx = canvas.getContext("2d");
+    const path = d3.geoPath(proj, ctx);
     const svg = s("svg", { viewBox: `0 0 ${W} ${H}`, width: W, role: "img", tabindex: "0", class: `globe ${cls}` });
-    svg.append(s("defs", {},
-      s("radialGradient", { id: `${gid}-sea`, cx: "36%", cy: "30%", r: "78%" }, stop("0%", "var(--globe-sea-lit)", 1), stop("100%", "var(--globe-sea-shade)", 1)),
-      s("radialGradient", { id: `${gid}-glow` }, stop("84%", "var(--globe-glow)", 0), stop("88.5%", "var(--globe-glow)", "var(--globe-glow-a)"), stop("100%", "var(--globe-glow)", 0)),
-      s("radialGradient", { id: `${gid}-limb` }, stop("58%", "var(--globe-limb)", 0), stop("86%", "var(--globe-limb)", "calc(var(--globe-limb-a) * .32)"), stop("100%", "var(--globe-limb)", "var(--globe-limb-a)")),
-      s("radialGradient", { id: `${gid}-hl`, cx: "32%", cy: "26%", r: "58%" }, stop("0%", "var(--globe-hl)", "var(--globe-hl-a)"), stop("100%", "var(--globe-hl)", 0)),
-      s("radialGradient", { id: `${gid}-shadow` }, stop("0%", "#000", "var(--globe-shadow-a)"), stop("100%", "#000", 0))));
-    const shadowEl = s("ellipse", { cx, class: "globe-shade", fill: `url(#${gid}-shadow)` });
-    const glowEl = s("circle", { cx, cy: gy, class: "globe-shade", fill: `url(#${gid}-glow)` });
-    const seaEl = s("circle", { cx, cy: gy, class: "globe-sea", fill: `url(#${gid}-sea)` });
-    const gratEl = s("path", { class: "globe-grat" });
-    const landG = s("g", {}), over = s("g", {}), top = s("g", {});
-    const limbEl = s("circle", { cx, cy: gy, class: "globe-shade", fill: `url(#${gid}-limb)` });
-    const hlEl = s("circle", { cx, cy: gy, class: "globe-shade", fill: `url(#${gid}-hl)` });
-    svg.append(shadowEl, glowEl, seaEl, gratEl, landG, limbEl, hlEl, over, top);
-    // One path per country. `fills(feature)` may give it a colour, a class and an id for hit-testing.
-    const land = new Map();
-    const shapes = world.features.map((f) => {
-      const a = (fills && fills(f)) || {};
-      const node = s("path", { class: "globe-land" + (a.class ? ` ${a.class}` : ""), "data-id": a.id || null });
-      if (a.fill) node.style.fill = a.fill;
-      landG.append(node);
-      land.set(f.id, node);
-      return { f, node };
-    });
+    const over = s("g", {}), top = s("g", {});
+    svg.append(over, top);
+    const stage = el("div", { class: "globe-stage" }, canvas, svg);
+    // One shape per country. `fills(feature)` may give it a colour and an id for hit-testing. A fill is a CSS
+    // colour, a CSS variable, or "@on" / "@home" for the two highlight styles.
+    const shapes = world.features.map((f) => { const a = (fills && fills(f)) || {}; return { f, id: a.id || null, fill: a.fill || null }; });
+    const byIso = new Map(shapes.map((sh) => [sh.f.id, sh]));
+    let outlined = null;
+    // Canvas cannot read CSS variables, so colours are looked up from the page once per map. Maps are rebuilt
+    // when the theme changes, which refreshes them.
+    let theme = null;
+    const readTheme = () => {
+      const cs = getComputedStyle(document.documentElement), v = (name) => cs.getPropertyValue(name).trim();
+      const rgb = (c) => { const m = /^#([0-9a-f]{3,8})$/i.exec(c); if (!m) return [128, 128, 128]; const x = m[1].length < 6 ? [...m[1]].map((d) => d + d).join("") : m[1]; return [0, 2, 4].map((i) => parseInt(x.slice(i, i + 2), 16)); };
+      const alpha = (c, a) => `rgba(${rgb(c).join(",")},${a})`, mix = (a, b, w) => { const x = rgb(a), y = rgb(b); return `rgb(${x.map((q, i) => Math.round(q * w + y[i] * (1 - w))).join(",")})`; };
+      const num = (name) => parseFloat(v(name)) || 0;
+      theme = { v, alpha, land: v("--land"), stroke: v("--land-stroke"), ink: v("--ink"), accent: v("--accent"), grat: v("--globe-grat"),
+        on: mix(v("--accent"), v("--land"), 0.38), seaLit: v("--globe-sea-lit"), seaShade: v("--globe-sea-shade"),
+        glow: v("--globe-glow"), glowA: num("--globe-glow-a"), limb: v("--globe-limb"), limbA: num("--globe-limb-a"),
+        hl: v("--globe-hl"), hlA: num("--globe-hl-a"), shadowA: num("--globe-shadow-a"), vars: new Map() };
+    };
+    const colour = (c) => {
+      if (!c.startsWith("var(")) return c;
+      if (!theme.vars.has(c)) theme.vars.set(c, theme.v(c.slice(4, -1)));
+      return theme.vars.get(c);
+    };
+    const disc = (x, y, r, fill) => { ctx.beginPath(); ctx.arc(x, y, r, 0, 2 * Math.PI); ctx.fillStyle = fill; ctx.fill(); };
+    const radial = (x, y, r, stops) => { const g = ctx.createRadialGradient(x, y, 0, x, y, r); for (const [o, c] of stops) g.addColorStop(o, c); return g; };
 
-    const drawFns = [];
-    let frame = 0;
+    const drawFns = [], settleFns = [];
+    let frame = 0, settleTimer = 0;
     const draw = () => {
       cancelAnimationFrame(frame); frame = 0;
       if (svg.isConnected) api.seen = true;
+      if (!theme) readTheme();
+      // The canvas is sized to the pixels it covers on screen, so it stays sharp at any width.
+      const scale = ((stage.clientWidth || W) / W) * Math.min(window.devicePixelRatio || 1, 2);
+      const pw = Math.round(W * scale), ph = Math.round(h * scale);
+      if (canvas.width !== pw || canvas.height !== ph) { canvas.width = pw; canvas.height = ph; }
+      ctx.setTransform(scale, 0, 0, scale, 0, 0);
+      ctx.clearRect(0, 0, W, h);
+      ctx.lineJoin = "round";
       if (flat) {
         flatProj.scale(s0 * view.k).translate([cx + view.k * (t0[0] - fv.x), h / 2 + view.k * (t0[1] - fv.y)]);
         // Keep lon/lat in step with the middle of the frame, so the view carries over to the globe.
@@ -329,16 +350,50 @@
         R = R0 * view.k;
         proj.rotate([-view.lon, -view.lat]).scale(R);
         rotate = d3.geoRotation([-view.lon, -view.lat]);
-        for (const c of [seaEl, limbEl, hlEl]) c.setAttribute("r", R);
-        glowEl.setAttribute("r", R * 1.14);
-        shadowEl.setAttribute("cy", gy + R * 1.035); shadowEl.setAttribute("rx", R * 0.78); shadowEl.setAttribute("ry", R * 0.07);
+        // Soft shadow under the globe, the atmosphere glow around it, then the lit sea.
+        if (theme.shadowA) { ctx.save(); ctx.translate(cx, gy + R * 1.035); ctx.scale(1, 0.09); disc(0, 0, R * 0.78, radial(0, 0, R * 0.78, [[0, theme.alpha("#000000", theme.shadowA)], [1, theme.alpha("#000000", 0)]])); ctx.restore(); }
+        disc(cx, gy, R * 1.14, radial(cx, gy, R * 1.14, [[0.84, theme.alpha(theme.glow, 0)], [0.885, theme.alpha(theme.glow, theme.glowA)], [1, theme.alpha(theme.glow, 0)]]));
+        disc(cx, gy, R, radial(cx - 0.28 * R, gy - 0.4 * R, 1.56 * R, [[0, theme.seaLit], [1, theme.seaShade]]));
       }
-      gratEl.setAttribute("d", path(GRATICULE) || "");
-      for (const { f, node } of shapes) node.setAttribute("d", path(f) || "");
+      ctx.beginPath(); path(GRATICULE); ctx.strokeStyle = theme.grat; ctx.lineWidth = 0.6; ctx.stroke();
+      // Countries on the far side of the globe are skipped. Plain land is painted in one pass; coloured and
+      // highlighted countries follow, grouped by colour.
+      const seen = flat ? shapes : shapes.filter((sh) => d3.geoDistance(sh.f.cap.c, [view.lon, view.lat]) < Math.PI / 2 + sh.f.cap.r);
+      const groups = new Map();
+      ctx.beginPath();
+      for (const sh of seen) {
+        if (!sh.fill) path(sh.f);
+        else { if (!groups.has(sh.fill)) groups.set(sh.fill, []); groups.get(sh.fill).push(sh); }
+      }
+      ctx.fillStyle = theme.land; ctx.fill(); ctx.strokeStyle = theme.stroke; ctx.lineWidth = 0.6; ctx.stroke();
+      for (const [fill, list] of groups) {
+        const special = fill === "@on" || fill === "@home";
+        ctx.beginPath(); for (const sh of list) path(sh.f);
+        ctx.fillStyle = fill === "@on" ? theme.on : fill === "@home" ? theme.accent : colour(fill); ctx.fill();
+        ctx.strokeStyle = special ? theme.accent : theme.stroke; ctx.lineWidth = special ? 1 : 0.6; ctx.stroke();
+      }
+      if (outlined) { ctx.beginPath(); path(outlined.f); ctx.strokeStyle = theme.ink; ctx.lineWidth = 1.5; ctx.stroke(); }
+      if (!flat) {
+        // Shading towards the edge and a highlight from the upper left make the disc read as a sphere.
+        disc(cx, gy, R, radial(cx, gy, R, [[0.58, theme.alpha(theme.limb, 0)], [0.86, theme.alpha(theme.limb, theme.limbA * 0.32)], [1, theme.alpha(theme.limb, theme.limbA)]]));
+        disc(cx, gy, R, radial(cx - 0.36 * R, gy - 0.48 * R, 1.16 * R, [[0, theme.alpha(theme.hl, theme.hlA)], [1, theme.alpha(theme.hl, 0)]]));
+      }
       for (const fn of drawFns) fn();
+      // Work that only matters once the map is still (hit areas for routes) waits for a short pause.
+      if (settleFns.length) { clearTimeout(settleTimer); settleTimer = setTimeout(() => { if (svg.isConnected) for (const fn of settleFns) fn(); }, 120); }
     };
     // Coalesce redraws to one per frame. A hidden tab gets no frames, so draw straight away there.
     const invalidate = () => { if (document.hidden) draw(); else if (!frame) frame = requestAnimationFrame(draw); };
+    // Redraw at the right resolution once the map is on the page, and whenever its width changes.
+    if (typeof ResizeObserver !== "undefined") new ResizeObserver(() => { if (stage.clientWidth) invalidate(); }).observe(stage);
+    // The covered country under a point of the frame, by the id given in `fills`.
+    const featureAt = (px, py) => {
+      if (!flat && Math.hypot(px - cx, py - gy) > R) return null;
+      const g = (flat ? flatProj : proj).invert([px, py]);
+      if (!g || !isFinite(g[0]) || !isFinite(g[1])) return null;
+      const hit = shapes.find((sh) => sh.id && d3.geoDistance(sh.f.cap.c, g) <= sh.f.cap.r + 1e-6 && d3.geoContains(sh.f, g));
+      return hit ? hit.id : null;
+    };
 
     // ---- geometry helpers for callers
     // Screen position of a [lon, lat] point, and z > 0 when it can be seen (on the globe: the side facing the reader).
@@ -466,8 +521,11 @@
       let last = performance.now();
       const step = (now) => {
         if (!spinning || flat || !svg.isConnected) return;
-        const dt = Math.min(60, now - last); last = now;
-        if (!hover) { view.lon += (degPerSec * dt) / 1000; clampView(); draw(); }
+        // About 30 frames a second is plenty for a slow idle turn, and halves the work.
+        if (now - last >= 30) {
+          const dt = Math.min(60, now - last); last = now;
+          if (!hover) { view.lon += (degPerSec * dt) / 1000; clampView(); draw(); }
+        }
         anim = requestAnimationFrame(step);
       };
       anim = requestAnimationFrame(step);
@@ -558,7 +616,6 @@
     // ---- 3D / 2D switch. One setting for the whole site; every map on the page follows it.
     const modeBtns = [["globe", "3D", "3D globe"], ["flat", "2D", "Flat 2D map"]].map(([mode, text, title]) =>
       el("button", { type: "button", class: "seg-btn", title, "aria-label": title, "data-mode": mode, onclick: () => setMapMode(mode) }, text));
-    const stage = el("div", { class: "globe-stage" }, svg);
     const applyMode = (mode) => {
       stopMotion();
       flat = mode === "flat"; h = flat ? HF : H;
@@ -575,10 +632,14 @@
     };
 
     const api = {
-      svg, view, land, over, top, W, draw, invalidate, point, arcSamples, arcPath, flyTo, fitPoints, spin,
+      svg, view, over, top, W, draw, invalidate, point, arcSamples, arcPath, flyTo, fitPoints, spin, featureAt,
       get H() { return h; },
       get flat() { return flat; },
       onDraw: (fn) => drawFns.push(fn),
+      onSettle: (fn) => settleFns.push(fn),
+      // Recolour one country (by its ISO number) or outline one (by its `fills` id); both redraw on the next frame.
+      setFill: (iso, fill) => { const sh = byIso.get(iso); if (sh && sh.fill !== (fill || null)) { sh.fill = fill || null; invalidate(); } },
+      setOutline: (id) => { const sh = id ? shapes.find((x) => x.id === id) : null; if (sh !== outlined) { outlined = sh || null; invalidate(); } },
       wasDrag: () => moved > 5,
       zoomIn: () => { user(); zoomBy(1.6); },
       zoomOut: () => { user(); zoomBy(1 / 1.6); },
@@ -625,7 +686,7 @@
     const goHome = (g, ms) => (regional ? g.fitPoints(shown.map((n) => n.geo), { ms, padPx: sq ? 44 : 80, maxK: 6 }) : g.flyTo(HOME, ms));
     const globe = createGlobe({ W, H, maxK: 14, view0: state.mapView || HOME, home: (g) => goHome(g, 600),
       label: `Map of the ${shown.length} nations, coloured by ${field ? field.label.toLowerCase() : metric.label}.`,
-      fills: (f) => { const n = isoMap.get(f.id); return n && inRegion(n) ? { fill: colorFor(n), class: "map-nation", id: n.id } : null; } });
+      fills: (f) => { const n = isoMap.get(f.id); return n && inRegion(n) ? { fill: colorFor(n), id: n.id } : null; } });
     if (!globe) {
       box.append(el("p", { class: "muted" }, "Map libraries failed to load."));
       return box;
@@ -671,7 +732,7 @@
       if (hovered === id) return;
       hovered = id;
       for (const m of markers) m.g.classList.toggle("is-hover", m.n.id === id);
-      globe.svg.querySelectorAll(".map-nation").forEach((p) => p.classList.toggle("is-hover", p.dataset.id === id));
+      globe.setOutline(id);
     }
     // The nation under the pointer: the nearest dot within reach, otherwise the country shape.
     const pick = (e) => {
@@ -680,8 +741,8 @@
       let best = null, reach = 14;
       for (const m of markers) if (m.on) { const d = Math.hypot(m.x - px, m.y - py); if (d < reach) { reach = d; best = m.n; } }
       if (best) return best;
-      const shape = document.elementsFromPoint(e.clientX, e.clientY).find((x) => x.classList && x.classList.contains("map-nation"));
-      return shape ? byId(shape.dataset.id) : null;
+      const id = globe.featureAt(px, py);
+      return id ? byId(id) : null;
     };
     globe.svg.addEventListener("pointermove", (e) => {
       if (globe.svg.classList.contains("is-dragging")) { hideTip(); return; }
@@ -765,7 +826,7 @@
     const frame = (g, ms) => g.flyTo(g.flat ? { lon: n.geo[0], lat: n.geo[1], k: 3 } : { lon: n.geo[0], lat: n.geo[1] * 0.7, k: 1 }, ms);
     const globe = createGlobe({ W: size, H: size, flatH: 176, pad: 24, maxK: 16, cls: "locator-globe", modeSwitch: false,
       view0: { lon: n.geo[0], lat: n.geo[1] * 0.7, k: 1 }, home: (g) => frame(g, 400),
-      label: `Map showing where ${n.name} is.`, fills: (f) => (f.id === n.isoN ? { class: "is-home" } : null) });
+      label: `Map showing where ${n.name} is.`, fills: (f) => (f.id === n.isoN ? { fill: "@home" } : null) });
     if (!globe) return null;
     const ring = s("circle", { class: "loc-ring", r: 11 }), dot = s("circle", { class: "loc-dot", r: 4.5 });
     globe.top.append(ring, dot);
@@ -787,23 +848,49 @@
         el("div", { class: "fact-meta" }, badge(f.level, f.sources.length), sourceChips(f.sources)),
         f.note ? el("p", { class: "note" }, f.note) : null));
   }
-  function newsItem(item, n, showCountry, why) {
-    return el("article", { class: "news-item" },
-      el("div", { class: "fact-date" }, fmtDate(item.date)),
-      el("div", {},
-        showCountry ? el("p", { class: "who" }, el("a", { href: `#${n.id}` }, `${n.flag} ${n.name}`)) : null,
-        el("h3", {}, item.title),
-        el("p", { class: "ink2" }, item.summary),
-        why && why.length ? el("p", { class: "news-why" }, why.join(" · ")) : null,
-        el("div", { class: "fact-meta" }, badge(item.level, item.sources.length), sourceChips(item.sources)),
-        item.note ? el("p", { class: "note" }, item.note) : null,
-        itemActions(newsKey(item, n), newsSnap(item, n))));
-  }
   const allClaims = () => N.flatMap((n) => [...n.facts, ...n.news]);
   // Newest first. Undated-precision items ("2025") sort as the start of that year.
   const byDateDesc = (a, b) => (dateValue(b.date) ?? 0) - (dateValue(a.date) ?? 0);
   const RECENT_FROM = 2024; // the user's focus: developments after 2023
   const isRecent = (x) => (dateValue(x.date) ?? 0) >= RECENT_FROM;
+  // The opening of every page: a small label, the title, and a sentence or two of introduction.
+  function pageHead(kicker, title, lede) {
+    return el("header", { class: "page-head" }, el("span", { class: "kicker" }, kicker), el("h1", {}, title), lede ? el("p", { class: "lede" }, lede) : null);
+  }
+  // The preview image one of a news item's sources publishes for link previews (data/news-images.js). It is
+  // loaded from that site, never copied here, and credited under the picture.
+  // `used` holds the pictures already shown in the same list, so one picture never appears on two cards.
+  function newsImage(item, used) {
+    const map = D.images || {};
+    for (const src of item.sources) {
+      const url = map[src.u];
+      if (url && !(used && used.has(url))) { if (used) used.add(url); return { url, src }; }
+    }
+    return null;
+  }
+  // A news item as a card: picture (or a plate with the flag when no source has one), who and when, headline,
+  // summary, sources and the save / review buttons. `lead` lays it out wide for the top story.
+  function newsCard(item, n, { why, lead, showCountry = true, used } = {}) {
+    const img = newsImage(item, used), to = (img ? img.src : item.sources[0]).u;
+    const media = el("a", { class: "nw-media", href: to, target: "_blank", rel: "noopener noreferrer", tabindex: "-1", "aria-hidden": "true" },
+      el("span", { class: "nw-plate" }, el("span", {}, n.flag)));
+    let credit = null;
+    if (img) {
+      const pic = el("img", { src: img.url, alt: "", loading: lead ? "eager" : "lazy", decoding: "async", referrerpolicy: "no-referrer" });
+      credit = el("p", { class: "nw-credit" }, "Image: ", el("a", { href: img.src.u, target: "_blank", rel: "noopener noreferrer" }, domain(img.src.u)));
+      // A picture that fails to load (moved, or blocked from other sites) falls back to the flag plate.
+      pic.addEventListener("error", () => { pic.remove(); credit.remove(); });
+      media.append(pic);
+    }
+    const text = el("div", { class: "nw-text" },
+      el("div", { class: "nw-meta" }, showCountry ? [el("a", { href: `#${n.id}` }, `${n.flag} ${n.name}`), el("span", { "aria-hidden": "true" }, "·")] : null, el("time", {}, fmtDate(item.date))),
+      el("h3", { class: "nw-title" }, item.title),
+      el("p", { class: "nw-sum" }, item.summary),
+      why && why.length ? el("p", { class: "news-why" }, why.join(" · ")) : null,
+      item.note ? el("p", { class: "note" }, item.note) : null,
+      el("div", { class: "nw-foot" }, el("div", { class: "fact-meta" }, badge(item.level, item.sources.length), sourceChips(item.sources)), itemActions(newsKey(item, n), newsSnap(item, n))));
+    return el("article", { class: "nw-card" + (lead ? " nw-lead" : "") }, el("div", { class: "nw-pic" }, media, credit), text);
+  }
   function sectionHead(title, sub) {
     return el("div", { class: "section-head" }, el("h2", {}, title), sub ? el("p", {}, sub) : null);
   }
@@ -845,10 +932,11 @@
     const levelColor = { verified: "var(--good)", corroborated: "var(--accent)", single: "var(--warning)" };
 
     const head = el("section", { class: "hero" },
-      el("div", {},
-        el("h1", {}, `How ${N.length} small nations are handling AI`),
+      el("div", { class: "page-head" },
+        el("span", { class: "kicker" }, "Overview"),
+        el("h1", {}, "AI outside the frontier"),
         el("p", { class: "lede" },
-          `${N.length} countries with fewer than 15 million people each, across five regions, and the different paths each has taken on AI: strategy, governance, institutions, adoption and investment. Every claim links to the sources behind it.`)),
+          `How ${N.length} countries that neither build frontier AI models nor hold a key place in the AI supply chain are handling AI: their strategies, rules, institutions, compute and partners. Every claim links to the sources behind it.`)),
       el("div", { class: "card" },
         el("div", { class: "hero-figure" }, `${count("verified")} of ${claims.length}`),
         el("p", { class: "hero-cap" }, `claims confirmed by 3 or more independent sources (${srcCount} sources cited in total)`),
@@ -1014,7 +1102,7 @@
       el("section", { class: "country-top" },
         el("div", { class: "country-head" },
           el("span", { class: "flag", "aria-hidden": "true" }, n.flag),
-          el("div", {}, el("h1", {}, n.name), el("p", { class: "stance" }, `${n.region} · ${n.stance}`),
+          el("div", {}, el("span", { class: "kicker" }, n.region), el("h1", {}, n.name), el("p", { class: "stance" }, n.stance),
             el("p", { class: "muted small", style: "margin-top:6px" }, n.oxford ? `#${pos + 1} of the ${nRanked} nations here in the Oxford Insights readiness index` : "Not in the Oxford Insights readiness index"))),
         locatorMap(n)),
       el("p", { class: "summary" }, n.summary),
@@ -1032,10 +1120,11 @@
         el("div", { class: "card" }, list)),
       el("section", { class: "section" },
         sectionHead("Recent news", "Since 2024, newest first."),
-        el("div", { class: "card" }, (() => {
+        (() => {
           const items = [...n.news].filter(isRecent).sort(byDateDesc);
-          return items.length ? items.map((x) => newsItem(x, n, false)) : [el("p", { class: "muted empty" }, "No news items since 2024 in this dataset.")];
-        })())),
+          const used = new Set();
+          return items.length ? el("div", { class: "nw-grid" }, items.map((x) => newsCard(x, n, { showCountry: false, used }))) : el("div", { class: "card" }, el("p", { class: "muted empty" }, "No news items since 2024 in this dataset."));
+        })()),
       el("nav", { class: "section pager", "aria-label": "Neighbouring nations by rank" },
         pos > 0 ? el("a", { href: `#${ranked[pos - 1].id}` }, `← ${ranked[pos - 1].flag} ${ranked[pos - 1].name}`) : el("span", {}),
         pos < ranked.length - 1 ? el("a", { href: `#${ranked[pos + 1].id}` }, `${ranked[pos + 1].flag} ${ranked[pos + 1].name} →`) : el("span", {})),
@@ -1140,38 +1229,44 @@
 
   function renderNews() {
     const items = N.flatMap((n) => n.news.filter(isRecent).map((x) => ({ x, n })));
-    let nation = "all", level = "all", theme = null;
+    const PAGE = 18;
+    let nation = "all", level = "all", theme = null, shownCount = PAGE;
     if (!NEWS_SORTS.some(([k]) => k === state.newsSort)) state.newsSort = "newest";
-    const list = el("div", { class: "card" });
-    const row2 = el("div", { class: "filters", role: "group", "aria-label": "Filter by number of sources" });
-    const sortRow = el("div", { class: "filters news-sort", role: "group", "aria-label": "Sort the news" });
-    const themeRow = el("div", { class: "news-themes" });
+    const grid = el("div", { class: "nw-grid" }), more = el("div", { class: "nw-more" });
+    const sortSeg = el("div", { class: "seg", role: "group", "aria-label": "Sort the news" });
+    const themeRow = el("div", { class: "nw-themes" }), count = el("span", { class: "nw-count" }), sortNote = el("p", { class: "muted small nw-sortnote" });
     const select = el("select", { class: "select", "aria-label": "Filter by nation" });
-    const draw = () => {
-      const opts = [["all", "All nations in region"], ...N.filter(inRegion).sort((a, b) => a.name.localeCompare(b.name)).map((n) => [n.id, `${n.flag} ${n.name}`])];
+    const levelSel = el("select", { class: "select", "aria-label": "Filter by number of sources" },
+      [["all", "Any number of sources"], ...["verified", "corroborated", "single"].map((k) => [k, LEVELS[k].label])].map(([k, lab]) => el("option", { value: k }, lab)));
+    const draw = (keepCount) => {
+      if (!keepCount) shownCount = PAGE;
+      const opts = [["all", state.region === "All" ? "All nations" : `All nations in ${state.region}`], ...N.filter(inRegion).sort((a, b) => a.name.localeCompare(b.name)).map((n) => [n.id, `${n.flag} ${n.name}`])];
       if (!opts.some(([k]) => k === nation)) nation = "all";
       select.replaceChildren(...opts.map(([k, lab]) => el("option", { value: k, selected: k === nation }, lab)));
-      row2.replaceChildren(...[["all", "Any number of sources"], ...["verified", "corroborated", "single"].map((k) => [k, LEVELS[k].label])].map(([k, lab]) =>
-        el("button", { class: "chip-btn", type: "button", "aria-pressed": String(level === k), onclick: () => { level = k; draw(); } }, lab)));
-      sortRow.replaceChildren(el("span", { class: "filter-label" }, "Sort"),
-        ...NEWS_SORTS.flatMap(([k, lab], i) => [i === 1 ? el("span", { class: "sort-sep", "aria-hidden": "true" }) : null,
-          el("button", { class: "chip-btn", type: "button", "aria-pressed": String(state.newsSort === k), onclick: () => { state.newsSort = k; theme = null; draw(); } }, lab)]).filter(Boolean));
+      sortSeg.replaceChildren(...NEWS_SORTS.map(([k, lab]) =>
+        el("button", { class: "seg-btn", type: "button", "aria-pressed": String(state.newsSort === k), onclick: () => { state.newsSort = k; theme = null; draw(); } }, lab)));
+      sortNote.textContent = state.newsSort === "relevance" ? "Relevance combines how much an item is trending, its likely impact and how insightful it is, worked out from its text, sources and date. There is no click or popularity data. Each card says why it ranked; the rules are in Method." : "";
+      sortNote.hidden = state.newsSort !== "relevance";
       const pool = items.filter(({ x, n }) => inRegion(n) && (nation === "all" || n.id === nation) && (level === "all" || x.level === level));
       const ranked = rankNews(pool, state.newsSort);
       const themeRe = theme ? NEWS_THEMES.find(([name]) => name === theme)[1] : null;
       const shown = themeRe ? ranked.list.filter(({ x }) => themeRe.test(`${x.title}. ${x.summary}`)) : ranked.list;
-      themeRow.replaceChildren(...(ranked.themes.length ? [el("span", { class: "muted small" }, "Hot topics, last 60 days:"),
+      themeRow.replaceChildren(...(ranked.themes.length ? [el("span", { class: "filter-label" }, "Hot in the last 60 days"),
         ...ranked.themes.map((t) => el("button", { class: "chip-btn small", type: "button", "aria-pressed": String(theme === t.name), onclick: () => { theme = theme === t.name ? null : t.name; draw(); } }, `${t.name} · ${t.n}`))] : []));
-      list.replaceChildren(...(shown.length ? shown.map(({ x, n, why }) => newsItem(x, n, true, why)) : [el("p", { class: "muted" }, "No items match these filters.")]));
+      count.textContent = `${shown.length} ${shown.length === 1 ? "item" : "items"}`;
+      // The first item is the lead story; the rest fill the grid a page at a time.
+      const used = new Set();
+      grid.replaceChildren(...(shown.length ? shown.slice(0, shownCount + 1).map(({ x, n, why }, i) => newsCard(x, n, { why, lead: i === 0, used })) : [el("p", { class: "muted" }, "No items match these filters.")]));
+      more.replaceChildren(...(shown.length > shownCount + 1 ? [el("button", { class: "show-more", type: "button", onclick: () => { shownCount += PAGE; draw(true); } }, `Show ${Math.min(PAGE, shown.length - shownCount - 1)} more of ${shown.length - shownCount - 1}`)] : []));
     };
     select.addEventListener("change", () => { nation = select.value; draw(); });
+    levelSel.addEventListener("change", () => { level = levelSel.value; draw(); });
     draw();
     view.replaceChildren(
-      el("h1", {}, "News feed"),
-      el("p", { class: "summary ink2" }, `${items.length} developments since January 2024 across ${N.length} nations. Research cut-off ${fmtDate(D.meta.asOf)}.`),
-      el("section", { class: "section" }, sortRow,
-        el("p", { class: "muted small news-sort-note" }, "Relevance combines how much an item is trending, its likely impact and how insightful it is, worked out from its text, sources and date; there is no click or popularity data. Each item says why it ranked. See Method."),
-        themeRow, regionFilter(draw), el("div", { class: "filters" }, select), row2, list));
+      pageHead("News", "What changed, and where", `${items.length} developments since January 2024 across ${N.length} countries, each tied to its sources. Research cut-off ${fmtDate(D.meta.asOf)}.`),
+      el("div", { class: "filter-bar nw-region" }, el("span", { class: "filter-label" }, "Region"), regionFilter(() => draw())),
+      el("div", { class: "nw-controls" }, sortSeg, select, levelSel, count),
+      sortNote, themeRow, grid, more);
   }
 
   // ---------------------------------------------------------------- collaborations (country to country)
@@ -1224,7 +1319,7 @@
     const frame = (g, ms) => g.fitPoints(places, { ms, maxK: 3.2, padPx: 70 });
     const globe = createGlobe({ W, H, pad: 14, maxK: 10, cls: "np-map", view0: { lon: n.geo[0], lat: n.geo[1], k: 1 }, home: (g) => frame(g, 600),
       label: `Map of ${n.name}'s AI partners: ${keys.map((k) => party(k).name).join(", ")}.`,
-      fills: (f) => (f.id === n.isoN ? { class: "cx-fill" } : null) });
+      fills: (f) => (f.id === n.isoN ? { fill: "@on" } : null) });
     if (!globe) return el("p", { class: "muted" }, "Map libraries failed to load.");
     const lines = links.filter(([, k]) => party(k)).map(([c, k]) => {
       const node = s("path", { class: `collab-line np-line ${c.kind}` }, s("title", {}, `${c.short}: ${party(k).name}`));
@@ -1318,20 +1413,22 @@
       const lineLayer = s("g", {}), onLayer = s("g", {}), hitLayer = s("g", {}), dotLayer = s("g", {});
       globe.over.append(lineLayer, onLayer, hitLayer);
       globe.top.append(dotLayer);
-      // Every agreement is a faint route above the surface; a wider invisible copy takes the pointer.
+      // Every agreement is a faint route above the surface. The faint routes share four paths (two kinds, shown
+      // or dimmed by the search) so a moving map updates four elements, not hundreds. A wider invisible copy of
+      // each route takes the pointer; those are only brought up to date once the map stops.
+      const faint = {};
+      for (const kind of ["bilateral", "group"]) for (const out of [false, true]) lineLayer.append(faint[kind + out] = s("path", { class: `collab-line ${kind}${out ? " is-out" : ""}` }));
       const segs = [];
       for (const c of all) {
         const pairs = c.kind === "bilateral" ? [[c.a, c.b]] : c.members.map((m) => [c.hub, m]);
         for (const [k1, k2] of pairs) {
           const a = party(k1), b = party(k2);
           if (!a || !b) continue;
-          const vis = s("path", { class: `collab-line ${c.kind}` });
           const hit = s("path", { class: "collab-hit", "data-id": c.id });
           hit.addEventListener("pointermove", (e) => { if (!globe.svg.classList.contains("is-dragging")) showTip(e, [el("div", { class: "tv" }, c.short || c.title), el("div", { class: "tl" }, partiesOf(c).map((p) => p.name).join(c.kind === "bilateral" ? " ⟷ " : ", ")), el("div", { class: "tl small", style: "margin-top:4px" }, "Click for details")]); });
           hit.addEventListener("pointerleave", hideTip);
-          lineLayer.append(vis);
           hitLayer.append(hit);
-          segs.push({ c, vis, hit, d: "", samples: globe.arcSamples(a.geo, b.geo, c.kind === "bilateral" ? 1 : 0.75) });
+          segs.push({ c, hit, d: "", out: false, samples: globe.arcSamples(a.geo, b.geo, c.kind === "bilateral" ? 1 : 0.75) });
         }
       }
       // A dot for every country or body with an agreement, sized by how many it has.
@@ -1347,8 +1444,11 @@
         return { ...d, n, g, circle, text, lit: false, named: false, out: false };
       });
       let onLines = [], filled = [];
+      globe.onSettle(() => { for (const sg of segs) sg.hit.setAttribute("d", sg.d); });
       globe.onDraw(() => {
-        for (const sg of segs) { sg.d = globe.arcPath(sg.samples); sg.vis.setAttribute("d", sg.d); sg.hit.setAttribute("d", sg.d); }
+        const merged = { bilateralfalse: "", bilateraltrue: "", groupfalse: "", grouptrue: "" };
+        for (const sg of segs) { sg.d = globe.arcPath(sg.samples); merged[sg.c.kind + sg.out] += sg.d; }
+        for (const k in merged) faint[k].setAttribute("d", merged[k]);
         for (const o of onLines) { o.glow.setAttribute("d", o.seg.d); o.line.setAttribute("d", o.seg.d); }
         for (const d of dots) {
           const p = globe.point(d.p.geo), on = p.z > 0.02;
@@ -1380,7 +1480,7 @@
       paint = () => {
         const c = byCid.get(st.sel), list = shownList();
         const shownIds = new Set(list.map((x) => x.id)), shownKeys = new Set(list.flatMap(collabParties));
-        for (const sg of segs) sg.vis.classList.toggle("is-out", !shownIds.has(sg.c.id));
+        for (const sg of segs) sg.out = !shownIds.has(sg.c.id);
         // The selected agreement: bright routes with a glow, its countries shaded, its dots ringed and named.
         onLayer.replaceChildren();
         onLines = segs.filter((sg) => c && sg.c.id === c.id).map((seg) => {
@@ -1388,9 +1488,9 @@
           onLayer.append(glow, line);
           return { seg, glow, line };
         });
-        for (const node of filled) node.classList.remove("cx-fill");
-        filled = c ? collabParties(c).map((k) => globe.land.get((byId(k) || PLACES[k] || {}).isoN)).filter(Boolean) : [];
-        for (const node of filled) node.classList.add("cx-fill");
+        for (const iso of filled) globe.setFill(iso, null);
+        filled = c ? collabParties(c).map((k) => (byId(k) || PLACES[k] || {}).isoN).filter(Boolean) : [];
+        for (const iso of filled) globe.setFill(iso, "@on");
         const lit = new Set(c ? collabParties(c) : []);
         // Name every country in the selected agreement; for large groups only the host.
         const named = new Set(c ? (lit.size <= 6 ? lit : [c.hub]) : []);
@@ -1531,9 +1631,8 @@
 
     const nBil = all.filter((c) => c.kind === "bilateral").length;
     view.replaceChildren(
-      el("h1", {}, "AI collaborations between countries"),
-      el("p", { class: "summary ink2" }, `${all.length} AI agreements between governments (${nBil} between two countries, ${all.length - nBil} in groups), each involving at least one nation on this site. The map moves to each one every few seconds; pick one from the list to stop and read it, or drag the map to look around. Switch between a 3D globe and a flat 2D map with the buttons in its corner.`),
-      el("section", { class: "section cx" },
+      pageHead("Collaborations", "Who is working with whom on AI", `${all.length} AI agreements between governments: ${nBil} between two countries and ${all.length - nBil} in groups, each involving at least one country on this site. The map moves to each one every few seconds. Pick one from the list to stop and read it, or drag the map to look around.`),
+      el("section", { class: "cx" },
         el("div", { class: "cx-side card" }, el("div", { class: "cx-side-in" }, search, status, rows)),
         stage),
       el("p", { class: "muted small cx-foot" },
@@ -1587,8 +1686,7 @@
     const multi = of("bloc", "multi").map((n) => n.name);
 
     view.replaceChildren(el("article", { class: "findings" },
-      el("h1", {}, "Findings"),
-      el("p", { class: "summary" }, `What the data on this site shows about how ${total} small nations govern AI, in six claims.`),
+      pageHead("Findings", "What the data shows", `Six claims about how ${total} countries outside the AI frontier govern AI, each counted from the facts on this site.`),
       el("p", { class: "note fd-note" }, "Each nation is coded on four questions: what leads its AI policy, where its rules come from, where its compute comes from, and which outside power it is tied to. The codes are editorial readings of the sourced facts, the rules are in ", el("a", { href: "#method" }, "Method"), ", and every count below is recalculated from the data. “None on record” means this site has no sourced fact, which is not proof that nothing exists."),
 
       finding(1, "Few small nations write their own AI rules.",
@@ -1629,8 +1727,7 @@
     const grp = (g) => N.filter((n) => n.group === g).length;
     const tally = (label, v, sub) => el("div", { class: "tile" }, el("div", { class: "l" }, label), el("div", { class: "v" }, v), el("div", { class: "s" }, sub));
     view.replaceChildren(el("article", { class: "method" },
-      el("h1", {}, "Method & verification"),
-      el("p", { class: "summary" }, "How the facts on this site were researched and checked, and what the badges mean."),
+      pageHead("Method", "How this was researched and checked", "How the facts on this site were researched and checked, and what the badges mean."),
       el("div", { class: "tally" },
         tally("Claims", String(claims.length), `across ${N.length} nations`),
         tally("3+ sources", String(cnt("verified")), "independent sources agree"),
@@ -2065,8 +2162,7 @@
   // #saved: the profile's saved items and review marks.
   function renderSaved() {
     if (!Store.user()) {
-      view.replaceChildren(el("h1", {}, "Saved & reviewed"),
-        el("p", { class: "summary ink2" }, "Sign in to keep a list of agreements, news and documents, and to mark what you have read and vetted or what looks suspicious, with notes."),
+      view.replaceChildren(pageHead("Your list", "Saved & reviewed", "Sign in to keep a list of agreements, news and documents, and to mark what you have read and vetted or what looks suspicious, with notes."),
         el("div", { class: "section acct-actions" },
           el("button", { class: "acct-btn primary", type: "button", onclick: () => accountDialog(null, "create") }, "Create a profile"),
           el("button", { class: "acct-btn", type: "button", onclick: () => accountDialog(null, "signin") }, "Sign in")));
@@ -2099,8 +2195,7 @@
     };
     draw();
     view.replaceChildren(
-      el("h1", {}, "Saved & reviewed"),
-      el("p", { class: "summary ink2" }, `${Store.displayName()}'s saved items and review notes.`),
+      pageHead("Your list", "Saved & reviewed", `${Store.displayName()}'s saved items and review notes.`),
       body,
       backupPanel());
   }

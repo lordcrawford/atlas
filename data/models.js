@@ -117,7 +117,7 @@
       ga: { posture: ["adopt","On 3 July 2026 President Bri"], route: ["regional","#au"], compute: ["own","On 3 July 2026 President Bri"], bloc: ["none"] }, // Gabon
       dj: { posture: ["align","At Djibouti's first National","In January 2026, ESCWA and t"], route: ["regional","#au"], compute: ["none"], bloc: ["none"] }, // Djibouti
       sz: { posture: ["align","Eswatini is developing a Nat"], route: ["regional","#au"], compute: ["none"], bloc: ["none"] }, // Eswatini
-      ls: { posture: ["adopt","Lesotho published its Artifi"], route: ["regional","#au"], compute: ["none"], bloc: ["none"] }, // Lesotho
+      ls: { posture: ["align","From 17 to 21 August 2026","Lesotho became the first country"], route: ["regional","#au"], compute: ["none"], bloc: ["none"] }, // Lesotho
       ba: { posture: ["align","The Parliamentary Assembly o"], route: ["none"], compute: ["none"], bloc: ["none"] }, // Bosnia and Herzegovina
       mk: { posture: ["align","On 14 October 2025 Digital T","North Macedonia has no stand"], route: ["none"], compute: ["shared","On 14 October 2025 Digital T","@mk-gr","@daedalus"], bloc: ["eu","On 14 October 2025 Digital T"] }, // North Macedonia
       md: { posture: ["align","The Ministry of Economic Dev","Moldova has no law specifica"], route: ["regional","@coe"], compute: ["none"], bloc: ["eu","@coe"] }, // Moldova

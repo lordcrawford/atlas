@@ -57,7 +57,7 @@
     form.className = "gate";
     form.innerHTML =
       '<div class="gate-card">' +
-      '<div class="gate-brand"><span class="brand-mark" aria-hidden="true">◐</span> Atlas</div>' +
+      '<div class="gate-brand"><span class="brand-mark" aria-hidden="true"></span> Atlas</div>' +
       '<h1 class="gate-title">This site is private</h1>' +
       '<p class="gate-sub">Enter the password to continue.</p>' +
       '<label class="gate-label" for="gatePw">Password</label>' +

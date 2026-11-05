@@ -30,7 +30,6 @@ window.ATLAS.nations.push(
         level: "verified",
         sources: [
           { t: "NVIDIA blog - Denmark launches leading sovereign AI supercomputer", u: "https://blogs.nvidia.com/blog/denmark-sovereign-ai-supercomputer" },
-          { t: "Eviden - Gefion AI supercomputer inaugurated", u: "https://eviden.com/insights/news/gefion-ai-supercomputer-built-by-eviden-inaugurated-as-one-of-the-worlds-most-powerful-in-denmark" },
           { t: "The Copenhagen Post - Denmark launches first AI supercomputer", u: "https://cphpost.dk/2024-10-25/news/technology/denmark-launches-first-ai-supercomputer/" },
           { t: "Novo Nordisk Fonden - Danish Centre for AI Innovation", u: "https://novonordiskfonden.dk/en/projects/danish-centre-for-ai-innovation/" },
         ],
@@ -174,9 +173,7 @@ window.ATLAS.nations.push(
         sources: [
           { t: "Research Professional News - Norway sets aside more than 1bn kroner for AI research", u: "https://www.researchprofessionalnews.com/rr-news-europe-nordics-2023-9-norway-sets-aside-more-than-1bn-kroner-for-ai-research/" },
           { t: "Innovation News Network - AI research to increase in Norway", u: "https://www.innovationnewsnetwork.com/artificial-intelligence-research-increase-in-norway-one-billion-kroner-investment/37419/" },
-          { t: "Chambers - Artificial Intelligence 2025: Norway", u: "https://practiceguides.chambers.com/practice-guides/artificial-intelligence-2025/norway/trends-and-developments" },
         ],
-        note: "As of April 2025, reporting said no funding decisions had yet been made.",
       },
       {
         topic: "Strategy & readiness", date: "2024-09-26",
@@ -652,7 +649,7 @@ window.ATLAS.nations.push(
     facts: [
       {
         topic: "Institutions", date: "2026-10-19",
-        text: "On 19 October 2026 the Emir ratified Cabinet Decision No. 34 of 2026, which creates a National Center for AI inside the Ministry of Communications and Information Technology. Reporting directly to the minister and made up of three departments, it is to prepare the national AI strategy and oversee it, develop AI policy and regulation, and run AI platforms and partnerships. The Cabinet had approved the draft in September 2025.",
+        text: "On 19 October 2026 the Emir ratified Cabinet Decision No. 34 of 2026, which creates a National Center for AI inside the Ministry of Communications and Information Technology. Reporting directly to the minister and made up of three departments, it is to prepare the national AI strategy and oversee it, develop AI policy and regulation, and run AI platforms and partnerships.",
         level: "verified",
         sources: [
           { t: "The Peninsula - Amir ratifies decision to establish National Center for AI (20 Oct 2026)", u: "https://thepeninsulaqatar.com/article/20/10/2026/amir-ratifies-decision-to-establish-national-center-for-ai" },

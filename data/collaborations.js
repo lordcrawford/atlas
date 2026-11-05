@@ -642,10 +642,12 @@ window.ATLAS.collaborations = [
     title: "UAE–Malaysia–Rwanda AI partnership",
     short: "AI adoption in the Global South",
     hub: "ae", members: ["rw", "my"],
-    text: "In July 2025 the UAE, Malaysia and Rwanda agreed to work together to boost AI adoption across the Global South, building on an AI fellowship programme the UAE and Rwanda launched at Davos in 2024.",
+    text: "In July 2025 the UAE, Malaysia and Rwanda signed a memorandum to work together on AI adoption across the Global South. It widens an AI fellowship programme that the UAE and Rwanda started at the World Economic Forum in Davos in 2024.",
     level: "single",
     sources: [
-      { t: "Bernama (WAM) - UAE, Malaysia, Rwanda seek to boost AI adoption in Global South (31 Jul 2025)", u: "https://www.bernama.com/en/news.php?id=2451825" },
+      { t: "Dubai Future Foundation - UAE, Malaysia, Rwanda seek to boost AI adoption in Global South (31 Jul 2025)", u: "https://www.dubaifuture.ae/?p=173878" },
+      { t: "Economy Middle East - UAE, Malaysia and Rwanda partner to boost AI adoption in Global South (31 Jul 2025)", u: "https://economymiddleeast.com/news/uae-malaysia-and-rwanda-partner-to-boost-ai-adoption-in-global-south" },
     ],
+    note: "Both pages carry the same Emirates News Agency (WAM) release, so they count as one source.",
   },
 ];
