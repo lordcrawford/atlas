@@ -1,5 +1,29 @@
 # Methodology
 
+## Scope (5 Nov 2026)
+
+Atlas covers countries outside the AI frontier: those that neither produce frontier AI models nor hold a key place in the AI chip supply chain. Until 5 November 2026 the scope was sovereign states under 15 million people.
+
+- **Yardstick.** The Stanford AI Index 2026, chapter 1. Figure 1.1.1 counts notable AI models by country in 2025: United States 59, China 35, South Korea 8, and one each for Canada, France, Hong Kong, Singapore and the United Kingdom. Section 1.3 describes the AI hardware supply chain: chip and memory design (Nvidia and Micron in the United States; SK Hynix and Samsung in South Korea), fabrication (TSMC in Taiwan, Samsung in South Korea) and packaging (ASE in Taiwan, Amkor in the United States).
+- **Left out:** United States, China, South Korea, Taiwan, Canada, France, United Kingdom. Hong Kong is a territory, and territories are not included.
+- **Exception:** Singapore is credited with one notable model but stays on the site, by the owner's decision.
+- **Coverage:** 121 countries so far, every sovereign state under 15 million people. 68 larger countries fall inside the scope and are being added largest first (India, Indonesia, Pakistan, Nigeria, Brazil and so on); the list is in `data/scope.js`. A country appears only once its facts are sourced and checked, so the Findings counts describe the smaller countries until then.
+- The yardstick counts one year of models and the supply-chain roles one report names. It does not capture every way a country takes part in AI (chip equipment in the Netherlands and Japan, for example), so those countries are inside the scope.
+
+## Sixth audit (5 Nov 2026)
+
+- All 775 cited pages were fetched again and every claim's dates, numbers and names were checked against them. 730 pages were read automatically and 13 in a browser. The other 32 sit behind bot checks, which are not bypassed, or are files that would not open; their claims rest on earlier audits.
+- **Lesotho corrected.** The page said the AI Policy and Implementation Plan was published on 17 August 2026. No source says so: stakeholders validated the policy in 2025, OECD.AI lists it as proposed or under development, and 17 August was the first day of a strategy workshop. The fact, summary and stance were rewritten, and Lesotho's approach code changed from adoption first to aligning (counts are now 49 adoption first, 27 aligning).
+- **Removed, because no current source carries them:** the sentence that Qatar's Cabinet approved the National Center for AI draft in September 2025; the note that no Norwegian funding decisions had been made by April 2025; Cuba's 2025 index score repeated in a 2026 news item.
+- **Re-sourced:** the UAE's October 2017 strategy launch and its place in Centennial 2071 (UAE Ministry of Foreign Affairs, 17 Oct 2017); the UAE, Malaysia and Rwanda memorandum (the Bernama page no longer shows the article; replaced by the Dubai Future Foundation and Economy Middle East, which carry the same WAM release and count as one source).
+- **Dead links dropped:** Eviden's Gefion press release (Denmark, still three independent sources) and the Chambers guide for Norway (still two).
+- All 87 key-document links were checked. None is dead; 12 refuse automated requests but open in a browser.
+- No news items were added in this audit.
+
+## News pictures (5 Nov 2026)
+
+Each news card shows the preview image that one of its source pages publishes for link previews (its `og:image`). The picture is loaded from the source's own server and credited under the card; nothing is copied into this site. An image is used only if it loaded when checked, is not shared by several different pages (a site logo) and is not tiny. 187 of 273 news source pages have one. A card with no picture, or whose picture fails to load, shows the country's flag.
+
 ## Verification levels
 
 | Badge | Meaning |

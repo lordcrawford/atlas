@@ -5,6 +5,8 @@
 
   const D = window.ATLAS;
   const N = D.nations;
+  // What the site covers and who is left out (data/scope.js).
+  const SCOPE = D.scope || { frontier: [], exception: { why: "" }, pending: [], source: { t: "", u: "#" } };
   const S = D.meta.sources;
   const PILLARS = D.meta.pillars;
   const OXFORD_TOTAL = 195;
@@ -970,7 +972,7 @@
         el("section", { class: "section" },
           sectionHead("Where they are", "Drag the map to look around. Hover a country or dot for its numbers, click to open its profile. Picking a region moves the map to it. Shade it by readiness or by governance model; the 3D and 2D buttons switch between a globe and a flat map."),
           el("div", { class: "card" }, shadeRow, mapSlot,
-            el("p", { class: "note" }, "Singapore, Malta, Bahrain, Mauritius and other small states are too small to draw as shapes, so every nation is also marked with a dot at its capital. Use 'Show as table' to see all of them at once."))),
+            el("p", { class: "note" }, "Singapore, Malta, Bahrain, Mauritius and other small states are too small to draw as shapes, so every country is also marked with a dot at its capital. Use 'Show as table' to see all of them at once."))),
         el("section", { class: "section" },
           sectionHead("At a glance", "Click a column header to sort; the top rows follow the sort."),
           el("div", { class: "card compare" }, viewRow, tableSlot, sourceLine("oxford", "wbNet"))),
@@ -1687,10 +1689,10 @@
 
     view.replaceChildren(el("article", { class: "findings" },
       pageHead("Findings", "What the data shows", `Six claims about how ${total} countries outside the AI frontier govern AI, each counted from the facts on this site.`),
-      el("p", { class: "note fd-note" }, "Each nation is coded on four questions: what leads its AI policy, where its rules come from, where its compute comes from, and which outside power it is tied to. The codes are editorial readings of the sourced facts, the rules are in ", el("a", { href: "#method" }, "Method"), ", and every count below is recalculated from the data. “None on record” means this site has no sourced fact, which is not proof that nothing exists."),
+      el("p", { class: "note fd-note" }, "Each nation is coded on four questions: what leads its AI policy, where its rules come from, where its compute comes from, and which outside power it is tied to. The codes are editorial readings of the sourced facts, the rules are in ", el("a", { href: "#method" }, "Method"), ", and every count below is recalculated from the data. “None on record” means this site has no sourced fact, which is not proof that nothing exists.", SCOPE.pending.length ? ` So far the site covers the ${N.length} countries with fewer than 15 million people; ${SCOPE.pending.length} larger ones are still to be added, so these findings describe smaller states for now.` : ""),
 
-      finding(1, "Few small nations write their own AI rules.",
-        el("p", {}, `${cnt("route", "own")} of ${total} have an AI law or bill of their own. ${cnt("route", "eu")} take the EU AI Act as members of the EU or the EEA, ${cnt("route", "regional")} sit under a regional body's framework or a treaty, and ${cnt("route", "none")} have no AI rules on record. For most small states the question is which outside rulebook to live under, not what to write.`),
+      finding(1, "Few countries outside the frontier write their own AI rules.",
+        el("p", {}, `${cnt("route", "own")} of ${total} have an AI law or bill of their own. ${cnt("route", "eu")} take the EU AI Act as members of the EU or the EEA, ${cnt("route", "regional")} sit under a regional body's framework or a treaty, and ${cnt("route", "none")} have no AI rules on record. For most of them the question is which outside rulebook to live under, not what to write.`),
         shareBar("route", N), el("div", { class: "fd-foot" }, onMap("route")), evidence("route")),
 
       finding(2, "Most lead with a strategy, not a law.",
@@ -1713,7 +1715,7 @@
         el("details", { class: "fd-evidence" }, el("summary", {}, "See the nations and the facts"),
           el("div", { class: "nchips" }, helped.sort((a, b) => a.n.name.localeCompare(b.n.name)).map((x) => nchip(x.n, `#${x.n.id}/f${x.i}`))))),
 
-      finding(6, "Small states cooperate in groups more than in pairs, and few are tied to more than one big power.",
+      finding(6, "They cooperate in groups more than in pairs, and few are tied to more than one big power.",
         el("p", {}, `${inAny.length} of ${total} are party to at least one AI agreement between governments, but only ${inPair.length} have a two-country deal; the other ${inAny.length - inPair.length} appear only in groups such as CARICOM, the Pacific Islands Forum or the Council of Europe convention. On ties to the big powers, ${cnt("bloc", "eu")} are tied to Europe, ${cnt("bloc", "us")} to the United States and ${cnt("bloc", "cn")} to China. ${multi.length ? `Only ${multi.length} are tied to more than one: ${multi.join(", ")}.` : ""}`),
         shareBar("bloc", N.filter((n) => codeOf(n, "bloc").v !== "none")),
         el("p", { class: "muted small fd-src" }, `The other ${cnt("bloc", "none")} have no such tie on record. Deals with other partners, such as the Gulf states, India, Japan or South Korea, are on the `, el("a", { href: "#collab" }, "Collaborations"), " page."),
@@ -1733,8 +1735,15 @@
         tally("3+ sources", String(cnt("verified")), "independent sources agree"),
         tally("2 sources", String(cnt("corroborated")), "independent sources agree"),
         tally("1 source", String(cnt("single")), "flagged on the claim")),
-      el("h2", {}, `Why these ${N.length} nations`),
-      el("p", {}, `The site covers sovereign states with fewer than 15 million people. Territories are not included. Coverage spans Europe (${grp("Europe")}, including the South Caucasus), the Middle East (${grp("Middle East")}), Asia-Pacific (${grp("Asia-Pacific")}), Africa (${grp("Africa")}) and the Americas (${grp("Americas")}). The first six (Singapore, Estonia, UAE, Rwanda, Uruguay, Malta) have the deepest profiles. The rest have 1–5 key facts each.`),
+      el("h2", {}, "Which countries are covered"),
+      el("p", {}, "Atlas covers countries outside the AI frontier: those that neither produce frontier AI models nor hold a key place in the AI chip supply chain. The line follows a published yardstick, Stanford's AI Index 2026, which counts the notable AI models each country produced in 2025 and describes who makes the chips they run on. Territories are not included."),
+      el("div", { class: "card codebook" }, table(["Left out", "Why"], SCOPE.frontier.map(([name, why]) => [el("strong", {}, name), why]))),
+      el("ul", {},
+        el("li", {}, SCOPE.exception.why),
+        el("li", {}, `Covered so far: ${N.length} countries, which is every sovereign state with fewer than 15 million people. They span Europe (${grp("Europe")}, including the South Caucasus), the Middle East (${grp("Middle East")}), Asia-Pacific (${grp("Asia-Pacific")}), Africa (${grp("Africa")}) and the Americas (${grp("Americas")}). The first six (Singapore, Estonia, UAE, Rwanda, Uruguay, Malta) have the deepest profiles; the rest have 1 to 5 key facts each.`),
+        SCOPE.pending.length ? el("li", {}, `Still to add: ${SCOPE.pending.length} larger countries that fall inside the scope. They are being added largest first, and each appears only once its facts are sourced and checked: ${SCOPE.pending.join(", ")}.`) : null,
+        el("li", {}, "Until the larger countries are in, every count on the Findings page describes the smaller countries only."),
+        el("li", {}, "Source for the line: ", sourceChips([SCOPE.source]))),
       el("h2", {}, "How each claim was checked"),
       el("ul", {},
         el("li", {}, "Each claim was researched across multiple searches and cross-checked against primary sources (government sites, official releases, the publishers' own reports) and independent coverage."),
@@ -1751,6 +1760,13 @@
         el("li", {}, "Bloc is counted only from institutional ties and government agreements listed on this site: EU or EEA membership, the Council of Europe convention or EU-led alignment work for Europe; a government AI agreement for the United States; a government agreement or a China-led AI body for China. Deals with single European states, Gulf states, India, Japan or South Korea are not counted as a bloc."),
         el("li", {}, "“None on record” means this site holds no sourced fact. For compute especially, that is often a gap in the site's coverage, not proof that a country has none."),
         el("li", {}, `Facts are filed under ten topics (${TOPICS.join(", ")}), merged in November 2026 from more than 40 one-off labels so that the same kind of fact can be compared across nations.`)),
+      el("h2", {}, "Sixth audit (5 November 2026)"),
+      el("ul", {},
+        el("li", {}, "All 775 cited pages were fetched again and every claim was checked against them: 730 pages were read automatically and 13 more in a browser. The other 32 sit behind bot checks, which are not bypassed, or are files that would not open; their claims rest on the reads made in earlier audits."),
+        el("li", {}, "Corrected: Lesotho. Its page said an AI policy was published on 17 August 2026. No source says that. The policy was validated by stakeholders in 2025 and OECD.AI still lists it as under development; 17 August was the start of a strategy workshop. Lesotho is now coded as aligning, not adoption first."),
+        el("li", {}, "Removed because no current source carries them: the September 2025 draft approval behind Qatar's National Center for AI, a note on Norway's research funding, and Cuba's 2025 index score repeated in a 2026 item."),
+        el("li", {}, "Re-sourced: the UAE's October 2017 strategy launch (now the UAE foreign ministry's own page) and the UAE, Malaysia and Rwanda agreement (the original article is no longer readable). Dead links to an Eviden press release and a law-firm guide were dropped; both claims keep their badge."),
+        el("li", {}, "News pictures: each news card now shows the preview image its source page publishes, loaded from that site and credited. Site logos and pictures that failed to load are left out, and cards without one show the country's flag.")),
       el("h2", {}, "The full audit (10 October 2026)"),
       el("p", {}, `After the first build, every claim on the site was re-checked against its sources:`),
       el("ul", {},
