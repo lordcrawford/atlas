@@ -185,57 +185,246 @@
     return WORLD;
   }
 
-  // Pan & zoom for an SVG map. `layer` gets the transform; `onChange(k)` re-places screen-space overlays.
-  function attachZoom(svg, W, H, layer, onChange, opts = {}) {
-    const z = { k: 1, x: 0, y: 0 };
-    const maxK = opts.maxK || 14;
-    let wheelArmed = false;
-    const clamp = () => {
-      z.k = Math.max(1, Math.min(maxK, z.k));
-      z.x = Math.min(0, Math.max(W - W * z.k, z.x));
-      z.y = Math.min(0, Math.max(H - H * z.k, z.y));
+  // ---------------------------------------------------------------- maps
+  // One component draws every map, in one of two styles the reader can switch between: a 3D globe (an
+  // orthographic projection turned by dragging, drawn as a lit sphere with an atmosphere glow and a shaded edge)
+  // or a flat 2D world map (Natural Earth projection, dragged to slide). The choice is remembered and applies to
+  // every map. Callers register onDraw to position their own marks: `over` holds lines, `top` holds dots and
+  // labels in screen space.
+  let GLOBE_SEQ = 0, GRATICULE = null;
+  const DEG = 180 / Math.PI;
+  const reducedMotion = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const narrowScreen = () => matchMedia("(max-width: 700px)").matches;
+  let MAP_MODE = "globe";
+  try { if (localStorage.getItem("wv-mapmode") === "flat") MAP_MODE = "flat"; } catch {}
+  const MAPS = new Set();
+  function setMapMode(mode) {
+    MAP_MODE = mode === "flat" ? "flat" : "globe";
+    try { localStorage.setItem("wv-mapmode", MAP_MODE); } catch {}
+    for (const m of MAPS) { if (m.svg.isConnected) m.setMode(MAP_MODE); else MAPS.delete(m); }
+  }
+  function createGlobe({ W, H, label, pad = 16, minK = 1, maxK = 10, view0, home, onUser, cls = "", fills, flatH, modeSwitch = true }) {
+    const world = worldFeatures();
+    if (!world) return null;
+    if (!GRATICULE) GRATICULE = d3.geoGraticule10();
+    for (const m of MAPS) if (m.seen && !m.svg.isConnected) MAPS.delete(m);
+    const gid = `globe${++GLOBE_SEQ}`;
+    const cx = W / 2, gy = H / 2, R0 = Math.min(W, H) / 2 - pad;
+    const proj = d3.geoOrthographic().translate([cx, gy]).clipAngle(90).precision(0.5).clipExtent([[-2, -2], [W + 2, H + 2]]);
+    // The flat map fills the width; its frame is only as tall as the map needs. `flat0` is the unzoomed map,
+    // used to turn places into positions; `flatProj` is the same map at the current zoom and position.
+    const flat0 = d3.geoNaturalEarth1().fitExtent([[6, 6], [W - 6, H - 6]], world);
+    let fb = d3.geoPath(flat0).bounds(world);
+    const HF = flatH || Math.min(H, Math.ceil(fb[1][1] - fb[0][1]) + 12);
+    flat0.fitExtent([[6, 6], [W - 6, HF - 6]], world);
+    fb = d3.geoPath(flat0).bounds(world);
+    const s0 = flat0.scale(), t0 = flat0.translate();
+    const flatProj = d3.geoNaturalEarth1().scale(s0).translate(t0).precision(0.5).clipExtent([[-2, -2], [W + 2, HF + 2]]);
+    const path = d3.geoPath(proj);
+    const view = { ...view0 };
+    // In flat mode `fv` is the point of the unzoomed map that sits in the middle of the frame.
+    const fv = { x: cx, y: HF / 2 };
+    let flat = false, h = H, R = R0, rotate = d3.geoRotation([-view.lon, -view.lat]);
+
+    // ---- drawing: shadow, glow, sea, graticule, land, edge shading and highlight, then the caller's layers
+    const stop = (offset, color, alpha) => s("stop", { offset, style: `stop-color:${color};stop-opacity:${alpha}` });
+    const svg = s("svg", { viewBox: `0 0 ${W} ${H}`, width: W, role: "img", tabindex: "0", class: `globe ${cls}` });
+    svg.append(s("defs", {},
+      s("radialGradient", { id: `${gid}-sea`, cx: "36%", cy: "30%", r: "78%" }, stop("0%", "var(--globe-sea-lit)", 1), stop("100%", "var(--globe-sea-shade)", 1)),
+      s("radialGradient", { id: `${gid}-glow` }, stop("84%", "var(--globe-glow)", 0), stop("88.5%", "var(--globe-glow)", "var(--globe-glow-a)"), stop("100%", "var(--globe-glow)", 0)),
+      s("radialGradient", { id: `${gid}-limb` }, stop("58%", "var(--globe-limb)", 0), stop("86%", "var(--globe-limb)", "calc(var(--globe-limb-a) * .32)"), stop("100%", "var(--globe-limb)", "var(--globe-limb-a)")),
+      s("radialGradient", { id: `${gid}-hl`, cx: "32%", cy: "26%", r: "58%" }, stop("0%", "var(--globe-hl)", "var(--globe-hl-a)"), stop("100%", "var(--globe-hl)", 0)),
+      s("radialGradient", { id: `${gid}-shadow` }, stop("0%", "#000", "var(--globe-shadow-a)"), stop("100%", "#000", 0))));
+    const shadowEl = s("ellipse", { cx, class: "globe-shade", fill: `url(#${gid}-shadow)` });
+    const glowEl = s("circle", { cx, cy: gy, class: "globe-shade", fill: `url(#${gid}-glow)` });
+    const seaEl = s("circle", { cx, cy: gy, class: "globe-sea", fill: `url(#${gid}-sea)` });
+    const gratEl = s("path", { class: "globe-grat" });
+    const landG = s("g", {}), over = s("g", {}), top = s("g", {});
+    const limbEl = s("circle", { cx, cy: gy, class: "globe-shade", fill: `url(#${gid}-limb)` });
+    const hlEl = s("circle", { cx, cy: gy, class: "globe-shade", fill: `url(#${gid}-hl)` });
+    svg.append(shadowEl, glowEl, seaEl, gratEl, landG, limbEl, hlEl, over, top);
+    // One path per country. `fills(feature)` may give it a colour, a class and an id for hit-testing.
+    const land = new Map();
+    const shapes = world.features.map((f) => {
+      const a = (fills && fills(f)) || {};
+      const node = s("path", { class: "globe-land" + (a.class ? ` ${a.class}` : ""), "data-id": a.id || null });
+      if (a.fill) node.style.fill = a.fill;
+      landG.append(node);
+      land.set(f.id, node);
+      return { f, node };
+    });
+
+    const drawFns = [];
+    let frame = 0;
+    const draw = () => {
+      cancelAnimationFrame(frame); frame = 0;
+      if (svg.isConnected) api.seen = true;
+      if (flat) {
+        flatProj.scale(s0 * view.k).translate([cx + view.k * (t0[0] - fv.x), h / 2 + view.k * (t0[1] - fv.y)]);
+        // Keep lon/lat in step with the middle of the frame, so the view carries over to the globe.
+        const g = flat0.invert([fv.x, fv.y]);
+        if (g && isFinite(g[0]) && isFinite(g[1])) { view.lon = g[0]; view.lat = g[1]; }
+      } else {
+        R = R0 * view.k;
+        proj.rotate([-view.lon, -view.lat]).scale(R);
+        rotate = d3.geoRotation([-view.lon, -view.lat]);
+        for (const c of [seaEl, limbEl, hlEl]) c.setAttribute("r", R);
+        glowEl.setAttribute("r", R * 1.14);
+        shadowEl.setAttribute("cy", gy + R * 1.035); shadowEl.setAttribute("rx", R * 0.78); shadowEl.setAttribute("ry", R * 0.07);
+      }
+      gratEl.setAttribute("d", path(GRATICULE) || "");
+      for (const { f, node } of shapes) node.setAttribute("d", path(f) || "");
+      for (const fn of drawFns) fn();
     };
-    const apply = () => {
-      clamp();
-      layer.setAttribute("transform", `translate(${z.x},${z.y}) scale(${z.k})`);
-      onChange(z);
+    // Coalesce redraws to one per frame. A hidden tab gets no frames, so draw straight away there.
+    const invalidate = () => { if (document.hidden) draw(); else if (!frame) frame = requestAnimationFrame(draw); };
+
+    // ---- geometry helpers for callers
+    // Screen position of a [lon, lat] point, and z > 0 when it can be seen (on the globe: the side facing the reader).
+    const point = (geo) => {
+      if (flat) { const p = flatProj(geo); return { x: p[0], y: p[1], z: 1 }; }
+      const [l, p] = rotate(geo), lr = l / DEG, pr = p / DEG, cp = Math.cos(pr);
+      return { x: cx + R * cp * Math.sin(lr), y: gy - R * Math.sin(pr), z: cp * Math.cos(lr) };
     };
-    const toSvg = (e) => {
-      const r = svg.getBoundingClientRect();
-      return [((e.clientX - r.left) / r.width) * W, ((e.clientY - r.top) / r.height) * H];
+    // A route between two places, sampled once for both styles. On the globe it rises off the surface in the
+    // middle, like a flight path, and longer routes rise higher. On the flat map it is a gentle bow that takes
+    // the short way round the date line.
+    const arcSamples = (a, b, lift = 1) => {
+      const dist = d3.geoDistance(a, b), interp = d3.geoInterpolate(a, b);
+      const n = Math.max(10, Math.ceil(dist * 26)), up = lift * Math.min(0.4, 0.05 + dist * 0.19);
+      const dLon = ((b[0] - a[0] + 540) % 360) - 180, dLat = b[1] - a[1], len = Math.hypot(dLon, dLat) || 1;
+      const side = dLon >= 0 ? 1 : -1; // bow towards the north
+      return {
+        globe: Array.from({ length: n + 1 }, (_, i) => ({ g: interp(i / n), up: 1 + up * Math.sin((Math.PI * i) / n) })),
+        flat: Array.from({ length: 25 }, (_, i) => {
+          const t = i / 24, off = side * lift * 0.16 * Math.sin(Math.PI * t);
+          return [((a[0] + dLon * t - dLat * off + 540) % 360) - 180, Math.max(-84, Math.min(88, a[1] + dLat * t + dLon * off))];
+        }),
+      };
     };
-    const zoomAt = (px, py, factor) => {
-      const k2 = Math.max(1, Math.min(maxK, z.k * factor));
-      z.x = px - ((px - z.x) * k2) / z.k;
-      z.y = py - ((py - z.y) * k2) / z.k;
-      z.k = k2;
-      apply();
+    // Projects a route for the current view. On the globe, parts behind it are hidden unless they rise past the edge.
+    const arcPath = (samples) => {
+      let d = "", pen = false;
+      if (flat) {
+        const jump = ((fb[1][0] - fb[0][0]) * view.k) / 2;
+        let px = 0;
+        for (const g of samples.flat) {
+          const [x, y] = flatProj(g);
+          // A jump across the map means the route crossed the date line: lift the pen and carry on from the other side.
+          d += `${pen && Math.abs(x - px) < jump ? "L" : "M"}${x.toFixed(1)},${y.toFixed(1)}`;
+          px = x; pen = true;
+        }
+        return d;
+      }
+      for (const { g, up } of samples.globe) {
+        const [l, p] = rotate(g), lr = l / DEG, pr = p / DEG, cp = Math.cos(pr);
+        const x = cp * Math.sin(lr) * up, y = Math.sin(pr) * up;
+        // Visible when on the near side, or on the far side but high enough to show past the edge.
+        if (cp * Math.cos(lr) >= 0 || x * x + y * y > 1) { d += `${pen ? "L" : "M"}${(cx + R * x).toFixed(1)},${(gy - R * y).toFixed(1)}`; pen = true; }
+        else pen = false;
+      }
+      return d;
     };
-    // Wheel zooms when the map is active (clicked) or with ctrl/cmd (trackpad pinch sends ctrlKey) so page scrolling isn't hijacked.
-    svg.addEventListener("wheel", (e) => {
-      if (!(wheelArmed || e.ctrlKey || e.metaKey)) { if (opts.onHint) opts.onHint(); return; }
-      e.preventDefault();
-      cancelAnimationFrame(anim);
-      if (opts.onUser) opts.onUser();
-      const [px, py] = toSvg(e);
-      zoomAt(px, py, Math.exp(-e.deltaY * (e.ctrlKey ? 0.01 : 0.0018)));
-    }, { passive: false });
-    // Drag to pan; two-pointer pinch to zoom.
+
+    // ---- motion: one of fly, spin or glide runs at a time
+    const clampK = (k) => Math.max(minK, Math.min(maxK, k));
+    const clampView = () => {
+      view.k = clampK(view.k);
+      if (flat) {
+        // The flat map stays in its frame: centred while it is smaller than the frame, edge to edge once larger.
+        const lim = (v, lo, hi, half) => (hi - lo <= 2 * half ? (lo + hi) / 2 : Math.max(lo + half, Math.min(hi - half, v)));
+        fv.x = lim(fv.x, fb[0][0] - 6, fb[1][0] + 6, W / 2 / view.k);
+        fv.y = lim(fv.y, fb[0][1] - 6, fb[1][1] + 6, HF / 2 / view.k);
+      } else {
+        view.lat = Math.max(-80, Math.min(80, view.lat));
+        view.lon = ((view.lon + 540) % 360) - 180;
+      }
+    };
+    // Move the view by a drag of (dx, dy) in frame units: the globe turns, the flat map slides.
+    const nudge = (dx, dy) => {
+      if (flat) { fv.x -= dx / view.k; fv.y -= dy / view.k; }
+      else { view.lon -= (dx * DEG) / R; view.lat += (dy * DEG) / R; }
+      clampView();
+    };
+    let anim = 0, flight = 0, spinning = false, hover = false;
+    const stopMotion = () => { cancelAnimationFrame(anim); anim = 0; flight++; spinning = false; };
+    const user = () => { stopMotion(); if (onUser) onUser(); };
+    // Animate to a place and zoom. `target` is { lon, lat, k }; leave out lon/lat to zoom on the spot. In flat
+    // mode `target.at` may give the position on the unzoomed map directly.
+    const flyTo = (target, ms = 900) => {
+      stopMotion();
+      const from = flat ? [fv.x, fv.y] : [view.lon, view.lat], k0 = view.k, k1 = clampK(target.k ?? view.k);
+      let to = from;
+      if (flat && target.at) to = target.at;
+      else if (target.lon != null) {
+        to = flat ? flat0([target.lon, target.lat]) : [target.lon, Math.max(-80, Math.min(80, target.lat))];
+        if (!to || !isFinite(to[0]) || !isFinite(to[1])) to = from;
+      }
+      const d = [flat ? to[0] - from[0] : ((to[0] - from[0] + 540) % 360) - 180, to[1] - from[1]];
+      const put = (e, k) => {
+        const x = from[0] + d[0] * e, y = from[1] + d[1] * e;
+        if (flat) { fv.x = x; fv.y = y; } else { view.lon = x; view.lat = y; }
+        view.k = k; clampView(); draw();
+      };
+      if (!ms || reducedMotion() || document.hidden) { put(1, k1); return; }
+      const far = Math.min(1, flat ? Math.hypot(d[0], d[1]) / (W * 0.6) : Math.hypot(d[0] * Math.cos(from[1] / DEG), d[1]) / 150);
+      const me = flight, start = performance.now();
+      const ease = (u) => (u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2);
+      let arrived = false;
+      const step = (now) => {
+        if (me !== flight || !svg.isConnected) return;
+        const u = Math.min(1, (now - start) / ms), e = ease(u);
+        // Pull back a little on long moves so they read as travel.
+        put(e, Math.exp(Math.log(k0) + (Math.log(k1) - Math.log(k0)) * e) * (1 - 0.3 * far * Math.sin(Math.PI * e)));
+        if (u < 1) anim = requestAnimationFrame(step); else arrived = true;
+      };
+      anim = requestAnimationFrame(step);
+      // If frames stop arriving (a background tab), land on the target anyway.
+      setTimeout(() => { if (me === flight && !arrived && svg.isConnected) { flight++; put(1, k1); } }, ms + 250);
+    };
+    // Face a set of places and zoom until they fill the frame.
+    const fitPoints = (pts, { ms = 900, maxK: cap = maxK, padPx = 60 } = {}) => {
+      if (flat) {
+        const ps = pts.map((p) => flat0(p)), xs = ps.map((p) => p[0]), ys = ps.map((p) => p[1]);
+        const x0 = Math.min(...xs), x1 = Math.max(...xs), y0 = Math.min(...ys), y1 = Math.max(...ys);
+        const k = Math.min(cap, (W - 2 * padPx) / Math.max(x1 - x0, 1), (HF - 2 * Math.min(padPx, HF / 4)) / Math.max(y1 - y0, 1));
+        flyTo({ at: [(x0 + x1) / 2, (y0 + y1) / 2], k: Math.max(1, k) }, ms);
+        return;
+      }
+      let c = pts.length > 1 ? d3.geoCentroid({ type: "MultiPoint", coordinates: pts }) : pts[0];
+      if (!isFinite(c[0]) || !isFinite(c[1])) c = pts[0];
+      const far = Math.max(0, ...pts.map((p) => d3.geoDistance(p, c)));
+      const room = Math.min(W, H) / 2 - padPx;
+      const k = far > 1.2 ? 1 : Math.min(cap, room / (R0 * Math.max(Math.sin(far), 0.02)));
+      flyTo({ lon: c[0], lat: c[1], k: Math.max(1, k) }, ms);
+    };
+    // Slow idle turn that shows the globe has a far side. Pauses under the pointer and ends at the first interaction.
+    const spin = (degPerSec = 3) => {
+      if (reducedMotion() || flat) return;
+      stopMotion(); spinning = true;
+      let last = performance.now();
+      const step = (now) => {
+        if (!spinning || flat || !svg.isConnected) return;
+        const dt = Math.min(60, now - last); last = now;
+        if (!hover) { view.lon += (degPerSec * dt) / 1000; clampView(); draw(); }
+        anim = requestAnimationFrame(step);
+      };
+      anim = requestAnimationFrame(step);
+    };
+    const zoomBy = (f) => flyTo({ k: view.k * f }, 250);
+
+    // ---- pointer, wheel and keyboard
+    const toSvg = (e) => { const r = svg.getBoundingClientRect(); return [((e.clientX - r.left) / r.width) * W, ((e.clientY - r.top) / r.height) * h]; };
+    const hintEl = el("div", { class: "map-hint", hidden: true });
+    let hintTimer = 0;
     const pts = new Map();
-    let moved = 0, last = null, pinch0 = null;
+    let moved = 0, last = null, pinch0 = null, vel = [0, 0], lastT = 0, wheelArmed = false;
     svg.addEventListener("pointerdown", (e) => {
       if (e.button !== 0 && e.pointerType === "mouse") return;
-      cancelAnimationFrame(anim);
-      if (opts.onUser) opts.onUser();
-      wheelArmed = true;
-      svg.setPointerCapture(e.pointerId);
+      user(); wheelArmed = true;
       pts.set(e.pointerId, toSvg(e));
-      moved = 0; last = toSvg(e);
-      if (pts.size === 2) {
-        const [a, b] = [...pts.values()];
-        pinch0 = { d: Math.hypot(a[0] - b[0], a[1] - b[1]), k: z.k, mid: [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2] };
-      }
-      svg.classList.add("is-dragging");
+      moved = 0; last = toSvg(e); vel = [0, 0]; lastT = e.timeStamp;
+      if (pts.size === 2) { const [a, b] = [...pts.values()]; pinch0 = { d: Math.hypot(a[0] - b[0], a[1] - b[1]) || 1, k: view.k }; }
     });
     svg.addEventListener("pointermove", (e) => {
       if (!pts.has(e.pointerId)) return;
@@ -243,60 +432,116 @@
       pts.set(e.pointerId, p);
       if (pts.size === 2 && pinch0) {
         const [a, b] = [...pts.values()];
-        const d = Math.hypot(a[0] - b[0], a[1] - b[1]);
-        zoomAt(pinch0.mid[0], pinch0.mid[1], (pinch0.k * (d / pinch0.d)) / z.k);
-        moved += 10;
+        view.k = (pinch0.k * Math.hypot(a[0] - b[0], a[1] - b[1])) / pinch0.d;
+        moved += 10; clampView(); invalidate();
         return;
       }
       const dx = p[0] - last[0], dy = p[1] - last[1];
       moved += Math.abs(dx) + Math.abs(dy);
-      if (z.k > 1) { z.x += dx; z.y += dy; apply(); }
-      last = p;
+      // Take over the pointer only once a drag has clearly begun, so plain clicks still reach dots and lines.
+      if (moved > 5 && !svg.classList.contains("is-dragging")) { svg.classList.add("is-dragging"); try { svg.setPointerCapture(e.pointerId); } catch {} }
+      const dt = Math.max(1, e.timeStamp - lastT);
+      nudge(dx, dy);
+      vel = [dx / dt, dy / dt]; lastT = e.timeStamp; last = p;
+      invalidate();
     });
-    const end = (e) => { pts.delete(e.pointerId); if (pts.size < 2) pinch0 = null; if (!pts.size) svg.classList.remove("is-dragging"); };
-    svg.addEventListener("pointerup", end);
-    svg.addEventListener("pointercancel", end);
-    svg.addEventListener("dblclick", (e) => { const [px, py] = toSvg(e); zoomAt(px, py, 2); });
-    svg.addEventListener("keydown", (e) => {
-      if (e.key === "+" || e.key === "=") { zoomAt(W / 2, H / 2, 1.5); e.preventDefault(); }
-      if (e.key === "-" || e.key === "_") { zoomAt(W / 2, H / 2, 1 / 1.5); e.preventDefault(); }
-      if (e.key === "0") { z.k = 1; z.x = 0; z.y = 0; apply(); }
-    });
-    // Animated move to a target view: the centre moves while the scale changes on a log curve.
-    let anim = 0;
-    const flyTo = (t, ms = 900) => {
-      cancelAnimationFrame(anim);
-      const goal = { ...t };
-      const k = Math.max(1, Math.min(maxK, goal.k));
-      goal.k = k;
-      goal.x = Math.min(0, Math.max(W - W * k, goal.x));
-      goal.y = Math.min(0, Math.max(H - H * k, goal.y));
-      if (!ms || matchMedia("(prefers-reduced-motion: reduce)").matches) { Object.assign(z, goal); apply(); return; }
-      const c0 = [(W / 2 - z.x) / z.k, (H / 2 - z.y) / z.k], c1 = [(W / 2 - goal.x) / goal.k, (H / 2 - goal.y) / goal.k];
-      const k0 = z.k, t0 = performance.now();
-      const ease = (u) => (u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2);
+    const release = (e) => {
+      if (!pts.has(e.pointerId)) return;
+      pts.delete(e.pointerId);
+      if (pts.size < 2) pinch0 = null;
+      if (pts.size === 1) last = [...pts.values()][0];
+      if (pts.size) return;
+      svg.classList.remove("is-dragging");
+      // A flick keeps the map moving for a moment.
+      if (e.type !== "pointerup" || e.timeStamp - lastT > 80 || Math.hypot(vel[0], vel[1]) < 0.14 || reducedMotion()) return;
+      const me = flight;
+      let prev = performance.now();
       const step = (now) => {
-        const u = Math.min(1, (now - t0) / ms), e = ease(u);
-        // Pull back a little mid-flight on long moves so the jump reads as travel.
-        const dist = Math.hypot(c1[0] - c0[0], c1[1] - c0[1]) / W;
-        const dip = Math.min(0.45, dist) * Math.sin(Math.PI * e);
-        const kk = Math.exp(Math.log(k0) + (Math.log(goal.k) - Math.log(k0)) * e) * (1 - dip);
-        const cx = c0[0] + (c1[0] - c0[0]) * e, cy = c0[1] + (c1[1] - c0[1]) * e;
-        z.k = Math.max(1, kk); z.x = W / 2 - cx * z.k; z.y = H / 2 - cy * z.k;
-        apply();
-        if (u < 1) anim = requestAnimationFrame(step);
+        if (me !== flight || !svg.isConnected) return;
+        const dt = Math.min(40, now - prev); prev = now;
+        nudge(vel[0] * dt, vel[1] * dt);
+        vel = [vel[0] * 0.93, vel[1] * 0.93];
+        draw();
+        if (Math.hypot(vel[0], vel[1]) > 0.02) anim = requestAnimationFrame(step);
       };
       anim = requestAnimationFrame(step);
     };
-    return {
-      z,
-      flyTo,
-      wasDrag: () => moved > 6,
-      zoomIn: () => { cancelAnimationFrame(anim); if (opts.onUser) opts.onUser(); zoomAt(W / 2, H / 2, 1.6); },
-      zoomOut: () => { cancelAnimationFrame(anim); if (opts.onUser) opts.onUser(); zoomAt(W / 2, H / 2, 1 / 1.6); },
-      reset: () => { cancelAnimationFrame(anim); if (opts.onUser) opts.onUser(); z.k = 1; z.x = 0; z.y = 0; apply(); },
-      apply,
+    svg.addEventListener("pointerup", release);
+    svg.addEventListener("pointercancel", release);
+    svg.addEventListener("pointerenter", () => { hover = true; });
+    // Scroll-zoom stays on only while the pointer is over the map, so page scrolling is not taken over later.
+    svg.addEventListener("pointerleave", () => { hover = false; wheelArmed = false; });
+    svg.addEventListener("wheel", (e) => {
+      if (!(wheelArmed || e.ctrlKey || e.metaKey)) {
+        hintEl.hidden = false; clearTimeout(hintTimer); hintTimer = setTimeout(() => { hintEl.hidden = true; }, 1800);
+        return;
+      }
+      e.preventDefault();
+      user();
+      view.k *= Math.exp(-e.deltaY * (e.ctrlKey ? 0.01 : 0.0018));
+      clampView(); invalidate();
+    }, { passive: false });
+    svg.addEventListener("dblclick", (e) => {
+      const [px, py] = toSvg(e);
+      const geo = flat ? flatProj.invert([px, py]) : Math.hypot(px - cx, py - gy) < R ? proj.invert([px, py]) : null;
+      if (geo && isFinite(geo[0]) && isFinite(geo[1])) { user(); flyTo({ lon: geo[0], lat: geo[1], k: view.k * 1.8 }, 450); }
+    });
+    svg.addEventListener("keydown", (e) => {
+      const turn = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, 1], ArrowDown: [0, -1] }[e.key];
+      if (turn) { e.preventDefault(); user(); flyTo({ lon: view.lon + (turn[0] * 14) / view.k, lat: view.lat + (turn[1] * 14) / view.k, k: view.k }, 200); }
+      else if (e.key === "+" || e.key === "=") { e.preventDefault(); user(); zoomBy(1.5); }
+      else if (e.key === "-" || e.key === "_") { e.preventDefault(); user(); zoomBy(1 / 1.5); }
+      else if (e.key === "0") { user(); api.reset(); }
+    });
+
+    // ---- 3D / 2D switch. One setting for the whole site; every map on the page follows it.
+    const modeBtns = [["globe", "3D", "3D globe"], ["flat", "2D", "Flat 2D map"]].map(([mode, text, title]) =>
+      el("button", { type: "button", class: "seg-btn", title, "aria-label": title, "data-mode": mode, onclick: () => setMapMode(mode) }, text));
+    const stage = el("div", { class: "globe-stage" }, svg);
+    const applyMode = (mode) => {
+      stopMotion();
+      flat = mode === "flat"; h = flat ? HF : H;
+      path.projection(flat ? flatProj : proj);
+      svg.setAttribute("viewBox", `0 0 ${W} ${h}`);
+      svg.classList.toggle("is-flat", flat); stage.classList.toggle("is-flat", flat);
+      svg.setAttribute("aria-label", `${label} ${flat ? "Drag to move it" : "Drag to turn it"}, or use the arrow keys; plus and minus zoom.`);
+      hintEl.textContent = `${flat ? "Drag to move the map" : "Drag to turn the globe"}. Click it, or hold ⌘/Ctrl, to zoom with scroll.`;
+      for (const b of modeBtns) b.setAttribute("aria-pressed", String(b.dataset.mode === mode));
+      // Carry the place being looked at across: the middle of the flat map is where the globe was facing.
+      const at = flat0([view.lon, view.lat]);
+      if (flat && at && isFinite(at[0]) && isFinite(at[1])) { fv.x = at[0]; fv.y = at[1]; }
+      clampView();
     };
+
+    const api = {
+      svg, view, land, over, top, W, draw, invalidate, point, arcSamples, arcPath, flyTo, fitPoints, spin,
+      get H() { return h; },
+      get flat() { return flat; },
+      onDraw: (fn) => drawFns.push(fn),
+      wasDrag: () => moved > 5,
+      zoomIn: () => { user(); zoomBy(1.6); },
+      zoomOut: () => { user(); zoomBy(1 / 1.6); },
+      reset: () => { user(); if (home) home(api); else flyTo(view0, 600); },
+      // Switch style and frame the same subject again, since "zoomed to fit" differs between the two.
+      setMode: (mode) => { if ((mode === "flat") === flat) return; applyMode(mode); if (home) home(api); else flyTo(view0, 0); },
+    };
+    stage.append(zoomControls(api), ...(modeSwitch ? [el("div", { class: "map-mode", role: "group", "aria-label": "Map style" }, modeBtns)] : []), hintEl);
+    api.node = stage;
+    applyMode(MAP_MODE);
+    MAPS.add(api);
+    return api;
+  }
+  // Finds room for a name beside a dot: tries eight positions around it and takes the first that covers no other
+  // name or dot and stays inside the frame. `dots` are {x, y} in the same coordinates; `placed` collects the boxes already used.
+  function labelSpot(x, y, w, placed, dots, frame) {
+    const h = 14;
+    const clash = (b) => b.x < 2 || b.y < 2 || b.x + b.w > frame.W - 2 || b.y + b.h > frame.H - 2 || placed.some((p) => b.x < p.x + p.w && b.x + b.w > p.x && b.y < p.y + p.h && b.y + b.h > p.y) ||
+      dots.some((o) => o.x > b.x - 4 && o.x < b.x + b.w + 4 && o.y > b.y - 4 && o.y < b.y + b.h + 4);
+    for (const [ox, oy] of [[10, -7], [-10 - w, -7], [-w / 2, -22], [-w / 2, 9], [10, -20], [10, 6], [-10 - w, -20], [-10 - w, 6]]) {
+      const b = { x: x + ox, y: y + oy, w, h };
+      if (!clash(b)) { placed.push(b); return b; }
+    }
+    return null;
   }
   function zoomControls(zoom) {
     return el("div", { class: "zoom-ctrl", role: "group", "aria-label": "Map zoom" },
@@ -306,112 +551,91 @@
   }
 
   function worldMap() {
-    const world = worldFeatures();
     const box = el("div", {});
-    if (!world) {
-      box.append(el("p", { class: "muted" }, "Map libraries failed to load. See the table below."));
-      return box;
-    }
-    const W = 960, H = 470;
     const metric = METRICS[state.colorBy];
     const shown = filtered();
     const isoMap = new Map(N.map((n) => [n.isoN, n]));
-
-    // Initial fit: the whole world for "All"; otherwise the selected nations' shapes plus padded capitals.
-    const proj = d3.geoNaturalEarth1();
-    if (state.region === "All") proj.fitExtent([[6, 6], [W - 6, H - 6]], world);
-    else {
-      const pad = 6;
-      const pts = shown.flatMap((n) => [[n.geo[0] - pad, n.geo[1] - pad], [n.geo[0] + pad, n.geo[1] + pad]]);
-      const feats = world.features.filter((f) => shown.some((n) => n.isoN === f.id));
-      proj.fitExtent([[30, 30], [W - 30, H - 30]], { type: "FeatureCollection", features: [...feats, { type: "Feature", geometry: { type: "MultiPoint", coordinates: pts } }] });
+    const colorFor = (n) => { const t = metric.t(n); return t == null ? "var(--na)" : rampAt(t); };
+    const sq = narrowScreen(), W = sq ? 420 : 960, H = sq ? 420 : 560;
+    const HOME = { lon: 18, lat: 24, k: 1 };
+    const regional = state.region !== "All";
+    // "Home" is the whole world (the globe facing Europe and Africa), or the chosen region filling the frame.
+    const goHome = (g, ms) => (regional ? g.fitPoints(shown.map((n) => n.geo), { ms, padPx: sq ? 44 : 80, maxK: 6 }) : g.flyTo(HOME, ms));
+    const globe = createGlobe({ W, H, maxK: 14, view0: state.mapView || HOME, home: (g) => goHome(g, 600),
+      label: `Map of the ${shown.length} nations, coloured by ${metric.label}.`,
+      fills: (f) => { const n = isoMap.get(f.id); return n && inRegion(n) ? { fill: colorFor(n), class: "map-nation", id: n.id } : null; } });
+    if (!globe) {
+      box.append(el("p", { class: "muted" }, "Map libraries failed to load."));
+      return box;
     }
-    const path = d3.geoPath(proj);
 
-    const svg = s("svg", { viewBox: `0 0 ${W} ${H}`, width: W, role: "img", tabindex: "0", class: "zoomable",
-      "aria-label": `World map of the ${shown.length} nations, coloured by ${metric.label}. Use plus and minus keys to zoom.` });
-    svg.append(s("defs", {}, s("clipPath", { id: "mapclip" }, s("rect", { x: 0, y: 0, width: W, height: H, rx: 8 }))));
-    const clip = s("g", { "clip-path": "url(#mapclip)" });
-    clip.append(s("rect", { x: 0, y: 0, width: W, height: H, fill: "var(--sea)" }));
-    const geoLayer = s("g", {});
-    if (state.region === "All") geoLayer.append(s("path", { d: path({ type: "Sphere" }), fill: "var(--sea)", stroke: "var(--grid)", "vector-effect": "non-scaling-stroke" }));
-
-    const colorFor = (n) => {
-      const t = metric.t(n);
-      return t == null ? "var(--na)" : rampAt(t);
-    };
-    for (const f of world.features) {
-      const d = path(f);
-      if (!d) continue;
-      const n = isoMap.get(f.id);
-      const active = n && inRegion(n);
-      geoLayer.append(s("path", { d, fill: active ? colorFor(n) : "var(--land)", stroke: "var(--land-stroke)", "stroke-width": 0.6, "vector-effect": "non-scaling-stroke", "data-id": active ? n.id : null, class: active ? "map-nation" : null }));
-    }
-    const markerLayer = s("g", {});
-    clip.append(geoLayer, markerLayer);
-    svg.append(clip);
-
-    // Markers live in screen space so they keep their size while zooming; tiny states stay visible.
-    const markers = shown.map((n) => ({ n, p: proj(n.geo) })).filter((m) => m.p);
+    // A dot at every capital, in screen space so it keeps its size while zooming; tiny states stay visible.
     let hovered = null;
-    const placeMarkers = (z) => {
-      const show = state.region !== "All" || z.k >= 2.2;
+    const markers = shown.map((n) => {
+      const g = s("g", { class: "map-marker", tabindex: "0", role: "link", "aria-label": `${n.name}: readiness rank ${rankText(n)}` });
+      const dot = s("circle", { r: 5.5 }), text = s("text", { class: "map-label" }, shortName(n));
+      dot.style.fill = colorFor(n);
+      g.append(dot, text);
+      g.addEventListener("focus", (e) => { setHover(n.id); showTip(e, nationTip(n)); });
+      g.addEventListener("blur", () => { setHover(null); hideTip(); });
+      g.addEventListener("keydown", (e) => { if (e.key === "Enter") location.hash = n.id; });
+      globe.top.append(g);
+      return { n, g, dot, text, w: shortName(n).length * 7.2 + 4, on: false, x: 0, y: 0 };
+    });
+    globe.onDraw(() => {
+      const vis = [];
+      for (const m of markers) {
+        const p = globe.point(m.n.geo);
+        m.on = p.z > 0.03 && p.x > -20 && p.x < W + 20 && p.y > -20 && p.y < globe.H + 20;
+        m.g.style.display = m.on ? "" : "none";
+        if (!m.on) continue;
+        m.x = p.x; m.y = p.y;
+        m.dot.setAttribute("cx", p.x); m.dot.setAttribute("cy", p.y);
+        m.g.style.opacity = Math.min(1, 0.3 + p.z * 2.4); // fades as it nears the edge
+        vis.push(m);
+      }
+      // Names appear once a region is chosen or the view is close, wherever one fits without covering a dot.
+      const labels = regional || globe.view.k >= 2.2;
       const placed = [];
-      const scr = markers.map((m) => [m.p[0] * z.k + z.x, m.p[1] * z.k + z.y]);
-      const overlaps = (b) => placed.some((p) => b.x < p.x + p.w && b.x + b.w > p.x && b.y < p.y + p.h && b.y + b.h > p.y) ||
-        scr.some(([dx, dy]) => dx > b.x - 4 && dx < b.x + b.w + 4 && dy > b.y - 4 && dy < b.y + b.h + 4);
-      markerLayer.replaceChildren(...markers.map((m, i) => {
-        const [x, y] = scr[i];
-        m.x = x; m.y = y;
-        const g = s("g", { class: "map-marker" + (hovered === m.n.id ? " is-hover" : ""), tabindex: "0", role: "link", "aria-label": `${m.n.name}: readiness rank ${rankText(m.n)}` });
-        g.append(s("circle", { cx: x, cy: y, r: 6, fill: colorFor(m.n), stroke: "var(--surface)", "stroke-width": 2 }));
-        if (show && x > -20 && x < W + 20 && y > -20 && y < H + 20) {
-          const label = shortName(m.n), w = label.length * 7.2 + 4, h = 14;
-          const tries = [[10, -7], [-10 - w, -7], [-w / 2, -22], [-w / 2, 9], [10, -20], [10, 6], [-10 - w, -20], [-10 - w, 6]];
-          let box = null;
-          for (const [ox, oy] of tries) { const b = { x: x + ox, y: y + oy, w, h }; if (!overlaps(b)) { box = b; break; } }
-          if (box) { placed.push(box); g.append(s("text", { x: box.x + 2, y: box.y + 11, class: "map-label" }, label)); }
-        }
-        g.addEventListener("focus", (e) => { setHover(m.n.id); showTip(e, nationTip(m.n)); });
-        g.addEventListener("blur", () => { setHover(null); hideTip(); });
-        g.addEventListener("keydown", (e) => { if (e.key === "Enter") location.hash = m.n.id; });
-        return g;
-      }));
-      hintEl.hidden = true;
-    };
+      for (const m of vis) {
+        const spot = labels ? labelSpot(m.x, m.y, m.w, placed, vis, globe) : null;
+        m.text.style.display = spot ? "" : "none";
+        if (spot) { m.text.setAttribute("x", spot.x + 2); m.text.setAttribute("y", spot.y + 11); }
+      }
+      // Remember the view, so coming back to this page (or switching theme) does not reset it.
+      state.mapView = { ...globe.view }; state.mapRegion = state.region;
+    });
     function setHover(id) {
       if (hovered === id) return;
       hovered = id;
-      markerLayer.querySelectorAll(".map-marker").forEach((g, i) => g.classList.toggle("is-hover", markers[i].n.id === id));
-      geoLayer.querySelectorAll(".map-nation").forEach((p) => p.classList.toggle("is-hover", p.dataset.id === id));
+      for (const m of markers) m.g.classList.toggle("is-hover", m.n.id === id);
+      globe.svg.querySelectorAll(".map-nation").forEach((p) => p.classList.toggle("is-hover", p.dataset.id === id));
     }
-    function pick(e) {
-      const r = svg.getBoundingClientRect();
-      const sx = W / r.width;
+    // The nation under the pointer: the nearest dot within reach, otherwise the country shape.
+    const pick = (e) => {
+      const r = globe.svg.getBoundingClientRect(), sx = W / r.width;
       const px = (e.clientX - r.left) * sx, py = (e.clientY - r.top) * sx;
-      let best = null, bd = 16 * sx;
-      for (const m of markers) { const d = Math.hypot(m.x - px, m.y - py); if (d < bd) { bd = d; best = m.n; } }
-      if (!best && e.target.dataset && e.target.dataset.id) best = byId(e.target.dataset.id);
-      return best;
-    }
-    const hintEl = el("div", { class: "map-hint", hidden: true }, "Click the map, or hold ⌘/Ctrl, to zoom with scroll. Drag to pan.");
-    let hintTimer = null;
-    const zoom = attachZoom(svg, W, H, geoLayer, placeMarkers, {
-      onHint: () => { hintEl.hidden = false; clearTimeout(hintTimer); hintTimer = setTimeout(() => { hintEl.hidden = true; }, 1600); },
-    });
-    svg.addEventListener("pointermove", (e) => {
-      if (svg.classList.contains("is-dragging")) { hideTip(); return; }
+      let best = null, reach = 14;
+      for (const m of markers) if (m.on) { const d = Math.hypot(m.x - px, m.y - py); if (d < reach) { reach = d; best = m.n; } }
+      if (best) return best;
+      const shape = document.elementsFromPoint(e.clientX, e.clientY).find((x) => x.classList && x.classList.contains("map-nation"));
+      return shape ? byId(shape.dataset.id) : null;
+    };
+    globe.svg.addEventListener("pointermove", (e) => {
+      if (globe.svg.classList.contains("is-dragging")) { hideTip(); return; }
       const n = pick(e);
       setHover(n ? n.id : null);
-      svg.style.cursor = n ? "pointer" : "grab";
+      globe.svg.style.cursor = n ? "pointer" : "";
       if (n) showTip(e, nationTip(n)); else hideTip();
     });
-    svg.addEventListener("pointerleave", () => { setHover(null); hideTip(); });
-    svg.addEventListener("click", (e) => { if (zoom.wasDrag()) return; const n = pick(e); if (n) location.hash = n.id; });
-    zoom.apply();
+    globe.svg.addEventListener("pointerleave", () => { setHover(null); hideTip(); });
+    globe.svg.addEventListener("click", (e) => { if (globe.wasDrag()) return; const n = pick(e); if (n) location.hash = n.id; });
 
-    // Legend + controls
-    const ctrl = el("span", { class: "muted small" }, `Shaded by ${metric.label.toLowerCase()} (Oxford Insights 2025)`);
+    // First visit: face home and turn slowly. Same region as last time: leave the view alone. New region: fly to it.
+    if (!state.mapView) { goHome(globe, 0); if (!regional) globe.spin(3); }
+    else if (state.mapRegion === state.region) globe.draw();
+    else { globe.draw(); goHome(globe, 900); }
+
     const legend = el("div", { class: "legend map-legend" },
       el("span", { class: "ramp-key" },
         `${metric.loLabel} ${metric.lo}`,
@@ -419,10 +643,9 @@
         `${metric.hi} ${metric.hiLabel}`),
       shown.some((n) => !n.oxford) ? el("span", {}, el("i", { style: "background:var(--na)" }), "Not ranked") : null,
       el("span", {}, el("i", { style: "background:var(--land)" }), "Not covered"));
-
     box.append(
-      el("div", { class: "map-head" }, ctrl, legend),
-      el("div", { class: "map-stage" }, el("div", { class: "chart map-wrap" }, svg), zoomControls(zoom), hintEl));
+      el("div", { class: "map-head" }, el("span", { class: "muted small" }, `Shaded by ${metric.label} (Oxford Insights 2025)`), legend),
+      globe.node);
     box.append(el("div", { class: "chart-foot" },
       tableToggle(box, () => table(["Nation", "Region", "Readiness rank"],
         [...shown].sort(byRank).map((n) => [n.name, n.group, rankText(n)]), [2])),
@@ -468,30 +691,23 @@
     return box;
   }
 
+  // A small map in a nation's header: the globe turned to face it, or the flat map zoomed to its region,
+  // with the nation filled and ringed. It follows the 3D/2D choice made on the larger maps.
   function locatorMap(n) {
-    const world = worldFeatures();
-    if (!world) return null;
-    const W = 360, H = 190;
-    const proj = d3.geoNaturalEarth1().fitExtent([[4, 4], [W - 4, H - 4]], world);
-    const path = d3.geoPath(proj);
-    const svg = s("svg", { viewBox: `0 0 ${W} ${H}`, width: W, role: "img", tabindex: "0", class: "zoomable", "aria-label": `Location of ${n.name}. Use plus and minus keys to zoom.` });
-    svg.append(s("defs", {}, s("clipPath", { id: "locclip" }, s("rect", { x: 0, y: 0, width: W, height: H, rx: 8 }))));
-    const clip = s("g", { "clip-path": "url(#locclip)" });
-    clip.append(s("rect", { x: 0, y: 0, width: W, height: H, fill: "var(--sea)" }));
-    const layer = s("g", {});
-    for (const f of world.features) {
-      const d = path(f);
-      if (d) layer.append(s("path", { d, fill: f.id === n.isoN ? "var(--accent)" : "var(--land)", stroke: "var(--land-stroke)", "stroke-width": 0.5, "vector-effect": "non-scaling-stroke" }));
-    }
-    const dot = s("circle", { r: 5, fill: "var(--accent)", stroke: "var(--surface)", "stroke-width": 2 });
-    clip.append(layer, dot);
-    svg.append(clip);
-    const xy = proj(n.geo);
-    const zoom = attachZoom(svg, W, H, layer, (z) => { dot.setAttribute("cx", xy[0] * z.k + z.x); dot.setAttribute("cy", xy[1] * z.k + z.y); }, { maxK: 24 });
-    // Open zoomed in on the nation so small states are visible.
-    zoom.z.k = 4; zoom.z.x = W / 2 - xy[0] * 4; zoom.z.y = H / 2 - xy[1] * 4;
-    zoom.apply();
-    return el("div", { class: "locator map-stage" }, svg, zoomControls(zoom));
+    const size = 260;
+    const frame = (g, ms) => g.flyTo(g.flat ? { lon: n.geo[0], lat: n.geo[1], k: 3 } : { lon: n.geo[0], lat: n.geo[1] * 0.7, k: 1 }, ms);
+    const globe = createGlobe({ W: size, H: size, flatH: 176, pad: 24, maxK: 16, cls: "locator-globe", modeSwitch: false,
+      view0: { lon: n.geo[0], lat: n.geo[1] * 0.7, k: 1 }, home: (g) => frame(g, 400),
+      label: `Map showing where ${n.name} is.`, fills: (f) => (f.id === n.isoN ? { class: "is-home" } : null) });
+    if (!globe) return null;
+    const ring = s("circle", { class: "loc-ring", r: 11 }), dot = s("circle", { class: "loc-dot", r: 4.5 });
+    globe.top.append(ring, dot);
+    globe.onDraw(() => {
+      const p = globe.point(n.geo);
+      for (const c of [ring, dot]) { c.setAttribute("cx", p.x); c.setAttribute("cy", p.y); c.style.display = p.z > 0 ? "" : "none"; }
+    });
+    frame(globe, 0);
+    return el("div", { class: "locator" }, globe.node);
   }
 
   // ---------------------------------------------------------------- shared blocks
@@ -581,9 +797,9 @@
       const mapSlot = el("div", {}, worldMap());
       body.replaceChildren(...[
         el("section", { class: "section" },
-          sectionHead("Where they are", "Hover a country or dot for its numbers, click to open its profile. Picking a region zooms in."),
+          sectionHead("Where they are", "Drag the map to look around. Hover a country or dot for its numbers, click to open its profile. Picking a region moves the map to it. The 3D and 2D buttons switch between a globe and a flat map."),
           el("div", { class: "card" }, mapSlot,
-            el("p", { class: "note" }, "At this scale Singapore, Malta, Bahrain and Mauritius are too small to draw as shapes, so every nation is also marked with a dot at its capital."))),
+            el("p", { class: "note" }, "Singapore, Malta, Bahrain, Mauritius and other small states are too small to draw as shapes, so every nation is also marked with a dot at its capital. Use 'Show as table' to see all of them at once."))),
         el("section", { class: "section" },
           sectionHead("At a glance", "Click a column header to sort; the top rows follow the sort."),
           el("div", { class: "card compare" }, expandable((k) => compareTable(list, k), list.length, { limit: 10, hint: "in this sort order" }), sourceLine("oxford", "wbNet"))),
@@ -878,21 +1094,6 @@
   const partiesOf = (c) => collabParties(c).map(party).filter(Boolean);
   const countriesIn = (c) => collabParties(c).filter((k) => !COLLAB_BODIES.has(k)).length;
   const monthYear = (d) => fmtDate(d).replace(/^\d+ /, "");
-  // Curved line between two projected points, bowed to one side so overlapping routes stay readable.
-  const arc = (p1, p2, bow) => {
-    const mx = (p1[0] + p2[0]) / 2, my = (p1[1] + p2[1]) / 2, dx = p2[0] - p1[0], dy = p2[1] - p1[1];
-    return `M${p1[0]},${p1[1]} Q${mx - dy * bow},${my + dx * bow} ${p2[0]},${p2[1]}`;
-  };
-  // The same between two [lon, lat] points. A route across the date line (e.g. Fiji to Samoa) would otherwise
-  // run the whole width of the map, so it is drawn as two short lines leaving each point towards the nearer edge.
-  // `center` is the longitude the projection is rotated to face, which moves the map's edge.
-  const relLon = (lon, center) => ((lon - center + 540) % 360) - 180;
-  const geoArc = (proj, a, b, bow, center = 0) => {
-    const ra = relLon(a[0], center), rb = relLon(b[0], center);
-    if (Math.abs(ra - rb) <= 180) return arc(proj(a), proj(b), bow);
-    const lat = (a[1] + b[1]) / 2, edge = (r) => proj([center + (r > 0 ? 179.9 : -179.9), lat]);
-    return `${arc(proj(a), edge(ra), bow)} ${arc(proj(b), edge(rb), -bow)}`;
-  };
   // A country "pill": flag and name, linking to the nation page when the country is on this site.
   const pill = (p, host) => el(p.nation ? "a" : "span", { class: "cpill" + (p.nation ? "" : " is-outside"), href: p.nation ? `#${p.key}` : null, title: p.nation ? `Open ${p.name}` : `${p.name} (not one of the nations on this site)` },
     el("span", { class: "cpill-flag", "aria-hidden": "true" }, p.flag), p.name, host ? el("span", { class: "cpill-host" }, COLLAB_BODIES.has(p.key) ? "coordinator" : "host") : null);
@@ -920,42 +1121,52 @@
   const collabLinks = (n, list) => list.flatMap((c) => (c.kind === "bilateral" ? [[c, c.a === n.id ? c.b : c.a]]
     : c.hub === n.id ? c.members.map((m) => [c, m]) : [[c, c.hub]]));
   function partnerMap(n, links) {
-    const world = worldFeatures();
-    if (!world) return el("p", { class: "muted" }, "Map libraries failed to load.");
-    const W = 560, H = 320;
     const keys = [...new Set(links.map(([, k]) => k))].filter((k) => party(k));
-    const pts = [n.geo, ...keys.map((k) => party(k).geo)];
-    // Frame the nation and its partners, padded so short hops still show their surroundings. The map is turned
-    // to face the nation, so Pacific neighbours across the date line (e.g. Samoa and Fiji) sit side by side.
-    const c = n.geo[0];
-    const lons = pts.map((p) => relLon(p[0], c)), lats = pts.map((p) => p[1]), pad = 10;
-    const box = { type: "MultiPoint", coordinates: [[c + Math.max(-179.9, Math.min(...lons) - pad), Math.max(-58, Math.min(...lats) - pad)], [c + Math.min(179.9, Math.max(...lons) + pad), Math.min(78, Math.max(...lats) + pad)]] };
-    const proj = d3.geoNaturalEarth1().rotate([-c, 0]).fitExtent([[56, 26], [W - 56, H - 26]], box);
-    const path = d3.geoPath(proj);
-    const svg = s("svg", { viewBox: `0 0 ${W} ${H}`, width: W, role: "img", class: "np-map",
-      "aria-label": `Map of ${n.name}'s AI partners: ${keys.map((k) => party(k).name).join(", ")}.` });
-    svg.append(s("rect", { x: 0, y: 0, width: W, height: H, fill: "var(--sea)" }));
-    for (const f of world.features) {
-      const d = path(f);
-      if (d) svg.append(s("path", { d, class: f.id === n.isoN ? "cx-fill" : null, fill: f.id === n.isoN ? null : "var(--land)", stroke: "var(--land-stroke)", "stroke-width": 0.5 }));
-    }
-    const home = proj(n.geo);
-    for (const [c, k] of links) {
-      const p = party(k);
-      if (!p) continue;
-      svg.append(s("path", { d: geoArc(proj, n.geo, p.geo, c.kind === "bilateral" ? 0.2 : 0.1, n.geo[0]), class: `collab-line np-line ${c.kind}` }, s("title", {}, `${c.short}: ${p.name}`)));
-    }
-    const label = (xy, text, strong) => {
-      const flip = xy[0] > W - 120;
-      return s("text", { x: flip ? xy[0] - 9 : xy[0] + 9, y: xy[1] + 4, "text-anchor": flip ? "end" : "start", class: "map-label" + (strong ? " is-strong" : "") }, text);
-    };
+    const W = narrowScreen() ? 420 : 560, H = 400;
+    const places = [n.geo, ...keys.map((k) => party(k).geo)];
+    // The map frames the nation and its partners together, zoomed until they fill it.
+    const frame = (g, ms) => g.fitPoints(places, { ms, maxK: 3.2, padPx: 70 });
+    const globe = createGlobe({ W, H, pad: 14, maxK: 10, cls: "np-map", view0: { lon: n.geo[0], lat: n.geo[1], k: 1 }, home: (g) => frame(g, 600),
+      label: `Map of ${n.name}'s AI partners: ${keys.map((k) => party(k).name).join(", ")}.`,
+      fills: (f) => (f.id === n.isoN ? { class: "cx-fill" } : null) });
+    if (!globe) return el("p", { class: "muted" }, "Map libraries failed to load.");
+    const lines = links.filter(([, k]) => party(k)).map(([c, k]) => {
+      const node = s("path", { class: `collab-line np-line ${c.kind}` }, s("title", {}, `${c.short}: ${party(k).name}`));
+      globe.over.append(node);
+      return { node, samples: globe.arcSamples(n.geo, party(k).geo, c.kind === "bilateral" ? 1 : 0.75) };
+    });
     const few = keys.length <= 10;
-    for (const k of keys) {
-      const p = party(k), xy = proj(p.geo);
-      svg.append(s("g", { class: "collab-dot" + (p.nation ? "" : " is-outside") }, s("circle", { cx: xy[0], cy: xy[1], r: 4 }, s("title", {}, p.name)), few ? label(xy, p.name) : null));
-    }
-    svg.append(s("g", { class: "collab-dot is-lit" }, s("circle", { cx: home[0], cy: home[1], r: 6.5 }), label(home, n.name, true)));
-    return el("div", { class: "chart np-mapwrap" }, svg);
+    const mark = (p, isHome) => {
+      const g = s("g", { class: "collab-dot" + (isHome ? " is-lit" : p.nation ? "" : " is-outside") });
+      const circle = s("circle", { r: isHome ? 6.5 : 4 }, s("title", {}, p.name));
+      const text = isHome || few ? s("text", { class: "map-label" + (isHome ? " is-strong" : "") }, p.name) : null;
+      g.append(...[circle, text].filter(Boolean));
+      globe.top.append(g);
+      return { geo: p.geo, g, circle, text, w: p.name.length * (isHome ? 7.8 : 7.2) + 4, x: 0, y: 0 };
+    };
+    // The nation itself is last in the list so it draws on top, but its name is placed first.
+    const marks = [...keys.map((k) => mark(party(k), false)), mark({ name: n.name, geo: n.geo, nation: n }, true)];
+    globe.onDraw(() => {
+      for (const l of lines) l.node.setAttribute("d", globe.arcPath(l.samples));
+      const vis = [];
+      for (const m of marks) {
+        const p = globe.point(m.geo), on = p.z > 0.02;
+        m.g.style.display = on ? "" : "none";
+        if (!on) continue;
+        m.x = p.x; m.y = p.y;
+        m.circle.setAttribute("cx", p.x); m.circle.setAttribute("cy", p.y);
+        vis.push(m);
+      }
+      const placed = [];
+      for (const m of [...vis].reverse()) {
+        if (!m.text) continue;
+        const spot = labelSpot(m.x, m.y, m.w, placed, vis, globe);
+        m.text.style.display = spot ? "" : "none";
+        if (spot) { m.text.setAttribute("x", spot.x + 2); m.text.setAttribute("y", spot.y + 11); }
+      }
+    });
+    frame(globe, 0);
+    return el("div", { class: "np-mapwrap" }, globe.node);
   }
   function nationPartners(n) {
     const list = (D.collaborations || []).filter((c) => collabParties(c).includes(n.id)).sort(byDateDesc);
@@ -977,151 +1188,7 @@
           el("a", { class: "np-more", href: "#collab" }, "All agreements on the Collaborations map →"))))];
   }
 
-  // ---- view switch between the map and the chord diagram
-  const collabSwitch = (active) => el("div", { class: "seg", role: "group", "aria-label": "Collaborations view" },
-    el("a", { class: "seg-btn", href: "#collab", "aria-current": active === "map" ? "page" : null }, "Map"),
-    el("a", { class: "seg-btn", href: "#collab/chord", "aria-current": active === "chord" ? "page" : null }, "Chord diagram"));
-
-  // ---- chord diagram (#collab/chord): every country or body with an agreement sits on a circle, grouped by region;
-  // each agreement is a ribbon between the two parties (a group agreement links each member to its host, as on the map).
-  const CHORD_GROUPS = [
-    ["Europe", "var(--grp-europe)"], ["Middle East", "var(--grp-mideast)"], ["Africa", "var(--grp-africa)"],
-    ["Asia-Pacific", "var(--grp-asia)"], ["Americas", "var(--grp-americas)"],
-    ["Outside partners", "var(--grp-outside)"], ["International bodies", "var(--grp-body)"],
-  ];
-  function renderChord() {
-    const all = [...(D.collaborations || [])].sort(byDateDesc);
-    // Links: one per pair of parties per agreement.
-    const links = all.flatMap((c) => (c.kind === "bilateral" ? [[c.a, c.b]] : c.members.map((m) => [c.hub, m]))
-      .filter(([a, b]) => party(a) && party(b)).map(([a, b]) => ({ c, a, b })));
-    const groupOf = (k) => { const p = party(k); return COLLAB_BODIES.has(k) ? "International bodies" : p.nation ? p.nation.group : "Outside partners"; };
-    const deg = new Map();
-    for (const l of links) for (const k of [l.a, l.b]) deg.set(k, (deg.get(k) || 0) + 1);
-    const order = CHORD_GROUPS.map(([g]) => g);
-    const nodes = [...deg.keys()].map((k) => ({ k, p: party(k), g: groupOf(k), deg: deg.get(k) }))
-      .sort((x, y) => order.indexOf(x.g) - order.indexOf(y.g) || y.deg - x.deg || x.p.name.localeCompare(y.p.name));
-
-    // Angles: each node gets one base unit plus one per link, with gaps between nodes and wider gaps between groups.
-    const TAU = Math.PI * 2, NODE_GAP = 0.004, GROUP_GAP = 0.05;
-    const groupsUsed = new Set(nodes.map((n) => n.g)).size;
-    const units = nodes.reduce((t, n) => t + 1 + n.deg, 0);
-    const unit = (TAU - nodes.length * NODE_GAP - groupsUsed * GROUP_GAP) / units;
-    let a = GROUP_GAP / 2, prevG = null;
-    for (const n of nodes) {
-      if (prevG && n.g !== prevG) a += GROUP_GAP;
-      prevG = n.g;
-      n.a0 = a; n.a1 = a + (1 + n.deg) * unit; n.mid = (n.a0 + n.a1) / 2;
-      a = n.a1 + NODE_GAP;
-    }
-    const byKey = new Map(nodes.map((n) => [n.k, n]));
-    // Each link end gets a slot on its node, ordered by where the other end sits so ribbons do not cross at the node.
-    const ends = new Map(nodes.map((n) => [n.k, []]));
-    links.forEach((l, i) => { ends.get(l.a).push({ i, other: l.b }); ends.get(l.b).push({ i, other: l.a }); });
-    const slot = new Map();
-    for (const n of nodes) {
-      const rel = (k) => (byKey.get(k).mid - n.mid + TAU) % TAU;
-      const list = ends.get(n.k).sort((x, y) => rel(y.other) - rel(x.other));
-      const start = n.a0 + unit / 2;
-      list.forEach((e, j) => slot.set(`${e.i}:${n.k}`, [start + j * unit, start + (j + 1) * unit]));
-    }
-
-    const R = 300, W = 940;
-    const pt = (ang, r) => `${(r * Math.sin(ang)).toFixed(1)},${(-r * Math.cos(ang)).toFixed(1)}`;
-    const svg = s("svg", { viewBox: `${-W / 2} ${-W / 2} ${W} ${W}`, class: "chord", role: "img",
-      "aria-label": `Chord diagram of ${all.length} AI agreements between ${nodes.length} countries and international bodies, grouped by region.` });
-    const ribbons = s("g", { class: "ch-ribbons" }), arcs = s("g", {}), labels = s("g", {});
-    svg.append(ribbons, arcs, labels);
-
-    const ribbonEls = links.map((l, i) => {
-      const [a0, a1] = slot.get(`${i}:${l.a}`), [b0, b1] = slot.get(`${i}:${l.b}`);
-      const d = `M${pt(a0, R)} A${R},${R} 0 0 1 ${pt(a1, R)} Q0,0 ${pt(b0, R)} A${R},${R} 0 0 1 ${pt(b1, R)} Q0,0 ${pt(a0, R)} Z`;
-      const path = s("path", { d, class: `ch-ribbon ${l.c.kind}`, tabindex: "0", role: "link", "aria-label": `${l.c.title}: ${party(l.a).name} and ${party(l.b).name}` });
-      path.addEventListener("pointermove", (e) => showTip(e, [el("div", { class: "tv" }, l.c.short || l.c.title),
-        el("div", { class: "tl" }, `${party(l.a).name} ⟷ ${party(l.b).name}`),
-        el("div", { class: "tl small" }, `${monthYear(l.c.date)} · ${l.c.kind === "bilateral" ? "two countries" : "group agreement"} · click to open`)]));
-      path.addEventListener("pointerleave", hideTip);
-      const open = () => { location.hash = `collab/${l.c.id}`; };
-      path.addEventListener("click", open);
-      path.addEventListener("keydown", (e) => { if (e.key === "Enter") open(); });
-      ribbons.append(path);
-      return path;
-    });
-
-    const color = (g) => CHORD_GROUPS.find(([name]) => name === g)[1];
-    const nodeEls = new Map();
-    for (const n of nodes) {
-      const r0 = R + 3, r1 = R + 15, big = n.a1 - n.a0 > Math.PI ? 1 : 0;
-      const d = `M${pt(n.a0, r1)} A${r1},${r1} 0 ${big} 1 ${pt(n.a1, r1)} L${pt(n.a1, r0)} A${r0},${r0} 0 ${big} 0 ${pt(n.a0, r0)} Z`;
-      const deg = (n.mid * 180) / Math.PI, flip = n.mid > Math.PI;
-      const g = s("g", { class: "ch-node", tabindex: "0", role: "button", "aria-label": `${n.p.name}: ${n.deg} link${n.deg === 1 ? "" : "s"}` },
-        s("path", { d, fill: color(n.g) }),
-        s("text", { transform: `rotate(${deg - 90}) translate(${R + 21},0)${flip ? " rotate(180)" : ""}`, "text-anchor": flip ? "end" : "start", dy: "0.35em", class: "ch-label" + (n.p.nation ? "" : " is-outside") },
-          `${n.p.flag} ${n.p.nation ? shortName(n.p.nation) : n.p.name}`));
-      g.addEventListener("pointermove", (e) => { if (!locked) focus(n.k); showTip(e, [el("div", { class: "tv" }, `${n.p.flag} ${n.p.name}`), el("div", { class: "tl" }, `${agreementsOf(n.k).length} agreement${agreementsOf(n.k).length === 1 ? "" : "s"} · ${n.g}`), el("div", { class: "tl small" }, "Click to list them")]); });
-      g.addEventListener("pointerleave", () => { hideTip(); if (!locked) focus(null); });
-      g.addEventListener("click", () => select(n.k));
-      g.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); select(n.k); } });
-      arcs.append(g);
-      nodeEls.set(n.k, g);
-    }
-
-    // Focus: light up one party's ribbons and partners. A click locks it and lists its agreements beside the diagram.
-    let locked = null;
-    const agreementsOf = (k) => all.filter((c) => links.some((l) => l.c === c && (l.a === k || l.b === k)));
-    function focus(k) {
-      svg.classList.toggle("has-focus", !!k);
-      const partners = new Set(k ? [k] : []);
-      links.forEach((l, i) => {
-        const on = !!k && (l.a === k || l.b === k);
-        ribbonEls[i].classList.toggle("is-on", on);
-        if (on) { partners.add(l.a); partners.add(l.b); }
-      });
-      for (const [key, g] of nodeEls) g.classList.toggle("is-on", partners.has(key));
-    }
-    const side = el("div", { class: "card ch-side", "aria-live": "polite" });
-    function drawSide() {
-      if (!locked) {
-        const top = [...nodes].sort((x, y) => agreementsOf(y.k).length - agreementsOf(x.k).length).slice(0, 8);
-        side.replaceChildren(
-          el("h2", { class: "ch-side-h" }, "Most connected"),
-          el("p", { class: "muted small" }, "Click a country on the circle, or one below, to see its agreements. Click a ribbon to open an agreement."),
-          el("div", { class: "ch-top" }, top.map((n) => el("button", { class: "cpill ch-pick", type: "button", onclick: () => select(n.k) },
-            el("span", { class: "cpill-flag", "aria-hidden": "true" }, n.p.flag), n.p.name, el("span", { class: "sv-count" }, String(agreementsOf(n.k).length))))));
-        return;
-      }
-      const p = party(locked), list = agreementsOf(locked);
-      side.replaceChildren(
-        el("div", { class: "ch-side-top" },
-          el("h2", { class: "ch-side-h" }, `${p.flag} ${p.name}`),
-          el("button", { class: "linklike small", type: "button", onclick: () => select(null) }, "Clear")),
-        el("p", { class: "muted small" }, `${list.length} agreement${list.length === 1 ? "" : "s"}`, p.nation ? [" · ", el("a", { href: `#${p.key}` }, "Open nation page")] : null),
-        el("div", { class: "np-rows" }, list.map((c) => el("a", { class: "cx-row", href: `#collab/${c.id}` }, ...collabRowParts(c, p.nation ? p.key : undefined)))));
-    }
-    function select(k) {
-      locked = k && locked !== k ? k : null;
-      focus(locked);
-      drawSide();
-    }
-    svg.addEventListener("click", (e) => { if (e.target === svg) select(null); });
-    drawSide();
-
-    const nBil = all.filter((c) => c.kind === "bilateral").length;
-    view.replaceChildren(
-      el("h1", {}, "AI collaborations between countries"),
-      el("p", { class: "summary ink2" }, `${all.length} AI agreements between governments (${nBil} between two countries, ${all.length - nBil} in groups). Each ribbon links two parties; a group agreement links each member to its host, so busy hubs such as the Global Partnership on AI stand out.`),
-      collabSwitch("chord"),
-      el("section", { class: "section ch-wrap" },
-        el("div", { class: "card ch-card" }, el("div", { class: "chart ch-chart" }, svg),
-          el("div", { class: "legend" },
-            CHORD_GROUPS.filter(([g]) => nodes.some((n) => n.g === g)).map(([g, col]) => el("span", {}, el("i", { style: `background:${col}` }), g)),
-            el("span", {}, el("i", { class: "line", style: "background:var(--series-1)" }), "Two countries"),
-            el("span", {}, el("i", { class: "line", style: "background:var(--series-2)" }), "Group agreement"))),
-        side),
-      el("p", { class: "muted small" }, "Arc length grows with a party's number of links. The Africa Declaration on AI has no member list here, so it does not appear."));
-  }
-
   function renderCollab(initialId) {
-    if (initialId === "chord") return renderChord();
     const all = [...(D.collaborations || [])].sort(byDateDesc);
     const byCid = new Map(all.map((c) => [c.id, c]));
     // A link to one agreement (#collab/<id>) opens it with the tour paused.
@@ -1143,81 +1210,71 @@
     };
 
     // ---- map
-    const W = 960, H = 480;
-    const world = worldFeatures();
+    const sq = narrowScreen(), W = sq ? 420 : 960, H = sq ? 420 : 560;
+    const START = { lon: 20, lat: 25, k: 1 };
     const mapCard = el("div", { class: "card cx-map" });
-    let proj = null, zoom = null, svg = null;
     let paint = () => {};
-    if (!world) mapCard.append(el("p", { class: "muted" }, "Map libraries failed to load."));
+    const globe = createGlobe({ W, H, maxK: 8, cls: "collab-map", view0: START, onUser: () => pause(),
+      home: (g) => { const c = byCid.get(st.sel); if (c) fit(c, 600); else g.flyTo(START, 600); },
+      label: `Map of ${all.length} AI agreements between countries. The selected agreement is drawn brightly and its countries are shaded.` });
+    if (!globe) mapCard.append(el("p", { class: "muted" }, "Map libraries failed to load."));
     else {
-      proj = d3.geoNaturalEarth1().fitExtent([[6, 6], [W - 6, H - 6]], world);
-      const path = d3.geoPath(proj);
-      svg = s("svg", { viewBox: `0 0 ${W} ${H}`, width: W, role: "img", tabindex: "0", class: "zoomable collab-map",
-        "aria-label": `Map of ${all.length} AI agreements between countries. The selected agreement is drawn brightly and its countries are shaded.` });
-      svg.append(s("defs", {}, s("clipPath", { id: "collabclip" }, s("rect", { x: 0, y: 0, width: W, height: H, rx: 8 }))));
-      const clip = s("g", { "clip-path": "url(#collabclip)" });
-      clip.append(s("rect", { x: 0, y: 0, width: W, height: H, fill: "var(--sea)" }));
-      const geoLayer = s("g", {});
-      geoLayer.append(s("path", { d: path({ type: "Sphere" }), fill: "var(--sea)", stroke: "var(--grid)", "vector-effect": "non-scaling-stroke" }));
-      const land = new Map();
-      for (const f of world.features) { const d = path(f); if (d) { land.set(f.id, d); geoLayer.append(s("path", { d, fill: "var(--land)", stroke: "var(--land-stroke)", "stroke-width": 0.6, "vector-effect": "non-scaling-stroke" })); } }
-      const fillLayer = s("g", {}), lineLayer = s("g", {}), topLayer = s("g", {}), hitLayer = s("g", {});
-      geoLayer.append(fillLayer, lineLayer, topLayer, hitLayer);
+      const lineLayer = s("g", {}), onLayer = s("g", {}), hitLayer = s("g", {}), dotLayer = s("g", {});
+      globe.over.append(lineLayer, onLayer, hitLayer);
+      globe.top.append(dotLayer);
+      // Every agreement is a faint route above the surface; a wider invisible copy takes the pointer.
       const segs = [];
       for (const c of all) {
         const pairs = c.kind === "bilateral" ? [[c.a, c.b]] : c.members.map((m) => [c.hub, m]);
         for (const [k1, k2] of pairs) {
           const a = party(k1), b = party(k2);
           if (!a || !b) continue;
-          const d = geoArc(proj, a.geo, b.geo, c.kind === "bilateral" ? 0.2 : 0.08);
-          const vis = s("path", { d, class: `collab-line ${c.kind}`, "vector-effect": "non-scaling-stroke" });
-          const hit = s("path", { d, class: "collab-hit", "vector-effect": "non-scaling-stroke", "data-id": c.id });
-          hit.addEventListener("pointermove", (e) => { if (!svg.classList.contains("is-dragging")) showTip(e, [el("div", { class: "tv" }, c.short || c.title), el("div", { class: "tl" }, partiesOf(c).map((p) => p.name).join(c.kind === "bilateral" ? " ⟷ " : ", ")), el("div", { class: "tl small", style: "margin-top:4px" }, "Click for details")]); });
+          const vis = s("path", { class: `collab-line ${c.kind}` });
+          const hit = s("path", { class: "collab-hit", "data-id": c.id });
+          hit.addEventListener("pointermove", (e) => { if (!globe.svg.classList.contains("is-dragging")) showTip(e, [el("div", { class: "tv" }, c.short || c.title), el("div", { class: "tl" }, partiesOf(c).map((p) => p.name).join(c.kind === "bilateral" ? " ⟷ " : ", ")), el("div", { class: "tl small", style: "margin-top:4px" }, "Click for details")]); });
           hit.addEventListener("pointerleave", hideTip);
           lineLayer.append(vis);
           hitLayer.append(hit);
-          segs.push({ c, d, vis });
+          segs.push({ c, vis, hit, d: "", samples: globe.arcSamples(a.geo, b.geo, c.kind === "bilateral" ? 1 : 0.75) });
         }
       }
-      // Country dots live in screen space so they keep their size while zooming.
-      const dotLayer = s("g", {});
-      clip.append(geoLayer, dotLayer);
-      svg.append(clip);
-      const dots = [...counts.keys()].map((k) => ({ p: party(k), k })).filter((d) => d.p).map((d) => ({ ...d, xy: proj(d.p.geo) }));
-      const place = (z) => {
-        const c = byCid.get(st.sel);
-        const lit = new Set(c ? collabParties(c) : []);
-        // Name every country in the selected agreement; for large groups only the host.
-        const named = new Set(c ? (lit.size <= 6 ? lit : [c.hub]) : []);
-        const shownKeys = new Set(shownList().flatMap(collabParties));
-        const node = (d) => {
-          const x = d.xy[0] * z.k + z.x, y = d.xy[1] * z.k + z.y;
-          const on = lit.has(d.k);
-          const r = on ? 6 : 2.5 + Math.min(counts.get(d.k), 5) * 0.5;
-          const g = s("g", { class: "collab-dot" + (on ? " is-lit" : "") + (d.p.nation ? "" : " is-outside") + (shownKeys.has(d.k) ? "" : " is-out"), "data-k": d.k, tabindex: on ? "0" : "-1", role: "button",
-            "aria-label": `${d.p.name}: ${counts.get(d.k)} agreement${counts.get(d.k) > 1 ? "s" : ""}. Show them.` });
-          g.append(s("circle", { cx: x, cy: y, r }));
-          if (named.has(d.k)) {
-            const flip = x > W - 150;
-            g.append(s("text", { x: flip ? x - r - 4 : x + r + 4, y: y + 4, class: "map-label is-strong", "text-anchor": flip ? "end" : "start" }, d.p.name));
-          }
-          g.addEventListener("pointermove", (e) => showTip(e, [el("div", { class: "tv" }, `${d.p.flag} ${d.p.name}`), el("div", { class: "tl" }, `${counts.get(d.k)} agreement${counts.get(d.k) > 1 ? "s" : ""}`), el("div", { class: "tl small", style: "margin-top:4px" }, "Click to list them")]));
-          g.addEventListener("pointerleave", hideTip);
-          g.addEventListener("keydown", (e) => { if (e.key === "Enter") selectCountry(d.k); });
-          return g;
-        };
-        const rank = (d) => (named.has(d.k) ? 2 : lit.has(d.k) ? 1 : 0);
-        dotLayer.replaceChildren(...[...dots].sort((a, b) => rank(a) - rank(b)).map(node));
-      };
-      const hintEl = el("div", { class: "map-hint", hidden: true }, "Click the map, or hold ⌘/Ctrl, to zoom with scroll. Drag to pan.");
-      let hintTimer = null;
-      zoom = attachZoom(svg, W, H, geoLayer, place, { maxK: 10, onUser: () => pause(),
-        onHint: () => { hintEl.hidden = false; clearTimeout(hintTimer); hintTimer = setTimeout(() => { hintEl.hidden = true; }, 1600); } });
-      zoom.apply();
-      // The map captures the pointer while pressed (for dragging), so clicks land on the svg itself:
-      // find the dot or line under the pointer from there.
-      svg.addEventListener("click", (e) => {
-        if (zoom.wasDrag()) return;
+      // A dot for every country or body with an agreement, sized by how many it has.
+      const dots = [...counts.keys()].map((k) => ({ k, p: party(k) })).filter((d) => d.p).map((d) => {
+        const n = counts.get(d.k), plural = n > 1 ? "s" : "";
+        const g = s("g", { class: "collab-dot" + (d.p.nation ? "" : " is-outside"), "data-k": d.k, tabindex: "-1", role: "button", "aria-label": `${d.p.name}: ${n} agreement${plural}. Show them.` });
+        const circle = s("circle", {}), text = s("text", { class: "map-label is-strong" }, d.p.name);
+        g.append(circle, text);
+        g.addEventListener("pointermove", (e) => showTip(e, [el("div", { class: "tv" }, `${d.p.flag} ${d.p.name}`), el("div", { class: "tl" }, `${n} agreement${plural}`), el("div", { class: "tl small", style: "margin-top:4px" }, "Click to list them")]));
+        g.addEventListener("pointerleave", hideTip);
+        g.addEventListener("keydown", (e) => { if (e.key === "Enter") selectCountry(d.k); });
+        dotLayer.append(g);
+        return { ...d, n, g, circle, text, lit: false, named: false, out: false };
+      });
+      let onLines = [], filled = [];
+      globe.onDraw(() => {
+        for (const sg of segs) { sg.d = globe.arcPath(sg.samples); sg.vis.setAttribute("d", sg.d); sg.hit.setAttribute("d", sg.d); }
+        for (const o of onLines) { o.glow.setAttribute("d", o.seg.d); o.line.setAttribute("d", o.seg.d); }
+        for (const d of dots) {
+          const p = globe.point(d.p.geo), on = p.z > 0.02;
+          d.g.style.display = on ? "" : "none";
+          if (!on) continue;
+          const r = d.lit ? 6 : 2.5 + Math.min(d.n, 5) * 0.5;
+          d.circle.setAttribute("cx", p.x); d.circle.setAttribute("cy", p.y); d.circle.setAttribute("r", r);
+          // Dots fade as they near the edge; ones outside the current search stay dim.
+          d.g.style.opacity = (d.out ? 0.3 : 1) * (d.lit ? 1 : Math.min(1, 0.3 + p.z * 2.2));
+          d.x = p.x; d.y = p.y; d.on = true;
+        }
+        // Names of the selected agreement's countries, each placed where it covers no other name or lit dot.
+        const litDots = dots.filter((d) => d.lit && d.g.style.display !== "none"), placed = [];
+        for (const d of dots) {
+          const spot = d.named && d.g.style.display !== "none" ? labelSpot(d.x, d.y, d.p.name.length * 7.8 + 4, placed, litDots, globe) : null;
+          d.text.style.display = spot ? "" : "none";
+          if (spot) { d.text.setAttribute("x", spot.x + 2); d.text.setAttribute("y", spot.y + 11); }
+        }
+      });
+      // Clicks are resolved from the point, because a drag hands the pointer to the map itself.
+      globe.svg.addEventListener("click", (e) => {
+        if (globe.wasDrag()) return;
         for (const n of document.elementsFromPoint(e.clientX, e.clientY)) {
           const dot = n.closest && n.closest(".collab-dot");
           if (dot) { hideTip(); selectCountry(dot.dataset.k); return; }
@@ -1225,27 +1282,37 @@
         }
       });
       paint = () => {
-        const c = byCid.get(st.sel);
-        const shownIds = new Set(shownList().map((x) => x.id));
-        segs.forEach(({ c: x, vis }) => vis.classList.toggle("is-out", !shownIds.has(x.id)));
-        topLayer.replaceChildren(...segs.filter((x) => c && x.c.id === c.id).flatMap(({ d }) => [
-          s("path", { d, class: `collab-glow ${c.kind}`, "vector-effect": "non-scaling-stroke" }),
-          s("path", { d, class: `collab-line is-on ${c.kind}`, "vector-effect": "non-scaling-stroke" })]));
-        const isos = c ? collabParties(c).map((k) => (byId(k) || PLACES[k] || {}).isoN).filter((i) => i && land.has(i)) : [];
-        fillLayer.replaceChildren(...isos.map((i) => s("path", { d: land.get(i), class: "cx-fill", "vector-effect": "non-scaling-stroke" })));
-        place(zoom.z);
+        const c = byCid.get(st.sel), list = shownList();
+        const shownIds = new Set(list.map((x) => x.id)), shownKeys = new Set(list.flatMap(collabParties));
+        for (const sg of segs) sg.vis.classList.toggle("is-out", !shownIds.has(sg.c.id));
+        // The selected agreement: bright routes with a glow, its countries shaded, its dots ringed and named.
+        onLayer.replaceChildren();
+        onLines = segs.filter((sg) => c && sg.c.id === c.id).map((seg) => {
+          const glow = s("path", { class: `collab-glow ${c.kind}` }), line = s("path", { class: `collab-line is-on ${c.kind}` });
+          onLayer.append(glow, line);
+          return { seg, glow, line };
+        });
+        for (const node of filled) node.classList.remove("cx-fill");
+        filled = c ? collabParties(c).map((k) => globe.land.get((byId(k) || PLACES[k] || {}).isoN)).filter(Boolean) : [];
+        for (const node of filled) node.classList.add("cx-fill");
+        const lit = new Set(c ? collabParties(c) : []);
+        // Name every country in the selected agreement; for large groups only the host.
+        const named = new Set(c ? (lit.size <= 6 ? lit : [c.hub]) : []);
+        for (const d of dots) {
+          d.lit = lit.has(d.k); d.named = named.has(d.k); d.out = !shownKeys.has(d.k);
+          d.g.classList.toggle("is-lit", d.lit);
+          d.g.setAttribute("tabindex", d.lit ? "0" : "-1");
+          if (d.lit) dotLayer.append(d.g); // lit dots draw above the rest
+        }
+        globe.draw();
       };
-      mapCard.append(el("div", { class: "map-stage" }, el("div", { class: "chart map-wrap" }, svg), zoomControls(zoom), hintEl));
+      mapCard.append(globe.node);
     }
-    // Frame the selected agreement's countries, leaving room for their labels.
-    const fit = (c) => {
-      if (!zoom || !c) return;
-      const pts = partiesOf(c).map((p) => proj(p.geo));
-      const xs = pts.map((p) => p[0]), ys = pts.map((p) => p[1]);
-      const x0 = Math.min(...xs), x1 = Math.max(...xs), y0 = Math.min(...ys), y1 = Math.max(...ys);
-      const k = Math.max(1, Math.min((W - 260) / Math.max(x1 - x0, 1), (H - 150) / Math.max(y1 - y0, 1), pts.length > 1 ? 4 : 3));
-      const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2;
-      zoom.flyTo({ k, x: W / 2 - cx * k, y: H / 2 - cy * k });
+    // Move the map to the selected agreement's countries and zoom until they fill it, with room for labels.
+    const fit = (c, ms = 900) => {
+      if (!globe || !c) return;
+      const pts = partiesOf(c).map((p) => p.geo);
+      globe.fitPoints(pts, { ms, maxK: pts.length > 1 ? 3.4 : 2.6, padPx: sq ? 56 : 100 });
     };
 
     // ---- tour controls (over the map) and the detail panel
@@ -1362,15 +1429,14 @@
 
     drawList();
     update(false);
-    if (zoom) zoom.flyTo({ k: 1, x: 0, y: 0 }, 0);
-    if (linked) requestAnimationFrame(() => { markRow(true); fit(byCid.get(st.sel)); });
+    fit(byCid.get(st.sel), 0);
+    if (linked) requestAnimationFrame(() => markRow(true));
     else play();
 
     const nBil = all.filter((c) => c.kind === "bilateral").length;
     view.replaceChildren(
       el("h1", {}, "AI collaborations between countries"),
-      el("p", { class: "summary ink2" }, `${all.length} AI agreements between governments (${nBil} between two countries, ${all.length - nBil} in groups), each involving at least one nation on this site. The map steps through them every few seconds; pick one from the list to stop and read it.`),
-      collabSwitch("map"),
+      el("p", { class: "summary ink2" }, `${all.length} AI agreements between governments (${nBil} between two countries, ${all.length - nBil} in groups), each involving at least one nation on this site. The map moves to each one every few seconds; pick one from the list to stop and read it, or drag the map to look around. Switch between a 3D globe and a flat 2D map with the buttons in its corner.`),
       el("section", { class: "section cx" },
         el("div", { class: "cx-side card" }, el("div", { class: "cx-side-in" }, search, status, rows)),
         stage),
@@ -1464,7 +1530,7 @@
       el("h2", {}, "What's shown"),
       el("ul", {},
         el("li", {}, "Nation pages and the News feed focus on developments since January 2024, newest first. Earlier background, such as first strategies, is available behind a 'Show earlier background' toggle."),
-        el("li", {}, "Maps can be zoomed (scroll after clicking the map, ⌘/Ctrl + scroll, pinch, double-click, or the +/− buttons) and dragged.")),
+        el("li", {}, "Every map can be shown as a 3D globe or a flat 2D map; the 3D and 2D buttons in a map's corner switch between them, and the choice is remembered for every map. Drag to turn the globe or move the flat map; zoom with the +/− buttons, a pinch, a double-click, or by scrolling after clicking the map (or with ⌘/Ctrl held). On the globe, countries on the far side are hidden until it is turned, so each map also has a list or table beside it.")),
       el("h2", {}, "Limits"),
       el("ul", {},
         el("li", {}, `This is a snapshot as of ${fmtDate(D.meta.asOf)}. The news feed does not update itself.`),

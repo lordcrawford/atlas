@@ -273,11 +273,6 @@ table.data th { color: var(--ink-2); font-weight: 600; }
 .map-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--s3); margin-bottom: var(--s3); }
 .map-head .legend { margin-top: 0; }
 .map-stage { position: relative; }
-.map-wrap svg, .locator svg { border-radius: var(--radius-sm); }
-.chart.map-wrap svg { min-width: 560px; width: 100%; max-width: none; }
-svg.zoomable { touch-action: none; cursor: grab; outline: none; user-select: none; -webkit-user-select: none; }
-svg.zoomable.is-dragging { cursor: grabbing; }
-svg.zoomable:focus-visible { box-shadow: 0 0 0 2px var(--accent); }
 .zoom-ctrl {
   position: absolute; top: var(--s3); right: var(--s3); display: flex; flex-direction: column;
   background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; box-shadow: var(--shadow);
@@ -306,8 +301,6 @@ svg.zoomable:focus-visible { box-shadow: 0 0 0 2px var(--accent); }
 .country-head { display: flex; gap: var(--s4); align-items: flex-start; }
 .country-head .flag { font-size: 44px; }
 .country-head .stance { color: var(--ink-2); margin-top: var(--s2); max-width: 60ch; }
-.locator { width: 360px; max-width: 100%; }
-.locator svg { width: 100%; height: auto; display: block; border: 1px solid var(--border); }
 .locator .zoom-ctrl { top: var(--s2); right: var(--s2); }
 .locator .zoom-ctrl button { width: 28px; height: 28px; font-size: 14px; }
 .summary { font-size: 16px; max-width: 75ch; margin-top: var(--s5); }
@@ -338,9 +331,7 @@ svg.zoomable:focus-visible { box-shadow: 0 0 0 2px var(--accent); }
   .section { margin-top: var(--s6); }
   .card { padding: var(--s4); }
   .hero-figure { font-size: 44px; }
-  .chart.map-wrap svg { min-width: 0; }
   .map-legend .ramp-key { white-space: normal; }
-  .country-top .locator { width: 100%; }
 }
 
 /* ---------- long lists: show-more toggle */
@@ -434,7 +425,6 @@ a.cpill:hover { border-color: var(--accent); color: var(--ink); }
 @media (hover: hover) { .cx-main:hover .cx-progress { opacity: 0; } }
 /* ---------- nation page: AI partners */
 .np { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: var(--s5); align-items: start; }
-.np-mapwrap svg { border-radius: var(--radius-sm); }
 .np-line { opacity: .85; stroke-width: 2; }
 .np-line.group { opacity: .7; stroke-width: 1.6; }
 .np-side { display: flex; flex-direction: column; gap: var(--s4); min-width: 0; }
@@ -564,32 +554,6 @@ html.is-locked body > :not(.gate):not(script) { display: none !important; }
 .ia-note-btn[aria-pressed="true"] { color: var(--link); border-color: var(--link); }
 .ia-note-btn[aria-expanded="true"] { background: var(--surface-2); color: var(--ink); }
 
-/* ---------- collaborations chord diagram ---------- */
-.ch-wrap { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: var(--s4); align-items: start; }
-.ch-chart svg.chord { width: 100%; height: auto; display: block; max-width: 760px; margin: 0 auto; }
-.ch-ribbon { fill-opacity: 0.32; stroke: none; cursor: pointer; transition: fill-opacity .15s; }
-.ch-ribbon.bilateral { fill: var(--series-1); }
-.ch-ribbon.group { fill: var(--series-2); }
-.ch-ribbon:hover, .ch-ribbon:focus-visible { fill-opacity: 0.9; outline: none; }
-.chord.has-focus .ch-ribbon { fill-opacity: 0.05; }
-.chord.has-focus .ch-ribbon.is-on { fill-opacity: 0.8; }
-.ch-node { cursor: pointer; }
-.ch-node:focus, .ch-node:focus-visible, .ch-ribbon:focus { outline: none; }
-.ch-node:focus-visible path { stroke: var(--ink); stroke-width: 1.5; }
-.chord.has-focus .ch-node:not(.is-on) { opacity: 0.3; }
-.ch-label { font-size: 10px; fill: var(--ink-2); }
-.ch-label.is-outside { font-style: italic; fill: var(--muted); }
-.ch-node.is-on .ch-label, .ch-node:hover .ch-label { fill: var(--ink); font-weight: 650; }
-.ch-side { position: sticky; top: 72px; display: flex; flex-direction: column; gap: var(--s2); max-height: calc(100vh - 96px); overflow: auto; }
-.ch-side-top { display: flex; justify-content: space-between; align-items: baseline; gap: var(--s2); }
-.ch-side-h { font-size: 17px; }
-.ch-top { display: flex; flex-wrap: wrap; gap: var(--s2); }
-.ch-pick { font: inherit; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
-@media (max-width: 860px) {
-  .ch-wrap { grid-template-columns: 1fr; }
-  .ch-side { position: static; max-height: none; }
-}
-
 /* ---------- backups ---------- */
 .bk { display: flex; flex-direction: column; gap: var(--s2); }
 .bk h2 { font-size: 18px; }
@@ -607,3 +571,59 @@ html.is-locked body > :not(.gate):not(script) { display: none !important; }
 .ia-history ol { list-style: none; margin: var(--s2) 0 0; padding: 0 0 0 var(--s3); border-left: 2px solid var(--grid); display: flex; flex-direction: column; gap: var(--s2); }
 .ia-history-meta { display: flex; gap: var(--s3); align-items: baseline; font-size: 12px; color: var(--muted); }
 .ia-history-note { white-space: pre-wrap; }
+
+/* ---------- globe and flat map ----------
+   One component draws every map, as a 3D globe or a flat 2D map. The globe is a lit sphere (sea gradient) with an
+   atmosphere glow outside the edge, a shaded edge and a highlight on top of the land; the flat map drops all of
+   that for a plain sea. Colours stay neutral so the blue readiness scale reads on both. */
+:root {
+  --globe-sea-lit: #f7fafe; --globe-sea-shade: #c3cfe2; --globe-glow: #2a78d6; --globe-glow-a: .34;
+  --globe-limb: #16233b; --globe-limb-a: .44; --globe-hl: #ffffff; --globe-hl-a: .5; --globe-shadow-a: .24;
+  --globe-grat: rgba(11, 11, 11, .07); --globe-halo: #f7f9fc;
+  --globe-space: radial-gradient(120% 95% at 50% 30%, #f9fafc 0%, #e7ebf1 100%); --globe-sea-flat: #eaeff6;
+}
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    --globe-sea-lit: #223044; --globe-sea-shade: #0a0f16; --globe-glow: #3987e5; --globe-glow-a: .55;
+    --globe-limb: #000000; --globe-limb-a: .6; --globe-hl: #bcd6ff; --globe-hl-a: .14; --globe-shadow-a: 0;
+    --globe-grat: rgba(255, 255, 255, .07); --globe-halo: #0c1118;
+    --globe-space: radial-gradient(120% 95% at 50% 30%, #151d29 0%, #090c11 100%); --globe-sea-flat: #111926;
+  }
+}
+:root[data-theme="dark"] {
+  --globe-sea-lit: #223044; --globe-sea-shade: #0a0f16; --globe-glow: #3987e5; --globe-glow-a: .55;
+  --globe-limb: #000000; --globe-limb-a: .6; --globe-hl: #bcd6ff; --globe-hl-a: .14; --globe-shadow-a: 0;
+  --globe-grat: rgba(255, 255, 255, .07); --globe-halo: #0c1118;
+  --globe-space: radial-gradient(120% 95% at 50% 30%, #151d29 0%, #090c11 100%); --globe-sea-flat: #111926;
+}
+.globe-stage { position: relative; border-radius: var(--radius-sm); overflow: hidden; background: var(--globe-space); }
+/* pan-y: a vertical swipe on a phone still scrolls the page; sideways drags turn the globe. */
+svg.globe { display: block; width: 100%; height: auto; touch-action: pan-y; cursor: grab; outline: none; user-select: none; -webkit-user-select: none; }
+svg.globe.is-dragging { cursor: grabbing; }
+svg.globe:focus-visible { box-shadow: inset 0 0 0 2px var(--accent); border-radius: var(--radius-sm); }
+.globe-shade, .globe-grat { pointer-events: none; }
+.globe-grat { fill: none; stroke: var(--globe-grat); stroke-width: .6; }
+:where(.globe-land) { fill: var(--land); stroke: var(--land-stroke); stroke-width: .6; stroke-linejoin: round; }
+.globe-land.is-home { fill: var(--accent); stroke: var(--accent); }
+svg.globe text.map-label { stroke: var(--globe-halo); }
+.map-marker circle { stroke: var(--surface); stroke-width: 2; }
+.np-map .collab-dot { cursor: default; }
+.globe-stage.is-flat { background: var(--globe-sea-flat); }
+svg.globe.is-flat .globe-shade, svg.globe.is-flat .globe-sea { display: none; }
+svg.globe.is-flat text.map-label { stroke: var(--globe-sea-flat); }
+/* 3D / 2D switch, bottom left of every large map */
+.map-mode { position: absolute; left: var(--s3); bottom: var(--s3); display: inline-flex; gap: 2px; padding: 2px; background: var(--surface); border: 1px solid var(--border); border-radius: 999px; box-shadow: var(--shadow); }
+.map-mode .seg-btn { font: 600 12px/1 system-ui, sans-serif; letter-spacing: .02em; padding: 6px 10px; border: 0; background: none; color: var(--ink-2); border-radius: 999px; cursor: pointer; }
+.map-mode .seg-btn:hover { color: var(--ink); }
+.map-mode .seg-btn[aria-pressed="true"] { background: var(--ink); color: var(--surface); }
+
+/* Nation header: a small globe with no frame, the nation ringed. */
+.locator { width: 230px; max-width: 100%; flex-shrink: 0; }
+.locator .globe-stage:not(.is-flat) { background: none; }
+.locator .globe-stage.is-flat { border: 1px solid var(--border); }
+.locator .zoom-ctrl { top: 0; right: 0; }
+.loc-dot { fill: var(--accent); stroke: var(--surface); stroke-width: 2; pointer-events: none; }
+.loc-ring { fill: none; stroke: var(--accent); stroke-width: 1.5; pointer-events: none; animation: loc-pulse 2.4s ease-out infinite; }
+@keyframes loc-pulse { from { r: 5; opacity: .9; } to { r: 20; opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .loc-ring { animation: none; opacity: .6; } }
+@media (max-width: 640px) { .country-top .locator { width: 200px; margin: 0 auto; } }
