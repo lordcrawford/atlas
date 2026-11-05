@@ -17,7 +17,7 @@
         ["absent","No AI policy yet","None of the above is on record."],
       ] },
       { key: "route", label: "Rules", q: "Where do its AI rules come from?", values: [
-        ["own","Own AI law or bill","An AI-specific law of its own: in force, before the legislature or being drafted."],
+        ["own","Own AI law or bill","A law of its own that sets rules for AI, either an AI act or AI rules inside a wider digital law: in force, before the legislature or being drafted."],
         ["eu","EU AI Act","Applies as an EU member, or is due to apply through the EEA."],
         ["regional","Regional body or treaty","No law of its own. It belongs to a regional body that has adopted an AI framework (African Union, CARICOM, Pacific Islands Forum, ASEAN, CIS) or has signed the Council of Europe AI convention."],
         ["none","None on record","No AI law, bill, regional framework or treaty is recorded here."],
@@ -163,6 +163,11 @@
       gq: { posture: ["absent"], route: ["regional","#au"], compute: ["none"], bloc: ["none"] }, // Equatorial Guinea
       xk: { posture: ["align","An EU AI Act readiness asses"], route: ["none"], compute: ["none"], bloc: ["eu","An EU AI Act readiness asses"] }, // Kosovo
       va: { posture: ["regulate","Guidelines on AI for Vatican"], route: ["own","Guidelines on AI for Vatican"], compute: ["none"], bloc: ["none"] }, // Holy See (Vatican City)
+      in: { posture: ["adopt","On 7 March 2024 the Cabinet approved","NITI Aayog, the government's policy think tank"], route: ["none"], compute: ["own","On 7 March 2024 the Cabinet approved"], bloc: ["none"] }, // India
+      id: { posture: ["adopt","Indonesia's first framework was","In early August 2025 the Ministry"], route: ["regional","@asean-guide"], compute: ["none"], bloc: ["none"] }, // Indonesia
+      pk: { posture: ["adopt","On 30 July 2025 the federal cabinet"], route: ["none"], compute: ["none"], bloc: ["none"] }, // Pakistan
+      ng: { posture: ["adopt","Nigeria launched its National Artificial"], route: ["own","In January 2026 a National Digital Economy"], compute: ["none"], bloc: ["none"] }, // Nigeria
+      br: { posture: ["adopt","The Brazilian Artificial Intelligence Plan"], route: ["own","On 10 December 2024 the Senate approved","In December 2025 the Chamber of Deputies"], compute: ["own","The Brazilian Artificial Intelligence Plan"], bloc: ["none"] }, // Brazil
     },
   };
 })();

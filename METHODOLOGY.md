@@ -7,8 +7,22 @@ Atlas covers countries outside the AI frontier: those that neither produce front
 - **Yardstick.** The Stanford AI Index 2026, chapter 1. Figure 1.1.1 counts notable AI models by country in 2025: United States 59, China 35, South Korea 8, and one each for Canada, France, Hong Kong, Singapore and the United Kingdom. Section 1.3 describes the AI hardware supply chain: chip and memory design (Nvidia and Micron in the United States; SK Hynix and Samsung in South Korea), fabrication (TSMC in Taiwan, Samsung in South Korea) and packaging (ASE in Taiwan, Amkor in the United States).
 - **Left out:** United States, China, South Korea, Taiwan, Canada, France, United Kingdom. Hong Kong is a territory, and territories are not included.
 - **Exception:** Singapore is credited with one notable model but stays on the site, by the owner's decision.
-- **Coverage:** 121 countries so far, every sovereign state under 15 million people. 68 larger countries fall inside the scope and are being added largest first (India, Indonesia, Pakistan, Nigeria, Brazil and so on); the list is in `data/scope.js`. A country appears only once its facts are sourced and checked, so the Findings counts describe the smaller countries until then.
+- **Coverage:** 126 countries so far: every sovereign state under 15 million people (121) and the five largest of the rest. 63 more larger countries fall inside the scope and are being added largest first; the list is in `data/scope.js`. A country appears only once its facts are sourced and checked, so the Findings counts lean towards the smaller countries until then.
 - The yardstick counts one year of models and the supply-chain roles one report names. It does not capture every way a country takes part in AI (chip equipment in the Netherlands and Japan, for example), so those countries are inside the scope.
+
+## First larger countries (5 Nov 2026)
+
+India, Indonesia, Pakistan, Nigeria and Brazil were added, the five largest countries inside the new scope.
+
+- Readiness ranks and pillar scores were read from the Oxford Insights table, AI usage from the appendix of Microsoft's H2 2025 report, and population, GDP per capita and internet use from the World Bank API.
+- Every source was fetched and its dates, numbers and names checked by hand. Portuguese and Indonesian sources were read in the original.
+- India: the 2018 NITI Aayog strategy paper, the March 2024 Cabinet approval of the IndiaAI Mission (the government release says "over Rs 10,300 crore", press reports Rs 10,372 crore), the November 2025 governance guidelines and the February 2026 New Delhi Declaration (reported as 86 countries plus two organisations, or 88 in all).
+- Indonesia: the August 2025 white paper on a national AI roadmap rests on one outlet; the ministry's own June 2025 release confirms only that the roadmap was being drafted. Whether the roadmap has since been issued as a regulation was not confirmed, so the page does not say.
+- Pakistan: the cabinet's approval of the National AI Policy 2025 (two outlets; Dawn's report sits behind a bot check and was not used).
+- Nigeria: the April 2025 strategy launch, the February 2025 approval of a National AI Trust and the digital-economy bill before the National Assembly in January 2026. Whether the bill has passed was not confirmed.
+- Brazil: the Senate's approval of the AI bill (Agência Senado), the lower house's postponement of its vote, and the final version of the Brazilian AI Plan (R$23.03 billion; one outlet's text also contains a stray "R$28 billion").
+- Model codes: all five are adoption first. Nigeria and Brazil are coded "own AI law or bill" (the rule now also covers AI rules inside a wider digital law), Indonesia "regional body" through the ASEAN guide, India and Brazil "national" compute on the strength of funded state programmes. Indonesia was added to the ASEAN guide agreement.
+- Not yet covered for these five: key documents beyond India's 2018 strategy, and agreements with other governments.
 
 ## Sixth audit (5 Nov 2026)
 

@@ -3,6 +3,9 @@
 // Every link was checked on 20 October 2026 (some in a browser, where sites block automated requests). Nations not listed have no official AI strategy or law document listed yet.
 
 window.ATLAS.docs = {
+  in: [
+    { t: "National Strategy for Artificial Intelligence (#AIforAll)", kind: "Strategy", year: "2018", by: "NITI Aayog", u: "https://www.niti.gov.in/sites/default/files/2023-03/National-Strategy-for-Artificial-Intelligence.pdf", note: "A discussion paper by the government's policy think tank; the funded programme that followed is the IndiaAI Mission (2024)." },
+  ],
   sg: [
     { t: "National AI Strategy 2.0 (2026 refresh)", kind: "Strategy", year: "2026", by: "Smart Nation and Digital Government Office", u: "https://isomer-user-content.by.gov.sg/39/cb52d9a0-0d6c-484d-96fe-571031b37eb7/NAIS_update.pdf", from: { t: "Smart Nation: National AI Strategy", u: "https://www.smartnation.gov.sg/initiatives/national-ai-strategy/" } },
     { t: "Model AI Governance Framework for Agentic AI (v1.5)", kind: "Guidance", year: "2026", by: "IMDA", u: "https://www.imda.gov.sg/-/media/imda/files/about/emerging-tech-and-research/artificial-intelligence/mgf-for-agentic-ai.pdf", from: { t: "IMDA: Artificial Intelligence in Singapore", u: "https://www.imda.gov.sg/about-imda/emerging-technologies-and-research/artificial-intelligence" } },

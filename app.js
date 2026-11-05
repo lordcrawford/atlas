@@ -6,6 +6,8 @@
   const D = window.ATLAS;
   const N = D.nations;
   // What the site covers and who is left out (data/scope.js).
+  // Countries with 15 million people or more: the ones being added after the scope widened.
+  const isLarge = (n) => !!(n.stats.population && n.stats.population.v >= 15e6);
   const SCOPE = D.scope || { frontier: [], exception: { why: "" }, pending: [], source: { t: "", u: "#" } };
   const S = D.meta.sources;
   const PILLARS = D.meta.pillars;
@@ -57,6 +59,7 @@
   }
   const fmtInt = (v) => v.toLocaleString("en-US");
   function compact(v) {
+    if (v >= 1e9) return (v / 1e9).toFixed(2) + "B";
     if (v >= 1e6) return (v / 1e6).toFixed(v >= 1e7 ? 1 : 2).replace(/\.0+$/, "") + "M";
     if (v >= 1e3) return Math.round(v / 1e3) + "K";
     return String(v);
@@ -1689,7 +1692,7 @@
 
     view.replaceChildren(el("article", { class: "findings" },
       pageHead("Findings", "What the data shows", `Six claims about how ${total} countries outside the AI frontier govern AI, each counted from the facts on this site.`),
-      el("p", { class: "note fd-note" }, "Each nation is coded on four questions: what leads its AI policy, where its rules come from, where its compute comes from, and which outside power it is tied to. The codes are editorial readings of the sourced facts, the rules are in ", el("a", { href: "#method" }, "Method"), ", and every count below is recalculated from the data. “None on record” means this site has no sourced fact, which is not proof that nothing exists.", SCOPE.pending.length ? ` So far the site covers the ${N.length} countries with fewer than 15 million people; ${SCOPE.pending.length} larger ones are still to be added, so these findings describe smaller states for now.` : ""),
+      el("p", { class: "note fd-note" }, "Each nation is coded on four questions: what leads its AI policy, where its rules come from, where its compute comes from, and which outside power it is tied to. The codes are editorial readings of the sourced facts, the rules are in ", el("a", { href: "#method" }, "Method"), ", and every count below is recalculated from the data. “None on record” means this site has no sourced fact, which is not proof that nothing exists.", SCOPE.pending.length ? ` So far the site covers ${N.length} countries: all ${N.filter((n) => !isLarge(n)).length} with fewer than 15 million people and the ${N.filter(isLarge).length} largest of the rest. ${SCOPE.pending.length} more are still to be added, so these findings lean towards smaller states for now.` : ""),
 
       finding(1, "Few countries outside the frontier write their own AI rules.",
         el("p", {}, `${cnt("route", "own")} of ${total} have an AI law or bill of their own. ${cnt("route", "eu")} take the EU AI Act as members of the EU or the EEA, ${cnt("route", "regional")} sit under a regional body's framework or a treaty, and ${cnt("route", "none")} have no AI rules on record. For most of them the question is which outside rulebook to live under, not what to write.`),
@@ -1740,9 +1743,9 @@
       el("div", { class: "card codebook" }, table(["Left out", "Why"], SCOPE.frontier.map(([name, why]) => [el("strong", {}, name), why]))),
       el("ul", {},
         el("li", {}, SCOPE.exception.why),
-        el("li", {}, `Covered so far: ${N.length} countries, which is every sovereign state with fewer than 15 million people. They span Europe (${grp("Europe")}, including the South Caucasus), the Middle East (${grp("Middle East")}), Asia-Pacific (${grp("Asia-Pacific")}), Africa (${grp("Africa")}) and the Americas (${grp("Americas")}). The first six (Singapore, Estonia, UAE, Rwanda, Uruguay, Malta) have the deepest profiles; the rest have 1 to 5 key facts each.`),
+        el("li", {}, `Covered so far: ${N.length} countries. That is every sovereign state with fewer than 15 million people (${N.filter((n) => !isLarge(n)).length}) and the first ${N.filter(isLarge).length} larger ones (${N.filter(isLarge).map((n) => n.name).join(", ")}). They span Europe (${grp("Europe")}, including the South Caucasus), the Middle East (${grp("Middle East")}), Asia-Pacific (${grp("Asia-Pacific")}), Africa (${grp("Africa")}) and the Americas (${grp("Americas")}). The first six (Singapore, Estonia, UAE, Rwanda, Uruguay, Malta) have the deepest profiles; the rest have 1 to 5 key facts each.`),
         SCOPE.pending.length ? el("li", {}, `Still to add: ${SCOPE.pending.length} larger countries that fall inside the scope. They are being added largest first, and each appears only once its facts are sourced and checked: ${SCOPE.pending.join(", ")}.`) : null,
-        el("li", {}, "Until the larger countries are in, every count on the Findings page describes the smaller countries only."),
+        el("li", {}, "Until all the larger countries are in, the counts on the Findings page lean towards the smaller ones."),
         el("li", {}, "Source for the line: ", sourceChips([SCOPE.source]))),
       el("h2", {}, "How each claim was checked"),
       el("ul", {},

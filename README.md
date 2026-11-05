@@ -4,7 +4,7 @@ An interactive dashboard on how **countries outside the AI frontier** are adopti
 
 **Scope.** Atlas covers countries that neither produce frontier AI models nor hold a key place in the AI chip supply chain. The line follows a published yardstick, the Stanford AI Index 2026: left out are the countries it credits with a notable AI model in 2025 (United States, China, South Korea, Canada, France, United Kingdom) and those it names in the chip supply chain (United States, South Korea, Taiwan). Singapore, credited with one model, is kept as a named exception. Territories are not included. The rule, the excluded list and the countries still to add live in `data/scope.js`.
 
-**Coverage so far: 121 countries**, every sovereign state under 15 million people. The 68 larger countries inside the scope are being added largest first, each only once its facts are sourced and checked.
+**Coverage so far: 126 countries**: every sovereign state under 15 million people (121) and the five largest of the rest (India, Indonesia, Pakistan, Nigeria, Brazil, in `data/nations-more7.js`). The other 63 larger countries inside the scope are being added largest first, each only once its facts are sourced and checked.
 
 - **Europe (incl. South Caucasus):** Estonia, Malta, Denmark, Finland, Norway, Ireland, Luxembourg, Iceland, Lithuania, Slovenia, Cyprus, Switzerland, Sweden, Austria, Portugal, Greece, Latvia, Albania, Georgia, Armenia, Belgium, Czechia, Hungary, Croatia, Slovakia, Bulgaria, Serbia, Montenegro, Azerbaijan, Bosnia and Herzegovina, North Macedonia, Moldova, Belarus, Liechtenstein, Andorra, Monaco, San Marino, Kosovo, Holy See (Vatican City)
 - **Middle East:** UAE, Qatar, Bahrain, Jordan, Kuwait, Oman, Lebanon, Palestine
@@ -64,6 +64,7 @@ Then open http://localhost:8765. Opening `index.html` directly also works.
 | `data/nations-more3.js` | Data for 25 more nations (added fourth) |
 | `data/nations-more4.js` | Data for 6 more African nations (added fifth) |
 | `data/nations-more5.js` | Data for 26 more nations (added sixth, including Saint Kitts and Nevis) |
+| `data/nations-more7.js` | The first larger countries added after the scope widened (5 November 2026): India, Indonesia, Pakistan, Nigeria, Brazil |
 | `data/nations-more6.js` | Data for the last 19 (added 21 October 2026): the remaining sovereign states under 15M people, plus Kosovo and the Holy See |
 | `data/documents.js` | Up to two key documents per nation, each linking to the document or its official page |
 | `data/scope.js` | What the site covers: who is left out as frontier and why, the one exception, and the in-scope countries still to add |

@@ -366,7 +366,7 @@ window.ATLAS.collaborations = [
     id: "asean-guide", kind: "group", date: "2024-02-02",
     title: "ASEAN Guide on AI Governance and Ethics",
     short: "ASEAN AI governance guide",
-    hub: "asean", members: ["sg", "bn", "la"],
+    hub: "asean", members: ["sg", "bn", "la", "id"],
     text: "ASEAN digital ministers endorsed the ASEAN Guide on AI Governance and Ethics in February 2024. It gives organisations practical guidance and recommends national and regional AI initiatives for governments across the bloc, which includes Brunei, Laos and Singapore.",
     level: "corroborated",
     sources: [
