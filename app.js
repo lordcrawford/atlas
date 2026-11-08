@@ -1271,7 +1271,7 @@
     levelSel.addEventListener("change", () => { level = levelSel.value; draw(); });
     draw();
     view.replaceChildren(
-      pageHead("News", "What changed, and where", `${items.length} developments since January 2024 across ${N.length} countries, each tied to its sources. Research cut-off ${fmtDate(D.meta.asOf)}.`),
+      pageHead("News", "Latest developments", `${items.length} developments since January 2024 across ${N.length} countries, each tied to its sources. Research cut-off ${fmtDate(D.meta.asOf)}.`),
       el("div", { class: "filter-bar nw-region" }, el("span", { class: "filter-label" }, "Region"), regionFilter(() => draw())),
       el("div", { class: "nw-controls" }, sortSeg, select, levelSel, count),
       sortNote, themeRow, grid, more);
