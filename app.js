@@ -961,7 +961,12 @@
       const qq = search.value.trim().toLowerCase();
       browse.textContent = browsing ? "Hide the list" : `Browse all ${N.filter(inRegion).length}`;
       browse.hidden = !!qq;
-      if (!qq && !browsing) { lists.replaceChildren(); return; }
+      // With nothing typed, a few well-known countries are offered as quick picks.
+      if (!qq && !browsing) {
+        const picks = ["sg", "in", "br", "ae", "ee", "id", "ng", "ch", "rw", "uy"].map(byId).filter((n) => n && inRegion(n));
+        lists.replaceChildren(el("div", { class: "nchips finder-picks" }, el("span", { class: "filter-label" }, "Popular"), picks.map((n) => el("a", { class: "nchip", href: `#${n.id}` }, `${n.flag} ${n.name}`))));
+        return;
+      }
       if (qq) {
         const hits = N.filter((n) => inRegion(n) && score(n, qq) < 3).sort((x, y) => score(x, qq) - score(y, qq) || x.name.localeCompare(y.name));
         lists.replaceChildren(hits.length ? el("div", { class: "nav-group finder-hits" }, hits.map((n) => el("a", { href: `#${n.id}`, class: "nav-item" }, `${n.flag} ${n.name}`, el("span", { class: "muted small" }, ` · ${n.region}`))))
@@ -1002,7 +1007,6 @@
       drawTable();
       body.replaceChildren(...[
         el("section", { class: "section" },
-          sectionHead("Where they are"),
           el("div", { class: "card" }, shadeRow, mapSlot,
             el("p", { class: "note" }, "Singapore, Malta, Bahrain, Mauritius and other small states are too small to draw as shapes, so every country is also marked with a dot at its capital. Use 'Show as table' to see all of them at once."))),
         el("section", { class: "section" },

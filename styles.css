@@ -161,6 +161,9 @@ strong { font-weight: 700; }
 .finder { margin-top: var(--s4); padding: var(--s4) var(--s5); }
 .finder-row { display: flex; align-items: center; gap: var(--s4); flex-wrap: wrap; }
 .finder .nav-groups { margin-top: var(--s4); }
+.finder .nav-groups:has(.finder-picks) { columns: auto; }
+.finder-picks { align-items: center; gap: var(--s2); margin-top: 0; }
+.finder-picks .filter-label { margin-right: var(--s1); }
 .finder-hits { columns: auto; display: flex; flex-wrap: wrap; gap: 2px var(--s4); }
 .finder-hits .nav-item { margin: 0; }
 .nav-search::placeholder, .dir-search::placeholder { color: var(--muted); }
