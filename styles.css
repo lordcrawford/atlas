@@ -382,7 +382,15 @@ table.data th { color: var(--muted); font-size: 11.5px; font-weight: 720; letter
 .map-head .legend { margin-top: 0; }
 .globe-stage { position: relative; border-radius: var(--radius-sm); overflow: hidden; background: var(--globe-space); }
 .globe-stage.is-flat { background: var(--globe-sea-flat); }
+.globe-box { position: relative; width: 100%; }
 .globe-canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+/* Full view: the stage fills the screen and the map keeps its shape, as large as fits. */
+.globe-stage:fullscreen, .globe-stage.is-max { display: grid; place-items: center; background: var(--page); border-radius: 0; }
+.globe-stage.is-max { position: fixed; inset: 0; z-index: 60; }
+.globe-stage:fullscreen .globe-box, .globe-stage.is-max .globe-box { width: min(100vw, calc(100vh * (var(--ar)))); }
+.globe-stage:fullscreen .zoom-ctrl, .globe-stage.is-max .zoom-ctrl { top: var(--s4); right: var(--s4); }
+.globe-stage:fullscreen .map-mode, .globe-stage.is-max .map-mode { left: var(--s4); bottom: var(--s4); }
+.zoom-ctrl .zoom-full { font-size: 15px; }
 /* pan-y: a vertical swipe on a phone still scrolls the page; sideways drags turn the globe. */
 svg.globe { position: relative; display: block; width: 100%; height: auto; touch-action: pan-y; cursor: grab; outline: none; user-select: none; -webkit-user-select: none; }
 svg.globe.is-dragging { cursor: grabbing; }

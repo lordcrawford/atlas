@@ -306,7 +306,9 @@
     const svg = s("svg", { viewBox: `0 0 ${W} ${H}`, width: W, role: "img", tabindex: "0", class: `globe ${cls}` });
     const over = s("g", {}), top = s("g", {});
     svg.append(over, top);
-    const stage = el("div", { class: "globe-stage" }, canvas, svg);
+    // `box` holds the canvas and the SVG at the same size; `stage` adds the controls and can go full screen.
+    const box = el("div", { class: "globe-box" }, canvas, svg);
+    const stage = el("div", { class: "globe-stage", style: `--ar:${W}/${H}` }, box);
     // One shape per country. `fills(feature)` may give it a colour and an id for hit-testing. A fill is a CSS
     // colour, a CSS variable, or "@on" / "@home" for the two highlight styles.
     const shapes = world.features.map((f) => { const a = (fills && fills(f)) || {}; return { f, id: a.id || null, fill: a.fill || null }; });
@@ -340,7 +342,7 @@
       if (svg.isConnected) api.seen = true;
       if (!theme) readTheme();
       // The canvas is sized to the pixels it covers on screen, so it stays sharp at any width.
-      const scale = ((stage.clientWidth || W) / W) * Math.min(window.devicePixelRatio || 1, 2);
+      const scale = ((box.clientWidth || W) / W) * Math.min(window.devicePixelRatio || 1, 2);
       const pw = Math.round(W * scale), ph = Math.round(h * scale);
       if (canvas.width !== pw || canvas.height !== ph) { canvas.width = pw; canvas.height = ph; }
       ctx.setTransform(scale, 0, 0, scale, 0, 0);
@@ -390,7 +392,7 @@
     // Coalesce redraws to one per frame. A hidden tab gets no frames, so draw straight away there.
     const invalidate = () => { if (document.hidden) draw(); else if (!frame) frame = requestAnimationFrame(draw); };
     // Redraw at the right resolution once the map is on the page, and whenever its width changes.
-    if (typeof ResizeObserver !== "undefined") new ResizeObserver(() => { if (stage.clientWidth) invalidate(); }).observe(stage);
+    if (typeof ResizeObserver !== "undefined") new ResizeObserver(() => { if (box.clientWidth) invalidate(); }).observe(box);
     // The covered country under a point of the frame, by the id given in `fills`.
     const featureAt = (px, py) => {
       if (!flat && Math.hypot(px - cx, py - gy) > R) return null;
@@ -626,6 +628,7 @@
       flat = mode === "flat"; h = flat ? HF : H;
       path.projection(flat ? flatProj : proj);
       svg.setAttribute("viewBox", `0 0 ${W} ${h}`);
+      stage.style.setProperty("--ar", `${W}/${h}`);
       svg.classList.toggle("is-flat", flat); stage.classList.toggle("is-flat", flat);
       svg.setAttribute("aria-label", `${label} ${flat ? "Drag to move it" : "Drag to turn it"}, or use the arrow keys; plus and minus zoom.`);
       hintEl.textContent = `${flat ? "Drag to move the map" : "Drag to turn the globe"}. Click it, or hold ⌘/Ctrl, to zoom with scroll.`;
@@ -652,7 +655,22 @@
       // Switch style and frame the same subject again, since "zoomed to fit" differs between the two.
       setMode: (mode) => { if ((mode === "flat") === flat) return; applyMode(mode); if (home) home(api); else flyTo(view0, 0); },
     };
-    stage.append(zoomControls(api), ...(modeSwitch ? [el("div", { class: "map-mode", role: "group", "aria-label": "Map style" }, modeBtns)] : []), hintEl);
+    // Full view: the browser's full-screen mode where it exists, otherwise a fixed overlay. Escape leaves either.
+    const isFull = () => document.fullscreenElement === stage || stage.classList.contains("is-max");
+    const syncFull = () => { const on = isFull(); fullBtn.setAttribute("aria-label", on ? "Exit full view" : "Full view"); fullBtn.title = on ? "Exit full view" : "Full view"; fullBtn.textContent = on ? "⤡" : "⤢"; invalidate(); };
+    const overlay = (on) => { stage.classList.toggle("is-max", on); syncFull(); };
+    api.toggleFull = () => {
+      if (document.fullscreenElement === stage) document.exitFullscreen();
+      else if (stage.classList.contains("is-max")) overlay(false);
+      else if (stage.requestFullscreen) stage.requestFullscreen().then(syncFull, () => overlay(true));
+      else overlay(true);
+    };
+    const fullBtn = el("button", { type: "button", class: "zoom-full", "aria-label": "Full view", title: "Full view", onclick: () => api.toggleFull() }, "⤢");
+    document.addEventListener("fullscreenchange", syncFull);
+    stage.addEventListener("keydown", (e) => { if (e.key === "Escape" && stage.classList.contains("is-max")) overlay(false); });
+    const ctrl = zoomControls(api);
+    ctrl.append(fullBtn);
+    stage.append(ctrl, ...(modeSwitch ? [el("div", { class: "map-mode", role: "group", "aria-label": "Map style" }, modeBtns)] : []), hintEl);
     api.node = stage;
     applyMode(MAP_MODE);
     MAPS.add(api);
