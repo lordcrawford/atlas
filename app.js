@@ -26,7 +26,7 @@
     dataset: { label: "Dataset", desc: "Read directly from the publisher's dataset" },
   };
 
-  // Overview state (kept across navigation within a visit)
+  // Nations page state (kept across navigation within a visit)
   const state = { region: "All", colorBy: "rank", tableView: "basics", sortKey: "rank", sortDir: 1, newsSort: "newest", savedTab: "saved" };
 
   // ---------------------------------------------------------------- helpers
@@ -947,30 +947,46 @@
   }
 
   // ---------------------------------------------------------------- views
-  function renderOverview() {
+  // One page for every country: a finder, the map, the comparison table, and how well sourced it all is.
+  function renderNations() {
     const claims = allClaims();
     const count = (lv) => claims.filter((c) => c.level === lv).length;
     const srcCount = new Set(claims.flatMap((c) => c.sources.map((x) => x.u))).size;
     const levels = ["verified", "corroborated", "single"];
     const levelColor = { verified: "var(--good)", corroborated: "var(--accent)", single: "var(--warning)" };
 
-    const head = el("section", { class: "hero" },
-      el("div", { class: "page-head" },
-        el("span", { class: "kicker" }, "Overview"),
-        el("h1", {}, "AI Outside The Frontier"),
-        el("p", { class: "lede" },
-          `How ${N.length} countries that neither build frontier AI models nor hold a key place in the AI supply chain are handling AI: their strategies, rules, institutions, compute and partners. Every claim links to the sources behind it.`)),
-      el("div", { class: "card" },
-        el("div", { class: "hero-figure" }, `${count("verified")} of ${claims.length}`),
-        el("p", { class: "hero-cap" }, `claims confirmed by 3 or more independent sources (${srcCount} sources cited in total)`),
-        el("div", { class: "levelbar", role: "img", "aria-label": levels.map((l) => `${LEVELS[l].label}: ${count(l)}`).join(", ") },
-          levels.map((l) => el("span", { style: `flex:${count(l)};background:${levelColor[l]}`, title: `${LEVELS[l].label}: ${count(l)}` }))),
-        el("div", { class: "legend" }, levels.map((l) => el("span", {}, el("i", { style: `background:${levelColor[l]}` }), `${LEVELS[l].label}: ${count(l)}`)))));
+    // Finder: type a name or region; Enter opens the first match. With nothing typed, every country is listed by region.
+    const search = el("input", { type: "search", class: "dir-search nations-search", placeholder: `Search ${N.length} countries…`, "aria-label": "Search countries" });
+    const lists = el("div", { class: "nav-groups" });
+    let browsing = false;
+    const browse = el("button", { type: "button", class: "table-toggle", onclick: () => { browsing = !browsing; drawFinder(); } });
+    // Matches are ranked: names that start with the text, then names that contain it, then regions that do.
+    const score = (n, qq) => { const name = n.name.toLowerCase(); return name.startsWith(qq) ? 0 : name.includes(qq) ? 1 : n.region.toLowerCase().includes(qq) ? 2 : 3; };
+    const drawFinder = () => {
+      const qq = search.value.trim().toLowerCase();
+      browse.textContent = browsing ? "Hide the list" : `Browse all ${N.filter(inRegion).length}`;
+      browse.hidden = !!qq;
+      if (!qq && !browsing) { lists.replaceChildren(); return; }
+      if (qq) {
+        const hits = N.filter((n) => inRegion(n) && score(n, qq) < 3).sort((x, y) => score(x, qq) - score(y, qq) || x.name.localeCompare(y.name));
+        lists.replaceChildren(hits.length ? el("div", { class: "nav-group finder-hits" }, hits.map((n) => el("a", { href: `#${n.id}`, class: "nav-item" }, `${n.flag} ${n.name}`, el("span", { class: "muted small" }, ` · ${n.region}`))))
+          : el("p", { class: "muted small" }, "No country matches."));
+        return;
+      }
+      lists.replaceChildren(...GROUPS.map((g) => {
+        const items = N.filter((n) => n.group === g && inRegion(n)).sort((x, y) => x.name.localeCompare(y.name));
+        return items.length ? el("div", { class: "nav-group" }, el("div", { class: "nav-group-h" }, `${g} · ${items.length}`),
+          items.map((n) => el("a", { href: `#${n.id}`, class: "nav-item" }, `${n.flag} ${n.name}`))) : null;
+      }).filter(Boolean));
+    };
+    search.addEventListener("input", drawFinder);
+    search.addEventListener("keydown", (e) => { if (e.key === "Enter") { const first = lists.querySelector(".nav-item"); if (first) location.hash = first.getAttribute("href"); } });
 
     // Everything below the filter row re-renders against the chosen region.
     const body = el("div", {});
     const drawBody = () => {
       hideTip();
+      drawFinder();
       const list = filtered();
       // The map can be shaded by the readiness rank or by any field of the governance model.
       const mapSlot = el("div", {}), shadeRow = el("div", { class: "filters shade-by", role: "group", "aria-label": "Shade the map by" });
@@ -997,10 +1013,20 @@
         el("section", { class: "section" },
           sectionHead("At a glance", "Click a column header to sort; the top rows follow the sort."),
           el("div", { class: "card compare" }, viewRow, tableSlot, sourceLine("oxford", "wbNet"))),
+        el("section", { class: "section" },
+          sectionHead("How well sourced", "Every claim on the site links to its sources; the badge on each shows how many independent sources agree."),
+          el("div", { class: "card" },
+            el("div", { class: "hero-figure" }, `${count("verified")} of ${claims.length}`),
+            el("p", { class: "hero-cap" }, `claims confirmed by 3 or more independent sources (${srcCount} sources cited in total)`),
+            el("div", { class: "levelbar", role: "img", "aria-label": levels.map((l) => `${LEVELS[l].label}: ${count(l)}`).join(", ") },
+              levels.map((l) => el("span", { style: `flex:${count(l)};background:${levelColor[l]}`, title: `${LEVELS[l].label}: ${count(l)}` }))),
+            el("div", { class: "legend" }, levels.map((l) => el("span", {}, el("i", { style: `background:${levelColor[l]}` }), `${LEVELS[l].label}: ${count(l)}`))))),
         dataSources(),
       ]);
     };
-    view.replaceChildren(head,
+    view.replaceChildren(
+      pageHead("Nations", "AI Outside The Frontier", `${N.length} countries that neither build frontier AI models nor hold a key place in the AI supply chain, and how each is handling AI: strategies, rules, institutions, compute and partners. Search for a country, or find it on the map.`),
+      el("div", { class: "card finder" }, el("div", { class: "finder-row" }, search, browse), lists),
       el("div", { class: "section filter-bar" }, el("span", { class: "filter-label" }, "Region"), regionFilter(drawBody)),
       body);
     drawBody();
@@ -1687,7 +1713,7 @@
           el("p", { class: "muted small" }, val.def),
           el("div", { class: "nchips" }, list.map((n) => nchip(n, evidenceHref(n, key), extra && extra(n))))) : null;
       }));
-    const onMap = (key) => el("button", { type: "button", class: "table-toggle", onclick: () => { state.colorBy = key; location.hash = "overview"; } }, `Show ${fieldOf(key).label.toLowerCase()} on the map →`);
+    const onMap = (key) => el("button", { type: "button", class: "table-toggle", onclick: () => { state.colorBy = key; location.hash = "nations"; } }, `Show ${fieldOf(key).label.toLowerCase()} on the map →`);
     const finding = (i, claim, ...body) => el("section", { class: "card fd" }, el("div", { class: "fd-num" }, String(i)), el("div", { class: "fd-body" }, el("h2", {}, claim), body));
 
     // 3: size and income by approach
@@ -1776,7 +1802,7 @@
         el("li", {}, "Where sources disagree (dates, counts, names), the claim gives the best-supported version and the disagreement is shown in a Note."),
         el("li", {}, "Index figures (Oxford Insights, Microsoft, World Bank, Stanford AI Index) were read directly from the publisher's own report, PDF table or API.")),
       el("h2", {}, "The coded governance model"),
-      el("p", {}, "To compare nations, each one is coded on four questions: what leads its AI policy, where its AI rules come from, where its computing power comes from, and which outside power it is tied to. The Overview map and table can show any of the four, and the Findings page counts them."),
+      el("p", {}, "To compare nations, each one is coded on four questions: what leads its AI policy, where its AI rules come from, where its computing power comes from, and which outside power it is tied to. The Nations map and table can show any of the four, and the Findings page counts them."),
       el("div", { class: "card codebook" }, table(["Question", "Code", "Rule"], MODEL_FIELDS.flatMap((f) => f.values.map((val, i) => [i ? "" : el("span", {}, el("strong", {}, f.label), el("br", {}), f.q), el("span", { class: "code-chip" }, swatch(val.color), val.label), val.def])))),
       el("ul", {},
         el("li", {}, "A code is an editorial reading of the sourced facts on the nation's page, not a fact in itself. The Governance model card on each nation's page lists the facts, agreements or memberships each code rests on, so a reader can check it and disagree."),
@@ -2307,58 +2333,15 @@
   const tabsEl = document.getElementById("tabs");
   // Nations menu: a button that opens a searchable panel grouped by region (a native <select> sizes itself
   // to its longest option, which left a wide gap in the nav).
-  let menuCleanup = null;
-  function nationMenu(current) {
-    const wrap = el("div", { class: "tab tab-menu", "aria-current": current ? "page" : null });
-    const btn = el("button", { type: "button", class: "tab-menu-btn", "aria-haspopup": "true", "aria-expanded": "false" },
-      current ? `${current.flag} ${shortName(current)}` : "Nations", el("span", { class: "caret", "aria-hidden": "true" }, "▾"));
-    const panel = el("div", { class: "nav-panel", hidden: true, role: "dialog", "aria-label": "Choose a nation" });
-    const search = el("input", { type: "search", class: "nav-search", placeholder: `Search ${N.length} nations…`, "aria-label": "Search nations" });
-    const lists = el("div", { class: "nav-groups" });
-    const draw = (q = "") => {
-      const qq = q.trim().toLowerCase();
-      lists.replaceChildren(...GROUPS.map((g) => {
-        const items = N.filter((n) => n.group === g && (!qq || n.name.toLowerCase().includes(qq) || n.region.toLowerCase().includes(qq)))
-          .sort((x, y) => x.name.localeCompare(y.name));
-        if (!items.length) return null;
-        return el("div", { class: "nav-group" }, el("div", { class: "nav-group-h" }, `${g} · ${items.length}`),
-          items.map((n) => el("a", { href: `#${n.id}`, class: "nav-item" + (n === current ? " is-current" : "") }, `${n.flag} ${n.name}`)));
-      }).filter(Boolean));
-      if (!lists.children.length) lists.append(el("p", { class: "muted small" }, "No nation matches."));
-    };
-    const close = () => { panel.hidden = true; btn.setAttribute("aria-expanded", "false"); };
-    const open = () => {
-      panel.hidden = false; btn.setAttribute("aria-expanded", "true"); search.value = ""; draw();
-      // Keep the panel inside the viewport.
-      panel.style.left = ""; const r = panel.getBoundingClientRect(), pad = 16;
-      if (innerWidth > 760 && r.right > innerWidth - pad) panel.style.left = `${Math.max(pad - wrap.getBoundingClientRect().left, -(r.right - (innerWidth - pad)))}px`;
-      search.focus();
-    };
-    btn.addEventListener("click", (e) => { e.stopPropagation(); panel.hidden ? open() : close(); });
-    search.addEventListener("input", () => draw(search.value));
-    search.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") { const first = lists.querySelector(".nav-item"); if (first) location.hash = first.getAttribute("href"); }
-    });
-    panel.addEventListener("click", (e) => { if (e.target.closest(".nav-item")) close(); });
-    const onDoc = (e) => { if (!wrap.contains(e.target)) close(); };
-    const onKey = (e) => { if (e.key === "Escape" && !panel.hidden) { close(); btn.focus(); } };
-    if (menuCleanup) menuCleanup();
-    document.addEventListener("click", onDoc);
-    document.addEventListener("keydown", onKey);
-    menuCleanup = () => { document.removeEventListener("click", onDoc); document.removeEventListener("keydown", onKey); };
-    panel.append(search, lists);
-    wrap.append(btn, panel);
-    return wrap;
-  }
   function renderTabs(key) {
     const current = byId(key);
-    const isCollab = key === "collab" || (!current && !["news", "overview", "findings", "method", "saved"].includes(key));
+    const isNations = !!current || key === "nations" || key === "overview";
+    const isCollab = key === "collab" || (!isNations && !["news", "findings", "method", "saved"].includes(key));
     tabsEl.replaceChildren(
       el("a", { class: "tab", href: "#collab", "aria-current": isCollab ? "page" : null }, "Collaborations"),
       el("a", { class: "tab", href: "#news", "aria-current": key === "news" ? "page" : null }, "News"),
       el("a", { class: "tab", href: "#findings", "aria-current": key === "findings" ? "page" : null }, "Findings"),
-      nationMenu(current),
-      el("a", { class: "tab", href: "#overview", "aria-current": key === "overview" ? "page" : null }, "Overview"),
+      el("a", { class: "tab", href: "#nations", "aria-current": isNations ? "page" : null }, "Nations"),
       el("a", { class: "tab", href: "#method", "aria-current": key === "method" ? "page" : null }, "Method"));
   }
   function route(keepScroll) {
@@ -2370,7 +2353,7 @@
     const n = byId(head);
     if (n) { renderNation(n, sub); document.title = `${n.name} — Atlas`; }
     else if (key === "news") { renderNews(); document.title = "News — Atlas"; }
-    else if (key === "overview") { renderOverview(); document.title = "Overview — Atlas"; }
+    else if (key === "nations" || key === "overview") { renderNations(); document.title = "Nations — Atlas"; }
     else if (key === "findings") { renderFindings(); document.title = "Findings — Atlas"; }
     else if (key === "method") { renderMethod(); document.title = "Method — Atlas"; }
     else if (key === "saved") { renderSaved(); document.title = "Saved & reviewed — Atlas"; }

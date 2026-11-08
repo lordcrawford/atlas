@@ -152,25 +152,17 @@ strong { font-weight: 700; }
 .tab[aria-current="page"] { color: var(--ink); font-weight: 720; }
 .tab[aria-current="page"]::after { background: var(--ink); }
 
-/* Nations menu */
-.tab-menu { padding: 0; }
-.tab-menu-btn {
-  display: flex; align-items: center; gap: 6px; height: 100%; padding: 0 var(--s3);
-  font: inherit; color: inherit; font-weight: inherit; background: none; border: 0; cursor: pointer; white-space: nowrap;
-}
-.tab-menu-btn .caret { font-size: 12px; line-height: 1; color: var(--ink-2); transition: transform .15s; }
-.tab-menu-btn[aria-expanded="true"] .caret { transform: rotate(180deg); }
-.nav-panel {
-  position: absolute; top: calc(100% + var(--s2)); left: 0; z-index: 30;
-  width: min(820px, calc(100vw - 2 * var(--s4))); max-height: min(72vh, 600px); overflow: auto;
-  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
-  box-shadow: var(--shadow-lift); padding: var(--s5);
-}
+/* Country finder (Nations page) */
 .nav-search, .dir-search {
   width: 100%; font: inherit; font-size: 15px; color: var(--ink); background: var(--page);
   border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px var(--s3);
 }
-.nav-search { margin-bottom: var(--s4); }
+.nations-search { max-width: none; flex: 1; }
+.finder { margin-top: var(--s4); padding: var(--s4) var(--s5); }
+.finder-row { display: flex; align-items: center; gap: var(--s4); flex-wrap: wrap; }
+.finder .nav-groups { margin-top: var(--s4); }
+.finder-hits { columns: auto; display: flex; flex-wrap: wrap; gap: 2px var(--s4); }
+.finder-hits .nav-item { margin: 0; }
 .nav-search::placeholder, .dir-search::placeholder { color: var(--muted); }
 .nav-groups { columns: 3 190px; column-gap: var(--s5); }
 .nav-group { break-inside: avoid; margin-bottom: var(--s4); }
@@ -185,8 +177,6 @@ strong { font-weight: 700; }
   .brand-sub { display: none; }
   .tabs { order: 3; width: 100%; height: 46px; overflow-x: auto; scrollbar-width: none; margin: var(--s1) calc(-1 * var(--s3)) 0; }
   .tabs::-webkit-scrollbar { display: none; }
-  .tab-menu { position: static; }
-  .nav-panel { left: var(--s4); right: var(--s4); width: auto; top: 100%; }
 }
 
 /* main also carries .wrap, whose padding shorthand would otherwise zero these out */

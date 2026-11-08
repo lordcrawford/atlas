@@ -96,7 +96,7 @@ During this batch the overview's EU AI Act highlight was corrected. It had said 
 
 ## Coded governance model (4 Nov 2026)
 
-To compare nations, each is coded on four questions. The codes are in `data/models.js`; the site shows them on each nation's page (with the facts they rest on), on the Overview map and table, and counts them on the Findings page.
+To compare nations, each is coded on four questions. The codes are in `data/models.js`; the site shows them on each nation's page (with the facts they rest on), on the Nations map and table, and counts them on the Findings page.
 
 | Question | Codes | Rule |
 |---|---|---|
