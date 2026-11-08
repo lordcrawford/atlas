@@ -1681,7 +1681,7 @@
 
     const nBil = all.filter((c) => c.kind === "bilateral").length;
     view.replaceChildren(
-      pageHead("Collaborations", "AI agreements between governments", `${all.length} agreements in all: ${nBil} between two countries and ${all.length - nBil} in groups, each involving at least one country on this site. The map moves to each one every few seconds. Pick one from the list to stop and read it, or drag the map to look around.`),
+      pageHead("Collaborations", "AI agreements between governments", `${all.length} agreements in all: ${nBil} between two countries and ${all.length - nBil} in groups, each involving at least one country on this site. Atlas covers countries outside the AI frontier: those that neither own frontier AI models nor hold a major place in the AI supply chain. The map moves to each agreement every few seconds; pick one from the list to stop and read it, or drag the map to look around.`),
       el("section", { class: "cx" },
         el("div", { class: "cx-side card" }, el("div", { class: "cx-side-in" }, search, status, rows)),
         stage),
