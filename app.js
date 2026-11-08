@@ -490,13 +490,13 @@
       if (!ms || reducedMotion() || document.hidden) { put(1, k1); return; }
       const far = Math.min(1, flat ? Math.hypot(d[0], d[1]) / (W * 0.6) : Math.hypot(d[0] * Math.cos(from[1] / DEG), d[1]) / 150);
       const me = flight, start = performance.now();
-      const ease = (u) => (u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2);
+      const ease = (u) => 0.5 - 0.5 * Math.cos(Math.PI * u); // sine in-out: eases in and out softly
       let arrived = false;
       const step = (now) => {
         if (me !== flight || !svg.isConnected) return;
         const u = Math.min(1, (now - start) / ms), e = ease(u);
         // Pull back a little on long moves so they read as travel.
-        put(e, Math.exp(Math.log(k0) + (Math.log(k1) - Math.log(k0)) * e) * (1 - 0.3 * far * Math.sin(Math.PI * e)));
+        put(e, Math.exp(Math.log(k0) + (Math.log(k1) - Math.log(k0)) * e) * (1 - 0.22 * far * Math.sin(Math.PI * e)));
         if (u < 1) anim = requestAnimationFrame(step); else arrived = true;
       };
       anim = requestAnimationFrame(step);
@@ -1513,7 +1513,7 @@
       mapCard.append(globe.node);
     }
     // Move the map to the selected agreement's countries and zoom until they fill it, with room for labels.
-    const fit = (c, ms = 900) => {
+    const fit = (c, ms = 1800) => {
       if (!globe || !c) return;
       const pts = partiesOf(c).map((p) => p.geo);
       globe.fitPoints(pts, { ms, maxK: pts.length > 1 ? 3.4 : 2.6, padPx: sq ? 56 : 100 });
@@ -1582,7 +1582,7 @@
     });
 
     // ---- state changes
-    const TOUR_MS = 3000;
+    const TOUR_MS = 6000; // each agreement is shown for six seconds
     let timer = null;
     // The address names the agreement on screen once the tour stops, so it can be shared.
     const syncUrl = () => {
