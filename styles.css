@@ -162,7 +162,10 @@ strong { font-weight: 700; }
 .finder-row { display: flex; align-items: center; gap: var(--s4); flex-wrap: wrap; }
 .finder .nav-groups { margin-top: var(--s4); }
 .finder .nav-groups:has(.finder-picks) { columns: auto; }
-.finder-picks { align-items: center; gap: var(--s2); margin-top: 0; }
+/* One row of quick picks: it scrolls sideways on narrow screens rather than wrapping. */
+.finder-picks { align-items: center; gap: var(--s2); margin-top: 0; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
+.finder-picks::-webkit-scrollbar { display: none; }
+.finder-picks .nchip, .finder-picks .filter-label { flex-shrink: 0; white-space: nowrap; }
 .finder-picks .filter-label { margin-right: var(--s1); }
 .finder-hits { columns: auto; display: flex; flex-wrap: wrap; gap: 2px var(--s4); }
 .finder-hits .nav-item { margin: 0; }
@@ -409,7 +412,9 @@ svg.globe.is-flat text.map-label { stroke: var(--globe-sea-flat); }
   position: absolute; left: 50%; bottom: var(--s4); transform: translateX(-50%); white-space: nowrap;
   background: rgba(11, 11, 11, .8); color: #fff; font-size: 13px; font-weight: 600; padding: 7px var(--s3); border-radius: 999px; pointer-events: none;
 }
-.shade-by { align-items: center; margin-bottom: var(--s4); }
+.shade-by { align-items: center; margin-bottom: var(--s3); }
+.map-region { margin-bottom: var(--s4); }
+.map-region .filter-label { margin-right: var(--s1); }
 
 /* ---------- nation page ---------- */
 .country-top { display: flex; justify-content: space-between; align-items: center; gap: var(--s6); flex-wrap: wrap; }

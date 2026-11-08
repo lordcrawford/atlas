@@ -1013,7 +1013,9 @@
       drawTable();
       body.replaceChildren(...[
         el("section", { class: "section" },
-          el("div", { class: "card" }, shadeRow, mapSlot,
+          el("div", { class: "card" }, shadeRow,
+            el("div", { class: "filter-bar map-region" }, el("span", { class: "filter-label" }, "Region"), regionFilter(drawBody)),
+            mapSlot,
             el("p", { class: "note" }, "Singapore, Malta, Bahrain, Mauritius and other small states are too small to draw as shapes, so every country is also marked with a dot at its capital. Use 'Show as table' to see all of them at once."))),
         el("section", { class: "section" },
           sectionHead("At a glance", "Click a column header to sort; the top rows follow the sort."),
@@ -1024,7 +1026,6 @@
     view.replaceChildren(
       pageHead("Nations", "AI Outside The Frontier", `${N.length} countries that neither build frontier AI models nor hold a key place in the AI supply chain, and how each is handling AI: strategies, rules, institutions, compute and partners. Search for a country, or find it on the map.`),
       el("div", { class: "card finder" }, el("div", { class: "finder-row" }, search, browse), lists),
-      el("div", { class: "section filter-bar" }, el("span", { class: "filter-label" }, "Region"), regionFilter(drawBody)),
       body);
     drawBody();
   }
