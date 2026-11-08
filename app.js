@@ -116,7 +116,7 @@
 
   // ---------------------------------------------------------------- tooltip
   function showTip(evt, nodes) {
-    tip.replaceChildren(...nodes);
+    tip.replaceChildren(...nodes.filter(Boolean));
     tip.hidden = false;
     let x, y;
     if (evt.clientX != null && evt.type !== "focus") { x = evt.clientX; y = evt.clientY; }
@@ -657,7 +657,13 @@
     };
     // Full view: the browser's full-screen mode where it exists, otherwise a fixed overlay. Escape leaves either.
     const isFull = () => document.fullscreenElement === stage || stage.classList.contains("is-max");
-    const syncFull = () => { const on = isFull(); fullBtn.setAttribute("aria-label", on ? "Exit full view" : "Full view"); fullBtn.title = on ? "Exit full view" : "Full view"; fullBtn.textContent = on ? "⤡" : "⤢"; invalidate(); };
+    const syncFull = () => {
+      const on = isFull();
+      fullBtn.setAttribute("aria-label", on ? "Exit full view" : "Full view"); fullBtn.title = on ? "Exit full view" : "Full view"; fullBtn.textContent = on ? "⤡" : "⤢";
+      // Only the full-screen element is shown, so the shared tooltip moves inside it while the map is in full view.
+      if (on) stage.append(tip); else if (tip.parentNode === stage) document.body.append(tip);
+      invalidate();
+    };
     const overlay = (on) => { stage.classList.toggle("is-max", on); syncFull(); };
     api.toggleFull = () => {
       if (document.fullscreenElement === stage) document.exitFullscreen();
