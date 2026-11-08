@@ -949,11 +949,6 @@
   // ---------------------------------------------------------------- views
   // One page for every country: a finder, the map, the comparison table, and how well sourced it all is.
   function renderNations() {
-    const claims = allClaims();
-    const count = (lv) => claims.filter((c) => c.level === lv).length;
-    const srcCount = new Set(claims.flatMap((c) => c.sources.map((x) => x.u))).size;
-    const levels = ["verified", "corroborated", "single"];
-    const levelColor = { verified: "var(--good)", corroborated: "var(--accent)", single: "var(--warning)" };
 
     // Finder: type a name or region; Enter opens the first match. With nothing typed, every country is listed by region.
     const search = el("input", { type: "search", class: "dir-search nations-search", placeholder: `Search ${N.length} countries…`, "aria-label": "Search countries" });
@@ -1007,20 +1002,12 @@
       drawTable();
       body.replaceChildren(...[
         el("section", { class: "section" },
-          sectionHead("Where they are", "Drag the map to look around. Hover a country or dot for its numbers, click to open its profile. Picking a region moves the map to it. Shade it by readiness or by governance model; the 3D and 2D buttons switch between a globe and a flat map."),
+          sectionHead("Where they are"),
           el("div", { class: "card" }, shadeRow, mapSlot,
             el("p", { class: "note" }, "Singapore, Malta, Bahrain, Mauritius and other small states are too small to draw as shapes, so every country is also marked with a dot at its capital. Use 'Show as table' to see all of them at once."))),
         el("section", { class: "section" },
           sectionHead("At a glance", "Click a column header to sort; the top rows follow the sort."),
           el("div", { class: "card compare" }, viewRow, tableSlot, sourceLine("oxford", "wbNet"))),
-        el("section", { class: "section" },
-          sectionHead("How well sourced", "Every claim on the site links to its sources; the badge on each shows how many independent sources agree."),
-          el("div", { class: "card" },
-            el("div", { class: "hero-figure" }, `${count("verified")} of ${claims.length}`),
-            el("p", { class: "hero-cap" }, `claims confirmed by 3 or more independent sources (${srcCount} sources cited in total)`),
-            el("div", { class: "levelbar", role: "img", "aria-label": levels.map((l) => `${LEVELS[l].label}: ${count(l)}`).join(", ") },
-              levels.map((l) => el("span", { style: `flex:${count(l)};background:${levelColor[l]}`, title: `${LEVELS[l].label}: ${count(l)}` }))),
-            el("div", { class: "legend" }, levels.map((l) => el("span", {}, el("i", { style: `background:${levelColor[l]}` }), `${LEVELS[l].label}: ${count(l)}`))))),
         dataSources(),
       ]);
     };
@@ -1777,14 +1764,14 @@
     const cnt = (lv) => claims.filter((c) => c.level === lv).length;
     const srcCount = new Set(claims.flatMap((c) => c.sources.map((x) => x.u))).size;
     const grp = (g) => N.filter((n) => n.group === g).length;
-    const tally = (label, v, sub) => el("div", { class: "tile" }, el("div", { class: "l" }, label), el("div", { class: "v" }, v), el("div", { class: "s" }, sub));
     view.replaceChildren(el("article", { class: "method" },
       pageHead("Method", "How this was researched and checked", "How the facts on this site were researched and checked, and what the badges mean."),
-      el("div", { class: "tally" },
-        tally("Claims", String(claims.length), `across ${N.length} nations`),
-        tally("3+ sources", String(cnt("verified")), "independent sources agree"),
-        tally("2 sources", String(cnt("corroborated")), "independent sources agree"),
-        tally("1 source", String(cnt("single")), "flagged on the claim")),
+      el("div", { class: "card sourced" },
+        el("div", { class: "hero-figure" }, `${cnt("verified")} of ${claims.length}`),
+        el("p", { class: "hero-cap" }, `claims across ${N.length} countries are confirmed by 3 or more independent sources (${srcCount} sources cited in total)`),
+        el("div", { class: "levelbar", role: "img", "aria-label": ["verified", "corroborated", "single"].map((l) => `${LEVELS[l].label}: ${cnt(l)}`).join(", ") },
+          ["verified", "corroborated", "single"].map((l) => el("span", { style: `flex:${cnt(l)};background:${{ verified: "var(--good)", corroborated: "var(--accent)", single: "var(--warning)" }[l]}`, title: `${LEVELS[l].label}: ${cnt(l)}` }))),
+        el("div", { class: "legend" }, ["verified", "corroborated", "single"].map((l) => el("span", {}, el("i", { style: `background:${{ verified: "var(--good)", corroborated: "var(--accent)", single: "var(--warning)" }[l]}` }), `${LEVELS[l].label}: ${cnt(l)}`)))),
       el("h2", {}, "Which countries are covered"),
       el("p", {}, "Atlas covers countries outside the AI frontier: those that neither produce frontier AI models nor hold a key place in the AI chip supply chain. The line follows a published yardstick, Stanford's AI Index 2026, which counts the notable AI models each country produced in 2025 and describes who makes the chips they run on. Territories are not included."),
       el("div", { class: "card codebook" }, table(["Left out", "Why"], SCOPE.frontier.map(([name, why]) => [el("strong", {}, name), why]))),
