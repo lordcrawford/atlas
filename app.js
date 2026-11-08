@@ -939,7 +939,7 @@
     const head = el("section", { class: "hero" },
       el("div", { class: "page-head" },
         el("span", { class: "kicker" }, "Overview"),
-        el("h1", {}, "AI outside the frontier"),
+        el("h1", {}, "AI Outside the Frontier"),
         el("p", { class: "lede" },
           `How ${N.length} countries that neither build frontier AI models nor hold a key place in the AI supply chain are handling AI: their strategies, rules, institutions, compute and partners. Every claim links to the sources behind it.`)),
       el("div", { class: "card" },
