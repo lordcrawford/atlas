@@ -13,7 +13,7 @@
 
 window.ATLAS = {
   meta: {
-    asOf: "2026-10-26",
+    asOf: "2026-11-05",
     pillars: [
       "Policy Capacity",
       "AI Infrastructure",
