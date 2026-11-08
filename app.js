@@ -1681,7 +1681,7 @@
 
     const nBil = all.filter((c) => c.kind === "bilateral").length;
     view.replaceChildren(
-      pageHead("Collaborations", "AI agreements between governments", `${all.length} agreements (${nBil} bilateral, ${all.length - nBil} group) involving countries outside the AI frontier: those with no frontier models and no major role in the AI supply chain. The map tours them; pick one to stop and read, or drag to look around.`),
+      pageHead("Collaborations", "AI agreements between governments", `${all.length} agreements (${nBil} bilateral, ${all.length - nBil} group) involving countries outside the AI frontier, the ones that neither build frontier models nor supply the chips behind them. The map tours them; pick one to stop and read, or drag to look around.`),
       el("section", { class: "cx" },
         el("div", { class: "cx-side card" }, el("div", { class: "cx-side-in" }, search, status, rows)),
         stage),
