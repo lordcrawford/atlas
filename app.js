@@ -1639,7 +1639,7 @@
 
     const nBil = all.filter((c) => c.kind === "bilateral").length;
     view.replaceChildren(
-      pageHead("Collaborations", "Who is working with whom on AI", `${all.length} AI agreements between governments: ${nBil} between two countries and ${all.length - nBil} in groups, each involving at least one country on this site. The map moves to each one every few seconds. Pick one from the list to stop and read it, or drag the map to look around.`),
+      pageHead("Collaborations", "AI agreements between governments", `${all.length} agreements in all: ${nBil} between two countries and ${all.length - nBil} in groups, each involving at least one country on this site. The map moves to each one every few seconds. Pick one from the list to stop and read it, or drag the map to look around.`),
       el("section", { class: "cx" },
         el("div", { class: "cx-side card" }, el("div", { class: "cx-side-in" }, search, status, rows)),
         stage),
