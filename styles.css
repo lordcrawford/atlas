@@ -132,7 +132,7 @@ strong { font-weight: 700; }
 .brand-mark { width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0; font-size: 0;
   background: radial-gradient(circle at 34% 30%, #8fc0ff 0%, var(--accent) 46%, #123f7c 100%); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent); }
 .brand-name { font-size: 21px; font-weight: 820; letter-spacing: -0.03em; line-height: 1; }
-.brand-sub { color: var(--muted); font-weight: 600; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; padding-left: 12px; border-left: 1px solid var(--border); line-height: 1.6; }
+.brand-sub { color: var(--muted); font-weight: 600; font-size: 13px; letter-spacing: 0; padding-left: 12px; border-left: 1px solid var(--border); line-height: 1.6; }
 .topbar-actions { margin-left: auto; display: flex; align-items: center; gap: var(--s2); flex-shrink: 0; }
 .theme-toggle {
   flex-shrink: 0; background: transparent; color: var(--ink-2); border: 1px solid var(--border);
