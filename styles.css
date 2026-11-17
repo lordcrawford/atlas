@@ -531,6 +531,22 @@ a.cx-row { text-decoration: none; color: var(--ink); }
 .spot-btn { width: 30px; height: 30px; border: 1px solid var(--border); border-radius: 7px; background: var(--surface); color: var(--ink); font: 14px/1 system-ui, sans-serif; cursor: pointer; }
 .spot-btn:hover { border-color: var(--ink-2); }
 .cx-detail { padding: var(--s6); min-height: 250px; }
+/* Full view: a compact copy of the details over the map. */
+.cx-fullinfo { display: none; }
+.globe-stage:fullscreen .cx-fullinfo, .globe-stage.is-max .cx-fullinfo {
+  display: block; position: absolute; left: var(--s4); top: var(--s4); z-index: 3; width: min(380px, calc(100vw - 2 * var(--s4)));
+  max-height: calc(100vh - 120px); overflow: auto; padding: var(--s4) var(--s5); background: color-mix(in srgb, var(--surface) 92%, transparent);
+  border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); backdrop-filter: blur(6px);
+}
+.cx-fulltitle { font-size: 20px; font-weight: 790; line-height: 1.15; letter-spacing: -0.015em; margin: 0 0 var(--s3); }
+.cx-fulltext { font-size: 14px; line-height: 1.5; margin: var(--s3) 0; }
+.cx-fullinfo .fact-meta { margin-top: var(--s2); }
+.cx-fullmore { margin: var(--s4) 0 var(--s2); }
+.cx-fulllist { display: flex; flex-direction: column; gap: 4px; }
+.cx-fullrow { display: flex; justify-content: space-between; gap: var(--s3); width: 100%; text-align: left; padding: 6px 8px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); color: var(--ink); font: inherit; font-size: 13px; cursor: pointer; }
+.cx-fullrow:hover { background: var(--surface-2); }
+.cx-fullrow-t { font-weight: 650; }
+@media (max-height: 600px) { .globe-stage:fullscreen .cx-fullinfo, .globe-stage.is-max .cx-fullinfo { max-height: calc(100vh - 90px); } }
 .cx-detail-top { display: flex; justify-content: space-between; align-items: baseline; gap: var(--s3); margin-bottom: var(--s3); }
 .cx-kind { color: var(--accent-ink); }
 .cx-title { font-size: 28px; font-weight: 790; line-height: 1.14; letter-spacing: -0.022em; margin: 0 0 var(--s4); }
@@ -544,10 +560,14 @@ a.cx-row { text-decoration: none; color: var(--ink); }
 .collab-line.is-on.group { stroke-width: 2.4; stroke-dasharray: 6 5; }
 .collab-glow { fill: none; stroke: var(--accent); stroke-width: 10; stroke-linecap: round; opacity: .18; pointer-events: none; }
 .collab-glow.group { stroke-width: 6; opacity: .1; }
-.collab-hit { fill: none; stroke: transparent; stroke-width: 12; cursor: pointer; }
+.collab-hit { fill: none; stroke: transparent; stroke-width: 12; stroke-linecap: round; cursor: pointer; transition: stroke .15s; }
+.collab-hit:hover { stroke: var(--accent); opacity: .3; }
 .collab-dot { cursor: pointer; }
 .collab-dot circle { fill: var(--accent); stroke: var(--surface); stroke-width: 1.5; }
 .collab-dot.is-outside circle { fill: var(--surface); stroke: var(--ink-2); stroke-width: 1.4; }
+.collab-dot circle { transition: fill .15s, stroke .15s, r .15s; }
+.collab-dot:hover circle { fill: var(--accent-ink); stroke: var(--ink); stroke-width: 2.2; }
+.collab-dot.is-outside:hover circle { fill: var(--surface-2); stroke: var(--accent); stroke-width: 2.2; }
 .collab-dot.is-lit circle { stroke: var(--ink); stroke-width: 2.5; }
 .collab-dot.is-lit.is-outside circle { fill: var(--surface); stroke: var(--accent); stroke-width: 2.5; }
 .collab-dot:focus-visible { outline: none; }

@@ -455,7 +455,9 @@
     };
 
     // ---- motion: one of fly, spin or glide runs at a time
-    const clampK = (k) => Math.max(minK, Math.min(maxK, k));
+    // In full view the flat map is never smaller than the screen: it zooms until the band fills the height.
+    let kFloor = minK;
+    const clampK = (k) => Math.max(kFloor, Math.min(maxK, k));
     const clampView = () => {
       view.k = clampK(view.k);
       if (flat) {
@@ -704,6 +706,7 @@
       flatProj.clipExtent([[-2, -2], [W + 2, h + 2]]);
       svg.setAttribute("viewBox", `0 0 ${W} ${h}`);
       stage.style.setProperty("--ar", `${W}/${h}`);
+      kFloor = flat && isFull() ? Math.max(minK, h / HF) : minK;
       if (flat) clampView();
     };
     window.addEventListener("resize", () => { if (flat && isFull() && svg.isConnected) { sizeFrame(); invalidate(); } });
@@ -1516,7 +1519,10 @@
     const START = { lon: 20, lat: 25, k: 1 };
     const mapCard = el("div", { class: "card cx-map" });
     let paint = () => {};
-    const globe = createGlobe({ W, H, pad: sq ? 58 : 78, maxK: 8, cls: "collab-map", view0: START, onUser: () => pause(),
+    // Countries with agreements answer to the pointer: an outline on hover, their list on click.
+    const isoKey = new Map();
+    for (const [k] of counts) { const p = byId(k) || PLACES[k]; if (p && p.isoN) isoKey.set(p.isoN, k); }
+    const globe = createGlobe({ W, H, pad: sq ? 58 : 78, maxK: 8, cls: "collab-map", view0: START, onUser: () => pause(), fills: (f) => (isoKey.has(f.id) ? { id: isoKey.get(f.id) } : null),
       home: (g) => { const c = byCid.get(st.sel); if (c) fit(c, 600); else g.flyTo(START, 600); },
       label: `Map of ${all.length} AI agreements between countries. The selected agreement is drawn brightly and its countries are shaded.` });
     if (!globe) mapCard.append(el("p", { class: "muted" }, "Map libraries failed to load."));
@@ -1587,7 +1593,21 @@
           if (dot) { hideTip(); selectCountry(dot.dataset.k); return; }
           if (n.classList && n.classList.contains("collab-hit")) { hideTip(); select(n.dataset.id, true); return; }
         }
+        const k = globe.featureAt(...framePt(e));
+        if (k) { hideTip(); selectCountry(k); }
       });
+      // Hovering a country outlines it and names it; the outline follows the pointer and clears when it leaves.
+      const framePt = (e) => { const r = globe.svg.getBoundingClientRect(); return [((e.clientX - r.left) / r.width) * W, ((e.clientY - r.top) / r.height) * globe.H]; };
+      let hoverKey = null;
+      globe.svg.addEventListener("pointermove", (e) => {
+        if (globe.svg.classList.contains("is-dragging")) return;
+        const onThing = e.target.closest && (e.target.closest(".collab-dot") || e.target.closest(".collab-hit"));
+        const k = onThing ? null : globe.featureAt(...framePt(e));
+        if (k !== hoverKey) { hoverKey = k; globe.setOutline(k); globe.svg.style.cursor = k ? "pointer" : ""; }
+        if (k) { const p = party(k), n = counts.get(k); showTip(e, [el("div", { class: "tv" }, `${p.flag} ${p.name}`), el("div", { class: "tl" }, `${n} agreement${n > 1 ? "s" : ""}`), el("div", { class: "tl small", style: "margin-top:4px" }, "Click to list them")]); }
+        else if (!onThing) hideTip();
+      });
+      globe.svg.addEventListener("pointerleave", () => { if (hoverKey) { hoverKey = null; globe.setOutline(null); globe.svg.style.cursor = ""; } });
       paint = () => {
         const c = byCid.get(st.sel), list = shownList();
         const shownIds = new Set(list.map((x) => x.id)), shownKeys = new Set(list.flatMap(collabParties));
@@ -1625,6 +1645,27 @@
     // ---- tour controls (over the map) and the detail panel
     const tour = el("div", { class: "cx-tour" });
     const detail = el("article", { class: "card cx-detail", "aria-live": "polite" });
+    // In full view only the map is on screen, so a compact copy of the details sits over it.
+    const fullInfo = el("aside", { class: "cx-fullinfo", "aria-label": "Selected agreement" });
+    if (globe) globe.node.append(fullInfo);
+    const drawFullInfo = (c) => {
+      const list = shownList();
+      const others = st.q ? list.filter((x) => !c || x.id !== c.id).slice(0, 8) : [];
+      fullInfo.replaceChildren(
+        ...(c ? [
+          el("div", { class: "cx-detail-top" },
+            el("span", { class: "cx-kind" }, c.kind === "bilateral" ? "Between two countries" : c.members.length ? `Group of ${countriesIn(c)} countries` : "Group"),
+            el("span", { class: "muted small" }, fmtDate(c.date))),
+          el("h3", { class: "cx-fulltitle" }, c.title),
+          partiesRow(c),
+          el("p", { class: "ink2 cx-fulltext" }, c.text),
+          el("div", { class: "fact-meta" }, badge(c.level, c.sources.length), sourceChips(c.sources)),
+        ] : [el("p", { class: "muted" }, "No agreements match the search.")]),
+        ...(others.length ? [
+          el("p", { class: "muted small cx-fullmore" }, `${list.length} agreement${list.length > 1 ? "s" : ""} match "${st.q}"`),
+          el("div", { class: "cx-fulllist" }, others.map((x) => el("button", { type: "button", class: "cx-fullrow", onclick: () => select(x.id, true) }, el("span", { class: "cx-fullrow-t" }, x.short || x.title), el("span", { class: "muted small" }, fmtDate(x.date))))),
+        ] : []));
+    };
     const drawTour = () => {
       const list = shownList();
       const i = list.findIndex((c) => c.id === st.sel);
@@ -1638,6 +1679,7 @@
     };
     const drawDetail = () => {
       const c = byCid.get(st.sel);
+      drawFullInfo(c);
       if (!c) { detail.replaceChildren(el("p", { class: "muted" }, "No agreements match the search.")); return; }
       detail.replaceChildren(
         el("div", { class: "cx-detail-top" },
