@@ -1520,7 +1520,9 @@
     const byCid = new Map(all.map((c) => [c.id, c]));
     // A link to one agreement (#collab/<id>) opens it with the tour paused.
     const linked = byCid.has(initialId);
-    const st = { q: "", sel: linked ? initialId : all[0] && all[0].id, playing: !linked, hold: false };
+    const st = { q: "", year: "", country: "", region: "", kind: "", sel: linked ? initialId : all[0] && all[0].id, playing: !linked, hold: false };
+    const filtersOn = () => !!(st.q.trim() || st.year || st.country || st.region || st.kind);
+    const regionsOf = (c) => collabParties(c).map((k) => byId(k)).filter(Boolean).map((n) => n.group);
     const counts = new Map();
     all.forEach((c) => collabParties(c).forEach((k) => counts.set(k, (counts.get(k) || 0) + 1)));
     const norm = (t) => t.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").trim();
@@ -1529,11 +1531,16 @@
     // anything else matches country names, titles and descriptions.
     const exactKey = () => { const q = norm(st.q); return q ? [...counts.keys()].find((k) => names(k).includes(q)) || null : null; };
     const shownList = () => {
+      let base = all;
+      if (st.year) base = base.filter((c) => c.date.slice(0, 4) === st.year);
+      if (st.country) base = base.filter((c) => collabParties(c).includes(st.country));
+      if (st.region) base = base.filter((c) => regionsOf(c).includes(st.region));
+      if (st.kind) base = base.filter((c) => c.kind === st.kind);
       const q = norm(st.q);
-      if (!q) return all;
+      if (!q) return base;
       const k = exactKey();
-      if (k) return all.filter((c) => collabParties(c).includes(k));
-      return all.filter((c) => collabParties(c).some((x) => names(x).some((n) => n.includes(q))) || norm(c.title).includes(q) || norm(c.short || "").includes(q) || norm(c.text).includes(q));
+      if (k) return base.filter((c) => collabParties(c).includes(k));
+      return base.filter((c) => collabParties(c).some((x) => names(x).some((n) => n.includes(q))) || norm(c.title).includes(q) || norm(c.short || "").includes(q) || norm(c.text).includes(q));
     };
 
     // ---- map
@@ -1678,7 +1685,7 @@
     if (globe) globe.node.append(fullInfo);
     const drawFullInfo = (c) => {
       const list = shownList();
-      const others = st.q ? list.filter((x) => !c || x.id !== c.id).slice(0, 8) : [];
+      const others = filtersOn() ? list.filter((x) => !c || x.id !== c.id).slice(0, 8) : [];
       fullInfo.replaceChildren(
         ...(c ? [
           el("div", { class: "cx-detail-top" },
@@ -1689,7 +1696,7 @@
           el("div", { class: "fact-meta" }, badge(c.level, c.sources.length), sourceChips(c.sources)),
         ] : [el("p", { class: "muted" }, "No agreements match the search.")]),
         ...(others.length ? [
-          el("p", { class: "muted small cx-fullmore" }, `${list.length} agreement${list.length > 1 ? "s" : ""} match "${st.q}"`),
+          el("p", { class: "muted small cx-fullmore" }, `${list.length} agreement${list.length > 1 ? "s" : ""} shown`),
           el("div", { class: "cx-fulllist" }, others.map((x) => el("button", { type: "button", class: "cx-fullrow", onclick: () => select(x.id, true) }, el("span", { class: "cx-fullrow-t" }, x.short || x.title), el("span", { class: "muted small" }, fmtDate(x.date))))),
         ] : []));
     };
@@ -1727,7 +1734,7 @@
     const drawList = () => {
       const list = shownList();
       const k = exactKey();
-      status.textContent = !st.q.trim() ? `${all.length} agreements, newest first` : k ? `${list.length} involving ${party(k).name}` : `${list.length} matching “${st.q.trim()}”`;
+      status.textContent = !filtersOn() ? `${all.length} agreements, newest first` : k ? `${list.length} involving ${party(k).name}` : st.q.trim() ? `${list.length} matching “${st.q.trim()}”` : `${list.length} of ${all.length} agreements`;
       let year = null;
       const out = [];
       for (const c of list) {
@@ -1787,7 +1794,31 @@
       drawTour(); syncUrl();
     }
     function pause() { if (!st.playing) return; st.playing = false; clearInterval(timer); drawTour(); syncUrl(); }
-    function selectCountry(k) { st.q = k ? party(k).name : ""; search.value = st.q; pause(); refresh(true); }
+    function selectCountry(k) { st.country = k || ""; st.q = ""; search.value = ""; pause(); refresh(true); drawFilters(); }
+
+    // ---- filters: year, country, region and type, above the map and list
+    const filters = el("div", { class: "cx-filters", role: "group", "aria-label": "Filter agreements" });
+    const YEARS = [...new Set(all.map((c) => c.date.slice(0, 4)))].sort().reverse();
+    const COUNTRIES = [...counts.keys()].map((k) => ({ k, p: party(k), n: counts.get(k) })).filter((d) => d.p).sort((a, b) => a.p.name.localeCompare(b.p.name));
+    const REGIONS = ["Europe", "Middle East", "Asia-Pacific", "Africa", "Americas"].filter((g) => all.some((c) => regionsOf(c).includes(g)));
+    const drawFilters = () => {
+      const sel = (label, key, options, value) => {
+        const node = el("select", { class: "select cx-filter", "aria-label": label },
+          el("option", { value: "" }, label),
+          ...options.map(([v, text]) => el("option", { value: v }, text)));
+        node.value = value;
+        node.classList.toggle("is-set", !!value);
+        node.addEventListener("change", () => { st[key] = node.value; pause(); refresh(true); drawFilters(); });
+        return node;
+      };
+      filters.replaceChildren(
+        sel("All years", "year", YEARS.map((y) => [y, y]), st.year),
+        sel("All countries", "country", COUNTRIES.map((d) => [d.k, `${d.p.flag} ${d.p.name} (${d.n})`]), st.country),
+        sel("All regions", "region", REGIONS.map((g) => [g, g]), st.region),
+        sel("All types", "kind", [["bilateral", "Between two countries"], ["group", "Group agreements"]], st.kind),
+        ...(filtersOn() ? [el("button", { type: "button", class: "cx-clear", onclick: () => { st.q = st.year = st.country = st.region = st.kind = ""; search.value = ""; refresh(true); drawFilters(); } }, "Clear")] : []));
+    };
+    drawFilters();
     function refresh(reselect) {
       const list = shownList();
       drawList();
@@ -1795,7 +1826,7 @@
       else update();
       if (st.playing) play();
     }
-    search.addEventListener("input", () => { st.q = search.value; refresh(true); });
+    search.addEventListener("input", () => { st.q = search.value; refresh(true); drawFilters(); });
 
     const stage = el("div", { class: "cx-main" }, el("div", { class: "cx-mapwrap" }, mapCard), detail);
     // Hovering the map or the details pauses the tour so they can be read.
@@ -1810,6 +1841,7 @@
 
     view.replaceChildren(
       Object.assign(pageHead("Collaborations", "AI agreements between governments"), { className: "page-head is-small" }),
+      filters,
       el("section", { class: "cx" },
         el("div", { class: "cx-side card" }, el("div", { class: "cx-side-in" }, search, status, rows)),
         stage),

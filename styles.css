@@ -402,8 +402,8 @@ svg.globe.is-flat text.map-label { stroke: var(--globe-sea-flat); }
   position: absolute; top: var(--s3); right: var(--s3); display: flex; flex-direction: column;
   background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; box-shadow: var(--shadow);
 }
-.zoom-ctrl button { width: 40px; height: 40px; border: 0; background: none; color: var(--ink); cursor: pointer; display: grid; place-items: center; }
-.zoom-ctrl button svg { width: 20px; height: 20px; }
+.zoom-ctrl button { width: 36px; height: 36px; border: 0; background: none; color: var(--ink); cursor: pointer; display: grid; place-items: center; }
+.zoom-ctrl button svg { width: 17px; height: 17px; }
 .zoom-ctrl button + button { border-top: 1px solid var(--border); }
 .zoom-ctrl button:hover { background: var(--surface-2); }
 .map-mode { position: absolute; left: var(--s3); bottom: var(--s3); display: inline-flex; gap: 2px; padding: 3px; background: var(--surface); border: 1px solid var(--border); border-radius: 999px; box-shadow: var(--shadow); }
@@ -516,11 +516,17 @@ a.cx-row { text-decoration: none; color: var(--ink); }
 .cx-what { font-size: 13px; color: var(--ink-2); line-height: 1.35; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .cx-date { font-size: 12px; font-weight: 650; color: var(--muted); white-space: nowrap; align-self: start; padding-top: 2px; }
 .cx-empty { padding: var(--s3) var(--s2); }
+.cx-filters { display: flex; flex-wrap: wrap; gap: var(--s2); align-items: center; margin: 0 0 var(--s4); }
+.cx-filter { font-size: 13.5px; padding: 6px 28px 6px 12px; }
+.cx-filter.is-set { border-color: var(--accent); color: var(--accent-ink); }
+.cx-clear { font: inherit; font-size: 13.5px; font-weight: 600; color: var(--accent-ink); background: none; border: 0; padding: 6px 8px; cursor: pointer; }
+.cx-clear:hover { text-decoration: underline; }
 .cx-main { display: flex; flex-direction: column; gap: var(--s4); min-width: 0; }
 .cx-mapwrap { position: relative; }
 .cx-map { padding: 0; background: none; border: 0; box-shadow: none; border-radius: 0; }
 /* The home-page globe sits on the page itself, with no box around it; the flat map keeps its sea. */
 .cx-map .globe-stage:not(.is-flat) { background: none; border-radius: 0; overflow: visible; }
+.cx-map .globe-stage.is-flat { background: none; border-radius: 0; }
 .cx-map .globe-stage:fullscreen { background: var(--page); overflow: hidden; }
 .cx-map .globe-stage.is-max { background: var(--page); overflow: hidden; }
 .cx-tour { position: absolute; left: 10px; top: 10px; display: flex; align-items: center; gap: 4px; padding: 4px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); box-shadow: var(--shadow); overflow: hidden; }
