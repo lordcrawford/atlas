@@ -547,7 +547,7 @@ a.cx-row { text-decoration: none; color: var(--ink); }
 .cx-fullrow:hover { background: var(--surface-2); }
 .cx-fullrow-t { font-weight: 650; }
 @media (max-height: 600px) { .globe-stage:fullscreen .cx-fullinfo, .globe-stage.is-max .cx-fullinfo { max-height: calc(100vh - 90px); } }
-.cx-detail-top { display: flex; justify-content: space-between; align-items: baseline; gap: var(--s3); margin-bottom: var(--s3); }
+.cx-detail-top { display: flex; justify-content: flex-end; align-items: baseline; gap: var(--s3); margin-bottom: var(--s3); }
 .cx-kind { color: var(--accent-ink); }
 .cx-title { font-size: 28px; font-weight: 790; line-height: 1.14; letter-spacing: -0.022em; margin: 0 0 var(--s4); }
 .cx-text { margin-bottom: var(--s4); font-size: 17px; line-height: 1.6; max-width: 72ch; }

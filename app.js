@@ -1682,8 +1682,7 @@
       fullInfo.replaceChildren(
         ...(c ? [
           el("div", { class: "cx-detail-top" },
-            el("span", { class: "cx-kind" }, c.kind === "bilateral" ? "Between two countries" : c.members.length ? `Group of ${countriesIn(c)} countries` : "Group"),
-            el("span", { class: "muted small" }, fmtDate(c.date))),
+                        el("span", { class: "muted small" }, fmtDate(c.date))),
           el("h3", { class: "cx-fulltitle" }, c.title),
           partiesRow(c),
           el("p", { class: "ink2 cx-fulltext" }, c.text),
@@ -1711,8 +1710,7 @@
       if (!c) { detail.replaceChildren(el("p", { class: "muted" }, "No agreements match the search.")); return; }
       detail.replaceChildren(
         el("div", { class: "cx-detail-top" },
-          el("span", { class: "cx-kind" }, c.kind === "bilateral" ? "Between two countries" : c.members.length ? `Group of ${countriesIn(c)} countries` : "Group"),
-          el("span", { class: "muted small" }, fmtDate(c.date))),
+                    el("span", { class: "muted small" }, fmtDate(c.date))),
         el("h2", { class: "cx-title" }, c.title),
         partiesRow(c),
         el("p", { class: "ink2 cx-text" }, c.text),
