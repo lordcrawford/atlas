@@ -1,5 +1,5 @@
 // Atlas dataset: AI policy & governance in six small nations.
-// Research cut-off: 20 October 2026 (news); full research to 10 October 2026.
+// Research cut-off: 16 November 2026 (news search 27 October to 16 November); see METHODOLOGY.md for the audit log.
 //
 // Verification levels (see METHODOLOGY.md):
 //   "verified"     - 3+ independent sources agree on the claim
