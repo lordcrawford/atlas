@@ -915,8 +915,9 @@
   const RECENT_FROM = 2024; // the user's focus: developments after 2023
   const isRecent = (x) => (dateValue(x.date) ?? 0) >= RECENT_FROM;
   // The opening of every page: a small label, the title, and a sentence or two of introduction.
+  // The tab already names the page, so the heading carries no label above it.
   function pageHead(kicker, title, lede) {
-    return el("header", { class: "page-head" }, el("span", { class: "kicker" }, kicker), el("h1", {}, title), lede ? el("p", { class: "lede" }, lede) : null);
+    return el("header", { class: "page-head" }, el("h1", {}, title), lede ? el("p", { class: "lede" }, lede) : null);
   }
   // The preview image one of a news item's sources publishes for link previews (data/news-images.js). It is
   // loaded from that site, never copied here, and credited under the picture.
