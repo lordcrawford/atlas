@@ -1032,7 +1032,7 @@ window.ATLAS.nations.push(
         sources: [
           { t: "Ecofin - Benin approves a national AI strategy", u: "https://www.ecofinagency.com/telecom/2401-44198-benin-approves-a-national-artificial-intelligence-strategy" },
           { t: "OECD.AI - National AI and Big Data Strategy 2023–2027", u: "https://oecd.ai/en/dashboards/policy-initiatives/national-artificial-intelligence-and-big-data-strategy-2023-2027" },
-          { t: "Government of Benin - National AI and Big Data Strategy (PDF)", u: "https://innovation.gouv.bj/assets/documents/national-artificial-intelligence-and-big-data-strategy-1682673348.pdf" },
+          { t: "Government of Benin - National AI and Big Data Strategy 2023–2027 (PDF, served by ASIN)", u: "https://asin.bj/doc/13/download" },
         ],
         note: "Budget conversions vary (about US$7.8M).",
       },

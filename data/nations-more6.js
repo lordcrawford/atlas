@@ -179,7 +179,7 @@
           topic: "Strategy & readiness", date: "2019",
           text: "Kiribati's National ICT Policy 2019 says the government is encouraging new technologies such as blockchain, artificial intelligence, big data analytics and the Internet of Things for education, health, finance and other sectors.",
           level: "single",
-          sources: [S("Government of Kiribati - National ICT Policy 2019 (PDF, copy hosted by UNIDIR's Cyber Policy Portal)", "https://database.cyberpolicyportal.org/api/files/1664377388298feiubzabnbu.pdf")],
+          sources: [S("Government of Kiribati - National ICT Policy 2019 (PDF, Internet Archive copy of the file once hosted by UNIDIR's Cyber Policy Portal)", "https://web.archive.org/web/20240129035711/https://database.cyberpolicyportal.org/api/files/1664377388298feiubzabnbu.pdf")],
         },
         pifFact("Kiribati"),
       ],

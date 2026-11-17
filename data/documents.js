@@ -81,7 +81,7 @@ window.ATLAS.docs = {
     { t: "National AI Strategy 2025", kind: "Strategy", year: "2025", by: "GovTech Agency", u: "https://tech.gov.bt/wp-content/uploads/2025/10/National-AI-Strategy-2025.pdf", note: "Awaiting formal approval.", from: { t: "GovTech Bhutan", u: "https://tech.gov.bt/" } },
   ],
   bj: [
-    { t: "National AI and Big Data Strategy 2023–2027", kind: "Strategy", year: "2023", by: "Government of Benin", u: "https://innovation.gouv.bj/assets/documents/national-artificial-intelligence-and-big-data-strategy-1682673348.pdf", from: { t: "Benin Ministry of Digital Affairs", u: "https://innovation.gouv.bj/" } },
+    { t: "National AI and Big Data Strategy 2023–2027", kind: "Strategy", year: "2023", by: "Government of Benin", u: "https://asin.bj/doc/13/download", from: { t: "ASIN (Benin's digital agency)", u: "https://asin.bj/" }, note: "The ministry's earlier link stopped working in November 2026; the file is now served by the Agence des Systèmes d'Information et du Numérique." },
   ],
   cr: [
     { t: "Estrategia Nacional de Inteligencia Artificial 2024–2027", kind: "Strategy", year: "2024", by: "MICITT", u: "https://micitt.go.cr/sites/default/files/2024-10/Estrategia%20Nacional%20de%20Inteligencia%20Artificial%20de%20Costa%20Rica%20ESP.pdf", note: "In Spanish.", from: { t: "MICITT: Inteligencia Artificial", u: "https://micitt.go.cr/gobierno_digital/inteligencia_artificial" } },

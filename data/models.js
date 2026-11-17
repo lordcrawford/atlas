@@ -58,7 +58,7 @@
       si: { posture: ["adopt","On 5 March 2026 the governme","The Slovenian AI Factory (SL"], route: ["eu","#eu"], compute: ["shared","The Slovenian AI Factory (SL"], bloc: ["eu","#eu"] }, // Slovenia
       cy: { posture: ["adopt","The Council of Ministers app","In January 2025 the Council ","The taskforce's draft Nation"], route: ["eu","#eu"], compute: ["shared","@daedalus"], bloc: ["eu","#eu"] }, // Cyprus
       ch: { posture: ["regulate","On 12 February 2025 the Fede"], route: ["regional","@coe"], compute: ["own","EPFL, ETH Zurich and the Swi"], bloc: ["eu","@coe"] }, // Switzerland
-      qa: { posture: ["adopt","Qatar launched its National ","QIA launched Qai, a national"], route: ["none"], compute: ["own","QIA launched Qai, a national"], bloc: ["none"] }, // Qatar
+      qa: { posture: ["adopt","Qatar launched its National ","QIA launched Qai, a national"], route: ["none"], compute: ["own","QIA launched Qai, a national"], bloc: ["us","@sf-declaration"] }, // Qatar
       bh: { posture: ["regulate","On 28 April 2024 the Shura C","The bill has not been enacte"], route: ["own","On 28 April 2024 the Shura C","The bill has not been enacte"], compute: ["none"], bloc: ["us","@bh-us"] }, // Bahrain
       jo: { posture: ["adopt","The Cabinet approved Jordan'","Jordan launched an 'AI for G"], route: ["none"], compute: ["none"], bloc: ["none"] }, // Jordan
       nz: { posture: ["adopt","New Zealand released its fir","A non-binding Public Service"], route: ["regional","@pif-ai"], compute: ["none"], bloc: ["none"] }, // New Zealand

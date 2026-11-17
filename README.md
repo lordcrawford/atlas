@@ -18,7 +18,7 @@ A dashboard on how countries outside the AI frontier use and govern AI.
 
 The site opens on Collaborations and sits behind a password gate (see below).
 
-- **Collaborations.** 49 AI agreements between governments: 33 two-country deals and 16 groups (LUMI, the Council of Europe AI convention, GPAI, CARICOM's AI roadmap, the Pacific Islands Forum's AI principles and so on). A list sits beside a globe that draws each agreement as a route. Picking one, or letting the tour run, turns the globe to its countries and opens the description and sources. Each agreement has its own link, `#collab/<id>`. Company deals and aid projects are not included.
+- **Collaborations.** 52 AI agreements between governments: 34 two-country deals and 18 groups (LUMI, the Council of Europe AI convention, GPAI, the Paris Call on AI safety, CARICOM's AI roadmap, the Pacific Islands Forum's AI principles and so on). A list sits beside a globe that draws each agreement as a route. Picking one, or letting the tour run, turns the globe to its countries and opens the description and sources. Each agreement has its own link, `#collab/<id>`. Company deals and aid projects are not included.
 - **Nations.** A country finder, a map shaded by readiness rank or governance model, a comparison table, and links to the source datasets (Oxford Insights, Microsoft's AI Diffusion reports, the Stanford AI Index, OECD.AI, the OECD Digital Economy Policy Platform, the World Bank). Each nation page has a locator map, stat tiles, a readiness profile against the median, up to two key documents, an AI partners section, facts newest first (pre-2024 background behind a toggle) and news since 2024.
 - **News.** Everything since January 2024, with the preview image each source page publishes (hotlinked and credited, listed in `data/news-images.js`). Items confirmed by two or more sources come first. Sort by date or by a relevance score, filter by region, nation or number of sources.
 - **Findings.** Six claims about what the data shows, counted live from the data, each opening to the nations behind it.
@@ -34,7 +34,7 @@ Everything is static files, so both are client-side only.
 - **Gate** (`gate.js`): the password is stored as a SHA-256 hash and "Remember on this device" keeps the browser unlocked. It stops casual visitors, but anyone requesting `data/*.js` directly can read the data. For real protection use the host's access control (Vercel or Netlify password protection, Cloudflare Access, basic auth). To change the password, replace `PASS_HASH` with the output of `printf 'newpass' | shasum -a 256`.
 - **Profiles** live in the browser's `localStorage` (name, salt, salted hash, saved items and marks) and do not sync between browsers or devices. Notes are never deleted: editing keeps earlier versions, there is no delete-profile button, and up to 30 snapshots per profile can be restored from the Saved page. In Chromium browsers, "Choose a backup file" on the Saved page writes every change to a JSON file; in Safari and Firefox use "Download a copy". Restores merge rather than replace. Clearing site data or a private window still wipes storage, which is why the backup file matters. Moving to a shared database means replacing the `Store` object in `app.js`.
 
-Data as of 5 November 2026 (sixth audit). Earlier audits and the news cut-offs are listed in `METHODOLOGY.md`.
+Data as of 16 November 2026 (seventh audit and news search). Earlier audits and the news cut-offs are listed in `METHODOLOGY.md`.
 
 ## Run it
 
@@ -57,6 +57,7 @@ Then open http://localhost:8765. Opening `index.html` directly also works.
 | `data/nations.js` | First six nations, plus shared metadata and sources |
 | `data/nations-more.js` … `nations-more6.js` | The rest of the under-15M states, in the order they were added |
 | `data/nations-more7.js` | India, Indonesia, Pakistan, Nigeria, Brazil (added 5 November 2026) |
+| `data/updates-2026-11.js` | News, facts, agreements and documents found in the November 2026 search, pushed onto the nations they concern |
 | `data/documents.js` | Up to two key documents per nation |
 | `data/scope.js` | Who is left out and why, the exception, and the countries still to add |
 | `data/news-images.js` | Preview image for each news source page |

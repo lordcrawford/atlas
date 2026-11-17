@@ -470,7 +470,8 @@
       clampView();
     };
     let anim = 0, flight = 0, spinning = false, hover = false;
-    const stopMotion = () => { cancelAnimationFrame(anim); anim = 0; flight++; spinning = false; };
+    let zoomGoal = 0, zoomAnchor = [0, 0], zooming = 0;
+    const stopMotion = () => { cancelAnimationFrame(anim); anim = 0; flight++; spinning = false; cancelAnimationFrame(zooming); zooming = 0; zoomGoal = 0; };
     const user = () => { stopMotion(); if (onUser) onUser(); };
     // Animate to a place and zoom. `target` is { lon, lat, k }; leave out lon/lat to zoom on the spot. In flat
     // mode `target.at` may give the position on the unzoomed map directly.
@@ -525,19 +526,42 @@
     const spin = (degPerSec = 3) => {
       if (reducedMotion() || flat) return;
       stopMotion(); spinning = true;
-      let last = performance.now();
+      let last = performance.now(), spd = 0;
       const step = (now) => {
         if (!spinning || flat || !svg.isConnected) return;
-        // About 30 frames a second is plenty for a slow idle turn, and halves the work.
-        if (now - last >= 30) {
-          const dt = Math.min(60, now - last); last = now;
-          if (!hover) { view.lon += (degPerSec * dt) / 1000; clampView(); draw(); }
-        }
+        const dt = Math.min(60, now - last); last = now;
+        // The turn eases in from rest and eases to a halt under the pointer, rather than switching on and off.
+        const want = hover ? 0 : degPerSec;
+        spd += (want - spd) * (1 - Math.exp(-dt / 400));
+        if (Math.abs(spd) > 0.01) { view.lon += (spd * dt) / 1000; clampView(); draw(); }
         anim = requestAnimationFrame(step);
       };
       anim = requestAnimationFrame(step);
     };
     const zoomBy = (f) => flyTo({ k: view.k * f }, 250);
+    // Zoom by factor f keeping the point under (px, py) where it is.
+    const zoomAt = (f, px, py) => {
+      const k0 = view.k, k1 = clampK(k0 * f);
+      if (k1 === k0) return;
+      view.k = k1;
+      if (flat) { fv.x += (px - cx) * (1 / k0 - 1 / k1); fv.y += (py - h / 2) * (1 / k0 - 1 / k1); }
+      else { R = R0 * k1; const g = k1 / k0; nudge((px - cx) * (1 - g), (py - gy) * (1 - g)); }
+      clampView();
+    };
+    // Wheel zoom glides towards its target instead of jumping with each tick of the wheel.
+    const glideZoom = () => {
+      if (zooming) return;
+      let prev = performance.now();
+      const step = (now) => {
+        const dt = Math.min(50, now - prev); prev = now;
+        const a = 1 - Math.exp(-dt / 90);
+        const part = zoomGoal * a; zoomGoal -= part;
+        zoomAt(Math.exp(part), zoomAnchor[0], zoomAnchor[1]);
+        draw();
+        if (Math.abs(zoomGoal) > 0.002 && svg.isConnected) zooming = requestAnimationFrame(step); else { zooming = 0; zoomGoal = 0; }
+      };
+      zooming = requestAnimationFrame(step);
+    };
 
     // ---- pointer, wheel and keyboard
     const toSvg = (e) => { const r = svg.getBoundingClientRect(); return [((e.clientX - r.left) / r.width) * W, ((e.clientY - r.top) / r.height) * h]; };
@@ -568,7 +592,9 @@
       if (moved > 5 && !svg.classList.contains("is-dragging")) { svg.classList.add("is-dragging"); try { svg.setPointerCapture(e.pointerId); } catch {} }
       const dt = Math.max(1, e.timeStamp - lastT);
       nudge(dx, dy);
-      vel = [dx / dt, dy / dt]; lastT = e.timeStamp; last = p;
+      // Blend the velocity over the last few events, so a flick is judged on the whole gesture, not one jittery sample.
+      const w = Math.min(1, dt / 40);
+      vel = [vel[0] + (dx / dt - vel[0]) * w, vel[1] + (dy / dt - vel[1]) * w]; lastT = e.timeStamp; last = p;
       invalidate();
     });
     const release = (e) => {
@@ -579,16 +605,18 @@
       if (pts.size) return;
       svg.classList.remove("is-dragging");
       // A flick keeps the map moving for a moment.
-      if (e.type !== "pointerup" || e.timeStamp - lastT > 80 || Math.hypot(vel[0], vel[1]) < 0.14 || reducedMotion()) return;
+      if (e.type !== "pointerup" || e.timeStamp - lastT > 100 || Math.hypot(vel[0], vel[1]) < 0.08 || reducedMotion()) return;
       const me = flight;
       let prev = performance.now();
       const step = (now) => {
         if (me !== flight || !svg.isConnected) return;
-        const dt = Math.min(40, now - prev); prev = now;
+        const dt = Math.min(50, now - prev); prev = now;
         nudge(vel[0] * dt, vel[1] * dt);
-        vel = [vel[0] * 0.93, vel[1] * 0.93];
+        // Friction by time, not by frame, so the glide feels the same at any refresh rate.
+        const f = Math.exp(-dt / 320);
+        vel = [vel[0] * f, vel[1] * f];
         draw();
-        if (Math.hypot(vel[0], vel[1]) > 0.02) anim = requestAnimationFrame(step);
+        if (Math.hypot(vel[0], vel[1]) > 0.004) anim = requestAnimationFrame(step);
       };
       anim = requestAnimationFrame(step);
     };
@@ -603,9 +631,13 @@
         return;
       }
       e.preventDefault();
-      user();
-      view.k *= Math.exp(-e.deltaY * (e.ctrlKey ? 0.01 : 0.0018));
-      clampView(); invalidate();
+      if (!zooming) user();
+      // Pixel, line and page deltas are scaled to about the same step.
+      const unit = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? 120 : 1;
+      zoomGoal += -e.deltaY * unit * (e.ctrlKey ? 0.01 : 0.0022);
+      zoomGoal = Math.max(-1.2, Math.min(1.2, zoomGoal));
+      zoomAnchor = toSvg(e);
+      glideZoom();
     }, { passive: false });
     svg.addEventListener("dblclick", (e) => {
       const [px, py] = toSvg(e);
