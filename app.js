@@ -1110,7 +1110,6 @@
       ]);
     };
     view.replaceChildren(
-      pageHead("Nations", "AI Outside The Frontier", `${N.length} countries that neither build frontier AI models nor hold a key place in the AI supply chain, and how each is handling AI: strategies, rules, institutions, compute and partners. Search for a country, or find it on the map.`),
       el("div", { class: "card finder" }, el("div", { class: "finder-row" }, search, browse), lists),
       body);
     drawBody();
