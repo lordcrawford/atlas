@@ -295,8 +295,12 @@
     const s0 = flat0.scale(), t0 = flat0.translate();
     const flatProj = d3.geoNaturalEarth1().scale(s0).translate(t0).precision(0.5).clipExtent([[-2, -2], [W + 2, HF + 2]]);
     const view = { ...view0 };
-    // In flat mode `fv` is the point of the unzoomed map that sits in the middle of the frame.
-    const fv = { x: cx, y: HF / 2 };
+    // The flat map wraps: it is centred on `view.lon` by turning the projection, so dragging sideways carries on
+    // round the world. `fv.y` is the height on the unzoomed map that sits in the middle of the frame.
+    const fv = { x: t0[0], y: HF / 2 };
+    const FX = 0.8707 * s0; // pixels per radian of longitude at the equator on the unzoomed map
+    const setFlatRot = () => { flat0.rotate([-view.lon, 0]); flatProj.rotate([-view.lon, 0]); };
+    const flatY = (lat) => { setFlatRot(); const p = flat0([view.lon, Math.max(-84, Math.min(88, lat))]); return p && isFinite(p[1]) ? p[1] : fv.y; };
     let flat = false, h = H, R = R0, rotate = d3.geoRotation([-view.lon, -view.lat]);
 
     // ---- drawing. The sphere, sea and countries are painted on a canvas, which stays smooth while the map
@@ -349,10 +353,11 @@
       ctx.clearRect(0, 0, W, h);
       ctx.lineJoin = "round";
       if (flat) {
-        flatProj.scale(s0 * view.k).translate([cx + view.k * (t0[0] - fv.x), h / 2 + view.k * (t0[1] - fv.y)]);
-        // Keep lon/lat in step with the middle of the frame, so the view carries over to the globe.
-        const g = flat0.invert([fv.x, fv.y]);
-        if (g && isFinite(g[0]) && isFinite(g[1])) { view.lon = g[0]; view.lat = g[1]; }
+        setFlatRot();
+        flatProj.scale(s0 * view.k).translate([cx, h / 2 + view.k * (t0[1] - fv.y)]);
+        // Keep the latitude in step with the middle of the frame, so the view carries over to the globe.
+        const g = flat0.invert([t0[0], fv.y]);
+        if (g && isFinite(g[1])) view.lat = g[1];
       } else {
         R = R0 * view.k;
         proj.rotate([-view.lon, -view.lat]).scale(R);
@@ -414,7 +419,7 @@
     // the short way round the date line.
     const arcSamples = (a, b, lift = 1) => {
       const dist = d3.geoDistance(a, b), interp = d3.geoInterpolate(a, b);
-      const n = Math.max(10, Math.ceil(dist * 26)), up = lift * Math.min(0.4, 0.05 + dist * 0.19);
+      const n = Math.max(10, Math.ceil(dist * 26)), up = lift * Math.min(0.3, 0.05 + dist * 0.16);
       const dLon = ((b[0] - a[0] + 540) % 360) - 180, dLat = b[1] - a[1], len = Math.hypot(dLon, dLat) || 1;
       const side = dLon >= 0 ? 1 : -1; // bow towards the north
       return {
@@ -456,8 +461,8 @@
       if (flat) {
         // The flat map stays in its frame: centred while it is smaller than the frame, edge to edge once larger.
         const lim = (v, lo, hi, half) => (hi - lo <= 2 * half ? (lo + hi) / 2 : Math.max(lo + half, Math.min(hi - half, v)));
-        fv.x = lim(fv.x, fb[0][0] - 6, fb[1][0] + 6, W / 2 / view.k);
-        fv.y = lim(fv.y, fb[0][1] - 6, fb[1][1] + 6, HF / 2 / view.k);
+        fv.y = lim(fv.y, fb[0][1] - 6, fb[1][1] + 6, h / 2 / view.k);
+        view.lon = ((view.lon + 540) % 360) - 180;
       } else {
         view.lat = Math.max(-80, Math.min(80, view.lat));
         view.lon = ((view.lon + 540) % 360) - 180;
@@ -465,7 +470,7 @@
     };
     // Move the view by a drag of (dx, dy) in frame units: the globe turns, the flat map slides.
     const nudge = (dx, dy) => {
-      if (flat) { fv.x -= dx / view.k; fv.y -= dy / view.k; }
+      if (flat) { view.lon -= (dx * DEG) / (view.k * FX); fv.y -= dy / view.k; }
       else { view.lon -= (dx * DEG) / R; view.lat += (dy * DEG) / R; }
       clampView();
     };
@@ -477,21 +482,21 @@
     // mode `target.at` may give the position on the unzoomed map directly.
     const flyTo = (target, ms = 900) => {
       stopMotion();
-      const from = flat ? [fv.x, fv.y] : [view.lon, view.lat], k0 = view.k, k1 = clampK(target.k ?? view.k);
+      const from = flat ? [view.lon, fv.y] : [view.lon, view.lat], k0 = view.k, k1 = clampK(target.k ?? view.k);
       let to = from;
       if (flat && target.at) to = target.at;
       else if (target.lon != null) {
-        to = flat ? flat0([target.lon, target.lat]) : [target.lon, Math.max(-80, Math.min(80, target.lat))];
+        to = flat ? [target.lon, flatY(target.lat)] : [target.lon, Math.max(-80, Math.min(80, target.lat))];
         if (!to || !isFinite(to[0]) || !isFinite(to[1])) to = from;
       }
-      const d = [flat ? to[0] - from[0] : ((to[0] - from[0] + 540) % 360) - 180, to[1] - from[1]];
+      const d = [((to[0] - from[0] + 540) % 360) - 180, to[1] - from[1]];
       const put = (e, k) => {
         const x = from[0] + d[0] * e, y = from[1] + d[1] * e;
-        if (flat) { fv.x = x; fv.y = y; } else { view.lon = x; view.lat = y; }
+        if (flat) { view.lon = x; fv.y = y; } else { view.lon = x; view.lat = y; }
         view.k = k; clampView(); draw();
       };
       if (!ms || reducedMotion() || document.hidden) { put(1, k1); return; }
-      const far = Math.min(1, flat ? Math.hypot(d[0], d[1]) / (W * 0.6) : Math.hypot(d[0] * Math.cos(from[1] / DEG), d[1]) / 150);
+      const far = Math.min(1, flat ? Math.hypot(d[0], (d[1] / s0) * DEG) / 150 : Math.hypot(d[0] * Math.cos(from[1] / DEG), d[1]) / 150);
       const me = flight, start = performance.now();
       const ease = (u) => 0.5 - 0.5 * Math.cos(Math.PI * u); // sine in-out: eases in and out softly
       let arrived = false;
@@ -507,19 +512,25 @@
       setTimeout(() => { if (me === flight && !arrived && svg.isConnected) { flight++; put(1, k1); } }, ms + 250);
     };
     // Face a set of places and zoom until they fill the frame.
-    const fitPoints = (pts, { ms = 900, maxK: cap = maxK, padPx = 60 } = {}) => {
-      if (flat) {
-        const ps = pts.map((p) => flat0(p)), xs = ps.map((p) => p[0]), ys = ps.map((p) => p[1]);
-        const x0 = Math.min(...xs), x1 = Math.max(...xs), y0 = Math.min(...ys), y1 = Math.max(...ys);
-        const k = Math.min(cap, (W - 2 * padPx) / Math.max(x1 - x0, 1), (HF - 2 * Math.min(padPx, HF / 4)) / Math.max(y1 - y0, 1));
-        flyTo({ at: [(x0 + x1) / 2, (y0 + y1) / 2], k: Math.max(1, k) }, ms);
-        return;
-      }
+    // `snap` shows the whole globe instead of a mild zoom: a fit below that zoom lands at k = 1.
+    const fitPoints = (pts, { ms = 900, maxK: cap = maxK, padPx = 60, snap = 0 } = {}) => {
       let c = pts.length > 1 ? d3.geoCentroid({ type: "MultiPoint", coordinates: pts }) : pts[0];
       if (!isFinite(c[0]) || !isFinite(c[1])) c = pts[0];
+      if (flat) {
+        // Measure the spread on a map centred on the places, so a group either side of the date line stays together.
+        flat0.rotate([-c[0], 0]);
+        const ps = pts.map((p) => flat0(p)), xs = ps.map((p) => p[0]), ys = ps.map((p) => p[1]);
+        setFlatRot();
+        const x0 = Math.min(...xs), x1 = Math.max(...xs), y0 = Math.min(...ys), y1 = Math.max(...ys);
+        let k = Math.min(cap, (W - 2 * padPx) / Math.max(x1 - x0, 1), (h - 2 * Math.min(padPx, h / 4)) / Math.max(y1 - y0, 1));
+        if (k < snap) k = 1;
+        flyTo({ at: [c[0], (y0 + y1) / 2], k: Math.max(1, k) }, ms);
+        return;
+      }
       const far = Math.max(0, ...pts.map((p) => d3.geoDistance(p, c)));
       const room = Math.min(W, H) / 2 - padPx;
-      const k = far > 1.2 ? 1 : Math.min(cap, room / (R0 * Math.max(Math.sin(far), 0.02)));
+      let k = far > 1.2 ? 1 : Math.min(cap, room / (R0 * Math.max(Math.sin(far), 0.02)));
+      if (k < snap) k = 1;
       flyTo({ lon: c[0], lat: c[1], k: Math.max(1, k) }, ms);
     };
     // Slow idle turn that shows the globe has a far side. Pauses under the pointer and ends at the first interaction.
@@ -544,7 +555,7 @@
       const k0 = view.k, k1 = clampK(k0 * f);
       if (k1 === k0) return;
       view.k = k1;
-      if (flat) { fv.x += (px - cx) * (1 / k0 - 1 / k1); fv.y += (py - h / 2) * (1 / k0 - 1 / k1); }
+      if (flat) { view.lon += (((px - cx) * (1 / k0 - 1 / k1)) / FX) * DEG; fv.y += (py - h / 2) * (1 / k0 - 1 / k1); }
       else { R = R0 * k1; const g = k1 / k0; nudge((px - cx) * (1 - g), (py - gy) * (1 - g)); }
       clampView();
     };
@@ -657,17 +668,15 @@
       el("button", { type: "button", class: "seg-btn", title, "aria-label": title, "data-mode": mode, onclick: () => setMapMode(mode) }, text));
     const applyMode = (mode) => {
       stopMotion();
-      flat = mode === "flat"; h = flat ? HF : H;
+      flat = mode === "flat";
       path.projection(flat ? flatProj : proj);
-      svg.setAttribute("viewBox", `0 0 ${W} ${h}`);
-      stage.style.setProperty("--ar", `${W}/${h}`);
+      sizeFrame();
       svg.classList.toggle("is-flat", flat); stage.classList.toggle("is-flat", flat);
       svg.setAttribute("aria-label", `${label} ${flat ? "Drag to move it" : "Drag to turn it"}, or use the arrow keys; plus and minus zoom.`);
       hintEl.textContent = `${flat ? "Drag to move the map" : "Drag to turn the globe"}. Click it, or hold ⌘/Ctrl, to zoom with scroll.`;
       for (const b of modeBtns) b.setAttribute("aria-pressed", String(b.dataset.mode === mode));
       // Carry the place being looked at across: the middle of the flat map is where the globe was facing.
-      const at = flat0([view.lon, view.lat]);
-      if (flat && at && isFinite(at[0]) && isFinite(at[1])) { fv.x = at[0]; fv.y = at[1]; }
+      if (flat) fv.y = flatY(view.lat);
       clampView();
     };
 
@@ -689,12 +698,21 @@
     };
     // Full view: the browser's full-screen mode where it exists, otherwise a fixed overlay. Escape leaves either.
     const isFull = () => document.fullscreenElement === stage || stage.classList.contains("is-max");
+    // The frame's height: the globe's own, or for the flat map its natural band, stretched to fill the screen in full view.
+    const sizeFrame = () => {
+      h = flat ? (isFull() ? Math.max(HF, Math.round((W * window.innerHeight) / Math.max(1, window.innerWidth))) : HF) : H;
+      flatProj.clipExtent([[-2, -2], [W + 2, h + 2]]);
+      svg.setAttribute("viewBox", `0 0 ${W} ${h}`);
+      stage.style.setProperty("--ar", `${W}/${h}`);
+      if (flat) clampView();
+    };
+    window.addEventListener("resize", () => { if (flat && isFull() && svg.isConnected) { sizeFrame(); invalidate(); } });
     const syncFull = () => {
       const on = isFull();
-      fullBtn.setAttribute("aria-label", on ? "Exit full view" : "Full view"); fullBtn.title = on ? "Exit full view" : "Full view"; fullBtn.textContent = on ? "⤡" : "⤢";
+      fullBtn.setAttribute("aria-label", on ? "Exit full view" : "Full view"); fullBtn.title = on ? "Exit full view" : "Full view"; fullBtn.replaceChildren(icon(on ? "exit" : "full"));
       // Only the full-screen element is shown, so the shared tooltip moves inside it while the map is in full view.
       if (on) stage.append(tip); else if (tip.parentNode === stage) document.body.append(tip);
-      invalidate();
+      sizeFrame(); invalidate();
     };
     const overlay = (on) => { stage.classList.toggle("is-max", on); syncFull(); };
     api.toggleFull = () => {
@@ -703,7 +721,7 @@
       else if (stage.requestFullscreen) stage.requestFullscreen().then(syncFull, () => overlay(true));
       else overlay(true);
     };
-    const fullBtn = el("button", { type: "button", class: "zoom-full", "aria-label": "Full view", title: "Full view", onclick: () => api.toggleFull() }, "⤢");
+    const fullBtn = el("button", { type: "button", class: "zoom-full", "aria-label": "Full view", title: "Full view", onclick: () => api.toggleFull() }, icon("full"));
     document.addEventListener("fullscreenchange", syncFull);
     stage.addEventListener("keydown", (e) => { if (e.key === "Escape" && stage.classList.contains("is-max")) overlay(false); });
     const ctrl = zoomControls(api);
@@ -726,11 +744,20 @@
     }
     return null;
   }
+  // Map control icons: simple strokes drawn at the button's size, so they stay crisp and readable.
+  const ICONS = {
+    plus: "M10 4v12M4 10h12",
+    minus: "M4 10h12",
+    reset: "M15.5 10a5.5 5.5 0 1 1-1.6-3.9M15.5 3.5v3.3h-3.3",
+    full: "M11.5 4h4.5v4.5M8.5 16H4v-4.5M16 4l-5 5M4 16l5-5",
+    exit: "M9 4v5H4M11 16v-5h5M9 9L4 4M11 11l5 5",
+  };
+  const icon = (name) => s("svg", { viewBox: "0 0 20 20", width: 20, height: 20, fill: "none", stroke: "currentColor", "stroke-width": 2, "stroke-linecap": "round", "stroke-linejoin": "round", "aria-hidden": "true" }, s("path", { d: ICONS[name] }));
   function zoomControls(zoom) {
     return el("div", { class: "zoom-ctrl", role: "group", "aria-label": "Map zoom" },
-      el("button", { type: "button", "aria-label": "Zoom in", title: "Zoom in", onclick: () => zoom.zoomIn() }, "+"),
-      el("button", { type: "button", "aria-label": "Zoom out", title: "Zoom out", onclick: () => zoom.zoomOut() }, "−"),
-      el("button", { type: "button", "aria-label": "Reset view", title: "Reset view", class: "zoom-reset", onclick: () => zoom.reset() }, "⟲"));
+      el("button", { type: "button", "aria-label": "Zoom in", title: "Zoom in", onclick: () => zoom.zoomIn() }, icon("plus")),
+      el("button", { type: "button", "aria-label": "Zoom out", title: "Zoom out", onclick: () => zoom.zoomOut() }, icon("minus")),
+      el("button", { type: "button", "aria-label": "Reset view", title: "Reset view", class: "zoom-reset", onclick: () => zoom.reset() }, icon("reset")));
   }
 
   function worldMap() {
@@ -1484,11 +1511,12 @@
     };
 
     // ---- map
-    const sq = narrowScreen(), W = sq ? 420 : 960, H = sq ? 420 : 560;
+    // Room above and below the sphere so the routes that rise off it are not clipped.
+    const sq = narrowScreen(), W = sq ? 440 : 960, H = sq ? 440 : 700;
     const START = { lon: 20, lat: 25, k: 1 };
     const mapCard = el("div", { class: "card cx-map" });
     let paint = () => {};
-    const globe = createGlobe({ W, H, maxK: 8, cls: "collab-map", view0: START, onUser: () => pause(),
+    const globe = createGlobe({ W, H, pad: sq ? 58 : 78, maxK: 8, cls: "collab-map", view0: START, onUser: () => pause(),
       home: (g) => { const c = byCid.get(st.sel); if (c) fit(c, 600); else g.flyTo(START, 600); },
       label: `Map of ${all.length} AI agreements between countries. The selected agreement is drawn brightly and its countries are shaded.` });
     if (!globe) mapCard.append(el("p", { class: "muted" }, "Map libraries failed to load."));
@@ -1591,7 +1619,7 @@
     const fit = (c, ms = 1800) => {
       if (!globe || !c) return;
       const pts = partiesOf(c).map((p) => p.geo);
-      globe.fitPoints(pts, { ms, maxK: pts.length > 1 ? 3.4 : 2.6, padPx: sq ? 56 : 100 });
+      globe.fitPoints(pts, { ms, maxK: pts.length > 1 ? 3.4 : 2.6, padPx: sq ? 56 : 100, snap: 2 });
     };
 
     // ---- tour controls (over the map) and the detail panel
@@ -1701,7 +1729,7 @@
     }
     search.addEventListener("input", () => { st.q = search.value; refresh(true); });
 
-    const stage = el("div", { class: "cx-main" }, el("div", { class: "cx-mapwrap" }, mapCard, tour), detail);
+    const stage = el("div", { class: "cx-main" }, el("div", { class: "cx-mapwrap" }, mapCard), detail);
     // Hovering the map or the details pauses the tour so they can be read.
     stage.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") st.hold = true; });
     stage.addEventListener("pointerleave", () => { st.hold = false; });
@@ -1713,7 +1741,7 @@
     else play();
 
     view.replaceChildren(
-      pageHead("Collaborations", "AI agreements between governments"),
+      Object.assign(pageHead("Collaborations", "AI agreements between governments"), { className: "page-head is-small" }),
       el("section", { class: "cx" },
         el("div", { class: "cx-side card" }, el("div", { class: "cx-side-in" }, search, status, rows)),
         stage),
