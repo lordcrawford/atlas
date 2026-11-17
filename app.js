@@ -254,6 +254,9 @@
       let r = 0;
       d3.geoStream(f, { point(x, y) { r = Math.max(r, d3.geoDistance(c, [x, y])); }, lineStart: noop, lineEnd: noop, polygonStart: noop, polygonEnd: noop, sphere: noop });
       f.cap = { c, r };
+      // Where a name label sits: the middle of the country's largest part, so Alaska does not pull "United States" out to sea.
+      const parts = f.geometry.type === "MultiPolygon" ? f.geometry.coordinates.map((co) => ({ type: "Polygon", coordinates: co })) : [f.geometry];
+      f.lab = d3.geoCentroid(parts.reduce((a, b) => (d3.geoArea(b) > d3.geoArea(a) ? b : a)));
     }
     WORLD = fc;
     return WORLD;
@@ -277,7 +280,7 @@
     try { localStorage.setItem("wv-mapmode", MAP_MODE); } catch {}
     for (const m of MAPS) { if (m.svg.isConnected) m.setMode(MAP_MODE); else MAPS.delete(m); }
   }
-  function createGlobe({ W, H, label, pad = 16, minK = 1, maxK = 10, view0, home, onUser, cls = "", fills, flatH, modeSwitch = true }) {
+  function createGlobe({ W, H, label, pad = 16, minK = 1, maxK = 10, view0, home, onUser, cls = "", fills, flatH, modeSwitch = true, labels = true }) {
     const world = worldFeatures();
     if (!world) return null;
     if (!GRATICULE) GRATICULE = d3.geoGraticule10();
@@ -317,7 +320,7 @@
     // colour, a CSS variable, or "@on" / "@home" for the two highlight styles.
     const shapes = world.features.map((f) => { const a = (fills && fills(f)) || {}; return { f, id: a.id || null, fill: a.fill || null }; });
     const byIso = new Map(shapes.map((sh) => [sh.f.id, sh]));
-    let outlined = null;
+    let outlined = null, skipLabels = new Set();
     // Canvas cannot read CSS variables, so colours are looked up from the page once per map. Maps are rebuilt
     // when the theme changes, which refreshes them.
     let theme = null;
@@ -327,7 +330,7 @@
       const alpha = (c, a) => `rgba(${rgb(c).join(",")},${a})`, mix = (a, b, w) => { const x = rgb(a), y = rgb(b); return `rgb(${x.map((q, i) => Math.round(q * w + y[i] * (1 - w))).join(",")})`; };
       const num = (name) => parseFloat(v(name)) || 0;
       theme = { v, alpha, land: v("--land"), stroke: v("--land-stroke"), ink: v("--ink"), accent: v("--accent"), grat: v("--globe-grat"),
-        on: mix(v("--accent"), v("--land"), 0.38), seaLit: v("--globe-sea-lit"), seaShade: v("--globe-sea-shade"),
+        on: mix(v("--accent"), v("--land"), 0.38), seaLit: v("--globe-sea-lit"), seaShade: v("--globe-sea-shade"), ink2: v("--ink-2"), halo: v("--page"),
         glow: v("--globe-glow"), glowA: num("--globe-glow-a"), limb: v("--globe-limb"), limbA: num("--globe-limb-a"),
         hl: v("--globe-hl"), hlA: num("--globe-hl-a"), shadowA: num("--globe-shadow-a"), vars: new Map() };
     };
@@ -385,6 +388,24 @@
         ctx.strokeStyle = special ? theme.accent : theme.stroke; ctx.lineWidth = special ? 1 : 0.6; ctx.stroke();
       }
       if (outlined) { ctx.beginPath(); path(outlined.f); ctx.strokeStyle = theme.ink; ctx.lineWidth = 1.5; ctx.stroke(); }
+      // Country names appear as the map zooms in, largest countries first, and never on the far side.
+      if (labels) {
+        const fade = Math.max(0, Math.min(1, (view.k - 1.5) / 0.9));
+        if (fade > 0.02) {
+          ctx.font = "600 11px Raleway, system-ui, sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.lineWidth = 3;
+          for (const sh of seen) {
+            const name = sh.f.properties && sh.f.properties.name;
+            if (!name || skipLabels.has(sh.f.id)) continue;
+            const across = sh.f.cap.r * (flat ? s0 * view.k * 0.87 : R) * 2;
+            const a = fade * Math.max(0, Math.min(1, (across - 26) / 30));
+            if (a < 0.05) continue;
+            const p = point(sh.f.lab);
+            if (p.z <= 0.1 || p.x < 0 || p.x > W || p.y < 0 || p.y > h) continue;
+            ctx.globalAlpha = a; ctx.strokeStyle = theme.halo; ctx.strokeText(name, p.x, p.y); ctx.fillStyle = theme.ink2; ctx.fillText(name, p.x, p.y);
+          }
+          ctx.globalAlpha = 1;
+        }
+      }
       if (!flat) {
         // Shading towards the edge and a highlight from the upper left make the disc read as a sphere.
         disc(cx, gy, R, radial(cx, gy, R, [[0.58, theme.alpha(theme.limb, 0)], [0.86, theme.alpha(theme.limb, theme.limbA * 0.32)], [1, theme.alpha(theme.limb, theme.limbA)]]));
@@ -690,6 +711,8 @@
       onSettle: (fn) => settleFns.push(fn),
       // Recolour one country (by its ISO number) or outline one (by its `fills` id); both redraw on the next frame.
       setFill: (iso, fill) => { const sh = byIso.get(iso); if (sh && sh.fill !== (fill || null)) { sh.fill = fill || null; invalidate(); } },
+      // Countries whose name the caller already shows (by ISO number) get no canvas label.
+      skipLabels: (isos) => { skipLabels = new Set(isos); invalidate(); },
       setOutline: (id) => { const sh = id ? shapes.find((x) => x.id === id) : null; if (sh !== outlined) { outlined = sh || null; invalidate(); } },
       wasDrag: () => moved > 5,
       zoomIn: () => { user(); zoomBy(1.6); },
@@ -915,7 +938,7 @@
   function locatorMap(n) {
     const size = 260;
     const frame = (g, ms) => g.flyTo(g.flat ? { lon: n.geo[0], lat: n.geo[1], k: 3 } : { lon: n.geo[0], lat: n.geo[1] * 0.7, k: 1 }, ms);
-    const globe = createGlobe({ W: size, H: size, flatH: 176, pad: 24, maxK: 16, cls: "locator-globe", modeSwitch: false,
+    const globe = createGlobe({ W: size, H: size, flatH: 176, pad: 24, maxK: 16, cls: "locator-globe", modeSwitch: false, labels: false,
       view0: { lon: n.geo[0], lat: n.geo[1] * 0.7, k: 1 }, home: (g) => frame(g, 400),
       label: `Map showing where ${n.name} is.`, fills: (f) => (f.id === n.isoN ? { fill: "@home" } : null) });
     if (!globe) return null;
@@ -1536,6 +1559,7 @@
       const faint = {};
       for (const kind of ["bilateral", "group"]) for (const out of [false, true]) lineLayer.append(faint[kind + out] = s("path", { class: `collab-line ${kind}${out ? " is-out" : ""}` }));
       const segs = [];
+      let hoverSeg = null; // the route under the pointer keeps its hit shape current while the map moves
       for (const c of all) {
         const pairs = c.kind === "bilateral" ? [[c.a, c.b]] : c.members.map((m) => [c.hub, m]);
         for (const [k1, k2] of pairs) {
@@ -1543,9 +1567,11 @@
           if (!a || !b) continue;
           const hit = s("path", { class: "collab-hit", "data-id": c.id });
           hit.addEventListener("pointermove", (e) => { if (!globe.svg.classList.contains("is-dragging")) showTip(e, [el("div", { class: "tv" }, c.short || c.title), el("div", { class: "tl" }, partiesOf(c).map((p) => p.name).join(c.kind === "bilateral" ? " ⟷ " : ", ")), el("div", { class: "tl small", style: "margin-top:4px" }, "Click for details")]); });
-          hit.addEventListener("pointerleave", hideTip);
+          hit.addEventListener("pointerleave", () => { hideTip(); if (hoverSeg && hoverSeg.hit === hit) hoverSeg = null; });
           hitLayer.append(hit);
-          segs.push({ c, hit, d: "", out: false, samples: globe.arcSamples(a.geo, b.geo, c.kind === "bilateral" ? 1 : 0.75) });
+          const seg = { c, hit, d: "", out: false, samples: globe.arcSamples(a.geo, b.geo, c.kind === "bilateral" ? 1 : 0.75) };
+          hit.addEventListener("pointerenter", () => { hoverSeg = seg; });
+          segs.push(seg);
         }
       }
       // A dot for every country or body with an agreement, sized by how many it has.
@@ -1567,6 +1593,7 @@
         for (const sg of segs) { sg.d = globe.arcPath(sg.samples); merged[sg.c.kind + sg.out] += sg.d; }
         for (const k in merged) faint[k].setAttribute("d", merged[k]);
         for (const o of onLines) { o.glow.setAttribute("d", o.seg.d); o.line.setAttribute("d", o.seg.d); }
+        if (hoverSeg) hoverSeg.hit.setAttribute("d", hoverSeg.d);
         for (const d of dots) {
           const p = globe.point(d.p.geo), on = p.z > 0.02;
           d.g.style.display = on ? "" : "none";
@@ -1625,6 +1652,7 @@
         const lit = new Set(c ? collabParties(c) : []);
         // Name every country in the selected agreement; for large groups only the host.
         const named = new Set(c ? (lit.size <= 6 ? lit : [c.hub]) : []);
+        globe.skipLabels([...named].map((k) => (byId(k) || PLACES[k] || {}).isoN).filter(Boolean));
         for (const d of dots) {
           d.lit = lit.has(d.k); d.named = named.has(d.k); d.out = !shownKeys.has(d.k);
           d.g.classList.toggle("is-lit", d.lit);
