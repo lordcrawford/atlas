@@ -1712,7 +1712,6 @@
     if (linked) requestAnimationFrame(() => markRow(true));
     else play();
 
-    const nBil = all.filter((c) => c.kind === "bilateral").length;
     view.replaceChildren(
       pageHead("Collaborations", "AI agreements between governments"),
       el("section", { class: "cx" },
