@@ -997,12 +997,21 @@
       pic.addEventListener("error", () => { pic.remove(); credit.remove(); });
       media.append(pic);
     }
+    // Grid cards show the first few lines so a row of cards stays level; "Read more" opens the rest and the note.
+    const long = !lead && (item.summary.length > 190 || !!item.note);
+    const sum = el("p", { class: "nw-sum" + (long ? " is-clamped" : "") }, item.summary);
+    const note = item.note ? el("p", { class: "note", hidden: long }, item.note) : null;
+    const more = long ? el("button", { type: "button", class: "nw-read", "aria-expanded": "false", onclick: () => {
+      const open = more.getAttribute("aria-expanded") !== "true";
+      more.setAttribute("aria-expanded", String(open)); more.textContent = open ? "Show less" : "Read more";
+      sum.classList.toggle("is-clamped", !open); if (note) note.hidden = !open;
+    } }, "Read more") : null;
     const text = el("div", { class: "nw-text" },
       el("div", { class: "nw-meta" }, showCountry ? [el("a", { href: `#${n.id}` }, `${n.flag} ${n.name}`), el("span", { "aria-hidden": "true" }, "·")] : null, el("time", {}, fmtDate(item.date))),
       el("h3", { class: "nw-title" }, item.title),
-      el("p", { class: "nw-sum" }, item.summary),
+      sum,
       why && why.length ? el("p", { class: "news-why" }, why.join(" · ")) : null,
-      item.note ? el("p", { class: "note" }, item.note) : null,
+      note, more,
       el("div", { class: "nw-foot" }, el("div", { class: "fact-meta" }, badge(item.level, item.sources.length), sourceChips(item.sources)), itemActions(newsKey(item, n), newsSnap(item, n))));
     return el("article", { class: "nw-card" + (lead ? " nw-lead" : "") }, el("div", { class: "nw-pic" }, media, credit), text);
   }
