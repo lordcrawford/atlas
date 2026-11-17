@@ -518,7 +518,9 @@ a.cx-row { text-decoration: none; color: var(--ink); }
 .cx-mapwrap { position: relative; }
 .cx-map { padding: 0; background: none; border: 0; box-shadow: none; border-radius: 0; }
 /* The home-page globe sits on the page itself, with no box around it; the flat map keeps its sea. */
-.cx-map .globe-stage:not(.is-flat):not(:fullscreen):not(.is-max) { background: none; border-radius: 0; overflow: visible; }
+.cx-map .globe-stage:not(.is-flat) { background: none; border-radius: 0; overflow: visible; }
+.cx-map .globe-stage:fullscreen { background: var(--page); overflow: hidden; }
+.cx-map .globe-stage.is-max { background: var(--page); overflow: hidden; }
 .cx-tour { position: absolute; left: 10px; top: 10px; display: flex; align-items: center; gap: 4px; padding: 4px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); box-shadow: var(--shadow); overflow: hidden; }
 .cx-count { font-size: 12.5px; font-weight: 650; color: var(--ink-2); padding: 0 6px; min-width: 58px; }
 .cx-progress { position: absolute; left: 0; right: 0; bottom: 0; height: 2px; }
