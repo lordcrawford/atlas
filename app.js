@@ -1519,7 +1519,7 @@
     const byCid = new Map(all.map((c) => [c.id, c]));
     // A link to one agreement (#collab/<id>) opens it with the tour paused.
     const linked = byCid.has(initialId);
-    const st = { q: "", year: "", country: "", region: "", kind: "", sel: linked ? initialId : all[0] && all[0].id, playing: !linked, hold: false };
+    const st = { q: "", year: "", country: "", region: "", kind: "", sel: linked ? initialId : all[0] && all[0].id, playing: false, hold: false };
     const filtersOn = () => !!(st.q.trim() || st.year || st.country || st.region || st.kind);
     const regionsOf = (c) => collabParties(c).map((k) => byId(k)).filter(Boolean).map((n) => n.group);
     const counts = new Map();
@@ -1835,11 +1835,11 @@
     drawList();
     update(false);
     fit(byCid.get(st.sel), 0);
+    // The map waits on the first agreement; nothing cycles unless asked.
     if (linked) requestAnimationFrame(() => markRow(true));
-    else play();
 
     view.replaceChildren(
-      Object.assign(pageHead("Collaborations", "AI agreements between governments"), { className: "page-head is-small" }),
+      pageHead("Collaborations", "AI agreements between governments"),
       filters,
       el("section", { class: "cx" },
         el("div", { class: "cx-side card" }, el("div", { class: "cx-side-in" }, search, status, rows)),
