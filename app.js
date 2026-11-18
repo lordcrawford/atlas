@@ -234,7 +234,7 @@
               : el("span", {}, b.text, b.source ? [" ", el("a", { class: "src", href: b.source.u, target: "_blank", rel: "noopener noreferrer", title: b.source.t }, domain(b.source.u), " ↗")] : null)))) : null));
     };
     return [el("section", { class: "section" },
-      sectionHead("Governance model", `How Atlas codes ${n.name}'s approach so it can be compared with other nations. Each code is an editorial reading of the sourced facts it lists; the rules are in Method.`),
+      sectionHead("Governance model"),
       el("div", { class: "card gm" }, MODEL_FIELDS.map(row)))];
   }
 
@@ -884,7 +884,7 @@
           shown.some((n) => !n.oxford) ? el("span", {}, el("i", { style: "background:var(--na)" }), "Not ranked") : null],
       el("span", {}, el("i", { style: "background:var(--land)" }), "Not covered"));
     box.append(
-      el("div", { class: "map-head" }, el("span", { class: "muted small" }, field ? `${field.label}: ${field.q}` : `Shaded by ${metric.label} (Oxford Insights 2025)`), legend),
+      el("div", { class: "map-head" }, field ? el("span", { class: "muted small" }, `${field.label}: ${field.q}`) : el("span", {}), legend),
       globe.node);
     const order = (n) => field.values.findIndex((val) => val.v === codeOf(n, field.key).v);
     box.append(el("div", { class: "chart-foot" },
@@ -974,7 +974,7 @@
     return el("header", { class: "page-head" }, el("h1", {}, title), lede ? el("p", { class: "lede" }, lede) : null);
   }
   // The preview image one of a news item's sources publishes for link previews (data/news-images.js). It is
-  // loaded from that site, never copied here, and credited under the picture.
+  // loaded from that site and never copied here; the picture links back to that page.
   // `used` holds the pictures already shown in the same list, so one picture never appears on two cards.
   function newsImage(item, used) {
     const map = D.images || {};
@@ -990,12 +990,11 @@
     const img = newsImage(item, used), to = (img ? img.src : item.sources[0]).u;
     const media = el("a", { class: "nw-media", href: to, target: "_blank", rel: "noopener noreferrer", tabindex: "-1", "aria-hidden": "true" },
       el("span", { class: "nw-plate" }, el("span", {}, n.flag)));
-    let credit = null;
     if (img) {
       const pic = el("img", { src: img.url, alt: "", loading: lead ? "eager" : "lazy", decoding: "async", referrerpolicy: "no-referrer" });
-      credit = el("p", { class: "nw-credit" }, "Image: ", el("a", { href: img.src.u, target: "_blank", rel: "noopener noreferrer" }, domain(img.src.u)));
       // A picture that fails to load (moved, or blocked from other sites) falls back to the flag plate.
-      pic.addEventListener("error", () => { pic.remove(); credit.remove(); });
+      // The picture links to the page it came from, so no separate credit line is shown.
+      pic.addEventListener("error", () => pic.remove());
       media.append(pic);
     }
     // Grid cards show the first few lines so a row of cards stays level; "Read more" opens the rest and the note.
@@ -1014,7 +1013,7 @@
       why && why.length ? el("p", { class: "news-why" }, why.join(" · ")) : null,
       note, more,
       el("div", { class: "nw-foot" }, el("div", { class: "fact-meta" }, badge(item.level, item.sources.length), sourceChips(item.sources)), itemActions(newsKey(item, n), newsSnap(item, n))));
-    return el("article", { class: "nw-card" + (lead ? " nw-lead" : "") }, el("div", { class: "nw-pic" }, media, credit), text);
+    return el("article", { class: "nw-card" + (lead ? " nw-lead" : "") }, el("div", { class: "nw-pic" }, media), text);
   }
   function sectionHead(title, sub) {
     return el("div", { class: "section-head" }, el("h2", {}, title), sub ? el("p", {}, sub) : null);
@@ -1038,7 +1037,6 @@
       box.replaceChildren(build(open ? Infinity : limit));
       if (!collapsible) return;
       box.append(el("div", { class: "show-more-row" },
-        open ? null : el("span", { class: "show-more-hint" }, `Showing the top ${limit} of ${total}${hint ? ` ${hint}` : ""}.`),
         el("button", { class: "show-more", type: "button", "aria-expanded": String(open), onclick: () => {
           open = !open; draw();
           if (!open) box.scrollIntoView({ block: "nearest" });
@@ -1100,7 +1098,7 @@
           el("div", { class: "card" }, shadeRow,
             el("div", { class: "filter-bar map-region" }, el("span", { class: "filter-label" }, "Region"), regionFilter(drawBody)),
             mapSlot,
-            el("p", { class: "note" }, "Singapore, Malta, Bahrain, Mauritius and other small states are too small to draw as shapes, so every country is also marked with a dot at its capital. Use 'Show as table' to see all of them at once."))),
+            )),
         dataSources(),
       ]);
     };
@@ -1125,7 +1123,7 @@
     return el("section", { class: "section" },
       sectionHead("Where to find the wider data"),
       el("ul", { class: "card ds-list" },
-        item("Oxford Insights · Government AI Readiness Index", "Readiness scores and pillar breakdowns for 195 governments. Source of the rank in the table.",
+        item("Oxford Insights · Government AI Readiness Index", "Readiness scores and pillar breakdowns for 195 governments.",
           link("Index page", "https://oxfordinsights.com/ai-readiness/government-ai-readiness-index-2025/"), link("2025 report (PDF)", S.oxford.u)),
         item("Microsoft AI Economy Institute · AI Diffusion reports", "Estimated share of working-age people using generative AI, by country, updated quarterly.",
           link("Reports", "https://www.microsoft.com/en-us/corporate-responsibility/topics/ai-economy-institute/"), link("H2 2025 report (PDF)", S.msH2.u)),
@@ -1153,7 +1151,7 @@
           itemActions(docKey(d, n), docSnap(d, n)))))
       : el("p", { class: "muted" }, "No official AI strategy or AI law document is listed for this nation yet.");
     return el("section", { class: "section" },
-      sectionHead("Key documents", docs.length ? `The ${docs.length === 1 ? "document" : "two documents"} to read first on ${n.name}'s approach to AI.` : "Official strategies and laws, when there are any."),
+      sectionHead("Key documents"),
       el("div", { class: "card" }, body));
   }
   // `focus` is the part of the address after the nation, e.g. "f3" in #sg/f3: open on that fact and mark it.
@@ -1211,15 +1209,15 @@
       ...modelCard(n),
       keyDocuments(n),
       ...(n.oxford ? [el("section", { class: "section" },
-        sectionHead("Readiness profile", `Oxford Insights 2025 pillar scores vs the median of the ${nRanked} nations here that it ranks.`),
+        sectionHead("Readiness profile", "Oxford Insights 2025, against the median of nations here."),
         el("div", { class: "card" }, pillarBars(n)))] : []),
       ...nationPartners(n),
       el("section", { class: "section" },
-        sectionHead("Policy & governance facts", `Newest first. ${n.facts.filter(isRecent).length} since 2024, plus earlier background on request.`),
+        sectionHead("Policy & governance facts"),
         filterRow,
         el("div", { class: "card" }, list)),
       el("section", { class: "section" },
-        sectionHead("Recent news", "Since 2024, newest first."),
+        sectionHead("Recent news"),
         (() => {
           const items = [...n.news].filter(isRecent).sort(byDateDesc);
           const used = new Set();
@@ -1334,7 +1332,7 @@
     if (!NEWS_SORTS.some(([k]) => k === state.newsSort)) state.newsSort = "newest";
     const grid = el("div", { class: "nw-grid" }), more = el("div", { class: "nw-more" });
     const sortSeg = el("div", { class: "seg", role: "group", "aria-label": "Sort the news" });
-    const themeRow = el("div", { class: "nw-themes" }), count = el("span", { class: "nw-count" }), sortNote = el("p", { class: "muted small nw-sortnote" });
+    const themeRow = el("div", { class: "nw-themes" }), count = el("span", { class: "nw-count" });
     const select = el("select", { class: "select", "aria-label": "Filter by nation" });
     const levelSel = el("select", { class: "select", "aria-label": "Filter by number of sources" },
       [["all", "Any number of sources"], ...["verified", "corroborated", "single"].map((k) => [k, LEVELS[k].label])].map(([k, lab]) => el("option", { value: k }, lab)));
@@ -1345,9 +1343,6 @@
       select.replaceChildren(...opts.map(([k, lab]) => el("option", { value: k, selected: k === nation }, lab)));
       sortSeg.replaceChildren(...NEWS_SORTS.map(([k, lab]) =>
         el("button", { class: "seg-btn", type: "button", "aria-pressed": String(state.newsSort === k), onclick: () => { state.newsSort = k; theme = null; draw(); } }, lab)));
-      sortNote.textContent = state.newsSort === "relevance" ? "Relevance combines how much an item is trending, its likely impact and how insightful it is, worked out from its text, sources and date. There is no click or popularity data. Each card says why it ranked; the rules are in Method." : "";
-      sortNote.textContent = `Items confirmed by 2 or more sources are listed first, then items with 1 source. ${sortNote.textContent}`.trim();
-      sortNote.hidden = false;
       const pool = items.filter(({ x, n }) => inRegion(n) && (nation === "all" || n.id === nation) && (level === "all" || x.level === level));
       const ranked = rankNews(pool, state.newsSort);
       const themeRe = theme ? NEWS_THEMES.find(([name]) => name === theme)[1] : null;
@@ -1369,7 +1364,7 @@
       pageHead("News", "Latest developments"),
       el("div", { class: "filter-bar nw-region" }, el("span", { class: "filter-label" }, "Region"), regionFilter(() => draw())),
       el("div", { class: "nw-controls" }, sortSeg, select, levelSel, count),
-      sortNote, themeRow, grid, more);
+      themeRow, grid, more);
   }
 
   // ---------------------------------------------------------------- collaborations (country to country)
@@ -1467,11 +1462,8 @@
     if (!list.length) return [];
     const links = collabLinks(n, list);
     const twoWay = [...new Map(list.filter((c) => c.kind === "bilateral").map((c) => { const k = c.a === n.id ? c.b : c.a; return [k, party(k)]; })).values()].filter(Boolean);
-    const groups = list.filter((c) => c.kind === "group");
-    const nBil = list.length - groups.length;
-    const parts = [nBil ? `${nBil} two-country deal${nBil > 1 ? "s" : ""}` : null, groups.length ? `${groups.length} group${groups.length > 1 ? "s" : ""}` : null].filter(Boolean).join(" and ");
     return [el("section", { class: "section" },
-      sectionHead("AI partners", `${list.length} agreement${list.length > 1 ? "s" : ""} with other governments: ${parts}. Open one to see it on the Collaborations map.`),
+      sectionHead("AI partners"),
       el("div", { class: "card np" },
         partnerMap(n, links),
         el("div", { class: "np-side" },
@@ -1663,7 +1655,6 @@
           el("div", { class: "fact-meta" }, badge(c.level, c.sources.length), sourceChips(c.sources)),
         ] : [el("p", { class: "muted" }, "No agreements match the search.")]),
         ...(others.length ? [
-          el("p", { class: "muted small cx-fullmore" }, `${list.length} agreement${list.length > 1 ? "s" : ""} shown`),
           el("div", { class: "cx-fulllist" }, others.map((x) => el("button", { type: "button", class: "cx-fullrow", onclick: () => select(x.id, true) }, el("span", { class: "cx-fullrow-t" }, x.short || x.title), el("span", { class: "muted small" }, fmtDate(x.date))))),
         ] : []));
     };
@@ -1701,7 +1692,7 @@
     const drawList = () => {
       const list = shownList();
       const k = exactKey();
-      status.textContent = !filtersOn() ? `${all.length} agreements, newest first` : k ? `${list.length} involving ${party(k).name}` : st.q.trim() ? `${list.length} matching “${st.q.trim()}”` : `${list.length} of ${all.length} agreements`;
+      status.textContent = !filtersOn() ? "" : k ? `${list.length} involving ${party(k).name}` : st.q.trim() ? `${list.length} matching “${st.q.trim()}”` : `${list.length} of ${all.length} agreements`;
       let year = null;
       const out = [];
       for (const c of list) {
@@ -1709,7 +1700,7 @@
         if (y !== year) { year = y; out.push(el("div", { class: "cx-year", role: "presentation" }, y)); }
         out.push(row(c));
       }
-      rows.replaceChildren(...(out.length ? out : [el("p", { class: "muted small cx-empty" }, "No agreements match. Try a country such as Singapore or Estonia.")]));
+      rows.replaceChildren(...(out.length ? out : [el("p", { class: "muted small cx-empty" }, "No agreements match.")]));
     };
     const markRow = (scroll) => {
       rows.querySelectorAll(".cx-row").forEach((n) => { const on = n.dataset.id === st.sel; n.classList.toggle("is-on", on); n.setAttribute("aria-selected", String(on)); });
@@ -1863,7 +1854,7 @@
     const multi = of("bloc", "multi").map((n) => n.name);
 
     view.replaceChildren(el("article", { class: "findings" },
-      pageHead("Findings", "What the data shows", `Six claims about how ${total} countries outside the AI frontier govern AI, each counted from the facts on this site.`),
+      pageHead("Findings", "What the data shows"),
       el("p", { class: "note fd-note" }, "Each nation is coded on four questions: what leads its AI policy, where its rules come from, where its compute comes from, and which outside power it is tied to. The codes are editorial readings of the sourced facts, the rules are in ", el("a", { href: "#method" }, "Method"), ", and every count below is recalculated from the data. “None on record” means this site has no sourced fact, which is not proof that nothing exists.", SCOPE.pending.length ? ` So far the site covers ${N.length} countries: all ${N.filter((n) => !isLarge(n)).length} with fewer than 15 million people and the ${N.filter(isLarge).length} largest of the rest. ${SCOPE.pending.length} more are still to be added, so these findings lean towards smaller states for now.` : ""),
 
       finding(1, "Few countries outside the frontier write their own AI rules.",
@@ -1915,7 +1906,7 @@
       ["10 Oct 2026", "First full audit. Every cited page fetched, every claim's dates, numbers and names checked against it, every mismatch reviewed by hand. About 50 dead links replaced; unconfirmed figures removed."],
     ];
     view.replaceChildren(el("article", { class: "method" },
-      pageHead("Method", "How this was researched and checked", "What the badges mean, which countries are in, how the governance codes are made, and what to read with care."),
+      pageHead("Method", "How this was researched and checked"),
       el("div", { class: "card sourced" },
         el("div", { class: "hero-figure" }, `${cnt("verified")} of ${claims.length}`),
         el("p", { class: "hero-cap" }, `claims across ${N.length} countries are confirmed by 3 or more independent sources (${srcCount} sources cited in total)`),
@@ -2335,8 +2326,7 @@
         el("button", { class: "acct-close", type: "button", "aria-label": "Close", onclick: () => shut() }, "×"),
         el("div", { class: "acct-head" },
           el("h2", { id: "acctTitle" }, creating ? "Create an account" : resetting ? "Reset your password" : newpw ? "Choose a new password" : "Welcome back"),
-          el("p", { class: "ink2 small" }, resetting ? "We'll email you a link to choose a new password." : newpw ? "Enter it twice to save it."
-            : then ? "Sign in to save items and leave review notes." : "Save agreements, news and documents, and keep review notes.")),
+          resetting ? el("p", { class: "ink2 small" }, "We'll email you a link to choose a new password.") : null),
         resetting || newpw ? null : el("div", { class: "seg acct-tabs", role: "group", "aria-label": "Sign in or create an account" }, tab("signin", "Sign in"), tab("create", "Create account")),
         info ? el("p", { class: "small acct-info", role: "status" }, info) : null,
         email ? field("Email", email) : null,
@@ -2346,7 +2336,7 @@
         submit,
         mode === "signin" ? el("button", { class: "linklike small acct-forgot", type: "button", onclick: () => go("reset") }, "Forgot your password?")
           : resetting ? el("button", { class: "linklike small acct-forgot", type: "button", onclick: () => go("signin") }, "Back to sign in") : null,
-        el("p", { class: "muted small acct-fine" }, "Your saved items and notes are kept in your account, so they follow you to any browser."));
+        null);
       dlg.replaceChildren(form);
       (email && !typedEmail ? email : pw || email).focus();
     };
@@ -2465,7 +2455,7 @@
   // #saved: the profile's saved items and review marks.
   function renderSaved() {
     if (!Store.user()) {
-      view.replaceChildren(pageHead("Your list", "Saved & reviewed", "Sign in to keep a list of agreements, news and documents, and to mark what you have read and vetted or what looks suspicious, with notes."),
+      view.replaceChildren(pageHead("Your list", "Saved & reviewed"),
         el("div", { class: "section acct-actions" },
           el("button", { class: "acct-btn primary", type: "button", onclick: () => accountDialog(null, "create") }, "Create an account"),
           el("button", { class: "acct-btn", type: "button", onclick: () => accountDialog(null, "signin") }, "Sign in")));
@@ -2498,7 +2488,7 @@
     };
     draw();
     view.replaceChildren(
-      pageHead("Your list", "Saved & reviewed", `${Store.displayName()}'s saved items and review notes.`),
+      pageHead("Your list", "Saved & reviewed"),
       body,
       backupPanel());
   }
@@ -2546,8 +2536,8 @@
     backupBox.replaceChildren(...[
       el("h2", {}, "Backups"),
       el("p", { class: "muted small" }, Store.isCloud()
-        ? "Notes are never deleted by the site: edited or cleared notes keep their earlier versions, and restoring always merges with what is here. Your account holds a copy, and this browser keeps another."
-        : "Notes are never deleted by the site: edited or cleared notes keep their earlier versions, and restoring always merges with what is here. Profiles live in this browser, so keep a copy outside it."),
+        ? "Notes are never deleted. Earlier versions are kept, and restores merge."
+        : "Notes are never deleted. Earlier versions are kept, and restores merge. This profile lives only in this browser, so keep a copy."),
       Store.lastError() ? el("p", { class: "small bk-warn" }, Store.lastError()) : null,
       fileRow,
       el("div", { class: "acct-actions" },
