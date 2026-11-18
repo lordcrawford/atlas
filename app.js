@@ -100,12 +100,14 @@
   function badge(level, count) {
     // Counts independent sources (pages from one organisation count once), so it can be lower than the links shown.
     const L = LEVELS[level];
-    return el("span", { class: `badge ${level}`, title: L.desc }, L.label);
+    // The number and the word are split so narrow cards can show the number alone.
+    const [num, ...rest] = L.label.split(" ");
+    return el("span", { class: `badge ${level}`, title: L.desc, "aria-label": L.label }, num, el("span", { class: "badge-word" }, ` ${rest.join(" ")}`));
   }
   function sourceChips(sources) {
     return sources.map((src, i) =>
       el("a", { class: "src", href: src.u, target: "_blank", rel: "noopener noreferrer", title: src.t },
-        el("span", { class: "n" }, `[${i + 1}]`), domain(src.u), " ↗")
+        el("span", { class: "n" }, `[${i + 1}]`), el("span", { class: "d" }, domain(src.u)), el("span", { class: "x", "aria-hidden": "true" }, "↗"))
     );
   }
   function sourceLine(...keys) {

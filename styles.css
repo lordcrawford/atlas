@@ -288,7 +288,12 @@ main.wrap { padding-top: var(--s7); padding-bottom: var(--s8); outline: none; mi
 .fact-date { color: var(--muted); font-size: 12.5px; font-weight: 650; padding-top: 3px; }
 .fact-topic { display: inline-block; color: var(--accent-ink); margin-bottom: 6px; }
 .fact-text { font-size: 15px; line-height: 1.58; max-width: 74ch; }
-.fact-meta { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: var(--s3); }
+/* Badge and sources share one row; long site names shorten with an ellipsis rather than wrapping. */
+.fact-meta { display: flex; flex-wrap: nowrap; gap: 4px; align-items: center; margin-top: var(--s3); min-width: 0; }
+.fact-meta .badge { flex-shrink: 0; }
+.fact-meta .src { flex: 0 1 auto; min-width: 0; }
+.fact-meta .src .x { display: none; }
+.nw-card:not(.nw-lead) .fact-meta .badge-word, .nw-card:not(.nw-lead) .fact-meta .src .n { display: none; }
 .note { margin-top: var(--s3); font-size: 12.5px; line-height: 1.5; color: var(--ink-2); background: var(--surface-2); border-radius: 0; padding: 10px var(--s3); max-width: 80ch; }
 .note::before { content: "Note · "; font-weight: 720; color: var(--ink); }
 .news-item h3 { margin-bottom: var(--s1); }
@@ -298,7 +303,7 @@ main.wrap { padding-top: var(--s7); padding-bottom: var(--s8); outline: none; mi
 
 .badge {
   display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; letter-spacing: .01em;
-  padding: 3px 9px; border-radius: 0; border: 1px solid var(--border); background: var(--surface); color: var(--ink);
+  padding: 3px 8px; border-radius: 0; border: 1px solid var(--border); background: var(--surface); color: var(--ink);
   white-space: nowrap;
 }
 /* A small dot keeps the source count scannable: green 3+, blue 2, amber 1. */
@@ -307,11 +312,13 @@ main.wrap { padding-top: var(--s7); padding-bottom: var(--s8); outline: none; mi
 .badge.corroborated::before { background: var(--accent); }
 .badge.single::before { background: var(--warning); }
 .src {
-  display: inline-flex; align-items: center; gap: var(--s1); font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 0;
+  display: inline-flex; align-items: center; gap: 3px; font-size: 11px; font-weight: 600; padding: 3px 7px; border-radius: 0;
   background: var(--chip); color: var(--link); text-decoration: none; max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 .src:hover { text-decoration: underline; }
-.src .n { color: var(--muted); }
+.src .n { color: var(--muted); flex-shrink: 0; }
+.src .d { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.src .x { flex-shrink: 0; }
 
 /* ---------- news page ----------
    A lead story, then a grid of cards. Each card shows the preview image its first source publishes for link
