@@ -166,7 +166,10 @@ strong { font-weight: 700; }
 .finder-bar .nations-search::-webkit-search-cancel-button { cursor: pointer; }
 .finder-browse { flex-shrink: 0; border: 0; background: none; color: var(--muted); font: inherit; font-size: 12.5px; font-weight: 600; padding: 8px 12px; border-radius: 0; cursor: pointer; }
 .finder-browse:hover { color: var(--ink); background: var(--surface-2); }
-.finder .nav-groups { margin-top: var(--s4); }
+/* Results open over the page as a dropdown, so nothing below moves. */
+.finder { position: relative; z-index: 30; }
+.finder .nav-groups { position: absolute; left: 0; right: 0; top: calc(100% + 6px); margin: 0; padding: var(--s3) var(--s4); background: var(--surface); border: 1px solid var(--border); box-shadow: var(--shadow-lift); max-height: min(60vh, 480px); overflow-y: auto; }
+.finder-hits { flex-direction: column; flex-wrap: nowrap; }
 .finder-hits { columns: auto; display: flex; flex-wrap: wrap; gap: 2px var(--s4); }
 .finder-hits .nav-item { margin: 0; }
 .nav-search::placeholder, .dir-search::placeholder { color: var(--muted); }
@@ -244,10 +247,15 @@ main.wrap { padding-top: var(--s7); padding-bottom: var(--s8); outline: none; mi
 .chip-btn:hover { color: var(--ink); border-color: var(--axis); }
 .chip-btn[aria-pressed="true"] { background: var(--ink); color: var(--page); border-color: var(--ink); }
 .chip-btn.small { font-size: 11.5px; padding: 5px 11px; }
+/* Every dropdown draws the same small chevron at a fixed inset instead of the browser's own arrow. */
 .select {
-  font: inherit; font-size: 13.5px; font-weight: 600; color: var(--ink); background: var(--surface); border: 1px solid var(--border);
-  border-radius: 0; padding: 7px 30px 7px 14px; max-width: 100%;
+  font: inherit; font-size: 12.5px; font-weight: 600; color: var(--ink); background-color: var(--surface); border: 1px solid var(--border);
+  border-radius: 0; padding: 7px 32px 7px 14px; max-width: 100%; line-height: 1.3;
+  appearance: none; -webkit-appearance: none; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; cursor: pointer;
+  background-image: linear-gradient(45deg, transparent 50%, var(--ink-2) 50%), linear-gradient(135deg, var(--ink-2) 50%, transparent 50%);
+  background-position: right 17px center, right 12px center; background-size: 5px 5px; background-repeat: no-repeat;
 }
+.select:hover { border-color: var(--axis); }
 .seg { display: inline-flex; gap: 2px; padding: 3px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 0; }
 .seg-btn { font: inherit; font-size: 13px; font-weight: 650; padding: 6px 16px; border: 0; background: none; border-radius: 0; color: var(--ink-2); text-decoration: none; cursor: pointer; white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; }
 .seg-btn:hover { color: var(--ink); }
@@ -310,6 +318,10 @@ main.wrap { padding-top: var(--s7); padding-bottom: var(--s8); outline: none; mi
    previews (loaded from that site, credited beneath), or a plain plate with the country's flag when there is none. */
 .nw-controls { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s3) var(--s5); padding: var(--s4) 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin-bottom: var(--s5); }
 .nw-controls .filters { margin: 0; }
+.nw-controls .select { width: 210px; }
+.nw-controls .seg + .select { margin-left: var(--s2); }
+.nw-controls .select + .select { margin-left: calc(var(--s2) - var(--s5)); }
+@media (max-width: 720px) { .nw-controls .select { width: calc(50% - var(--s2)); } .nw-controls .select + .select { margin-left: 0; } .nw-controls .seg + .select { margin-left: 0; } }
 .nw-count { margin-left: auto; color: var(--muted); font-size: 12.5px; font-weight: 600; }
 .nw-themes { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s2); margin-bottom: var(--s5); }
 .nw-themes:empty { display: none; }

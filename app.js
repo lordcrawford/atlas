@@ -1116,8 +1116,15 @@
         dataSources(),
       ]);
     };
+    // Clicking elsewhere or pressing Escape closes the dropdown; the typed text stays.
+    const finder = el("div", { class: "finder" }, el("label", { class: "finder-bar" }, icon("search"), search, browse), lists);
+    const closeFinder = () => { if (lists.hidden) return; browsing = false; lists.hidden = true; browse.textContent = `Browse all ${N.filter(inRegion).length}`; };
+    const outside = (e) => { if (!finder.isConnected) return document.removeEventListener("pointerdown", outside); if (!finder.contains(e.target)) closeFinder(); };
+    document.addEventListener("pointerdown", outside);
+    finder.addEventListener("keydown", (e) => { if (e.key === "Escape") { closeFinder(); search.blur(); } });
+    search.addEventListener("focus", () => { if (search.value.trim()) drawFinder(); });
     view.replaceChildren(
-      el("div", { class: "finder" }, el("label", { class: "finder-bar" }, icon("search"), search, browse), lists),
+      finder,
       body);
     drawBody();
   }
