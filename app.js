@@ -2139,8 +2139,8 @@
   })();
 
   // ---------------------------------------------------------------- accounts (Supabase)
-  // Email and password accounts. Supabase keeps passwords hashed, confirms each new address by email and
-  // sends password-reset links. The links come back to this page with ?code=, which supabase-js exchanges
+  // Email and password accounts. Supabase keeps passwords hashed; "Confirm email" is off, so a new account
+  // is signed in straight away. Supabase sends password-reset links. The links come back to this page with ?code=, which supabase-js exchanges
   // for a session (PKCE, so the hash router is left alone). Each account's saved items and notes live in one row of `atlas_profiles`
   // (see supabase/schema.sql), readable and writable only by that account. This browser keeps its own copy
   // too; every sync merges the two, so nothing written on either side is lost.
@@ -2206,7 +2206,8 @@
       // Returns { msg } on failure or { sent: true } when a confirmation email is on its way.
       async signUp(email, pw) {
         const { data, error } = await sb.auth.signUp({ email, password: pw, options: { emailRedirectTo: back() } });
-        if (error) return { msg: /rate|too many|security purposes/i.test(error.message) ? "Too many emails were sent. Wait a few minutes and try again." : error.message };
+        if (error) return { msg: /already|registered|exists/i.test(error.message) ? "That email already has an account. Sign in instead."
+          : /rate|too many|security purposes/i.test(error.message) ? "Too many attempts. Wait a few minutes and try again." : error.message };
         // An address that already has an account comes back with no identities and no email is sent.
         if (data.user && data.user.identities && !data.user.identities.length) return { msg: "That email already has an account. Sign in instead." };
         return data.session ? {} : { sent: true };
