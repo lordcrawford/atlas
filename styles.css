@@ -353,7 +353,7 @@ main.wrap { padding-top: var(--s7); padding-bottom: var(--s8); outline: none; mi
 .news-why { font-size: 11.5px; color: var(--muted); margin-top: var(--s2); }
 .nw-card .note { margin-top: var(--s2); }
 /* The lead story spans the grid, image beside text. */
-.nw-lead { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: var(--s6); align-items: center; padding-bottom: var(--s6); border-bottom: 1px solid var(--border); }
+.nw-lead { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: var(--s6); align-items: start; padding-bottom: var(--s6); border-bottom: 1px solid var(--border); }
 .nw-lead .nw-title { font-size: clamp(24px, 3vw, 33px); line-height: 1.1; letter-spacing: -0.025em; font-weight: 800; }
 .nw-lead .nw-sum { font-size: 15.5px; }
 .nw-lead .nw-meta { margin-top: 0; }
