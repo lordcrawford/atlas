@@ -2139,17 +2139,22 @@
   })();
 
   // ---------------------------------------------------------------- accounts (Supabase)
-  // Username and password accounts. Supabase only takes email addresses, so a username is stored as
-  // <username>@users.atlas.invalid (the .invalid domain can never receive mail; email confirmation is off).
-  // Supabase keeps passwords hashed. Each account's saved items and notes live in one row of `atlas_profiles`
+  // Email and password accounts. Supabase keeps passwords hashed, confirms each new address by email and
+  // sends password-reset links. The links come back to this page with ?code=, which supabase-js exchanges
+  // for a session (PKCE, so the hash router is left alone). Each account's saved items and notes live in one row of `atlas_profiles`
   // (see supabase/schema.sql), readable and writable only by that account. This browser keeps its own copy
   // too; every sync merges the two, so nothing written on either side is lost.
   const SB_URL = "https://nozgqlqanjwmoyigesep.supabase.co", SB_KEY = "sb_publishable_jo_3XTRCBFG04zIymzhM5Q_LiWVyF4I";
   const Cloud = (() => {
     const sb = window.supabase && window.supabase.createClient
-      ? window.supabase.createClient(SB_URL, SB_KEY, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false } }) : null;
-    const DOMAIN = "users.atlas.invalid";
-    const userOf = (email) => (email || "").replace(`@${DOMAIN}`, "");
+      ? window.supabase.createClient(SB_URL, SB_KEY, { auth: { flowType: "pkce", persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } }) : null;
+    const back = () => location.origin + location.pathname;
+    // A link opened in another browser can't be exchanged there; the address is confirmed all the same.
+    let linkNote = null;
+    if (/[?&]code=/.test(location.search) || /^#error/.test(location.hash)) {
+      if (/^#error/.test(location.hash)) linkNote = /expired/i.test(location.hash) ? "That link has expired. Ask for a new one." : "That link didn't work. Try signing in.";
+      setTimeout(() => { history.replaceState(null, "", location.pathname + (/^#error/.test(location.hash) ? "#collab" : location.hash)); }, 1500);
+    }
     let session = null, status = "off", timer = null, chain = Promise.resolve(), ready = false;
     const listeners = new Set();
     const emit = () => listeners.forEach((fn) => fn());
@@ -2168,7 +2173,7 @@
       session = s;
       if (s) {
         const was = Store.user();
-        Store.useCloud(s.user.id, userOf(s.user.email));
+        Store.useCloud(s.user.id, s.user.email);
         await sync();
         if (fresh || was !== Store.user()) route(true);
       } else if (Store.isCloud()) { Store.signOut(); route(true); }
@@ -2177,6 +2182,7 @@
       // Supabase advises not to call it from inside this callback, so the work runs on the next tick.
       sb.auth.onAuthStateChange((event, s) => {
         if (event === "TOKEN_REFRESHED" || event === "USER_UPDATED") { session = s; return; }
+        if (event === "PASSWORD_RECOVERY") setTimeout(() => accountDialog(null, "newpw"), 0);
         const first = !ready; ready = true;
         setTimeout(() => adopt(s, event === "SIGNED_IN" && !first), 0);
       });
@@ -2188,18 +2194,30 @@
       onChange: (fn) => listeners.add(fn),
       schedule() { if (!session || !Store.isCloud()) return; clearTimeout(timer); timer = setTimeout(sync, 1200); },
       sync,
-      validName: (name) => /^[a-z0-9._-]{3,32}$/.test(name),
-      // Returns null on success or a message to show.
-      async signIn(name, pw) {
-        const { error } = await sb.auth.signInWithPassword({ email: `${name}@${DOMAIN}`, password: pw });
+      linkNote: () => { const n = linkNote; linkNote = null; return n; },
+      validEmail: (e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e),
+      // Each returns null on success or a message to show.
+      async signIn(email, pw) {
+        const { error } = await sb.auth.signInWithPassword({ email, password: pw });
         if (!error) return null;
-        return /invalid login|credentials/i.test(error.message) ? "Username or password not recognised." : error.message;
+        if (/not confirmed/i.test(error.message)) return "Confirm your email first: open the link we sent you. Check spam if it isn't there.";
+        return /invalid login|credentials/i.test(error.message) ? "Email or password not recognised." : error.message;
       },
-      async signUp(name, pw) {
-        const { data, error } = await sb.auth.signUp({ email: `${name}@${DOMAIN}`, password: pw });
-        if (error) return /already|registered|exists/i.test(error.message) ? "That username is taken. Sign in instead." : error.message;
-        if (!data.session) return "The account was created but can't sign in yet: turn off \u201cConfirm email\u201d in Supabase (Authentication, Email provider).";
-        return null;
+      // Returns { msg } on failure or { sent: true } when a confirmation email is on its way.
+      async signUp(email, pw) {
+        const { data, error } = await sb.auth.signUp({ email, password: pw, options: { emailRedirectTo: back() } });
+        if (error) return { msg: /rate|too many|security purposes/i.test(error.message) ? "Too many emails were sent. Wait a few minutes and try again." : error.message };
+        // An address that already has an account comes back with no identities and no email is sent.
+        if (data.user && data.user.identities && !data.user.identities.length) return { msg: "That email already has an account. Sign in instead." };
+        return data.session ? {} : { sent: true };
+      },
+      async sendReset(email) {
+        const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: back() });
+        return error ? (/rate|too many|security purposes/i.test(error.message) ? "Too many emails were sent. Wait a few minutes and try again." : error.message) : null;
+      },
+      async setPassword(pw) {
+        const { error } = await sb.auth.updateUser({ password: pw });
+        return error ? error.message : null;
       },
       async signOut() {
         clearTimeout(timer);
@@ -2285,61 +2303,81 @@
   };
 
   // Sign-in / create-account dialog. `then` runs after a successful sign-in (e.g. the save the user clicked).
-  function accountDialog(then, mode = "signin") {
+  // Modes: signin, create, reset (email a reset link), newpw (set a new password after opening that link).
+  function accountDialog(then, mode = "signin", note = null) {
     const dlg = el("dialog", { class: "acct-dialog", "aria-labelledby": "acctTitle" });
-    let typedName = "";
-    const draw = () => {
-      const creating = mode === "create";
+    let typedEmail = "";
+    const wait = async () => { for (let i = 0; i < 200 && !Store.isCloud(); i++) await new Promise((r) => setTimeout(r, 25)); };
+    const draw = (info = note) => {
+      note = null;
+      const creating = mode === "create", resetting = mode === "reset", newpw = mode === "newpw";
       const err = el("p", { class: "acct-err", role: "alert", hidden: true });
-      const fail = (m) => { err.textContent = m; err.hidden = false; submit.disabled = false; submit.textContent = label; };
       const field = (lab, input) => el("div", { class: "acct-field" }, el("label", { class: "acct-label", for: input.id }, lab), input);
-      const name = el("input", { class: "acct-input", id: "acctName", autocomplete: "username", autocapitalize: "none", spellcheck: "false", required: true, maxlength: "32", value: typedName });
-      name.addEventListener("input", () => { typedName = name.value; });
-      const pw = el("input", { class: "acct-input", id: "acctPw", type: "password", autocomplete: creating ? "new-password" : "current-password", required: true });
-      const pw2 = creating ? el("input", { class: "acct-input", id: "acctPw2", type: "password", autocomplete: "new-password", required: true }) : null;
-      const label = creating ? "Create account" : "Sign in";
+      const email = newpw ? null : el("input", { class: "acct-input", id: "acctEmail", type: "email", autocomplete: "email", autocapitalize: "none", spellcheck: "false", required: true, value: typedEmail });
+      if (email) email.addEventListener("input", () => { typedEmail = email.value; });
+      const pw = resetting ? null : el("input", { class: "acct-input", id: "acctPw", type: "password", autocomplete: creating || newpw ? "new-password" : "current-password", required: true });
+      const pw2 = creating || newpw ? el("input", { class: "acct-input", id: "acctPw2", type: "password", autocomplete: "new-password", required: true }) : null;
+      const label = creating ? "Create account" : resetting ? "Email me a reset link" : newpw ? "Save new password" : "Sign in";
       const submit = el("button", { class: "acct-btn primary acct-submit", type: "submit" }, label);
-      const tab = (m, lab) => el("button", { class: "seg-btn", type: "button", "aria-pressed": String(mode === m), onclick: () => { if (mode !== m) { mode = m; draw(); } } }, lab);
+      const fail = (m) => { err.textContent = m; err.hidden = false; submit.disabled = false; submit.textContent = label; };
+      const go = (m, msg) => { mode = m; draw(msg); };
+      const tab = (m, lab) => el("button", { class: "seg-btn", type: "button", "aria-pressed": String(mode === m), onclick: () => { if (mode !== m) go(m); } }, lab);
       const form = el("form", { method: "dialog", onsubmit: async (e) => {
         e.preventDefault();
         err.hidden = true;
-        const u = name.value.trim().toLowerCase(), p = pw.value;
         if (!Cloud.available) return fail("Couldn't reach the sign-in service. Check your connection and reload the page.");
-        if (!Cloud.validName(u)) return fail("Use 3–32 letters, numbers, dots, dashes or underscores, with no spaces.");
-        if (creating && p.length < 8) return fail("Use a password of at least 8 characters.");
-        if (creating && p !== pw2.value) return fail("The two passwords don't match.");
-        submit.disabled = true; submit.textContent = creating ? "Creating…" : "Signing in…";
-        // A profile of the same name and password kept only in this browser is signed in first, so its notes
-        // are merged into the account.
-        if (!Store.isCloud()) Store.signIn(u, p);
-        const msg = creating ? await Cloud.signUp(u, p) : await Cloud.signIn(u, p);
-        if (msg) return fail(msg);
-        for (let i = 0; i < 200 && !Store.isCloud(); i++) await new Promise((r) => setTimeout(r, 25));
+        const em = email ? email.value.trim().toLowerCase() : "", p = pw ? pw.value : "";
+        if (email && !Cloud.validEmail(em)) return fail("Enter a valid email address.");
+        if ((creating || newpw) && p.length < 8) return fail("Use a password of at least 8 characters.");
+        if ((creating || newpw) && p !== pw2.value) return fail("The two passwords don't match.");
+        submit.disabled = true; submit.textContent = "One moment…";
+        if (resetting) {
+          const m = await Cloud.sendReset(em);
+          return m ? fail(m) : go("signin", `If ${em} has an account, a reset link is on its way. Open it in this browser.`);
+        }
+        if (newpw) {
+          const m = await Cloud.setPassword(p);
+          if (m) return fail(m);
+          dlg.close(); return;
+        }
+        if (creating) {
+          const r = await Cloud.signUp(em, p);
+          if (r.msg) return fail(r.msg);
+          if (r.sent) return go("signin", `Almost done. We sent a confirmation link to ${em}. Open it, then sign in here. Check spam if it isn't there.`);
+        } else {
+          const m = await Cloud.signIn(em, p);
+          if (m) return fail(m);
+        }
+        await wait();
         dlg.close();
         if (then) then();
         route(true); // redraw so every icon on the page shows this account's marks
       } },
         el("button", { class: "acct-close", type: "button", "aria-label": "Close", onclick: () => dlg.close() }, "×"),
         el("div", { class: "acct-head" },
-          el("h2", { id: "acctTitle" }, creating ? "Create an account" : "Welcome back"),
-          el("p", { class: "ink2 small" }, then ? "Sign in to save items and leave review notes." : "Save agreements, news and documents, and keep review notes.")),
-        el("div", { class: "seg acct-tabs", role: "group", "aria-label": "Sign in or create an account" }, tab("signin", "Sign in"), tab("create", "Create account")),
-        field("Username", name),
-        field("Password", pw),
-        creating ? field("Confirm password", pw2) : null,
+          el("h2", { id: "acctTitle" }, creating ? "Create an account" : resetting ? "Reset your password" : newpw ? "Choose a new password" : "Welcome back"),
+          el("p", { class: "ink2 small" }, resetting ? "We'll email you a link to choose a new password." : newpw ? "Enter it twice to save it."
+            : then ? "Sign in to save items and leave review notes." : "Save agreements, news and documents, and keep review notes.")),
+        resetting || newpw ? null : el("div", { class: "seg acct-tabs", role: "group", "aria-label": "Sign in or create an account" }, tab("signin", "Sign in"), tab("create", "Create account")),
+        info ? el("p", { class: "small acct-info", role: "status" }, info) : null,
+        email ? field("Email", email) : null,
+        pw ? field(newpw ? "New password" : "Password", pw) : null,
+        pw2 ? field("Confirm password", pw2) : null,
         err,
         submit,
-        el("p", { class: "muted small acct-fine" }, creating
-          ? "There is no email address on the account, so a forgotten password can't be reset by email. Keep it somewhere safe."
-          : "Your saved items and notes are kept in your account, so they follow you to any browser."));
+        mode === "signin" ? el("button", { class: "linklike small acct-forgot", type: "button", onclick: () => go("reset") }, "Forgot your password?")
+          : resetting ? el("button", { class: "linklike small acct-forgot", type: "button", onclick: () => go("signin") }, "Back to sign in") : null,
+        el("p", { class: "muted small acct-fine" }, "Your saved items and notes are kept in your account, so they follow you to any browser."));
       dlg.replaceChildren(form);
-      (typedName ? pw : name).focus();
+      (email && !typedEmail ? email : pw || email).focus();
     };
     dlg.addEventListener("close", () => dlg.remove());
     document.body.append(dlg);
     dlg.showModal();
     draw();
   }
+  // A confirmation or reset link that couldn't sign in here says why.
+  setTimeout(() => { const n = Cloud.linkNote(); if (n && !Store.isCloud()) accountDialog(null, "signin", n); }, 1200);
   // Run fn if signed in, otherwise ask for a profile first.
   const needUser = (fn) => (Store.user() ? fn() : accountDialog(fn, "signin"));
 

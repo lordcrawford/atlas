@@ -761,3 +761,4 @@ html.is-locked body > :not(.gate):not(script) { display: none !important; }
   h2 { font-size: 22px; }
   .fd-body > h2 { font-size: 22px; }
 }
+.acct-info { margin: 0; padding: 10px 12px; border-radius: 10px; background: color-mix(in srgb, var(--accent, #2f6f4f) 10%, transparent); line-height: 1.45; }

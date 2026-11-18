@@ -25,14 +25,14 @@ The site opens on Collaborations and sits behind a password gate (see below).
 - **Governance model.** Four codes per nation: approach, rules, compute and bloc. Shown on the nation page with the facts each rests on, and usable as a map shading and a table view. The codes are editorial readings; the rules are in Method and `METHODOLOGY.md`.
 - **Method.** Sourcing rules, the codebook, audit log, corrections and limits.
 - **Maps.** The 3D/2D buttons switch every map between a globe and a flat map (remembered per browser). ⤢ opens a map in full view.
-- **Profiles.** Sign in from the top bar with a username and password. Agreements, news items and key documents can be saved (☆), marked read (✓), flagged (⚠) or annotated (✎). The Saved page (`#saved`) lists them and can download a JSON copy.
+- **Profiles.** Sign in from the top bar with an email and password. Agreements, news items and key documents can be saved (☆), marked read (✓), flagged (⚠) or annotated (✎). The Saved page (`#saved`) lists them and can download a JSON copy.
 
 ## Password and profiles
 
 Everything is static files, so both are client-side only.
 
 - **Gate** (`gate.js`): the password is stored as a SHA-256 hash and "Remember on this device" keeps the browser unlocked. It stops casual visitors, but anyone requesting `data/*.js` directly can read the data. For real protection use the host's access control (Vercel or Netlify password protection, Cloudflare Access, basic auth). To change the password, replace `PASS_HASH` with the output of `printf 'newpass' | shasum -a 256`.
-- **Accounts** use Supabase: a username and password, with the password stored hashed by Supabase. Supabase needs an email, so a username is stored as `<username>@users.atlas.invalid`, and "Confirm email" must be off. Each account's saved items and notes sit in one row of `atlas_profiles`, which only that account can read or write. Create the table once by running `supabase/schema.sql` in the Supabase SQL Editor. The browser keeps its own copy, and every sync merges the two, so notes are never lost. There is no password reset by email; reset a password from the Supabase dashboard. Signing in with the same name and password as an older browser-only profile merges that profile's notes into the account. Snapshots, the backup file and "Download a copy" still work as before.
+- **Accounts** use Supabase: an email and a password, stored hashed by Supabase. New accounts confirm their address through an emailed link, and "Forgot your password?" emails a reset link. Both links return to the site, so its address must be in Supabase's redirect URLs. Each account's saved items and notes sit in one row of `atlas_profiles`, which only that account can read or write. Create the table once by running `supabase/schema.sql` in the Supabase SQL Editor. The browser keeps its own copy, and every sync merges the two, so notes are never lost. A browser-only profile that is signed in when someone signs into an account is merged into it. Snapshots, the backup file and "Download a copy" still work as before. Supabase's built-in mail only reaches members of the Supabase team and sends a few emails an hour; anyone else needs custom SMTP set up in Supabase.
 
 Data as of 16 November 2026 (seventh audit and news search). Earlier audits and the news cut-offs are listed in `METHODOLOGY.md`.
 
