@@ -27,7 +27,7 @@
   };
 
   // Nations page state (kept across navigation within a visit)
-  const state = { region: "All", colorBy: "rank", tableView: "basics", sortKey: "rank", sortDir: 1, newsSort: "newest", savedTab: "saved" };
+  const state = { region: "All", colorBy: "rank", newsSort: "newest", savedTab: "saved" };
 
   // ---------------------------------------------------------------- helpers
   function el(tag, attrs, ...kids) {
@@ -1086,7 +1086,6 @@
     const drawBody = () => {
       hideTip();
       drawFinder();
-      const list = filtered();
       // The map can be shaded by the readiness rank or by any field of the governance model.
       const mapSlot = el("div", {}), shadeRow = el("div", { class: "filters shade-by", role: "group", "aria-label": "Shade the map by" });
       const drawMap = () => {
@@ -1096,23 +1095,12 @@
         mapSlot.replaceChildren(worldMap());
       };
       drawMap();
-      // The table shows either strategy and readiness columns or the four model codes.
-      const tableSlot = el("div", {}), viewRow = el("div", { class: "filters", role: "group", "aria-label": "Table columns" });
-      const drawTable = () => {
-        viewRow.replaceChildren(...[["basics", "Strategy and readiness"], ["model", "Governance model"]].map(([k, t]) =>
-          el("button", { class: "chip-btn small", type: "button", "aria-pressed": String(state.tableView === k), onclick: () => { state.tableView = k; drawTable(); } }, t)));
-        tableSlot.replaceChildren(expandable((k) => compareTable(list, k), list.length, { limit: 10, hint: "in this sort order" }));
-      };
-      drawTable();
       body.replaceChildren(...[
         el("section", { class: "section" },
           el("div", { class: "card" }, shadeRow,
             el("div", { class: "filter-bar map-region" }, el("span", { class: "filter-label" }, "Region"), regionFilter(drawBody)),
             mapSlot,
             el("p", { class: "note" }, "Singapore, Malta, Bahrain, Mauritius and other small states are too small to draw as shapes, so every country is also marked with a dot at its capital. Use 'Show as table' to see all of them at once."))),
-        el("section", { class: "section" },
-          sectionHead("At a glance", "Click a column header to sort; the top rows follow the sort."),
-          el("div", { class: "card compare" }, viewRow, tableSlot, sourceLine("oxford", "wbNet"))),
         dataSources(),
       ]);
     };
@@ -1127,40 +1115,6 @@
       finder,
       body);
     drawBody();
-  }
-
-  function compareTable(list, limit = Infinity) {
-    const nameCols = [
-      { h: "Nation", key: "name", get: (n) => n.name, cell: (n) => el("a", { href: `#${n.id}` }, `${n.flag} ${n.name}`) },
-      { h: "Region", key: "group", get: (n) => n.group },
-    ];
-    // Model columns sort in codebook order, so nations with the same code sit together.
-    const cols = state.tableView === "model" ? [...nameCols, ...MODEL_FIELDS.map((f) => ({ h: f.label, key: `m:${f.key}`,
-      get: (n) => f.values.findIndex((val) => val.v === codeOf(n, f.key).v), cell: (n) => codeChip(codeOf(n, f.key)) }))] : [...nameCols,
-      { h: "First AI strategy", key: "first", get: (n) => n.glance.firstStrategy },
-      { h: "Latest strategy", key: "latest", get: (n) => n.glance.latestStrategy },
-      { h: "Newest AI body", key: "body", get: (n) => n.glance.newestBodyDate || "", cell: (n) => (n.glance.newestBody === "—" ? "—" : `${n.glance.newestBody} (${fmtDate(n.glance.newestBodyDate)})`) },
-      { h: "Readiness rank", key: "rank", num: true, get: (n) => rankOf(n) ?? 999, cell: rankText },
-      { h: "Internet users", key: "net", num: true, get: (n) => (n.stats.internet ? n.stats.internet.v : -1), cell: (n) => (n.stats.internet ? `${n.stats.internet.v.toFixed(0)}%` : "n/a") },
-    ];
-    const wrap = el("div", {});
-    const draw = () => {
-      const col = cols.find((c) => c.key === state.sortKey) || cols.find((c) => c.key === "rank") || cols[0];
-      const rows = [...list].sort((a, b) => {
-        const x = col.get(a), y = col.get(b);
-        return (x < y ? -1 : x > y ? 1 : 0) * state.sortDir;
-      }).slice(0, limit);
-      wrap.replaceChildren(el("table", { class: "data" },
-        el("thead", {}, el("tr", {}, cols.map((c) =>
-          el("th", { class: c.num ? "num" : null, "aria-sort": c.key === state.sortKey ? (state.sortDir > 0 ? "ascending" : "descending") : null },
-            el("button", { class: "th-btn", type: "button", onclick: () => {
-              if (state.sortKey === c.key) state.sortDir *= -1; else { state.sortKey = c.key; state.sortDir = c.key === "net" ? -1 : 1; }
-              draw();
-            } }, c.h, c.key === state.sortKey ? (state.sortDir > 0 ? " ↑" : " ↓") : ""))))),
-        el("tbody", {}, rows.map((n) => el("tr", {}, cols.map((c) => el("td", { class: c.num ? "num" : null }, c.cell ? c.cell(n) : c.get(n))))))));
-    };
-    draw();
-    return wrap;
   }
 
   // The broader datasets this site draws on, linked at the source instead of re-plotted here.
