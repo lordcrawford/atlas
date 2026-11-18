@@ -2094,9 +2094,10 @@
       },
       signOut() { user = null; try { localStorage.removeItem(K_USER); } catch {} load(); emit("auth"); },
       data: () => data,
-      isSaved: (key) => !!(data && data.saved[key]),
+      // An unsaved item stays as a dated "removed" entry, so syncing with another device can't bring it back.
+      isSaved: (key) => !!(data && data.saved[key] && !data.saved[key].removed),
       toggleSave(key, snap) {
-        if (data.saved[key]) delete data.saved[key];
+        if (data.saved[key] && !data.saved[key].removed) data.saved[key] = { ...data.saved[key], removed: true, at: now() };
         else data.saved[key] = { ...snap, at: now() };
         save(); emit("data");
       },
@@ -2120,6 +2121,93 @@
         return `Restored. ${Object.keys(data.saved).length + Object.keys(data.marks).length - before} items were added back; the rest were merged.`;
       },
       snapshots,
+      isCloud: () => !!(user && user.startsWith("sb:")),
+      // Switch to the profile of a signed-in account. A browser-only profile that was signed in a moment
+      // ago is merged into it, so its notes come along.
+      useCloud(uid, email) {
+        const id = `sb:${uid}`, prev = user, all = read(K_PROFILES, {});
+        if (!all[id] || all[id].name !== email) { all[id] = { name: email, cloud: true, created: (all[id] && all[id].created) || now() }; write(K_PROFILES, all); }
+        if (prev === id) return;
+        user = id; write(K_USER, user); load();
+        if (prev && !prev.startsWith("sb:")) { mergeInto(data, read(`atlas-data:${prev}`, {})); save(); }
+        persist(); emit("auth");
+      },
+      // Merge the copy held by the account into this browser's copy.
+      mergeRemote(obj) { if (!data || !obj) return; mergeInto(data, { saved: obj.saved || {}, marks: obj.marks || {} }); save(); emit("sync"); },
+      payload: () => ({ saved: data.saved, marks: data.marks }),
+    };
+  })();
+
+  // ---------------------------------------------------------------- accounts (Supabase)
+  // Username and password accounts. Supabase only takes email addresses, so a username is stored as
+  // <username>@users.atlas.invalid (the .invalid domain can never receive mail; email confirmation is off).
+  // Supabase keeps passwords hashed. Each account's saved items and notes live in one row of `atlas_profiles`
+  // (see supabase/schema.sql), readable and writable only by that account. This browser keeps its own copy
+  // too; every sync merges the two, so nothing written on either side is lost.
+  const SB_URL = "https://nozgqlqanjwmoyigesep.supabase.co", SB_KEY = "sb_publishable_jo_3XTRCBFG04zIymzhM5Q_LiWVyF4I";
+  const Cloud = (() => {
+    const sb = window.supabase && window.supabase.createClient
+      ? window.supabase.createClient(SB_URL, SB_KEY, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false } }) : null;
+    const DOMAIN = "users.atlas.invalid";
+    const userOf = (email) => (email || "").replace(`@${DOMAIN}`, "");
+    let session = null, status = "off", timer = null, chain = Promise.resolve(), ready = false;
+    const listeners = new Set();
+    const emit = () => listeners.forEach((fn) => fn());
+    async function syncNow() {
+      if (!sb || !session || !Store.isCloud()) return;
+      status = "syncing"; emit();
+      const uid = session.user.id;
+      const got = await sb.from("atlas_profiles").select("data").eq("user_id", uid).maybeSingle();
+      if (got.error) { status = "error"; emit(); return; }
+      if (got.data && got.data.data) Store.mergeRemote(got.data.data);
+      const put = await sb.from("atlas_profiles").upsert({ user_id: uid, email: session.user.email, data: Store.payload(), updated_at: new Date().toISOString() });
+      status = put.error ? "error" : "ok"; emit();
+    }
+    const sync = () => (chain = chain.then(syncNow, syncNow));
+    async function adopt(s, fresh) {
+      session = s;
+      if (s) {
+        const was = Store.user();
+        Store.useCloud(s.user.id, userOf(s.user.email));
+        await sync();
+        if (fresh || was !== Store.user()) route(true);
+      } else if (Store.isCloud()) { Store.signOut(); route(true); }
+    }
+    if (sb) {
+      // Supabase advises not to call it from inside this callback, so the work runs on the next tick.
+      sb.auth.onAuthStateChange((event, s) => {
+        if (event === "TOKEN_REFRESHED" || event === "USER_UPDATED") { session = s; return; }
+        const first = !ready; ready = true;
+        setTimeout(() => adopt(s, event === "SIGNED_IN" && !first), 0);
+      });
+      window.addEventListener("focus", () => { if (session && Store.isCloud()) sync(); });
+    }
+    return {
+      available: !!sb,
+      status: () => status,
+      onChange: (fn) => listeners.add(fn),
+      schedule() { if (!session || !Store.isCloud()) return; clearTimeout(timer); timer = setTimeout(sync, 1200); },
+      sync,
+      validName: (name) => /^[a-z0-9._-]{3,32}$/.test(name),
+      // Returns null on success or a message to show.
+      async signIn(name, pw) {
+        const { error } = await sb.auth.signInWithPassword({ email: `${name}@${DOMAIN}`, password: pw });
+        if (!error) return null;
+        return /invalid login|credentials/i.test(error.message) ? "Username or password not recognised." : error.message;
+      },
+      async signUp(name, pw) {
+        const { data, error } = await sb.auth.signUp({ email: `${name}@${DOMAIN}`, password: pw });
+        if (error) return /already|registered|exists/i.test(error.message) ? "That username is taken. Sign in instead." : error.message;
+        if (!data.session) return "The account was created but can't sign in yet: turn off \u201cConfirm email\u201d in Supabase (Authentication, Email provider).";
+        return null;
+      },
+      async signOut() {
+        clearTimeout(timer);
+        if (session) await sync();
+        session = null; status = "off";
+        if (sb) await sb.auth.signOut();
+        Store.signOut(); route(true);
+      },
     };
   })();
 
@@ -2196,43 +2284,54 @@
     return [...Object.values(d.saved), ...Object.values(d.marks)].filter((x) => (x.at || "") > since).length;
   };
 
-  // Sign-in / create-profile dialog. `then` runs after a successful sign-in (e.g. the save the user clicked).
+  // Sign-in / create-account dialog. `then` runs after a successful sign-in (e.g. the save the user clicked).
   function accountDialog(then, mode = "signin") {
     const dlg = el("dialog", { class: "acct-dialog", "aria-labelledby": "acctTitle" });
     let typedName = "";
     const draw = () => {
-      const creating = mode === "create", resetting = mode === "reset";
+      const creating = mode === "create";
       const err = el("p", { class: "acct-err", role: "alert", hidden: true });
-      const field = (label, input) => el("div", { class: "acct-field" }, el("label", { class: "acct-label", for: input.id }, label), input);
-      const name = el("input", { class: "acct-input", id: "acctName", autocomplete: "username", required: true, maxlength: "32", value: typedName });
+      const fail = (m) => { err.textContent = m; err.hidden = false; submit.disabled = false; submit.textContent = label; };
+      const field = (lab, input) => el("div", { class: "acct-field" }, el("label", { class: "acct-label", for: input.id }, lab), input);
+      const name = el("input", { class: "acct-input", id: "acctName", autocomplete: "username", autocapitalize: "none", spellcheck: "false", required: true, maxlength: "32", value: typedName });
       name.addEventListener("input", () => { typedName = name.value; });
       const pw = el("input", { class: "acct-input", id: "acctPw", type: "password", autocomplete: creating ? "new-password" : "current-password", required: true });
-      const pw2 = creating || resetting ? el("input", { class: "acct-input", id: "acctPw2", type: "password", autocomplete: "new-password", required: true }) : null;
-      if (resetting) pw.setAttribute("autocomplete", "new-password");
-      const tab = (m, label) => el("button", { class: "seg-btn", type: "button", "aria-pressed": String(mode === m), onclick: () => { if (mode !== m) { mode = m; draw(); } } }, label);
-      const form = el("form", { method: "dialog", onsubmit: (e) => {
+      const pw2 = creating ? el("input", { class: "acct-input", id: "acctPw2", type: "password", autocomplete: "new-password", required: true }) : null;
+      const label = creating ? "Create account" : "Sign in";
+      const submit = el("button", { class: "acct-btn primary acct-submit", type: "submit" }, label);
+      const tab = (m, lab) => el("button", { class: "seg-btn", type: "button", "aria-pressed": String(mode === m), onclick: () => { if (mode !== m) { mode = m; draw(); } } }, lab);
+      const form = el("form", { method: "dialog", onsubmit: async (e) => {
         e.preventDefault();
-        if ((creating || resetting) && pw.value !== pw2.value) { err.textContent = "The two passwords don't match."; err.hidden = false; return; }
-        const msg = creating ? Store.create(name.value, pw.value) : resetting ? Store.resetPassword(name.value, pw.value) : Store.signIn(name.value, pw.value);
-        if (msg) { err.textContent = msg; err.hidden = false; return; }
+        err.hidden = true;
+        const u = name.value.trim().toLowerCase(), p = pw.value;
+        if (!Cloud.available) return fail("Couldn't reach the sign-in service. Check your connection and reload the page.");
+        if (!Cloud.validName(u)) return fail("Use 3–32 letters, numbers, dots, dashes or underscores, with no spaces.");
+        if (creating && p.length < 8) return fail("Use a password of at least 8 characters.");
+        if (creating && p !== pw2.value) return fail("The two passwords don't match.");
+        submit.disabled = true; submit.textContent = creating ? "Creating…" : "Signing in…";
+        // A profile of the same name and password kept only in this browser is signed in first, so its notes
+        // are merged into the account.
+        if (!Store.isCloud()) Store.signIn(u, p);
+        const msg = creating ? await Cloud.signUp(u, p) : await Cloud.signIn(u, p);
+        if (msg) return fail(msg);
+        for (let i = 0; i < 200 && !Store.isCloud(); i++) await new Promise((r) => setTimeout(r, 25));
         dlg.close();
         if (then) then();
-        route(true); // redraw so every icon on the page shows this profile's marks
+        route(true); // redraw so every icon on the page shows this account's marks
       } },
         el("button", { class: "acct-close", type: "button", "aria-label": "Close", onclick: () => dlg.close() }, "×"),
         el("div", { class: "acct-head" },
-          el("h2", { id: "acctTitle" }, creating ? "Create a profile" : resetting ? "Set a new password" : "Welcome back"),
+          el("h2", { id: "acctTitle" }, creating ? "Create an account" : "Welcome back"),
           el("p", { class: "ink2 small" }, then ? "Sign in to save items and leave review notes." : "Save agreements, news and documents, and keep review notes.")),
-        resetting ? el("p", { class: "small ink2" }, "Profiles live only in this browser, so you can set a new password here. Your saved items and notes are kept.")
-          : el("div", { class: "seg acct-tabs", role: "group", "aria-label": "Sign in or create a profile" }, tab("signin", "Sign in"), tab("create", "Create profile")),
-        field("Name", name),
-        field(resetting ? "New password" : "Password", pw),
-        creating || resetting ? field("Confirm password", pw2) : null,
+        el("div", { class: "seg acct-tabs", role: "group", "aria-label": "Sign in or create an account" }, tab("signin", "Sign in"), tab("create", "Create account")),
+        field("Username", name),
+        field("Password", pw),
+        creating ? field("Confirm password", pw2) : null,
         err,
-        el("button", { class: "acct-btn primary acct-submit", type: "submit" }, creating ? "Create profile" : resetting ? "Set password and sign in" : "Sign in"),
-        mode === "signin" ? el("button", { class: "linklike small acct-forgot", type: "button", onclick: () => { mode = "reset"; draw(); } }, "Forgot your password?")
-          : resetting ? el("button", { class: "linklike small acct-forgot", type: "button", onclick: () => { mode = "signin"; draw(); } }, "Back to sign in") : null,
-        el("p", { class: "muted small acct-fine" }, "Profiles are stored only in this browser. Don't reuse a password from another site."));
+        submit,
+        el("p", { class: "muted small acct-fine" }, creating
+          ? "There is no email address on the account, so a forgotten password can't be reset by email. Keep it somewhere safe."
+          : "Your saved items and notes are kept in your account, so they follow you to any browser."));
       dlg.replaceChildren(form);
       (typedName ? pw : name).focus();
     };
@@ -2242,7 +2341,7 @@
     draw();
   }
   // Run fn if signed in, otherwise ask for a profile first.
-  const needUser = (fn) => (Store.user() ? fn() : accountDialog(fn, "create"));
+  const needUser = (fn) => (Store.user() ? fn() : accountDialog(fn, "signin"));
 
   // Header account control: "Sign in", or the profile name with a small menu.
   const accountEl = document.getElementById("account");
@@ -2254,15 +2353,18 @@
       return;
     }
     const d = Store.data();
-    const n = Object.keys(d.saved).length + Object.keys(d.marks).length;
+    const n = Object.values(d.saved).filter((v) => !v.removed).length + Object.keys(d.marks).length;
+    const cst = Store.isCloud() ? Cloud.status() : null;
+    const syncLine = cst ? { ok: ["is-ok", "Saved to your account"], syncing: ["is-ok", "Saving to your account…"], error: ["is-warn", "Couldn't reach your account: retry"], off: ["is-warn", "Not connected to your account"] }[cst] : null;
     const bst = Backup.supported ? Backup.status() : (unbackedChanges() ? "download" : "ok-dl");
     const backupLine = { ok: ["is-ok", "Backup file up to date"], paused: ["is-warn", "Backups paused: resume"], error: ["is-warn", "Backup failed: check"], off: ["is-warn", "Set up a backup"],
       download: ["is-warn", `${unbackedChanges()} change${unbackedChanges() === 1 ? "" : "s"} not backed up`], "ok-dl": ["is-ok", "Backed up (download)"] }[bst];
     const panel = el("div", { class: "acct-menu", hidden: true },
       el("p", { class: "muted small" }, `Signed in as ${Store.displayName()}`),
-      el("a", { class: `nav-item acct-backup ${backupLine[0]}`, href: "#saved", onclick: () => close() }, backupLine[1]),
+      syncLine ? el("button", { class: `nav-item linklike acct-backup ${syncLine[0]}`, type: "button", onclick: () => Cloud.sync() }, syncLine[1])
+        : el("a", { class: `nav-item acct-backup ${backupLine[0]}`, href: "#saved", onclick: () => close() }, backupLine[1]),
       el("a", { class: "nav-item", href: "#saved", onclick: () => close() }, "Saved & reviewed", n ? ` (${n})` : ""),
-      el("button", { class: "nav-item linklike", type: "button", onclick: () => { close(); Store.signOut(); route(true); } }, "Sign out"));
+      el("button", { class: "nav-item linklike", type: "button", onclick: () => { close(); if (Store.isCloud()) Cloud.signOut(); else { Store.signOut(); route(true); } } }, "Sign out"));
     const btn = el("button", { class: "acct-open is-in", type: "button", "aria-expanded": "false", "aria-haspopup": "true", onclick: () => (panel.hidden ? open() : close()) },
       el("span", { class: "acct-avatar", "aria-hidden": "true" }, Store.displayName().slice(0, 1).toUpperCase()), Store.displayName());
     const outside = (e) => { if (!accountEl.contains(e.target)) close(); };
@@ -2348,7 +2450,7 @@
     if (!Store.user()) {
       view.replaceChildren(pageHead("Your list", "Saved & reviewed", "Sign in to keep a list of agreements, news and documents, and to mark what you have read and vetted or what looks suspicious, with notes."),
         el("div", { class: "section acct-actions" },
-          el("button", { class: "acct-btn primary", type: "button", onclick: () => accountDialog(null, "create") }, "Create a profile"),
+          el("button", { class: "acct-btn primary", type: "button", onclick: () => accountDialog(null, "create") }, "Create an account"),
           el("button", { class: "acct-btn", type: "button", onclick: () => accountDialog(null, "signin") }, "Sign in")));
       return;
     }
@@ -2362,7 +2464,7 @@
       itemActions(key, { type: x.type, title: x.title, sub: x.sub, href: x.href, ext: x.ext }));
     // One list at a time, chosen with a toggle. Notes lists every item with a note, whether or not it is also marked.
     const draw = () => {
-      const saved = Object.entries(d.saved).sort((a, b) => b[1].at.localeCompare(a[1].at));
+      const saved = Object.entries(d.saved).filter(([, v]) => !v.removed).sort((a, b) => b[1].at.localeCompare(a[1].at));
       const marks = Object.entries(d.marks).sort((a, b) => b[1].at.localeCompare(a[1].at));
       const tabs = [
         ["saved", "Saved", saved, "Nothing saved yet. Use ☆ on an agreement, a news item or a key document."],
@@ -2426,7 +2528,9 @@
     const snapSelect = el("select", { class: "select", "aria-label": "Earlier version" }, snaps.map((sn, i) => el("option", { value: String(i) }, time(new Date(sn.at)))));
     backupBox.replaceChildren(...[
       el("h2", {}, "Backups"),
-      el("p", { class: "muted small" }, "Notes are never deleted by the site: edited or cleared notes keep their earlier versions, and restoring always merges with what is here. Profiles live in this browser, so keep a copy outside it."),
+      el("p", { class: "muted small" }, Store.isCloud()
+        ? "Notes are never deleted by the site: edited or cleared notes keep their earlier versions, and restoring always merges with what is here. Your account holds a copy, and this browser keeps another."
+        : "Notes are never deleted by the site: edited or cleared notes keep their earlier versions, and restoring always merges with what is here. Profiles live in this browser, so keep a copy outside it."),
       Store.lastError() ? el("p", { class: "small bk-warn" }, Store.lastError()) : null,
       fileRow,
       el("div", { class: "acct-actions" },
@@ -2440,12 +2544,13 @@
   }
   // The header count follows every change. Pages redraw on sign-in and sign-out only, so a note being written stays open.
   Store.onChange((why) => {
-    if (why === "data") Backup.schedule();
+    if (why === "data") { Backup.schedule(); Cloud.schedule(); }
     if (why === "auth") Backup.init();
     renderAccount();
     drawBackupPanel();
   });
   Backup.onChange(() => { renderAccount(); drawBackupPanel(); });
+  Cloud.onChange(() => renderAccount());
 
   // ---------------------------------------------------------------- routing
   const tabsEl = document.getElementById("tabs");
