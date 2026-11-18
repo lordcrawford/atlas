@@ -357,12 +357,6 @@ main.wrap { padding-top: var(--s7); padding-bottom: var(--s8); outline: none; mi
 .nw-lead .nw-title { font-size: clamp(24px, 3vw, 33px); line-height: 1.1; letter-spacing: -0.025em; font-weight: 800; }
 .nw-lead .nw-sum { font-size: 15.5px; }
 .nw-lead .nw-meta { margin-top: 0; }
-/* On wide screens the lead picture runs the full height of its story, cropped to fit. */
-@media (min-width: 801px) {
-  .nw-lead { align-items: stretch; }
-  .nw-lead .nw-pic { display: flex; flex-direction: column; min-height: 320px; }
-  .nw-lead .nw-media { flex: 1; aspect-ratio: auto; min-height: 320px; }
-}
 @media (max-width: 800px) { .nw-lead { grid-template-columns: 1fr; gap: var(--s4); } }
 .nw-more { display: flex; justify-content: center; margin-top: var(--s7); }
 
