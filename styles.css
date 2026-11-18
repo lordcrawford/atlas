@@ -411,8 +411,8 @@ text.map-label { fill: var(--ink); font: 700 11.5px var(--font); paint-order: st
 svg.globe.is-flat text.map-label { stroke: var(--globe-sea-flat); }
 .map-label.is-strong { font-size: 12.5px; }
 .map-marker { cursor: pointer; outline: none; }
-.map-marker circle { stroke: var(--surface); stroke-width: 2; transition: r .12s; }
-.map-marker.is-hover circle, .map-marker:focus circle { r: 9; stroke: var(--ink); }
+.map-marker circle { stroke: var(--surface); stroke-width: 1.5; transition: r .12s; }
+.map-marker.is-hover circle, .map-marker:focus circle { r: 6.5; stroke: var(--ink); }
 .zoom-ctrl {
   position: absolute; top: var(--s3); right: var(--s3); display: flex; flex-direction: column;
   background: var(--surface); border: 1px solid var(--border); border-radius: 0; overflow: hidden; box-shadow: var(--shadow);
@@ -444,7 +444,7 @@ svg.globe.is-flat text.map-label { stroke: var(--globe-sea-flat); }
 .locator .zoom-ctrl { top: 0; right: 0; }
 .locator .zoom-ctrl button { width: 30px; height: 30px; }
 .locator .zoom-ctrl button svg { width: 16px; height: 16px; }
-.loc-dot { fill: var(--accent); stroke: var(--surface); stroke-width: 2; pointer-events: none; }
+.loc-dot { fill: var(--accent); stroke: var(--surface); stroke-width: 1.5; pointer-events: none; }
 .loc-ring { fill: none; stroke: var(--accent); stroke-width: 1.5; pointer-events: none; animation: loc-pulse 2.4s ease-out infinite; }
 @keyframes loc-pulse { from { r: 5; opacity: .9; } to { r: 20; opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .loc-ring { animation: none; opacity: .6; } }

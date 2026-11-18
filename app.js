@@ -811,7 +811,7 @@
     let hovered = null;
     const markers = shown.map((n) => {
       const g = s("g", { class: "map-marker", tabindex: "0", role: "link", "aria-label": field ? `${n.name}: ${codeOf(n, field.key).label}` : `${n.name}: readiness rank ${rankText(n)}` });
-      const dot = s("circle", { r: 5.5 }), text = s("text", { class: "map-label" }, shortName(n));
+      const dot = s("circle", { r: 4 }), text = s("text", { class: "map-label" }, shortName(n));
       dot.style.fill = colorFor(n);
       g.append(dot, text);
       g.addEventListener("focus", (e) => { setHover(n.id); showTip(e, nationTip(n)); });
