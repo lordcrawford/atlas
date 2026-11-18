@@ -777,6 +777,7 @@
     reset: "M15.5 10a5.5 5.5 0 1 1-1.6-3.9M15.5 3.5v3.3h-3.3",
     full: "M11.5 4h4.5v4.5M8.5 16H4v-4.5M16 4l-5 5M4 16l5-5",
     exit: "M9 4v5H4M11 16v-5h5M9 9L4 4M11 11l5 5",
+    search: "M8.5 14.5a6 6 0 1 0 0-12 6 6 0 0 0 0 12zM13 13l4.5 4.5",
   };
   const icon = (name) => s("svg", { viewBox: "0 0 20 20", width: 20, height: 20, fill: "none", stroke: "currentColor", "stroke-width": 2, "stroke-linecap": "round", "stroke-linejoin": "round", "aria-hidden": "true" }, s("path", { d: ICONS[name] }));
   function zoomControls(zoom) {
@@ -1055,19 +1056,16 @@
     const search = el("input", { type: "search", class: "dir-search nations-search", placeholder: `Search ${N.length} countries…`, "aria-label": "Search countries" });
     const lists = el("div", { class: "nav-groups" });
     let browsing = false;
-    const browse = el("button", { type: "button", class: "table-toggle", onclick: () => { browsing = !browsing; drawFinder(); } });
+    const browse = el("button", { type: "button", class: "finder-browse", onclick: () => { browsing = !browsing; drawFinder(); } });
     // Matches are ranked: names that start with the text, then names that contain it, then regions that do.
     const score = (n, qq) => { const name = n.name.toLowerCase(); return name.startsWith(qq) ? 0 : name.includes(qq) ? 1 : n.region.toLowerCase().includes(qq) ? 2 : 3; };
     const drawFinder = () => {
       const qq = search.value.trim().toLowerCase();
       browse.textContent = browsing ? "Hide the list" : `Browse all ${N.filter(inRegion).length}`;
       browse.hidden = !!qq;
-      // With nothing typed, a few well-known countries are offered as quick picks.
-      if (!qq && !browsing) {
-        const picks = ["sg", "in", "br", "ae", "ee", "id", "ng", "ch", "rw", "uy"].map(byId).filter((n) => n && inRegion(n));
-        lists.replaceChildren(el("div", { class: "nchips finder-picks" }, el("span", { class: "filter-label" }, "Popular"), picks.map((n) => el("a", { class: "nchip", href: `#${n.id}` }, `${n.flag} ${n.name}`))));
-        return;
-      }
+      // With nothing typed, only the search bar shows.
+      lists.hidden = !qq && !browsing;
+      if (lists.hidden) { lists.replaceChildren(); return; }
       if (qq) {
         const hits = N.filter((n) => inRegion(n) && score(n, qq) < 3).sort((x, y) => score(x, qq) - score(y, qq) || x.name.localeCompare(y.name));
         lists.replaceChildren(hits.length ? el("div", { class: "nav-group finder-hits" }, hits.map((n) => el("a", { href: `#${n.id}`, class: "nav-item" }, `${n.flag} ${n.name}`, el("span", { class: "muted small" }, ` · ${n.region}`))))
@@ -1119,7 +1117,7 @@
       ]);
     };
     view.replaceChildren(
-      el("div", { class: "card finder" }, el("div", { class: "finder-row" }, search, browse), lists),
+      el("div", { class: "finder" }, el("label", { class: "finder-bar" }, icon("search"), search, browse), lists),
       body);
     drawBody();
   }
@@ -2181,6 +2179,14 @@
     async function adopt(s, fresh) {
       session = s;
       if (s) {
+        // A stored sign-in can outlive its account (deleted in Supabase); ask the server before using it.
+        const check = await sb.auth.getUser();
+        if (check.error && check.error.status >= 400 && check.error.status < 500) {
+          session = null;
+          await sb.auth.signOut({ scope: "local" });
+          if (Store.isCloud()) { Store.signOut(); route(true); }
+          return;
+        }
         const was = Store.user();
         Store.useCloud(s.user.id, s.user.email);
         await sync();
