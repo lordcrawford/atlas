@@ -2133,7 +2133,14 @@
         persist(); emit("auth");
       },
       // Merge the copy held by the account into this browser's copy.
-      mergeRemote(obj) { if (!data || !obj) return; mergeInto(data, { saved: obj.saved || {}, marks: obj.marks || {} }); save(); emit("sync"); },
+      // Returns true when the account's copy brought in something this browser didn't have.
+      mergeRemote(obj) {
+        if (!data || !obj) return false;
+        const before = JSON.stringify(data);
+        mergeInto(data, { saved: obj.saved || {}, marks: obj.marks || {} });
+        if (JSON.stringify(data) === before) return false;
+        save(); emit("sync"); return true;
+      },
       payload: () => ({ saved: data.saved, marks: data.marks }),
     };
   })();
@@ -2164,9 +2171,11 @@
       const uid = session.user.id;
       const got = await sb.from("atlas_profiles").select("data").eq("user_id", uid).maybeSingle();
       if (got.error) { status = "error"; emit(); return; }
-      if (got.data && got.data.data) Store.mergeRemote(got.data.data);
+      const changed = !!(got.data && got.data.data && Store.mergeRemote(got.data.data));
       const put = await sb.from("atlas_profiles").upsert({ user_id: uid, email: session.user.email, data: Store.payload(), updated_at: new Date().toISOString() });
       status = put.error ? "error" : "ok"; emit();
+      // Show what came from another browser, unless a note is being typed.
+      if (changed && !(document.activeElement && document.activeElement.tagName === "TEXTAREA")) route(true);
     }
     const sync = () => (chain = chain.then(syncNow, syncNow));
     async function adopt(s, fresh) {
@@ -2308,6 +2317,8 @@
   function accountDialog(then, mode = "signin", note = null) {
     const dlg = el("dialog", { class: "acct-dialog", "aria-labelledby": "acctTitle" });
     let typedEmail = "";
+    // Removed as well as closed, so a second dialog never finds this one's fields by id.
+    const shut = () => { if (dlg.open) dlg.close(); dlg.remove(); };
     const wait = async () => { for (let i = 0; i < 200 && !Store.isCloud(); i++) await new Promise((r) => setTimeout(r, 25)); };
     const draw = (info = note) => {
       note = null;
@@ -2339,7 +2350,7 @@
         if (newpw) {
           const m = await Cloud.setPassword(p);
           if (m) return fail(m);
-          dlg.close(); return;
+          shut(); return;
         }
         if (creating) {
           const r = await Cloud.signUp(em, p);
@@ -2350,11 +2361,11 @@
           if (m) return fail(m);
         }
         await wait();
-        dlg.close();
+        shut();
         if (then) then();
         route(true); // redraw so every icon on the page shows this account's marks
       } },
-        el("button", { class: "acct-close", type: "button", "aria-label": "Close", onclick: () => dlg.close() }, "×"),
+        el("button", { class: "acct-close", type: "button", "aria-label": "Close", onclick: () => shut() }, "×"),
         el("div", { class: "acct-head" },
           el("h2", { id: "acctTitle" }, creating ? "Create an account" : resetting ? "Reset your password" : newpw ? "Choose a new password" : "Welcome back"),
           el("p", { class: "ink2 small" }, resetting ? "We'll email you a link to choose a new password." : newpw ? "Enter it twice to save it."
