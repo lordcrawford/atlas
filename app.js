@@ -2590,7 +2590,7 @@
     else if (key === "method") { renderMethod(); document.title = "Method — Atlas"; }
     else if (key === "saved") { renderSaved(); document.title = "Saved & reviewed — Atlas"; }
     // Collaborations is the landing page, and unknown addresses fall back to it.
-    else { renderCollab(key.startsWith("collab/") ? key.slice(7) : ""); document.title = "AI collaborations — Atlas"; }
+    else { renderCollab(key.startsWith("collab/") ? key.slice(7) : ""); document.title = "Atlas"; }
     if (keepScroll !== true) scrollTo(0, 0);
   }
 
