@@ -2607,7 +2607,6 @@
 
   document.getElementById("asOf").textContent = fmtDate(D.meta.asOf);
   addEventListener("scroll", hideTip, { passive: true });
-  // Nothing renders until the password gate (gate.js) is passed.
   window.atlasGate.ready(() => {
     addEventListener("hashchange", () => route());
     renderAccount();

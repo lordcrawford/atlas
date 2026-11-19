@@ -1,6 +1,4 @@
-/* Atlas password gate and SHA-256 helper.
-   The site is static, so this only keeps casual visitors out: the data files are still public to anyone
-   who requests them directly. Real protection needs the host to ask for the password (see README). */
+/* SHA-256 helper, used to hash browser-only profile passwords. */
 (function () {
   "use strict";
 
@@ -37,54 +35,8 @@
     return H.map((v) => (v >>> 0).toString(16).padStart(8, "0")).join("");
   }
 
-  const PASS_HASH = "f288d4466160488d0d2d77cb0b813e00793aaf8d3948d170356a535e1e0f5632";
-  const KEY = "atlas-unlock";
-  let unlocked = false;
-  try { unlocked = localStorage.getItem(KEY) === PASS_HASH || sessionStorage.getItem(KEY) === PASS_HASH; } catch {}
-  const waiting = [];
-
-  function unlock(remember) {
-    unlocked = true;
-    try { (remember ? localStorage : sessionStorage).setItem(KEY, PASS_HASH); } catch {}
-    document.documentElement.classList.remove("is-locked");
-    const g = document.getElementById("gate");
-    if (g) g.remove();
-    waiting.splice(0).forEach((fn) => fn());
-  }
-  function showGate() {
-    const form = document.createElement("form");
-    form.id = "gate";
-    form.className = "gate";
-    form.innerHTML =
-      '<div class="gate-card">' +
-      '<div class="gate-brand"><span class="brand-mark" aria-hidden="true"></span> Atlas</div>' +
-      '<h1 class="gate-title">This site is private</h1>' +
-      '<p class="gate-sub">Enter the password to continue.</p>' +
-      '<label class="gate-label" for="gatePw">Password</label>' +
-      '<input class="gate-input" id="gatePw" type="password" autocomplete="current-password" required autofocus />' +
-      '<label class="gate-check"><input type="checkbox" id="gateRemember" checked /> Remember on this device</label>' +
-      '<p class="gate-err" id="gateErr" role="alert" hidden>That password is not right.</p>' +
-      '<button class="gate-btn" type="submit">Unlock</button>' +
-      "</div>";
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const pw = form.querySelector("#gatePw");
-      if (sha256(pw.value) === PASS_HASH) unlock(form.querySelector("#gateRemember").checked);
-      else { form.querySelector("#gateErr").hidden = false; pw.select(); }
-    });
-    document.body.prepend(form);
-    form.querySelector("#gatePw").focus();
-  }
-
-  if (!unlocked) {
-    document.documentElement.classList.add("is-locked");
-    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", showGate);
-    else showGate();
-  }
-
   window.atlasGate = {
     sha256,
-    // Runs fn now if the site is unlocked, otherwise once the password is entered.
-    ready(fn) { if (unlocked) fn(); else waiting.push(fn); },
+    ready(fn) { fn(); },
   };
 })();

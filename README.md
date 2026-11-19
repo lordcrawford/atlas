@@ -16,7 +16,7 @@ A dashboard on how countries outside the AI frontier use and govern AI.
 
 ## Pages
 
-The site opens on Collaborations and sits behind a password gate (see below).
+The site opens on Collaborations and is open to anyone.
 
 - **Collaborations.** 52 AI agreements between governments: 34 two-country deals and 18 groups (LUMI, the Council of Europe AI convention, GPAI, the Paris Call on AI safety, CARICOM's AI roadmap, the Pacific Islands Forum's AI principles and so on). A list sits beside a globe that draws each agreement as a route. Picking one, or letting the tour run, turns the globe to its countries and opens the description and sources. Each agreement has its own link, `#collab/<id>`. Company deals and aid projects are not included.
 - **Nations.** A country finder, a map shaded by readiness rank or governance model, and links to the source datasets (Oxford Insights, Microsoft's AI Diffusion reports, the Stanford AI Index, OECD.AI, the OECD Digital Economy Policy Platform, the World Bank). Each nation page has a locator map, stat tiles, a readiness profile against the median, up to two key documents, an AI partners section, facts newest first (pre-2024 background behind a toggle) and news since 2024.
@@ -27,11 +27,8 @@ The site opens on Collaborations and sits behind a password gate (see below).
 - **Maps.** The 3D/2D buttons switch every map between a globe and a flat map (remembered per browser). ⤢ opens a map in full view.
 - **Profiles.** Sign in from the top bar with an email and password. Agreements, news items and key documents can be saved (☆), marked read (✓), flagged (⚠) or annotated (✎). The Saved page (`#saved`) lists them and can download a JSON copy.
 
-## Password and profiles
+## Accounts
 
-Everything is static files, so both are client-side only.
-
-- **Gate** (`gate.js`): the password is stored as a SHA-256 hash and "Remember on this device" keeps the browser unlocked. It stops casual visitors, but anyone requesting `data/*.js` directly can read the data. For real protection use the host's access control (Vercel or Netlify password protection, Cloudflare Access, basic auth). To change the password, replace `PASS_HASH` with the output of `printf 'newpass' | shasum -a 256`.
 - **Accounts** use Supabase: an email and a password, stored hashed by Supabase. "Confirm email" is off in Supabase, so a new account is signed in at once. "Forgot your password?" emails a reset link that returns to the site, so its address must be in Supabase's redirect URLs. Each account's saved items and notes sit in one row of `atlas_profiles`, which only that account can read or write. Create the table once by running `supabase/schema.sql` in the Supabase SQL Editor. The browser keeps its own copy, and every sync merges the two, so notes are never lost. A browser-only profile that is signed in when someone signs into an account is merged into it. Snapshots, the backup file and "Download a copy" still work as before. Supabase's built-in mail, used only for reset links, reaches only members of the Supabase team and sends a few emails an hour; anyone else needs custom SMTP set up in Supabase.
 
 Data as of 16 November 2026 (seventh audit and news search). Earlier audits and the news cut-offs are listed in `METHODOLOGY.md`.
@@ -51,7 +48,7 @@ Then open http://localhost:8765. Opening `index.html` directly also works.
 | File | What it is |
 |---|---|
 | `index.html` | Page shell |
-| `gate.js` | Password gate and the SHA-256 helper |
+| `gate.js` | SHA-256 helper for browser-only profiles |
 | `styles.css` | Styles, light and dark |
 | `app.js` | Rendering, routing, maps and charts (vanilla JS) |
 | `data/nations.js` | First six nations, plus shared metadata and sources |
