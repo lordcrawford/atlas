@@ -1,4 +1,4 @@
-// Atlas - the coded governance model.
+// Archipelago - the coded governance model.
 // Four codes per nation, so that models can be compared, counted and mapped: approach, where its rules come from,
 // where its compute comes from, and which outside power it is tied to. The codes are editorial readings of the
 // sourced facts on each nation's page; every code lists what it rests on:

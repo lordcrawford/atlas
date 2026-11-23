@@ -1,4 +1,4 @@
-// Atlas: developments found in the seventh audit and news search (27 October to 16 November 2026).
+// Archipelago: developments found in the seventh audit and news search (27 October to 16 November 2026).
 // Same rules as the other data files (see METHODOLOGY.md). Items are pushed onto the nations they concern;
 // agreements go to ATLAS.collaborations and new documents to ATLAS.docs.
 

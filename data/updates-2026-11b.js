@@ -1,4 +1,4 @@
-// Atlas: developments found in the eighth audit and news search (17 to 22 November 2026), plus two earlier
+// Archipelago: developments found in the eighth audit and news search (17 to 22 November 2026), plus two earlier
 // items the previous search missed. Same rules as the other data files (see METHODOLOGY.md). Items are pushed
 // onto the nations they concern; agreements go to ATLAS.collaborations.
 

@@ -1,6 +1,8 @@
-# Atlas
+# Archipelago
 
 A dashboard on how countries outside the AI frontier use and govern AI.
+
+The project was called Atlas until 23 November 2026. The old name remains in places a visitor never sees: the browser storage keys (`atlas-*`), the `ATLAS` data object, the backup file format and the Supabase table, so that saved notes and old backups keep working.
 
 ## Scope
 

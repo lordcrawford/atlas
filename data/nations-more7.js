@@ -1,4 +1,4 @@
-// Atlas dataset, part 8: the first larger countries inside the scope (added 5 Nov 2026, largest first).
+// Archipelago dataset, part 8: the first larger countries inside the scope (added 5 Nov 2026, largest first).
 // The scope changed on 5 Nov 2026 from "states under 15 million people" to "countries outside the AI frontier"
 // (see data/scope.js and METHODOLOGY.md). Same verification rules as the other data files: every source was
 // fetched and its key details checked by hand. Readiness ranks are from the Oxford Insights table, AI usage

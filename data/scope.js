@@ -1,5 +1,5 @@
-// Atlas - scope.
-// Atlas covers countries outside the AI frontier: those that neither produce frontier AI models nor hold a key
+// Archipelago - scope.
+// Archipelago covers countries outside the AI frontier: those that neither produce frontier AI models nor hold a key
 // place in the AI chip supply chain. The line follows a published yardstick, the Stanford AI Index 2026:
 // `frontier` lists who is left out and why, `exception` the one country kept despite the rule, and
 // `pending` the in-scope countries not yet on the site (largest first; World Bank population, 2025).

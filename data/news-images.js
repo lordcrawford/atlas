@@ -1,4 +1,4 @@
-// Atlas - preview images for news items.
+// Archipelago - preview images for news items.
 // For each news source page, the picture that page itself publishes for link previews (its og:image). The site
 // loads each picture from the source's own server and credits it; nothing is copied here. Site-wide logos and
 // pictures that failed to load when checked are left out. Rebuilt with each audit.

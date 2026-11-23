@@ -1,4 +1,4 @@
-// Atlas dataset, part 4: 25 more small nations (added 12 Oct 2026).
+// Archipelago dataset, part 4: 25 more small nations (added 12 Oct 2026).
 // Same verification rules as the other data files (see METHODOLOGY.md). Every claim here was run through
 // the automated source audit before publication; badges reflect sources that were readable and confirmed the claim.
 // msAdoption.regional marks Microsoft figures that are a shared regional estimate; regionLabel names the region.

@@ -1,4 +1,4 @@
-// Atlas dataset, part 2: 19 additional small nations (added 10 Oct 2026).
+// Archipelago dataset, part 2: 19 additional small nations (added 10 Oct 2026).
 // Same verification rules as data/nations.js (see METHODOLOGY.md).
 // Index figures: Oxford Insights GAIRI 2025 (validated Jan 2026 table), Microsoft AI Diffusion H2 2025 appendix,
 // World Bank WDI API. Oxford pillar order: see ATLAS.meta.pillars.

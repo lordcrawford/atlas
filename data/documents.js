@@ -1,4 +1,4 @@
-// Atlas: up to two key documents per nation (national AI strategies, laws, official guidance).
+// Archipelago: up to two key documents per nation (national AI strategies, laws, official guidance).
 // Links go to the document itself (usually the official PDF). Where no file is published, the card links the official page and says so in its note.
 // Every link was checked on 20 October 2026 (some in a browser, where sites block automated requests). Nations not listed have no official AI strategy or law document listed yet.
 

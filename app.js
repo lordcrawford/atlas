@@ -1,4 +1,4 @@
-/* Atlas dashboard - vanilla JS, no build step.
+/* Archipelago dashboard - vanilla JS, no build step.
    Data: data/nations.js + data/nations-more.js. Map: vendor/ (d3-geo, topojson-client, world-atlas). */
 (function () {
   "use strict";
@@ -203,7 +203,7 @@
       const i = n.facts.findIndex((x) => x.text.startsWith(b));
       return i < 0 ? null : { kind: "fact", text: n.facts[i].text, href: `#${n.id}/f${i}` };
     });
-    if (basis.includes(null)) console.warn(`Atlas model: a basis for ${n.id}.${key} no longer matches a fact or agreement`);
+    if (basis.includes(null)) console.warn(`Archipelago model: a basis for ${n.id}.${key} no longer matches a fact or agreement`);
     const code = { field: f, ...val, basis: basis.filter(Boolean) };
     CODES.set(ck, code);
     return code;
@@ -899,7 +899,7 @@
         ? table(["Nation", "Region", field.label], [...shown].sort((a, b) => order(a) - order(b) || a.name.localeCompare(b.name)).map((n) => [n.name, n.group, codeChip(codeOf(n, field.key))]))
         : table(["Nation", "Region", "Readiness rank"], [...shown].sort(byRank).map((n) => [n.name, n.group, rankText(n)]), [2]))),
       el("span", { class: "muted small" }, "· Source:"),
-      field ? el("span", { class: "muted small" }, "Atlas coding of the sourced facts on each nation's page. Rules in ", el("a", { href: "#method" }, "Method"), ".") : sourceChips([S[metric.source]])));
+      field ? el("span", { class: "muted small" }, "Archipelago coding of the sourced facts on each nation's page. Rules in ", el("a", { href: "#method" }, "Method"), ".") : sourceChips([S[metric.source]])));
     return box;
   }
 
@@ -1983,7 +1983,7 @@
     const b = (lead, text) => li(el("strong", {}, lead), " ", text);
     const contact = (t) => el("a", { href: "#contact" }, t);
     legalPage("Privacy Policy",
-      el("p", {}, "This Privacy Policy explains how Atlas (“Atlas”, “we”, “us” or “our”) collects, uses and shares information when you use this website (the “Service”). By using the Service, you agree to the collection and use of information as described in this policy."),
+      el("p", {}, "This Privacy Policy explains how Archipelago (“Archipelago”, “we”, “us” or “our”) collects, uses and shares information when you use this website (the “Service”). By using the Service, you agree to the collection and use of information as described in this policy."),
       el("h2", {}, "1. Information We Collect"),
       el("p", {}, "The Service does not offer online accounts, and we do not collect your name, email address or password."),
       el("ul", {},
@@ -2023,9 +2023,9 @@
     const li = (...k) => el("li", {}, ...k);
     const contact = (t) => el("a", { href: "#contact" }, t);
     legalPage("Terms of Service",
-      el("p", {}, "These Terms of Service (“Terms”) govern your access to and use of the Atlas website (the “Service”), operated by Atlas (“Atlas”, “we”, “us” or “our”). By accessing or using the Service, you agree to be bound by these Terms."),
+      el("p", {}, "These Terms of Service (“Terms”) govern your access to and use of the Archipelago website (the “Service”), operated by Archipelago (“Archipelago”, “we”, “us” or “our”). By accessing or using the Service, you agree to be bound by these Terms."),
       el("h2", {}, "1. The Service"),
-      el("p", {}, "Atlas provides research summaries on how countries use and govern artificial intelligence, compiled from publicly available sources. The Service is provided free of charge. We may modify, suspend or discontinue the Service, or any part of it, at any time and without notice."),
+      el("p", {}, "Archipelago provides research summaries on how countries use and govern artificial intelligence, compiled from publicly available sources. The Service is provided free of charge. We may modify, suspend or discontinue the Service, or any part of it, at any time and without notice."),
       el("h2", {}, "2. Informational Purposes Only"),
       el("p", {}, "The content on the Service is provided for general informational purposes only and does not constitute legal, policy, financial or other professional advice. While we make reasonable efforts to verify content against the sources cited, we do not guarantee that it is accurate, complete or current. You should review the cited sources and verify information independently before relying on it."),
       el("h2", {}, "3. Profiles and Your Content"),
@@ -2037,7 +2037,7 @@
         li("use automated means to submit messages through the contact form; or"),
         li("use the Service for any unlawful purpose or to send spam.")),
       el("h2", {}, "5. Intellectual Property"),
-      el("p", {}, "The Service, including its design, text and compilation of data, is owned by Atlas and protected by applicable intellectual property laws. You may access the Service and quote from it for personal and non-commercial purposes, provided you credit Atlas as the source."),
+      el("p", {}, "The Service, including its design, text and compilation of data, is owned by Archipelago and protected by applicable intellectual property laws. You may access the Service and quote from it for personal and non-commercial purposes, provided you credit Archipelago as the source."),
       el("h2", {}, "6. Third-Party Content and Links"),
       el("p", {}, "The Service links to third-party websites and documents and displays preview images loaded from publishers’ websites. This content belongs to its respective owners. We do not control or endorse third-party content and are not responsible for it. If you are a rights holder and would like content removed, please reach us through the ", contact("contact form"), "."),
       el("h2", {}, "7. Termination"),
@@ -2045,7 +2045,7 @@
       el("h2", {}, "8. Disclaimer of Warranties"),
       el("p", {}, "The Service is provided on an “as is” and “as available” basis, without warranties of any kind, whether express or implied, including implied warranties of merchantability, fitness for a particular purpose and non-infringement. We do not warrant that the Service will be uninterrupted, secure or error-free."),
       el("h2", {}, "9. Limitation of Liability"),
-      el("p", {}, "To the fullest extent permitted by law, Atlas shall not be liable for any indirect, incidental, special, consequential or punitive damages, or for any loss of data, arising out of or relating to your use of, or inability to use, the Service."),
+      el("p", {}, "To the fullest extent permitted by law, Archipelago shall not be liable for any indirect, incidental, special, consequential or punitive damages, or for any loss of data, arising out of or relating to your use of, or inability to use, the Service."),
       el("h2", {}, "10. Changes to These Terms"),
       el("p", {}, "We may update these Terms from time to time. When we do, we will revise the “Last updated” date at the top of this page. Your continued use of the Service after a change takes effect constitutes acceptance of the revised Terms."),
       el("h2", {}, "11. Contact Us"),
@@ -2071,7 +2071,7 @@
       try {
         const r = await fetch("https://api.web3forms.com/submit", {
           method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" },
-          body: JSON.stringify({ access_key: W3F_KEY, subject: `Atlas: ${topic.value}`, from_name: "Atlas contact form",
+          body: JSON.stringify({ access_key: W3F_KEY, subject: `Archipelago: ${topic.value}`, from_name: "Archipelago contact form",
             email: email.value.trim(), replyto: email.value.trim(), topic: topic.value, message: msg.value, botcheck: trap.checked }),
         });
         const j = await r.json().catch(() => ({}));
@@ -2193,7 +2193,7 @@
       exportData: () => ({ format: "atlas-profile", version: 2, profile: user ? read(K_PROFILES, {})[user].name : null, exported: now(), saved: data.saved, marks: data.marks }),
       // Restore from a downloaded or backed-up copy, or from a snapshot. Merges, so nothing current is lost.
       importData(obj) {
-        if (!obj || typeof obj !== "object" || (!obj.saved && !obj.marks)) return "That file is not an Atlas backup.";
+        if (!obj || typeof obj !== "object" || (!obj.saved && !obj.marks)) return "That file is not an Archipelago backup.";
         const before = Object.keys(data.saved).length + Object.keys(data.marks).length;
         mergeInto(data, obj);
         save(); emit("data");
@@ -2382,7 +2382,7 @@
       },
       async choose() {
         const name = `atlas-${(Store.displayName() || "profile").toLowerCase().replace(/[^a-z0-9]+/g, "-")}-backup.json`;
-        try { handle = await window.showSaveFilePicker({ suggestedName: name, types: [{ description: "Atlas backup", accept: { "application/json": [".json"] } }] }); }
+        try { handle = await window.showSaveFilePicker({ suggestedName: name, types: [{ description: "Archipelago backup", accept: { "application/json": [".json"] } }] }); }
         catch { return; } // picker closed
         try { await kv("readwrite", (st) => st.put(handle, key())); } catch {}
         await writeNow();
@@ -2773,17 +2773,17 @@
     const [head, sub] = key.split("/");
     renderTabs(key.startsWith("collab/") ? "collab" : head);
     const n = byId(head);
-    if (n) { renderNation(n, sub); document.title = `${n.name} — Atlas`; }
-    else if (key === "news") { renderNews(); document.title = "News — Atlas"; }
-    else if (key === "nations" || key === "overview") { renderNations(); document.title = "Nations — Atlas"; }
-    else if (key === "findings") { renderFindings(); document.title = "Findings — Atlas"; }
-    else if (key === "method") { renderMethod(); document.title = "Method — Atlas"; }
-    else if (key === "saved") { renderSaved(); document.title = "Saved & reviewed — Atlas"; }
-    else if (key === "privacy") { renderPrivacy(); document.title = "Privacy Policy — Atlas"; }
-    else if (key === "terms") { renderTerms(); document.title = "Terms of Service — Atlas"; }
-    else if (key === "contact") { renderContact(); document.title = "Contact — Atlas"; }
+    if (n) { renderNation(n, sub); document.title = `${n.name} — Archipelago`; }
+    else if (key === "news") { renderNews(); document.title = "News — Archipelago"; }
+    else if (key === "nations" || key === "overview") { renderNations(); document.title = "Nations — Archipelago"; }
+    else if (key === "findings") { renderFindings(); document.title = "Findings — Archipelago"; }
+    else if (key === "method") { renderMethod(); document.title = "Method — Archipelago"; }
+    else if (key === "saved") { renderSaved(); document.title = "Saved & reviewed — Archipelago"; }
+    else if (key === "privacy") { renderPrivacy(); document.title = "Privacy Policy — Archipelago"; }
+    else if (key === "terms") { renderTerms(); document.title = "Terms of Service — Archipelago"; }
+    else if (key === "contact") { renderContact(); document.title = "Contact — Archipelago"; }
     // Collaborations is the landing page, and unknown addresses fall back to it.
-    else { renderCollab(key.startsWith("collab/") ? key.slice(7) : ""); document.title = "Atlas"; }
+    else { renderCollab(key.startsWith("collab/") ? key.slice(7) : ""); document.title = "Archipelago"; }
     if (keepScroll !== true) scrollTo(0, 0);
     trackPage(key, !!n);
   }

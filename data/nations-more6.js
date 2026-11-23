@@ -1,4 +1,4 @@
-// Atlas dataset, part 7: the remaining sovereign states under 15 million people (added 21 Oct 2026).
+// Archipelago dataset, part 7: the remaining sovereign states under 15 million people (added 21 Oct 2026).
 // Same verification rules as the other data files (see METHODOLOGY.md). Every source was fetched and its key
 // details checked by hand; pages that block automated requests were read in a browser and say so in a note.
 // oxford is null for nations the Oxford Insights index does not rank (Kosovo, the Holy See); stats entries are null

@@ -1,4 +1,4 @@
-// Atlas: country-to-country AI collaborations involving the nations on this site.
+// Archipelago: country-to-country AI collaborations involving the nations on this site.
 // Edit this file directly. kind 'bilateral' links a and b; kind 'group' links each member to the hub. Keys are nation ids or entries in ATLAS.places.
 // Entries reusing a nation-page claim keep its text, badge and sources; new entries were audited the same way (see METHODOLOGY.md).
 

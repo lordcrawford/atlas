@@ -2,7 +2,7 @@
 
 ## Scope (5 Nov 2026)
 
-Atlas covers countries outside the AI frontier: those that neither produce frontier AI models nor hold a key place in the AI chip supply chain. Until 5 November 2026 the scope was sovereign states under 15 million people.
+Archipelago covers countries outside the AI frontier: those that neither produce frontier AI models nor hold a key place in the AI chip supply chain. Until 5 November 2026 the scope was sovereign states under 15 million people.
 
 - **Yardstick.** The Stanford AI Index 2026, chapter 1. Figure 1.1.1 counts notable AI models by country in 2025: United States 59, China 35, South Korea 8, and one each for Canada, France, Hong Kong, Singapore and the United Kingdom. Section 1.3 describes the AI hardware supply chain: chip and memory design (Nvidia and Micron in the United States; SK Hynix and Samsung in South Korea), fabrication (TSMC in Taiwan, Samsung in South Korea) and packaging (ASE in Taiwan, Amkor in the United States).
 - **Left out:** United States, China, South Korea, Taiwan, Canada, France, United Kingdom. Hong Kong is a territory, and territories are not included.

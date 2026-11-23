@@ -1,4 +1,4 @@
-// Atlas dataset: AI policy & governance in six small nations.
+// Archipelago dataset: AI policy & governance in six small nations.
 // Research cut-off: 22 November 2026 (news search 17 to 22 November); see METHODOLOGY.md for the audit log.
 //
 // Verification levels (see METHODOLOGY.md):

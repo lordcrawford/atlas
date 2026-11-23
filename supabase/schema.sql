@@ -1,4 +1,4 @@
--- Atlas: one row per signed-in person, holding their saved items and notes.
+-- Archipelago: one row per signed-in person, holding their saved items and notes.
 -- Paste into Supabase > SQL Editor and run once.
 
 create table if not exists public.atlas_profiles (
