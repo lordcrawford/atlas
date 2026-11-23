@@ -2617,7 +2617,7 @@
           Store.setMark(key, { status: off ? null : k }, snap);
           editing = !off && k === "sus"; sent = ""; draw();
         }) }, MARKS[k].icon);
-      const bar = el("div", { class: "ia-bar" }, saveBtn(key, snap), markBtn("vetted"), markBtn("sus"),
+      const bar = el("div", { class: "ia-bar" }, saveBtn(key, snap), ownerMode() || (m && m.status === "vetted") ? markBtn("vetted") : null, markBtn("sus"),
         m && m.status ? el("span", { class: `ia-state ia-state-${m.status}` }, MARKS[m.status].label) : null,
         sent ? el("span", { class: "ia-sent small", role: "status" }, sent) : null);
       const kids = [bar];
@@ -2692,7 +2692,7 @@
         ["vetted", "Read & vetted", marks.filter(([, m]) => m.status === "vetted"), "Nothing marked ✓ yet."],
         ["sus", "Seems suspicious", marks.filter(([, m]) => m.status === "sus"), "Nothing flagged ⚠ yet."],
         ["note", "Notes", marks.filter(([, m]) => (m.note || "").trim() || (m.history || []).some((h) => h.note)), "No notes yet."],
-      ].filter(([k, , l]) => k !== "note" || l.length); // notes now come only from flag reasons, so the tab shows only when there are some
+      ].filter(([k, , l]) => l.length || (k !== "note" && (k !== "vetted" || ownerMode()))); // notes now come only from flag reasons, so the tab shows only when there are some
       if (!tabs.some(([k]) => k === state.savedTab)) state.savedTab = "saved";
       const [, , list, empty] = tabs.find(([k]) => k === state.savedTab);
       body.replaceChildren(

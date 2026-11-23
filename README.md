@@ -28,7 +28,7 @@ The site opens on Collaborations and is open to anyone.
 - **Method.** Sourcing rules, the codebook, audit log, corrections and limits.
 - **Privacy, Terms, Contact** (`#privacy`, `#terms`, `#contact`), linked in the footer. The contact form posts to Web3Forms, which emails the message to the address its access key was made with, so no address appears in the site. Put the key in `W3F_KEY` in `app.js`.
 - **Maps.** The 3D/2D buttons switch every map between a globe and a flat map (remembered per browser). ⤢ opens a map in full view.
-- **Saving and flagging.** Anyone can save (☆), mark read (✓) or flag (⚠) an agreement, news item or key document without signing in; the marks are kept in their own browser and listed on the Saved page (`#saved`), which can download a JSON copy. Flagging asks why, and a visitor's reason is emailed to the site owner through Web3Forms with the item it concerns. Sign-in (a named profile with a password, also browser-only) is shown only on a browser that has opened the private address `#signin` once; signing in merges that browser's unsigned marks into the profile.
+- **Saving and flagging.** Anyone can save (☆) or flag (⚠) an agreement, news item or key document without signing in; the marks are kept in their own browser and listed on the Saved page (`#saved`), which can download a JSON copy. Flagging asks why, and a visitor's reason is emailed to the site owner through Web3Forms with the item it concerns. The read tick (✓) is the owner's review mark and is shown with sign-in. Sign-in (a named profile with a password, also browser-only) is shown only on a browser that has opened the private address `#signin` once; signing in merges that browser's unsigned marks into the profile.
 
 ## Accounts
 
