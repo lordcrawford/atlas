@@ -2561,14 +2561,14 @@
     if (acctCleanup) { acctCleanup(); acctCleanup = null; }
     if (!Store.user() || Store.isGuest()) {
       const g = Store.isGuest() ? Store.data() : null;
-      const count = g ? Object.values(g.saved).filter((v) => !v.removed).length + Object.keys(g.marks).length : 0;
+      const count = g ? Object.values(g.saved).filter((v) => !v.removed).length + Object.values(g.marks).filter((m) => m.status || m.note).length : 0;
       accountEl.replaceChildren(...[
         count ? el("a", { class: "acct-open", href: "#saved" }, `Saved (${count})`) : null,
         ownerMode() ? el("button", { class: "acct-open", type: "button", onclick: () => accountDialog(null, "signin") }, "Sign in") : null].filter(Boolean));
       return;
     }
     const d = Store.data();
-    const n = Object.values(d.saved).filter((v) => !v.removed).length + Object.keys(d.marks).length;
+    const n = Object.values(d.saved).filter((v) => !v.removed).length + Object.values(d.marks).filter((m) => m.status || m.note).length;
     const cst = ACCOUNTS_ON && Store.isCloud() ? Cloud.status() : null;
     const syncLine = cst ? { ok: ["is-ok", "Saved to your account"], syncing: ["is-ok", "Saving to your account…"], error: ["is-warn", "Couldn't reach your account: retry"], off: ["is-warn", "Not connected to your account"] }[cst] : null;
     const bst = Backup.supported ? Backup.status() : (unbackedChanges() ? "download" : "ok-dl");

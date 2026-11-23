@@ -786,7 +786,9 @@ a.cpill:hover { border-color: var(--accent); color: var(--ink); }
 .legal h2 { font-size: 17px; margin-top: var(--s6); }
 .ct-form { display: flex; flex-direction: column; gap: var(--s3); max-width: 480px; margin-top: var(--s4); }
 .ct-form textarea { resize: vertical; min-height: 140px; }
-.ct-form select { appearance: auto; }
+.ct-form select { appearance: none; -webkit-appearance: none; cursor: pointer; padding-right: 40px;
+  background-image: linear-gradient(45deg, transparent 50%, var(--ink-2) 50%), linear-gradient(135deg, var(--ink-2) 50%, transparent 50%);
+  background-position: right 21px center, right 16px center; background-size: 5px 5px; background-repeat: no-repeat; }
 .ct-form .acct-btn { align-self: flex-start; }
 .ct-form .acct-err { margin: 0; }
 .ct-trap { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
