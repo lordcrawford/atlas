@@ -53,6 +53,15 @@
   <script src="data/updates-2026-11.js?v=20261116r"></script>
   <!-- Online accounts are off (ACCOUNTS_ON in app.js). To turn them on, restore:
        script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js" -->
-  <script src="app.js?v=20261123b"></script>
+  <script>
+    // Vercel Web Analytics. Page views are sent from app.js; the script is skipped when running locally.
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    if (location.protocol === "https:" && !/^(localhost|127\.0\.0\.1)$/.test(location.hostname)) {
+      const s = document.createElement("script");
+      s.defer = true; s.src = "/_vercel/insights/script.js"; s.dataset.disableAutoTrack = "1";
+      document.head.appendChild(s);
+    }
+  </script>
+  <script src="app.js?v=20261123c"></script>
 </body>
 </html>

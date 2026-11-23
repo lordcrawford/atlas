@@ -393,7 +393,7 @@
       if (labels) {
         const fade = Math.max(0, Math.min(1, (view.k - 1.5) / 0.9));
         if (fade > 0.02) {
-          ctx.font = "600 11px Raleway, system-ui, sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.lineWidth = 3;
+          ctx.font = `600 ${11 * unit}px Raleway, system-ui, sans-serif`; ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.lineWidth = 3 * unit;
           for (const sh of seen) {
             const name = sh.f.properties && sh.f.properties.name;
             if (!name || skipLabels.has(sh.f.id)) continue;
@@ -705,7 +705,7 @@
     };
 
     const api = {
-      svg, view, over, top, W, draw, invalidate, point, arcSamples, arcPath, flyTo, fitPoints, spin, featureAt,
+      svg, view, over, top, W, unit: () => unit, draw, invalidate, point, arcSamples, arcPath, flyTo, fitPoints, spin, featureAt,
       get H() { return h; },
       get flat() { return flat; },
       onDraw: (fn) => drawFns.push(fn),
@@ -733,13 +733,19 @@
       kFloor = flat && isFull() ? Math.max(minK, h / HF) : minK;
       if (flat) clampView();
     };
-    window.addEventListener("resize", () => { if (flat && isFull() && svg.isConnected) { sizeFrame(); invalidate(); } });
+    // Full view stretches the drawing, so lines, dots and names are scaled back by `unit` to stay the size they are on the page.
+    let unit = 1;
+    const sizeUnit = () => {
+      unit = isFull() ? Math.min(1, W / Math.max(1, Math.min(window.innerWidth, (window.innerHeight * W) / h))) : 1;
+      stage.style.setProperty("--u", unit.toFixed(3));
+    };
+    window.addEventListener("resize", () => { if (isFull() && svg.isConnected) { if (flat) sizeFrame(); sizeUnit(); invalidate(); } });
     const syncFull = () => {
       const on = isFull();
       fullBtn.setAttribute("aria-label", on ? "Exit full view" : "Full view"); fullBtn.title = on ? "Exit full view" : "Full view"; fullBtn.replaceChildren(icon(on ? "exit" : "full"));
       // Only the full-screen element is shown, so the shared tooltip moves inside it while the map is in full view.
       if (on) stage.append(tip); else if (tip.parentNode === stage) document.body.append(tip);
-      sizeFrame(); invalidate();
+      sizeFrame(); sizeUnit(); invalidate();
     };
     const overlay = (on) => { stage.classList.toggle("is-max", on); syncFull(); };
     api.toggleFull = () => {
@@ -1561,11 +1567,12 @@
         for (const k in merged) faint[k].setAttribute("d", merged[k]);
         for (const o of onLines) { o.glow.setAttribute("d", o.seg.d); o.line.setAttribute("d", o.seg.d); }
         if (hoverSeg) hoverSeg.hit.setAttribute("d", hoverSeg.d);
+        const u = globe.unit();
         for (const d of dots) {
           const p = globe.point(d.p.geo), on = p.z > 0.02;
           d.g.style.display = on ? "" : "none";
           if (!on) continue;
-          const r = d.lit ? 6 : 2.5 + Math.min(d.n, 5) * 0.5;
+          const r = (d.lit ? 6 : 2.5 + Math.min(d.n, 5) * 0.5) * u;
           d.circle.setAttribute("cx", p.x); d.circle.setAttribute("cy", p.y); d.circle.setAttribute("r", r);
           // Dots fade as they near the edge; ones outside the current search stay dim.
           d.g.style.opacity = (d.out ? 0.3 : 1) * (d.lit ? 1 : Math.min(1, 0.3 + p.z * 2.2));
@@ -1574,9 +1581,9 @@
         // Names of the selected agreement's countries, each placed where it covers no other name or lit dot.
         const litDots = dots.filter((d) => d.lit && d.g.style.display !== "none"), placed = [];
         for (const d of dots) {
-          const spot = d.named && d.g.style.display !== "none" ? labelSpot(d.x, d.y, d.p.name.length * 7.8 + 4, placed, litDots, globe) : null;
+          const spot = d.named && d.g.style.display !== "none" ? labelSpot(d.x, d.y, (d.p.name.length * 7.8 + 4) * u, placed, litDots, globe) : null;
           d.text.style.display = spot ? "" : "none";
-          if (spot) { d.text.setAttribute("x", spot.x + 2); d.text.setAttribute("y", spot.y + 11); }
+          if (spot) { d.text.setAttribute("x", spot.x + 2 * u); d.text.setAttribute("y", spot.y + 11 * u); }
         }
       });
       // Clicks are resolved from the point, because a drag hands the pointer to the map itself.
@@ -1958,7 +1965,7 @@
   }
 
   // ---------------------------------------------------------------- privacy, terms and contact
-  const LEGAL_DATE = "22 November 2026";
+  const LEGAL_DATE = "23 November 2026";
   // Web3Forms access key: messages from the contact form are emailed to the address it was created with,
   // so the address itself never appears in the site. Create one at web3forms.com.
   const W3F_KEY = "2d4717fa-70d8-447e-8418-3f71d5653db6";
@@ -1978,14 +1985,15 @@
       el("ul", {},
         b("Communications.", "When you contact us through the contact form, we collect your email address and the content of your message."),
         b("Log data.", "Our hosting provider automatically records standard technical information, such as your IP address, browser type, and the dates and times of requests."),
+        b("Usage data.", "We use Vercel Web Analytics to count visits. It records the pages viewed, the referring website, and the approximate country, device type, operating system and browser of each visit. It does not use cookies, and visitors are counted using an anonymised identifier that is discarded after 24 hours, so it does not identify you or follow you across websites."),
         b("Information stored on your device.", "The Service uses your browser’s local storage to remember your preferences (such as theme and map view). If you create a profile, its name, a salted hash of its password, and the items you save, mark or annotate are stored only in your browser. This information is not sent to us. If you turn on the backup file feature, your data is written to a file you choose on your own device.")),
       el("p", {}, "We do not use advertising or analytics cookies, and we do not track you across other websites."),
       el("h2", {}, "2. How We Use Information"),
-      el("p", {}, "We use the information we collect to provide, maintain and secure the Service and to respond to your messages and requests. We do not use your information for advertising, and we do not sell your personal information."),
+      el("p", {}, "We use the information we collect to provide, maintain and secure the Service, to understand how it is used so we can improve it, and to respond to your messages and requests. We do not use your information for advertising, and we do not sell your personal information."),
       el("h2", {}, "3. How We Share Information"),
       el("p", {}, "We do not share your personal information with third parties except as described below."),
       el("ul", {},
-        b("Service providers.", el("span", {}, "We rely on third-party providers to operate the Service: ", ext("Vercel", "https://vercel.com/legal/privacy-policy"), " (hosting) and Web3Forms (delivery of contact form messages). These providers process information on our behalf and under their own privacy policies.")),
+        b("Service providers.", el("span", {}, "We rely on third-party providers to operate the Service: ", ext("Vercel", "https://vercel.com/legal/privacy-policy"), " (hosting and visit analytics) and Web3Forms (delivery of contact form messages). These providers process information on our behalf and under their own privacy policies.")),
         b("Third-party content.", "News preview images are loaded directly from the websites of the publishers that produced them. When an image is displayed, that publisher may receive your IP address and browser information. Links to external websites are governed by the privacy policies of those websites."),
         b("Legal requirements.", "We may disclose information if required to do so by law or in response to a valid legal request.")),
       el("h2", {}, "4. Data Retention"),
@@ -2773,6 +2781,18 @@
     // Collaborations is the landing page, and unknown addresses fall back to it.
     else { renderCollab(key.startsWith("collab/") ? key.slice(7) : ""); document.title = "Atlas"; }
     if (keepScroll !== true) scrollTo(0, 0);
+    trackPage(key, !!n);
+  }
+  // Vercel Web Analytics ignores "#" addresses, so each page change is reported by hand (once per page, not per redraw).
+  // Country pages and agreements are grouped under one route each. The script only loads on the deployed site.
+  let trackedPage = null;
+  function trackPage(key, isNation) {
+    const [head, sub] = key.split("/");
+    const known = ["collab", "news", "findings", "nations", "method", "saved", "privacy", "terms", "contact"];
+    const page = isNation ? `/${head}` : head === "overview" ? "/nations" : known.includes(head) ? `/${head}${head === "collab" && sub ? `/${sub}` : ""}` : "/collab";
+    if (page === trackedPage || typeof window.va !== "function") return;
+    trackedPage = page;
+    window.va("pageview", { path: page, route: isNation ? "/[country]" : head === "collab" && sub ? "/collab/[agreement]" : page });
   }
 
   // ---------------------------------------------------------------- theme
