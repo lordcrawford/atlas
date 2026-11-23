@@ -419,7 +419,7 @@
     // Coalesce redraws to one per frame. A hidden tab gets no frames, so draw straight away there.
     const invalidate = () => { if (document.hidden) draw(); else if (!frame) frame = requestAnimationFrame(draw); };
     // Redraw at the right resolution once the map is on the page, and whenever its width changes.
-    if (typeof ResizeObserver !== "undefined") new ResizeObserver(() => { if (box.clientWidth) invalidate(); }).observe(box);
+    if (typeof ResizeObserver !== "undefined") new ResizeObserver(() => { if (box.clientWidth) { sizeUnit(); invalidate(); } }).observe(box);
     // The covered country under a point of the frame, by the id given in `fills`.
     const featureAt = (px, py) => {
       if (!flat && Math.hypot(px - cx, py - gy) > R) return null;
@@ -733,10 +733,12 @@
       kFloor = flat && isFull() ? Math.max(minK, h / HF) : minK;
       if (flat) clampView();
     };
-    // Full view stretches the drawing, so lines, dots and names are scaled back by `unit` to stay the size they are on the page.
+    // The drawing is stretched or shrunk to fit its column (and stretched again in full view), so lines, dots and
+    // names are scaled by `unit` to stay the same size on screen at every width.
     let unit = 1;
     const sizeUnit = () => {
-      unit = isFull() ? Math.min(1, W / Math.max(1, Math.min(window.innerWidth, (window.innerHeight * W) / h))) : 1;
+      const shown = isFull() ? Math.min(window.innerWidth, (window.innerHeight * W) / h) : svg.getBoundingClientRect().width;
+      unit = shown ? Math.max(0.4, Math.min(2.2, W / shown)) : 1;
       stage.style.setProperty("--u", unit.toFixed(3));
     };
     window.addEventListener("resize", () => { if (isFull() && svg.isConnected) { if (flat) sizeFrame(); sizeUnit(); invalidate(); } });
