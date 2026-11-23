@@ -2003,27 +2003,19 @@
       el("p", {}, "If this policy changes, the date at the top changes with it. Questions go through the ", el("a", { href: "#contact" }, "contact form"), "."));
   }
   function renderTerms() {
-    const li = (...k) => el("li", {}, ...k);
+    const contact = (t) => el("a", { href: "#contact" }, t);
     legalPage("Terms of service",
-      el("p", {}, "By using Atlas you agree to these terms."),
-      el("h2", {}, "What Atlas is"),
-      el("p", {}, "Atlas summarises public information about how governments use and regulate AI. Every claim is checked against its sources, but mistakes happen and things change. It is for information only and is not legal, policy or financial advice. Check the linked sources before relying on anything. Errors can be reported through the ", el("a", { href: "#contact" }, "contact form"), "."),
-      el("h2", {}, "Accounts"),
-      el("ul", {},
-        li("Use an email address you control, and keep your password to yourself. You are responsible for what happens under your account."),
-        li("Accounts used to break these terms may be suspended or removed.")),
-      el("h2", {}, "Your notes"),
-      el("p", {}, "Your notes and saved items are yours. Atlas stores them only so it can show them back to you, and they are not visible to other people. Don't use them to store anything unlawful."),
-      el("h2", {}, "Fair use of the site"),
-      el("ul", {},
-        li("Don't try to get around security, reach other people's data, or disrupt the site."),
-        li("Don't create accounts or send contact messages automatically, or use the form to send spam.")),
-      el("h2", {}, "Other people's content"),
-      el("p", {}, "Linked articles, documents and news pictures belong to their publishers. Pictures load from the publisher's own site and link back to the original page. If you own something shown here and want it removed, use the ", el("a", { href: "#contact" }, "contact form"), "."),
-      el("h2", {}, "Availability"),
-      el("p", {}, "Atlas is free and provided as is, without warranties of any kind. It may change, pause or close at any time. Keep a copy of anything important using the download on the Saved page. As far as the law allows, Atlas is not liable for any loss that comes from using the site or relying on its content."),
-      el("h2", {}, "Changes"),
-      el("p", {}, "These terms may be updated. The date at the top shows the latest version, and using the site after a change means you accept it. See also the ", el("a", { href: "#privacy" }, "privacy policy"), "."));
+      el("p", {}, "Atlas is a free research site about how governments outside the AI frontier use and regulate AI. Using it means you accept these terms."),
+      el("h2", {}, "The research"),
+      el("p", {}, "Every claim links to its sources and was checked against them, but it can still be wrong or out of date. Treat it as a starting point, not legal or policy advice, and read the sources before you rely on something. If you spot a mistake, send it through the ", contact("contact form"), " and it will be checked."),
+      el("h2", {}, "Your account and notes"),
+      el("p", {}, "Use an email you can get into, and don't share your password. What you save and write is private to your account, and Atlas keeps it only so it can show it back to you."),
+      el("p", {}, "Don't try to get into other people's accounts, break the site, or flood the contact form. Accounts that do will be removed."),
+      el("h2", {}, "Other people's work"),
+      el("p", {}, "Articles, reports and news pictures belong to whoever published them. Pictures load from the publisher's own site and link back to the story. If something of yours is here and you want it taken down, ", contact("get in touch"), "."),
+      el("h2", {}, "No guarantees"),
+      el("p", {}, "Atlas may change, go offline or shut down, and it comes with no warranty. If you'd hate to lose your notes, download a copy from the Saved page. As far as the law allows, Atlas isn't responsible for losses from using it."),
+      el("p", {}, "If these terms change, the date above changes too. What data is kept is in the ", el("a", { href: "#privacy" }, "privacy policy"), "."));
   }
   function renderContact() {
     const field = (lab, input) => el("div", { class: "acct-field" }, el("label", { class: "acct-label", for: input.id }, lab), input);
