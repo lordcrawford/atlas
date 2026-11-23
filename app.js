@@ -1974,6 +1974,14 @@
   // Web3Forms access key: messages from the contact form are emailed to the address it was created with,
   // so the address itself never appears in the site. Create one at web3forms.com.
   const W3F_KEY = "2d4717fa-70d8-447e-8418-3f71d5653db6";
+  // A cap on emails to the host from one browser: at most `max` a day. It is kept in the browser, so it stops
+  // casual floods, not someone who clears their storage; Web3Forms applies its own spam checks on top.
+  const sendCap = (kind, max) => {
+    const k = `atlas-sent:${kind}`, day = 24 * 60 * 60 * 1000;
+    let times = [];
+    try { times = (JSON.parse(localStorage.getItem(k)) || []).filter((t) => Date.now() - t < day); } catch {}
+    return { ok: times.length < max, note() { times.push(Date.now()); try { localStorage.setItem(k, JSON.stringify(times)); } catch {} } };
+  };
   function legalPage(title, ...body) {
     view.replaceChildren(el("article", { class: "method legal" },
       pageHead("", title), el("p", { class: "legal-date" }, `Last updated ${LEGAL_DATE}`), ...body));
@@ -2066,6 +2074,8 @@
       e.preventDefault();
       const show = (t, ok) => { status.textContent = t; status.hidden = false; status.classList.toggle("ok", !!ok); };
       if (!W3F_KEY) return show("The contact form isn't set up yet.");
+      const cap = sendCap("contact", 3);
+      if (!cap.ok) return show("You've sent the most messages allowed in a day. Please try again tomorrow.");
       submit.disabled = true; submit.textContent = "Sending…";
       try {
         const r = await fetch("https://api.web3forms.com/submit", {
@@ -2075,6 +2085,7 @@
         });
         const j = await r.json().catch(() => ({}));
         if (!r.ok || !j.success) throw new Error(j.message || "failed");
+        cap.note();
         form.replaceChildren(el("p", { class: "acct-info" }, "Thanks, your message was sent. The reply will come to the email you gave."));
       } catch {
         show("Couldn't send that. Check your connection and try again.");
@@ -2631,7 +2642,10 @@
         const done = (keep) => {
           const text = ta.value.trim(), changed = text !== ((m && m.note) || "");
           if (keep) Store.setMark(key, { note: text }, snap);
-          if (keep && report && text && changed) {
+          const cap = sendCap("flag", 5);
+          if (keep && report && text && changed && !cap.ok) sent = "Saved in this browser. Today's limit for emails to the host has been reached.";
+          else if (keep && report && text && changed) {
+            cap.note();
             sent = "Emailed to the site host. Thank you.";
             const link = snap.href ? location.origin + location.pathname + snap.href : location.href;
             fetch("https://api.web3forms.com/submit", { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" },
