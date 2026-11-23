@@ -2005,7 +2005,7 @@
   function renderTerms() {
     const li = (...k) => el("li", {}, ...k);
     legalPage("Terms of service",
-      el("p", {}, "By using Atlas you agree to these terms. If you don't agree, please don't use the site."),
+      el("p", {}, "By using Atlas you agree to these terms."),
       el("h2", {}, "What Atlas is"),
       el("p", {}, "Atlas summarises public information about how governments use and regulate AI. Every claim is checked against its sources, but mistakes happen and things change. It is for information only and is not legal, policy or financial advice. Check the linked sources before relying on anything. Errors can be reported through the ", el("a", { href: "#contact" }, "contact form"), "."),
       el("h2", {}, "Accounts"),
