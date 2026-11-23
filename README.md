@@ -24,6 +24,7 @@ The site opens on Collaborations and is open to anyone.
 - **Findings.** Six claims about what the data shows, counted live from the data, each opening to the nations behind it.
 - **Governance model.** Four codes per nation: approach, rules, compute and bloc. Shown on the nation page with the facts each rests on, and usable as a map shading. The codes are editorial readings; the rules are in Method and `METHODOLOGY.md`.
 - **Method.** Sourcing rules, the codebook, audit log, corrections and limits.
+- **Privacy, Terms, Contact** (`#privacy`, `#terms`, `#contact`), linked in the footer. The contact form posts to Web3Forms, which emails the message to the address its access key was made with, so no address appears in the site. Put the key in `W3F_KEY` in `app.js`.
 - **Maps.** The 3D/2D buttons switch every map between a globe and a flat map (remembered per browser). ⤢ opens a map in full view.
 - **Profiles.** Sign in from the top bar with an email and password. Agreements, news items and key documents can be saved (☆), marked read (✓), flagged (⚠) or annotated (✎). The Saved page (`#saved`) lists them and can download a JSON copy.
 

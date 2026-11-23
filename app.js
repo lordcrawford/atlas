@@ -1952,12 +1952,113 @@
       el("ul", {},
         li(`A snapshot as of ${fmtDate(D.meta.asOf)}; the feed does not update itself. Summaries and stance lines are editorial synthesis, not quotations.`),
         li("Programme-reported figures are the programmes' own numbers. Some Microsoft usage figures are regional estimates and say so on the page."),
-        li("Profiles, saved items and notes stay in this browser and do not sync between devices. Notes are never deleted, and the Saved page can back everything up to a file."),
+        li("Saved items and notes sync between devices only when signed in to an account; browser-only profiles stay in that browser. Notes are never deleted, and the Saved page can back everything up to a file."),
         li("Map boundaries are Natural Earth at 110m scale: approximate, and no position on disputed borders."),
         li("Disclosure: this site was compiled by Claude, an AI model made by Anthropic. Anthropic is party to two agreements described here (Rwanda, Estonia); those claims rely on both parties' public statements.")),
     ));
   }
 
+  // ---------------------------------------------------------------- privacy, terms and contact
+  const LEGAL_DATE = "22 November 2026";
+  // Web3Forms access key: messages from the contact form are emailed to the address it was created with,
+  // so the address itself never appears in the site. Create one at web3forms.com.
+  const W3F_KEY = "";
+  function legalPage(title, ...body) {
+    view.replaceChildren(el("article", { class: "method legal" },
+      pageHead("", title), el("p", { class: "legal-date" }, `Last updated ${LEGAL_DATE}`), ...body));
+  }
+  const ext = (label, u) => el("a", { href: u, target: "_blank", rel: "noopener" }, label);
+  function renderPrivacy() {
+    const li = (...k) => el("li", {}, ...k);
+    legalPage("Privacy policy",
+      el("p", {}, "Atlas has no ads, no analytics and no tracking cookies. This page lists everything that is stored or sent when you use it."),
+      el("h2", {}, "Without an account"),
+      el("ul", {},
+        li("Nothing about you is stored by Atlas on a server."),
+        li("Your browser keeps your theme and map choice, and any profile you create on this browser with the saved items and notes in it. A profile's password is stored as a salted hash. This stays on your device until you clear the site's data."),
+        li("If you turn on the backup file, the site writes your profile to a file you pick on your computer. The browser remembers which file, and nothing is uploaded.")),
+      el("h2", {}, "With an account"),
+      el("ul", {},
+        li("Accounts run on Supabase. It stores your email address, your password as a hash, and sign-in records such as times and IP addresses."),
+        li("Your saved items, read and flag marks and notes are stored in one database row that only your account can read or change. A copy also stays in your browser so the site works offline."),
+        li("Your email is used only to sign you in and to send password reset links.")),
+      el("h2", {}, "Contact form"),
+      el("p", {}, "What you write in the contact form, and the email address you give, is sent through Web3Forms to Atlas's inbox and used only to reply to you."),
+      el("h2", {}, "Other services your browser talks to"),
+      el("ul", {},
+        li(ext("Vercel", "https://vercel.com/legal/privacy-policy"), " hosts the site and keeps standard request logs, including IP addresses."),
+        li(ext("Supabase", "https://supabase.com/privacy"), " runs accounts and stores account data."),
+        li(ext("jsDelivr", "https://www.jsdelivr.com/terms/privacy-policy-jsdelivr-net"), " serves the code library used for signing in."),
+        li("Web3Forms delivers contact form messages."),
+        li("News pictures load straight from the news sites that published them, so those sites see your IP address and browser details when a picture is shown.")),
+      el("p", {}, "Atlas does not sell or share your information with anyone else."),
+      el("h2", {}, "Keeping and deleting it"),
+      el("ul", {},
+        li("Account data is kept until you ask for the account to be deleted. Deleting it removes your email, password and stored notes."),
+        li("To delete your account, use the ", el("a", { href: "#contact" }, "contact form"), " from the email address on the account. Download a copy of your notes from the Saved page first if you want to keep them."),
+        li("Browser data can be removed at any time by clearing this site's data in your browser.")),
+      el("h2", {}, "Children"),
+      el("p", {}, "Atlas is not meant for children under 13, and they should not create an account."),
+      el("h2", {}, "Changes"),
+      el("p", {}, "If this policy changes, the date at the top changes with it. Questions go through the ", el("a", { href: "#contact" }, "contact form"), "."));
+  }
+  function renderTerms() {
+    const li = (...k) => el("li", {}, ...k);
+    legalPage("Terms of service",
+      el("p", {}, "By using Atlas you agree to these terms. If you don't agree, please don't use the site."),
+      el("h2", {}, "What Atlas is"),
+      el("p", {}, "Atlas summarises public information about how governments use and regulate AI. Every claim is checked against its sources, but mistakes happen and things change. It is for information only and is not legal, policy or financial advice. Check the linked sources before relying on anything. Errors can be reported through the ", el("a", { href: "#contact" }, "contact form"), "."),
+      el("h2", {}, "Accounts"),
+      el("ul", {},
+        li("Use an email address you control, and keep your password to yourself. You are responsible for what happens under your account."),
+        li("Accounts used to break these terms may be suspended or removed.")),
+      el("h2", {}, "Your notes"),
+      el("p", {}, "Your notes and saved items are yours. Atlas stores them only so it can show them back to you, and they are not visible to other people. Don't use them to store anything unlawful."),
+      el("h2", {}, "Fair use of the site"),
+      el("ul", {},
+        li("Don't try to get around security, reach other people's data, or disrupt the site."),
+        li("Don't create accounts or send contact messages automatically, or use the form to send spam.")),
+      el("h2", {}, "Other people's content"),
+      el("p", {}, "Linked articles, documents and news pictures belong to their publishers. Pictures load from the publisher's own site and link back to the original page. If you own something shown here and want it removed, use the ", el("a", { href: "#contact" }, "contact form"), "."),
+      el("h2", {}, "Availability"),
+      el("p", {}, "Atlas is free and provided as is, without warranties of any kind. It may change, pause or close at any time. Keep a copy of anything important using the download on the Saved page. As far as the law allows, Atlas is not liable for any loss that comes from using the site or relying on its content."),
+      el("h2", {}, "Changes"),
+      el("p", {}, "These terms may be updated. The date at the top shows the latest version, and using the site after a change means you accept it. See also the ", el("a", { href: "#privacy" }, "privacy policy"), "."));
+  }
+  function renderContact() {
+    const field = (lab, input) => el("div", { class: "acct-field" }, el("label", { class: "acct-label", for: input.id }, lab), input);
+    const signedIn = Store.isCloud() ? Store.displayName() : "";
+    const email = el("input", { class: "acct-input", id: "ctEmail", type: "email", autocomplete: "email", required: true, value: signedIn || "" });
+    const topic = el("select", { class: "acct-input", id: "ctTopic" },
+      ["A correction", "Delete my account", "A question", "Something else"].map((t) => el("option", {}, t)));
+    const msg = el("textarea", { class: "acct-input", id: "ctMsg", rows: 6, required: true, maxlength: 5000 });
+    // Hidden from people; bots that fill every field are dropped by Web3Forms.
+    const trap = el("input", { type: "checkbox", name: "botcheck", class: "ct-trap", tabindex: "-1", "aria-hidden": "true" });
+    const status = el("p", { class: "acct-err", role: "status", hidden: true });
+    const submit = el("button", { class: "acct-btn primary", type: "submit" }, "Send");
+    const form = el("form", { class: "ct-form" }, field("Your email", email), field("About", topic), field("Message", msg), trap, status, submit);
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const show = (t, ok) => { status.textContent = t; status.hidden = false; status.classList.toggle("ok", !!ok); };
+      if (!W3F_KEY) return show("The contact form isn't set up yet.");
+      submit.disabled = true; submit.textContent = "Sending…";
+      try {
+        const r = await fetch("https://api.web3forms.com/submit", {
+          method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify({ access_key: W3F_KEY, subject: `Atlas: ${topic.value}`, from_name: "Atlas contact form",
+            email: email.value.trim(), replyto: email.value.trim(), topic: topic.value, message: msg.value, botcheck: trap.checked }),
+        });
+        const j = await r.json().catch(() => ({}));
+        if (!r.ok || !j.success) throw new Error(j.message || "failed");
+        form.replaceChildren(el("p", { class: "acct-info" }, "Thanks, your message was sent. The reply will come to the email you gave."));
+      } catch {
+        show("Couldn't send that. Check your connection and try again.");
+        submit.disabled = false; submit.textContent = "Send";
+      }
+    });
+    legalPage("Contact", form);
+    view.querySelector(".legal-date").remove();
+  }
 
   // ---------------------------------------------------------------- profiles, saved items and review marks
   // Everything is kept in this browser's localStorage (no server yet): a list of profiles with salted
@@ -2568,7 +2669,7 @@
   function renderTabs(key) {
     const current = byId(key);
     const isNations = !!current || key === "nations" || key === "overview";
-    const isCollab = key === "collab" || (!isNations && !["news", "findings", "method", "saved"].includes(key));
+    const isCollab = key === "collab" || (!isNations && !["news", "findings", "method", "saved", "privacy", "terms", "contact"].includes(key));
     tabsEl.replaceChildren(
       el("a", { class: "tab", href: "#collab", "aria-current": isCollab ? "page" : null }, "Collaborations"),
       el("a", { class: "tab", href: "#news", "aria-current": key === "news" ? "page" : null }, "News"),
@@ -2589,6 +2690,9 @@
     else if (key === "findings") { renderFindings(); document.title = "Findings — Atlas"; }
     else if (key === "method") { renderMethod(); document.title = "Method — Atlas"; }
     else if (key === "saved") { renderSaved(); document.title = "Saved & reviewed — Atlas"; }
+    else if (key === "privacy") { renderPrivacy(); document.title = "Privacy policy — Atlas"; }
+    else if (key === "terms") { renderTerms(); document.title = "Terms of service — Atlas"; }
+    else if (key === "contact") { renderContact(); document.title = "Contact — Atlas"; }
     // Collaborations is the landing page, and unknown addresses fall back to it.
     else { renderCollab(key.startsWith("collab/") ? key.slice(7) : ""); document.title = "Atlas"; }
     if (keepScroll !== true) scrollTo(0, 0);

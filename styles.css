@@ -193,6 +193,7 @@ main.wrap { padding-top: var(--s7); padding-bottom: var(--s8); outline: none; mi
 .footer { color: var(--muted); font-size: 12.5px; border-top: 1px solid var(--border); padding-top: var(--s6); padding-bottom: var(--s7); display: flex; flex-wrap: wrap; gap: var(--s4) var(--s7); justify-content: space-between; }
 .footer p { max-width: 62ch; }
 .footer a { color: var(--ink-2); }
+.footer-links { display: flex; gap: var(--s4); align-items: flex-start; }
 .footer-brand { font-weight: 820; font-size: 15.5px; letter-spacing: -0.02em; color: var(--ink); }
 
 /* ---------- page header: kicker, display title, lede ---------- */
@@ -776,3 +777,13 @@ a.cpill:hover { border-color: var(--accent); color: var(--ink); }
 /* iPhones zoom into any field under 16px when it gets focus. */
 @media (max-width: 720px) { input, select, textarea { font-size: 16px !important; } }
 .finder + div > .section:first-child { margin-top: var(--s5); }
+
+/* ---------- privacy, terms, contact ---------- */
+.legal-date { color: var(--muted); font-size: 12.5px; margin: calc(-1 * var(--s3)) 0 var(--s4); }
+.legal h2 { font-size: 17px; margin-top: var(--s6); }
+.ct-form { display: flex; flex-direction: column; gap: var(--s3); max-width: 480px; margin-top: var(--s4); }
+.ct-form textarea { resize: vertical; min-height: 140px; }
+.ct-form select { appearance: auto; }
+.ct-form .acct-btn { align-self: flex-start; }
+.ct-form .acct-err { margin: 0; }
+.ct-trap { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
