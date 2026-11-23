@@ -28,7 +28,7 @@ The site opens on Collaborations and is open to anyone.
 - **Method.** Sourcing rules, the codebook, audit log, corrections and limits.
 - **Privacy, Terms, Contact** (`#privacy`, `#terms`, `#contact`), linked in the footer. The contact form posts to Web3Forms, which emails the message to the address its access key was made with, so no address appears in the site. Put the key in `W3F_KEY` in `app.js`.
 - **Maps.** The 3D/2D buttons switch every map between a globe and a flat map (remembered per browser). ⤢ opens a map in full view.
-- **Profiles.** Create a profile from the top bar with a name and password; it lives only in that browser. Agreements, news items and key documents can be saved (☆), marked read (✓), flagged (⚠) or annotated (✎). The Saved page (`#saved`) lists them and can download a JSON copy.
+- **Profiles (owner only for now).** Visitors see no sign-in and no save, mark or note icons. Opening the private address `#signin` once on a browser turns them on there: a profile with a name and password, kept only in that browser. Agreements, news items and key documents can then be saved (☆), marked read (✓), flagged (⚠) or annotated (✎), and the Saved page (`#saved`) lists them and can download a JSON copy.
 
 ## Accounts
 

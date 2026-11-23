@@ -1964,7 +1964,6 @@
       el("ul", {},
         li(`A snapshot as of ${fmtDate(D.meta.asOf)}; the feed does not update itself. Summaries and stance lines are editorial synthesis, not quotations.`),
         li("Programme-reported figures are the programmes' own numbers. Some Microsoft usage figures are regional estimates and say so on the page."),
-        li("Profiles, saved items and notes stay in this browser and do not sync between devices. Notes are never deleted, and the Saved page can back everything up to a file."),
         li("Map boundaries are Natural Earth at 110m scale: approximate, and no position on disputed borders."),
         li("Disclosure: this site was compiled by Claude, an AI model made by Anthropic. Anthropic is party to two agreements described here (Rwanda, Estonia); those claims rely on both parties' public statements.")),
     ));
@@ -1987,12 +1986,12 @@
     legalPage("Privacy Policy",
       el("p", {}, "This Privacy Policy explains how Archipelago (“Archipelago”, “we”, “us” or “our”) collects, uses and shares information when you use this website (the “Service”). By using the Service, you agree to the collection and use of information as described in this policy."),
       el("h2", {}, "1. Information We Collect"),
-      el("p", {}, "The Service does not offer online accounts, and we do not collect your name, email address or password."),
+      el("p", {}, "The Service does not offer user accounts, and we do not collect your name or a password."),
       el("ul", {},
         b("Communications.", "When you contact us through the contact form, we collect your email address and the content of your message."),
         b("Log data.", "Our hosting provider automatically records standard technical information, such as your IP address, browser type, and the dates and times of requests."),
         b("Usage data.", "We use Vercel Web Analytics and Speed Insights to count visits and measure how fast pages load. They record the pages viewed, the referring website, and the approximate country, device type, operating system and browser of each visit. They do not use cookies, and visitors are counted using an anonymised identifier that is discarded after 24 hours, so they do not identify you or follow you across websites."),
-        b("Information stored on your device.", "The Service uses your browser’s local storage to remember your preferences (such as theme and map view). If you create a profile, its name, a salted hash of its password, and the items you save, mark or annotate are stored only in your browser. This information is not sent to us. If you turn on the backup file feature, your data is written to a file you choose on your own device.")),
+        b("Information stored on your device.", "The Service uses your browser\u2019s local storage to remember your preferences, such as theme and map view. This information stays on your device and is not sent to us.")),
       el("p", {}, "We do not use advertising or analytics cookies, and we do not track you across other websites."),
       el("h2", {}, "2. How We Use Information"),
       el("p", {}, "We use the information we collect to provide, maintain and secure the Service, to understand how it is used so we can improve it, and to respond to your messages and requests. We do not use your information for advertising, and we do not sell your personal information."),
@@ -2006,7 +2005,6 @@
       el("p", {}, "Messages sent through the contact form are retained for as long as needed to respond to you and maintain our records. Information stored on your device remains there until you remove it."),
       el("h2", {}, "5. Your Rights and Choices"),
       el("ul", {},
-        b("Access and portability.", "You can download a copy of your saved items and notes at any time from the Saved page."),
         b("Device data.", "You can remove information stored on your device by clearing this site’s data in your browser settings."),
         b("Messages.", el("span", {}, "You can ask us to delete a message you sent us through the ", contact("contact form"), "."))),
       el("p", {}, "Depending on where you live, you may have additional rights under applicable law, such as the right to access, correct or delete your personal information or to object to its processing. To exercise these rights, please contact us."),
@@ -2030,27 +2028,25 @@
       el("p", {}, "Archipelago provides research summaries on how countries use and govern artificial intelligence, compiled from publicly available sources. The Service is provided free of charge. We may modify, suspend or discontinue the Service, or any part of it, at any time and without notice."),
       el("h2", {}, "2. Informational Purposes Only"),
       el("p", {}, "The content on the Service is provided for general informational purposes only and does not constitute legal, policy, financial or other professional advice. While we make reasonable efforts to verify content against the sources cited, we do not guarantee that it is accurate, complete or current. You should review the cited sources and verify information independently before relying on it."),
-      el("h2", {}, "3. Profiles and Your Content"),
-      el("p", {}, "The Service does not offer online accounts. You may create a profile to save items and write notes (“Your Content”). A profile and Your Content are stored only in the browser in which they were created. We do not have access to them and cannot recover them if your browser data is cleared or your device is lost. You are responsible for keeping your own copy, which you can download from the Saved page."),
-      el("h2", {}, "4. Acceptable Use"),
+      el("h2", {}, "3. Acceptable Use"),
       el("p", {}, "You agree not to:"),
       el("ul", {},
         li("interfere with, disrupt or attempt to circumvent the security of the Service;"),
         li("use automated means to submit messages through the contact form; or"),
         li("use the Service for any unlawful purpose or to send spam.")),
-      el("h2", {}, "5. Intellectual Property"),
+      el("h2", {}, "4. Intellectual Property"),
       el("p", {}, "The Service, including its design, text and compilation of data, is owned by Archipelago and protected by applicable intellectual property laws. You may access the Service and quote from it for personal and non-commercial purposes, provided you credit Archipelago as the source."),
-      el("h2", {}, "6. Third-Party Content and Links"),
+      el("h2", {}, "5. Third-Party Content and Links"),
       el("p", {}, "The Service links to third-party websites and documents and displays preview images loaded from publishers’ websites. This content belongs to its respective owners. We do not control or endorse third-party content and are not responsible for it. If you are a rights holder and would like content removed, please reach us through the ", contact("contact form"), "."),
-      el("h2", {}, "7. Termination"),
+      el("h2", {}, "6. Termination"),
       el("p", {}, "We may restrict or terminate access to the Service at any time for anyone who violates these Terms. You may stop using the Service at any time."),
-      el("h2", {}, "8. Disclaimer of Warranties"),
+      el("h2", {}, "7. Disclaimer of Warranties"),
       el("p", {}, "The Service is provided on an “as is” and “as available” basis, without warranties of any kind, whether express or implied, including implied warranties of merchantability, fitness for a particular purpose and non-infringement. We do not warrant that the Service will be uninterrupted, secure or error-free."),
-      el("h2", {}, "9. Limitation of Liability"),
+      el("h2", {}, "8. Limitation of Liability"),
       el("p", {}, "To the fullest extent permitted by law, Archipelago shall not be liable for any indirect, incidental, special, consequential or punitive damages, or for any loss of data, arising out of or relating to your use of, or inability to use, the Service."),
-      el("h2", {}, "10. Changes to These Terms"),
+      el("h2", {}, "9. Changes to These Terms"),
       el("p", {}, "We may update these Terms from time to time. When we do, we will revise the “Last updated” date at the top of this page. Your continued use of the Service after a change takes effect constitutes acceptance of the revised Terms."),
-      el("h2", {}, "11. Contact Us"),
+      el("h2", {}, "10. Contact Us"),
       el("p", {}, "If you have questions about these Terms, please reach us through the ", contact("contact form"), ". Our ", el("a", { href: "#privacy" }, "Privacy Policy"), " explains how we handle your information."));
   }
   function renderContact() {
@@ -2243,6 +2239,10 @@
   // Online accounts are switched off for now: profiles are browser-only. Set ACCOUNTS_ON to true and put the
   // supabase-js script tag back in index.html to turn them on again; the privacy policy and terms need updating too.
   const ACCOUNTS_ON = false;
+  // While accounts are off, sign-in and the save, mark and note icons are shown only on a browser that has opened
+  // the private address #signin once (or already has a profile signed in). Visitors see none of it.
+  const K_OWNER = "atlas-owner";
+  const ownerMode = () => { if (ACCOUNTS_ON || Store.user()) return true; try { return localStorage.getItem(K_OWNER) === "1"; } catch { return false; } };
   const SB_URL = "https://nozgqlqanjwmoyigesep.supabase.co", SB_KEY = "sb_publishable_jo_3XTRCBFG04zIymzhM5Q_LiWVyF4I";
   const Cloud = (() => {
     const sb = ACCOUNTS_ON && window.supabase && window.supabase.createClient
@@ -2550,7 +2550,8 @@
   function renderAccount() {
     if (acctCleanup) { acctCleanup(); acctCleanup = null; }
     if (!Store.user()) {
-      accountEl.replaceChildren(el("button", { class: "acct-open", type: "button", onclick: () => accountDialog(null, "signin") }, "Sign in"));
+      if (ownerMode()) accountEl.replaceChildren(el("button", { class: "acct-open", type: "button", onclick: () => accountDialog(null, "signin") }, "Sign in"));
+      else accountEl.replaceChildren();
       return;
     }
     const d = Store.data();
@@ -2592,6 +2593,7 @@
   // Save star, review icons (✓ read & vetted, ⚠ seems suspicious) and the note they open.
   const MARKS = { vetted: { icon: "✓", label: "Read & vetted" }, sus: { icon: "⚠", label: "Seems suspicious" } };
   function itemActions(key, snap) {
+    if (!ownerMode()) return null;
     const box = el("div", { class: "ia" });
     let editing = false, showHistory = false;
     const draw = () => {
@@ -2760,7 +2762,7 @@
   function renderTabs(key) {
     const current = byId(key);
     const isNations = !!current || key === "nations" || key === "overview";
-    const isCollab = key === "collab" || (!isNations && !["news", "findings", "method", "saved", "privacy", "terms", "contact"].includes(key));
+    const isCollab = key === "collab" || (!isNations && !["news", "findings", "method", "privacy", "terms", "contact"].includes(key) && !(key === "saved" && ownerMode()));
     tabsEl.replaceChildren(
       el("a", { class: "tab", href: "#collab", "aria-current": isCollab ? "page" : null }, "Collaborations"),
       el("a", { class: "tab", href: "#news", "aria-current": key === "news" ? "page" : null }, "News"),
@@ -2780,7 +2782,14 @@
     else if (key === "nations" || key === "overview") { renderNations(); document.title = "Nations — Archipelago"; }
     else if (key === "findings") { renderFindings(); document.title = "Findings — Archipelago"; }
     else if (key === "method") { renderMethod(); document.title = "Method — Archipelago"; }
-    else if (key === "saved") { renderSaved(); document.title = "Saved & reviewed — Archipelago"; }
+    else if (key === "saved" && ownerMode()) { renderSaved(); document.title = "Saved & reviewed — Archipelago"; }
+    // The private way in: marks this browser as the owner's and opens the sign-in dialog over the home page.
+    else if (key === "signin" && !ACCOUNTS_ON) {
+      try { localStorage.setItem(K_OWNER, "1"); } catch {}
+      history.replaceState(null, "", location.pathname + "#collab");
+      renderTabs("collab"); renderAccount(); renderCollab(""); document.title = "Archipelago";
+      if (!Store.user()) accountDialog(null, "signin");
+    }
     else if (key === "privacy") { renderPrivacy(); document.title = "Privacy Policy — Archipelago"; }
     else if (key === "terms") { renderTerms(); document.title = "Terms of Service — Archipelago"; }
     else if (key === "contact") { renderContact(); document.title = "Contact — Archipelago"; }
