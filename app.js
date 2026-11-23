@@ -367,9 +367,8 @@
         R = R0 * view.k;
         proj.rotate([-view.lon, -view.lat]).scale(R);
         rotate = d3.geoRotation([-view.lon, -view.lat]);
-        // Soft shadow under the globe, the atmosphere glow around it, then the lit sea.
+        // Soft shadow under the globe, then the lit sea.
         if (theme.shadowA) { ctx.save(); ctx.translate(cx, gy + R * 1.035); ctx.scale(1, 0.09); disc(0, 0, R * 0.78, radial(0, 0, R * 0.78, [[0, theme.alpha("#000000", theme.shadowA)], [1, theme.alpha("#000000", 0)]])); ctx.restore(); }
-        disc(cx, gy, R * 1.14, radial(cx, gy, R * 1.14, [[0.84, theme.alpha(theme.glow, 0)], [0.885, theme.alpha(theme.glow, theme.glowA)], [1, theme.alpha(theme.glow, 0)]]));
         disc(cx, gy, R, radial(cx - 0.28 * R, gy - 0.4 * R, 1.56 * R, [[0, theme.seaLit], [1, theme.seaShade]]));
       }
       ctx.beginPath(); path(GRATICULE); ctx.strokeStyle = theme.grat; ctx.lineWidth = 0.6; ctx.stroke();
@@ -1952,7 +1951,7 @@
       el("ul", {},
         li(`A snapshot as of ${fmtDate(D.meta.asOf)}; the feed does not update itself. Summaries and stance lines are editorial synthesis, not quotations.`),
         li("Programme-reported figures are the programmes' own numbers. Some Microsoft usage figures are regional estimates and say so on the page."),
-        li("Saved items and notes sync between devices only when signed in to an account; browser-only profiles stay in that browser. Notes are never deleted, and the Saved page can back everything up to a file."),
+        li("Profiles, saved items and notes stay in this browser and do not sync between devices. Notes are never deleted, and the Saved page can back everything up to a file."),
         li("Map boundaries are Natural Earth at 110m scale: approximate, and no position on disputed borders."),
         li("Disclosure: this site was compiled by Claude, an AI model made by Anthropic. Anthropic is party to two agreements described here (Rwanda, Estonia); those claims rely on both parties' public statements.")),
     ));
@@ -1975,37 +1974,30 @@
     legalPage("Privacy Policy",
       el("p", {}, "This Privacy Policy explains how Atlas (“Atlas”, “we”, “us” or “our”) collects, uses and shares information when you use this website (the “Service”). By using the Service, you agree to the collection and use of information as described in this policy."),
       el("h2", {}, "1. Information We Collect"),
+      el("p", {}, "The Service does not offer online accounts, and we do not collect your name, email address or password."),
       el("ul", {},
-        b("Account information.", "When you create an account, we collect your email address and a password. Passwords are stored in hashed form by our authentication provider. We never see or store your password in plain text."),
-        b("Content you save.", "When you are signed in, we store the items you save, the items you mark as read or flagged, and the notes you write."),
         b("Communications.", "When you contact us through the contact form, we collect your email address and the content of your message."),
-        b("Log data.", "Our hosting and authentication providers automatically record standard technical information, such as your IP address, browser type, and the dates and times of requests and sign-ins."),
-        b("Information stored on your device.", "The Service uses your browser’s local storage to remember your preferences (such as theme and map view), to keep you signed in, and to hold a copy of your saved items and notes. A profile created on a browser without an account is stored only on that device. If you turn on the backup file feature, your data is written to a file you choose on your own device.")),
+        b("Log data.", "Our hosting provider automatically records standard technical information, such as your IP address, browser type, and the dates and times of requests."),
+        b("Information stored on your device.", "The Service uses your browser’s local storage to remember your preferences (such as theme and map view). If you create a profile, its name, a salted hash of its password, and the items you save, mark or annotate are stored only in your browser. This information is not sent to us. If you turn on the backup file feature, your data is written to a file you choose on your own device.")),
       el("p", {}, "We do not use advertising or analytics cookies, and we do not track you across other websites."),
       el("h2", {}, "2. How We Use Information"),
-      el("p", {}, "We use the information we collect to:"),
-      el("ul", {},
-        li("provide, maintain and secure the Service;"),
-        li("create and manage your account, including sending password reset emails;"),
-        li("store your saved items and notes and sync them across your devices; and"),
-        li("respond to your messages and requests.")),
-      el("p", {}, "We do not use your information for advertising, and we do not sell your personal information."),
+      el("p", {}, "We use the information we collect to provide, maintain and secure the Service and to respond to your messages and requests. We do not use your information for advertising, and we do not sell your personal information."),
       el("h2", {}, "3. How We Share Information"),
       el("p", {}, "We do not share your personal information with third parties except as described below."),
       el("ul", {},
-        b("Service providers.", el("span", {}, "We rely on third-party providers to operate the Service: ", ext("Vercel", "https://vercel.com/legal/privacy-policy"), " (hosting), ", ext("Supabase", "https://supabase.com/privacy"), " (authentication and database), ", ext("jsDelivr", "https://www.jsdelivr.com/terms/privacy-policy-jsdelivr-net"), " (delivery of a software library used for sign-in) and Web3Forms (delivery of contact form messages). These providers process information on our behalf and under their own privacy policies.")),
+        b("Service providers.", el("span", {}, "We rely on third-party providers to operate the Service: ", ext("Vercel", "https://vercel.com/legal/privacy-policy"), " (hosting) and Web3Forms (delivery of contact form messages). These providers process information on our behalf and under their own privacy policies.")),
         b("Third-party content.", "News preview images are loaded directly from the websites of the publishers that produced them. When an image is displayed, that publisher may receive your IP address and browser information. Links to external websites are governed by the privacy policies of those websites."),
         b("Legal requirements.", "We may disclose information if required to do so by law or in response to a valid legal request.")),
       el("h2", {}, "4. Data Retention"),
-      el("p", {}, "We retain your account information and saved content for as long as your account is active. When your account is deleted, we delete your email address, credentials and saved content from our systems, although residual copies may remain in backups for a limited period. Messages sent through the contact form are retained for as long as needed to respond to you and maintain our records."),
+      el("p", {}, "Messages sent through the contact form are retained for as long as needed to respond to you and maintain our records. Information stored on your device remains there until you remove it."),
       el("h2", {}, "5. Your Rights and Choices"),
       el("ul", {},
         b("Access and portability.", "You can download a copy of your saved items and notes at any time from the Saved page."),
-        b("Deletion.", el("span", {}, "You can request deletion of your account and associated data through the ", contact("contact form"), ", using the email address associated with your account.")),
-        b("Device data.", "You can remove information stored on your device by clearing this site’s data in your browser settings.")),
+        b("Device data.", "You can remove information stored on your device by clearing this site’s data in your browser settings."),
+        b("Messages.", el("span", {}, "You can ask us to delete a message you sent us through the ", contact("contact form"), "."))),
       el("p", {}, "Depending on where you live, you may have additional rights under applicable law, such as the right to access, correct or delete your personal information or to object to its processing. To exercise these rights, please contact us."),
       el("h2", {}, "6. Security"),
-      el("p", {}, "We use reasonable technical measures to protect your information, including encryption in transit and access controls that restrict each account’s data to that account. However, no method of transmission or storage is completely secure, and we cannot guarantee absolute security."),
+      el("p", {}, "We use reasonable technical measures to protect information, including encryption in transit. However, no method of transmission or storage is completely secure, and we cannot guarantee absolute security. Information stored in your browser is only as secure as your device."),
       el("h2", {}, "7. Children’s Privacy"),
       el("p", {}, "The Service is not directed to children under 13, and we do not knowingly collect personal information from them. If we learn that we have collected personal information from a child under 13, we will delete it."),
       el("h2", {}, "8. International Data Transfers"),
@@ -2024,30 +2016,27 @@
       el("p", {}, "Atlas provides research summaries on how countries use and govern artificial intelligence, compiled from publicly available sources. The Service is provided free of charge. We may modify, suspend or discontinue the Service, or any part of it, at any time and without notice."),
       el("h2", {}, "2. Informational Purposes Only"),
       el("p", {}, "The content on the Service is provided for general informational purposes only and does not constitute legal, policy, financial or other professional advice. While we make reasonable efforts to verify content against the sources cited, we do not guarantee that it is accurate, complete or current. You should review the cited sources and verify information independently before relying on it."),
-      el("h2", {}, "3. Accounts"),
-      el("p", {}, "Some features require an account. You must be at least 13 years old to create one. You agree to provide a valid email address, to keep your password confidential, and to accept responsibility for all activity that occurs under your account. Please notify us promptly of any unauthorized use of your account."),
-      el("h2", {}, "4. Your Content"),
-      el("p", {}, "You retain ownership of the notes and other content you save to the Service (“Your Content”). You grant us a limited licence to store, process and display Your Content solely for the purpose of providing the Service to you. You are responsible for Your Content and agree that it will not violate any applicable law. We recommend keeping your own copy, which you can download from the Saved page."),
-      el("h2", {}, "5. Acceptable Use"),
+      el("h2", {}, "3. Profiles and Your Content"),
+      el("p", {}, "The Service does not offer online accounts. You may create a profile to save items and write notes (“Your Content”). A profile and Your Content are stored only in the browser in which they were created. We do not have access to them and cannot recover them if your browser data is cleared or your device is lost. You are responsible for keeping your own copy, which you can download from the Saved page."),
+      el("h2", {}, "4. Acceptable Use"),
       el("p", {}, "You agree not to:"),
       el("ul", {},
-        li("access or attempt to access another user’s account or data;"),
         li("interfere with, disrupt or attempt to circumvent the security of the Service;"),
-        li("use automated means to create accounts or submit messages; or"),
+        li("use automated means to submit messages through the contact form; or"),
         li("use the Service for any unlawful purpose or to send spam.")),
-      el("h2", {}, "6. Intellectual Property"),
+      el("h2", {}, "5. Intellectual Property"),
       el("p", {}, "The Service, including its design, text and compilation of data, is owned by Atlas and protected by applicable intellectual property laws. You may access the Service and quote from it for personal and non-commercial purposes, provided you credit Atlas as the source."),
-      el("h2", {}, "7. Third-Party Content and Links"),
+      el("h2", {}, "6. Third-Party Content and Links"),
       el("p", {}, "The Service links to third-party websites and documents and displays preview images loaded from publishers’ websites. This content belongs to its respective owners. We do not control or endorse third-party content and are not responsible for it. If you are a rights holder and would like content removed, please reach us through the ", contact("contact form"), "."),
-      el("h2", {}, "8. Termination"),
-      el("p", {}, "We may suspend or terminate your access to the Service at any time if you violate these Terms. You may stop using the Service at any time and may request deletion of your account through the ", contact("contact form"), "."),
-      el("h2", {}, "9. Disclaimer of Warranties"),
+      el("h2", {}, "7. Termination"),
+      el("p", {}, "We may restrict or terminate access to the Service at any time for anyone who violates these Terms. You may stop using the Service at any time."),
+      el("h2", {}, "8. Disclaimer of Warranties"),
       el("p", {}, "The Service is provided on an “as is” and “as available” basis, without warranties of any kind, whether express or implied, including implied warranties of merchantability, fitness for a particular purpose and non-infringement. We do not warrant that the Service will be uninterrupted, secure or error-free."),
-      el("h2", {}, "10. Limitation of Liability"),
+      el("h2", {}, "9. Limitation of Liability"),
       el("p", {}, "To the fullest extent permitted by law, Atlas shall not be liable for any indirect, incidental, special, consequential or punitive damages, or for any loss of data, arising out of or relating to your use of, or inability to use, the Service."),
-      el("h2", {}, "11. Changes to These Terms"),
+      el("h2", {}, "10. Changes to These Terms"),
       el("p", {}, "We may update these Terms from time to time. When we do, we will revise the “Last updated” date at the top of this page. Your continued use of the Service after a change takes effect constitutes acceptance of the revised Terms."),
-      el("h2", {}, "12. Contact Us"),
+      el("h2", {}, "11. Contact Us"),
       el("p", {}, "If you have questions about these Terms, please reach us through the ", contact("contact form"), ". Our ", el("a", { href: "#privacy" }, "Privacy Policy"), " explains how we handle your information."));
   }
   function renderContact() {
@@ -2055,7 +2044,7 @@
     const signedIn = Store.isCloud() ? Store.displayName() : "";
     const email = el("input", { class: "acct-input", id: "ctEmail", type: "email", autocomplete: "email", required: true, value: signedIn || "" });
     const topic = el("select", { class: "acct-input", id: "ctTopic" },
-      ["A correction", "Delete my account", "A question", "Something else"].map((t) => el("option", {}, t)));
+      ["A correction", "A question", "Something else"].map((t) => el("option", {}, t)));
     const msg = el("textarea", { class: "acct-input", id: "ctMsg", rows: 6, required: true, maxlength: 5000 });
     // Hidden from people; bots that fill every field are dropped by Web3Forms.
     const trap = el("input", { type: "checkbox", name: "botcheck", class: "ct-trap", tabindex: "-1", "aria-hidden": "true" });
@@ -2220,6 +2209,14 @@
         save(); emit("sync"); return true;
       },
       payload: () => ({ saved: data.saved, marks: data.marks }),
+      // With online accounts switched off, bring the notes of any account used on this browser into the
+      // signed-in profile, so they stay reachable. The account's own copy is left as it is.
+      absorbCloud() {
+        if (!data || (user && user.startsWith("sb:"))) return;
+        const before = JSON.stringify(data);
+        for (const id of Object.keys(read(K_PROFILES, {}))) if (id.startsWith("sb:")) mergeInto(data, Object.assign({ saved: {}, marks: {} }, read(`atlas-data:${id}`, {})));
+        if (JSON.stringify(data) !== before) { save(); emit("data"); }
+      },
     };
   })();
 
@@ -2229,9 +2226,12 @@
   // for a session (PKCE, so the hash router is left alone). Each account's saved items and notes live in one row of `atlas_profiles`
   // (see supabase/schema.sql), readable and writable only by that account. This browser keeps its own copy
   // too; every sync merges the two, so nothing written on either side is lost.
+  // Online accounts are switched off for now: profiles are browser-only. Set ACCOUNTS_ON to true and put the
+  // supabase-js script tag back in index.html to turn them on again; the privacy policy and terms need updating too.
+  const ACCOUNTS_ON = false;
   const SB_URL = "https://nozgqlqanjwmoyigesep.supabase.co", SB_KEY = "sb_publishable_jo_3XTRCBFG04zIymzhM5Q_LiWVyF4I";
   const Cloud = (() => {
-    const sb = window.supabase && window.supabase.createClient
+    const sb = ACCOUNTS_ON && window.supabase && window.supabase.createClient
       ? window.supabase.createClient(SB_URL, SB_KEY, { auth: { flowType: "pkce", persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } }) : null;
     const back = () => location.origin + location.pathname;
     // A link opened in another browser can't be exchanged there; the address is confirmed all the same.
@@ -2398,9 +2398,56 @@
     return [...Object.values(d.saved), ...Object.values(d.marks)].filter((x) => (x.at || "") > since).length;
   };
 
+  // Browser-only profile dialog, used while online accounts are switched off (ACCOUNTS_ON).
+  // Modes: signin, create, reset (choose a new password for a profile on this browser).
+  function localDialog(then, mode = "signin") {
+    const dlg = el("dialog", { class: "acct-dialog", "aria-labelledby": "acctTitle" });
+    let typedName = "";
+    const shut = () => { if (dlg.open) dlg.close(); dlg.remove(); };
+    const draw = () => {
+      const creating = mode === "create", resetting = mode === "reset";
+      const err = el("p", { class: "acct-err", role: "alert", hidden: true });
+      const field = (lab, input) => el("div", { class: "acct-field" }, el("label", { class: "acct-label", for: input.id }, lab), input);
+      const name = el("input", { class: "acct-input", id: "acctName", type: "text", autocomplete: "username", autocapitalize: "none", spellcheck: "false", required: true, value: typedName });
+      name.addEventListener("input", () => { typedName = name.value; });
+      const pw = el("input", { class: "acct-input", id: "acctPw", type: "password", autocomplete: creating || resetting ? "new-password" : "current-password", required: true });
+      const pw2 = creating || resetting ? el("input", { class: "acct-input", id: "acctPw2", type: "password", autocomplete: "new-password", required: true }) : null;
+      const label = creating ? "Create profile" : resetting ? "Save new password" : "Sign in";
+      const submit = el("button", { class: "acct-btn primary acct-submit", type: "submit" }, label);
+      const fail = (m) => { err.textContent = m; err.hidden = false; };
+      const go = (m) => { mode = m; draw(); };
+      const tab = (m, lab) => el("button", { class: "seg-btn", type: "button", "aria-pressed": String(mode === m), onclick: () => { if (mode !== m) go(m); } }, lab);
+      const form = el("form", { method: "dialog", onsubmit: (e) => {
+        e.preventDefault();
+        err.hidden = true;
+        if (pw2 && pw.value !== pw2.value) return fail("The two passwords don't match.");
+        const m = creating ? Store.create(name.value, pw.value) : resetting ? Store.resetPassword(name.value, pw.value) : Store.signIn(name.value, pw.value);
+        if (m) return fail(m);
+        Store.absorbCloud();
+        shut();
+        if (then) then();
+        route(true);
+      } },
+        el("button", { class: "acct-close", type: "button", "aria-label": "Close", onclick: () => shut() }, "×"),
+        el("div", { class: "acct-head" }, el("h2", { id: "acctTitle" }, creating ? "Create a profile" : resetting ? "Choose a new password" : "Welcome back")),
+        resetting ? null : el("div", { class: "seg acct-tabs", role: "group", "aria-label": "Sign in or create a profile" }, tab("signin", "Sign in"), tab("create", "Create profile")),
+        field("Name", name), field(resetting ? "New password" : "Password", pw), pw2 ? field("Confirm password", pw2) : null,
+        err, submit,
+        mode === "signin" ? el("button", { class: "linklike small acct-forgot", type: "button", onclick: () => go("reset") }, "Forgot your password?")
+          : resetting ? el("button", { class: "linklike small acct-forgot", type: "button", onclick: () => go("signin") }, "Back to sign in") : null);
+      dlg.replaceChildren(form);
+      (typedName ? pw : name).focus();
+    };
+    dlg.addEventListener("close", () => dlg.remove());
+    document.body.append(dlg);
+    dlg.showModal();
+    draw();
+  }
+
   // Sign-in / create-account dialog. `then` runs after a successful sign-in (e.g. the save the user clicked).
   // Modes: signin, create, reset (email a reset link), newpw (set a new password after opening that link).
   function accountDialog(then, mode = "signin", note = null) {
+    if (!ACCOUNTS_ON) return localDialog(then, mode === "create" ? "create" : "signin");
     const dlg = el("dialog", { class: "acct-dialog", "aria-labelledby": "acctTitle" });
     let typedEmail = "";
     // Removed as well as closed, so a second dialog never finds this one's fields by id.
@@ -2494,7 +2541,7 @@
     }
     const d = Store.data();
     const n = Object.values(d.saved).filter((v) => !v.removed).length + Object.keys(d.marks).length;
-    const cst = Store.isCloud() ? Cloud.status() : null;
+    const cst = ACCOUNTS_ON && Store.isCloud() ? Cloud.status() : null;
     const syncLine = cst ? { ok: ["is-ok", "Saved to your account"], syncing: ["is-ok", "Saving to your account…"], error: ["is-warn", "Couldn't reach your account: retry"], off: ["is-warn", "Not connected to your account"] }[cst] : null;
     const bst = Backup.supported ? Backup.status() : (unbackedChanges() ? "download" : "ok-dl");
     const backupLine = { ok: ["is-ok", "Backup file up to date"], paused: ["is-warn", "Backups paused: resume"], error: ["is-warn", "Backup failed: check"], off: ["is-warn", "Set up a backup"],

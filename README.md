@@ -26,9 +26,11 @@ The site opens on Collaborations and is open to anyone.
 - **Method.** Sourcing rules, the codebook, audit log, corrections and limits.
 - **Privacy, Terms, Contact** (`#privacy`, `#terms`, `#contact`), linked in the footer. The contact form posts to Web3Forms, which emails the message to the address its access key was made with, so no address appears in the site. Put the key in `W3F_KEY` in `app.js`.
 - **Maps.** The 3D/2D buttons switch every map between a globe and a flat map (remembered per browser). ⤢ opens a map in full view.
-- **Profiles.** Sign in from the top bar with an email and password. Agreements, news items and key documents can be saved (☆), marked read (✓), flagged (⚠) or annotated (✎). The Saved page (`#saved`) lists them and can download a JSON copy.
+- **Profiles.** Create a profile from the top bar with a name and password; it lives only in that browser. Agreements, news items and key documents can be saved (☆), marked read (✓), flagged (⚠) or annotated (✎). The Saved page (`#saved`) lists them and can download a JSON copy.
 
 ## Accounts
+
+Online accounts are switched off for now: `ACCOUNTS_ON` in `app.js` is `false` and the supabase-js script tag in `index.html` is commented out, so profiles are browser-only and nothing is sent to Supabase. The account code is kept. Turning it back on means flipping the flag, restoring the script tag, updating the Privacy Policy and Terms, and giving Supabase a custom email sender so password resets reach people. How it works when on:
 
 - **Accounts** use Supabase: an email and a password, stored hashed by Supabase. "Confirm email" is off in Supabase, so a new account is signed in at once. "Forgot your password?" emails a reset link that returns to the site, so its address must be in Supabase's redirect URLs. Each account's saved items and notes sit in one row of `atlas_profiles`, which only that account can read or write. Create the table once by running `supabase/schema.sql` in the Supabase SQL Editor. The browser keeps its own copy, and every sync merges the two, so notes are never lost. A browser-only profile that is signed in when someone signs into an account is merged into it. Snapshots, the backup file and "Download a copy" still work as before. Supabase's built-in mail, used only for reset links, reaches only members of the Supabase team and sends a few emails an hour; anyone else needs custom SMTP set up in Supabase.
 
