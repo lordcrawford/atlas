@@ -24,6 +24,32 @@ India, Indonesia, Pakistan, Nigeria and Brazil were added, the five largest coun
 - Model codes: all five are adoption first. Nigeria and Brazil are coded "own AI law or bill" (the rule now also covers AI rules inside a wider digital law), Indonesia "regional body" through the ASEAN guide, India and Brazil "national" compute on the strength of funded state programmes. Indonesia was added to the ASEAN guide agreement.
 - Not yet covered for these five: key documents beyond India's 2018 strategy, and agreements with other governments.
 
+## Eighth audit and news update (22 Nov 2026)
+
+- All 854 cited pages were fetched again and each claim's numbers and dates were compared with the text of its sources. 788 pages were read automatically and 3 more in a browser (Sweden's AI strategy page, the Council of Europe's notice on its AI convention and the Nordic Council's 2018 declaration). 62 sit behind bot checks, time out or return empty pages; none is bypassed, and each was read in an earlier audit. 1 was dead. Of 592 claims, 66 were flagged by the comparison and reviewed by hand; all but the ones below were differences of format (a date taken from the page's publication day, "US$ 400.000", "cuatro años y medio").
+- **Group agreements were missing the larger countries added on 5 November.** Each fix rests on a source already cited:
+  - GPAI: OECD.AI now lists 47 member countries, not 46. India (a founding member) and Brazil were added, so 26 nations on this site are members.
+  - Bletchley Declaration: Brazil, India, Indonesia and Nigeria are on GOV.UK's list of the 28 countries and were added.
+  - WAICO: Reuters names Belarus and Brazil among the 29 founding signatories; both were added.
+  - San Francisco Declaration: India, already named in the text, was added as a member.
+- **Pax Silica.** The State Department's page now lists the declaration's signatories. El Salvador, Finland, Greece, India, Norway, Panama, Qatar, Singapore, Sweden and the UAE were added beside Paraguay and Costa Rica, and the page is cited.
+- **San Francisco Declaration re-sourced.** The State Department release that could not be found on 16 November is now online and confirms the date, the ten governments and the five working groups. It and The National were added and the badge went from 2 sources to 3+ on the agreement and on the Singapore, Qatar and UAE news items.
+- **Dead link replaced:** Morningstar's copy of Firebird's 8 August 2026 press release (HTTP 404). The fact now cites the Armenian prime minister's office and the news item cites Zawya's copy of the same release.
+- **Removed:** "for 2026–2028" from the Turkmenistan news item of 20 May 2026. The UNDP page it cites does not give the strategy's period; the fact beside it keeps the period, which UN APCICT's note supports.
+- **Not reachable on 22 November, left in place:** the Lithuanian economy ministry's pages, Muscat Daily and the Ukrainian government portal (verification walls), AGBI (refuses the request), u.ae, edbmauritius.org, mtnima.gov.mr and two aiffp.gov.au pages (time-outs), asean.org (redirect loop). Eleven claims had no source readable by script; three of them were confirmed in a browser as above.
+- Kosovo's readiness assessment is a Word file, so it was unpacked and read directly; its date (April 2026), Regulation No. 04/2026 and findings match the two facts that cite it.
+- **News search, 17 to 22 November 2026,** covering every region and the five larger countries. 6 news items, 4 facts and 3 agreements were added, in `data/updates-2026-11b.js`:
+  - Singapore: three National AI Missions for financial services, announced on 18 November (MAS, TNGlobal, Indiplomacy).
+  - Greece: the bill on AI and algorithms at work tabled on 20 November (Greek City Times, Dnews, Parapolitika).
+  - Fiji: the Civil Service AI Initiative launched on 20 November (Fiji Sun, an IANS report in the Free Press Journal).
+  - Jamaica: the Cabinet-approved exploratory memorandum on AI infrastructure announced on 15 November (the Star and Gleaner counted once, Caribbean National Weekly, IRIE FM).
+  - Dominican Republic: Decree 787-26 of 2 November approving an AI ethics code for public services (Diario Libre, Infobae). It fell inside the previous search window and was missed then.
+  - India: a news item for its signature of the San Francisco Declaration.
+  - Agreements: the UAE–Dominican Republic One Million AI Coders programme (The National, Hoy; Dominican Today translates Hoy and is counted with it); the US-led Joint Statement on AI Opportunity Partnership, with 54 countries of which 35 are on this site (State Department, ITIF); and the GCC AI Strategy approved by the Gulf digital-government ministers in late October (one outlet, marked single).
+  - Checked and not added: Zimbabwe's AI charter and the Dutch AI vision (countries not on the site); Google's grant to IIT Kharagpur (a company, not a government act); Nigeria's reported use of AI in intelligence work (one outlet, no programme named); the UAE AI Office's training initiative for Arab women (the WAM page could not be read); Brazil's AI bill (no vote scheduled).
+- The governance codes were not changed. Whether signing Pax Silica or the AI Opportunity Statement should move a country's bloc code is left for a separate review.
+- 15 preview images were added for the new source pages, each checked to load.
+
 ## Seventh audit and news update (16 Nov 2026)
 
 - All 794 cited pages were fetched again and every claim's dates, numbers and names were checked against them. 699 pages were read automatically, 86 sit behind bot checks or returned empty pages (they were read in a browser where a claim depended on them, and none is bypassed), and 9 could not be reached at all.

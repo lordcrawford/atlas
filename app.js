@@ -1907,6 +1907,8 @@
     const li = (...kids) => el("li", {}, ...kids);
     // The audit history, kept short and folded away; METHODOLOGY.md in the project holds the full record.
     const audits = [
+      ["22 Nov 2026", "Eighth audit. 854 pages re-fetched (788 read automatically, 3 more in a browser, the rest behind bot checks that are not bypassed). Group agreements corrected to include the larger countries added on 5 November: India and Brazil in GPAI (now 47 members), Brazil, India, Indonesia and Nigeria in the Bletchley Declaration, Belarus and Brazil in WAICO, and ten more signatories of Pax Silica from the State Department's list. The San Francisco Declaration re-sourced to the State Department's release. One dead link replaced; one unsupported date range removed from a Turkmenistan news item."],
+      ["16 Nov 2026", "Seventh audit. 794 pages re-fetched. Benin's strategy and Kiribati's ICT policy re-sourced after their links died; no badge changed."],
       ["5 Nov 2026", "Sixth audit. 775 pages re-fetched (730 read automatically, 13 in a browser, 32 behind bot checks that are not bypassed). Lesotho corrected: its AI policy was validated in 2025, not published on 17 August 2026. Unsupported details removed from Qatar, Norway and Cuba; the UAE's 2017 launch and the UAE–Malaysia–Rwanda agreement re-sourced; two dead links dropped."],
       ["26 Oct 2026", "Fifth audit. 782 links re-fetched; no source removed, no badge changed. All 110 key-document links alive."],
       ["24 Oct 2026", "Fourth audit. 51 citations that broke the source rule removed (trackers, aggregators, newsletters, consultancies); 41 badges lowered; 12 dead pages pointed at Internet Archive copies."],

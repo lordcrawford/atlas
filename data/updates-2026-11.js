@@ -26,12 +26,13 @@
     {
       date: "2026-11-15", title: "Singapore signs the San Francisco Declaration",
       summary: "At the Pax Silica founders' retreat in San Francisco, Singapore joined the United States, Australia, India, Israel, Japan, South Korea, Qatar, the UAE and the United Kingdom in signing the San Francisco Declaration on the Secure Foundations of Enduring Prosperity, which sets up five working groups on innovation policy, AI adoption, supply-chain coordination, supply-chain security hubs, and security and resilience.",
-      level: "corroborated",
+      level: "verified",
       sources: [
         S("ANI - US, India and 8 other nations sign San Francisco Declaration (16 Nov 2026)", "https://www.aninews.in/news/world/us/us-india-and-8-other-nations-sign-san-francisco-declaration-to-secure-super-intelligence-supply-chains-ahead-of-quad-summit20261116120000/"),
+        S("US Department of State - The San Francisco Declaration on the Secure Foundations of Enduring Prosperity (15 Nov 2026)", "https://www.state.gov/releases/office-of-the-spokesman/2026/11/the-san-francisco-declaration-on-the-secure-foundations-of-enduring-prosperity/"),
+        S("The National - UAE among nine US allies pledging to safeguard sensitive AI technology (16 Nov 2026)", "https://www.thenationalnews.com/future/technology/2026/11/16/uae-san-francisco-declaration-pax-silica/"),
         S("Investing.com - US, nine nations sign San Francisco declaration on AI security (16 Nov 2026)", "https://www.investing.com/news/world-news/us-nine-nations-sign-san-francisco-declaration-on-ai-security-5028448"),
       ],
-      note: "Both reports cite a US State Department press release; the department's own page was not found at the time of checking.",
     },
     {
       date: "2026-11-05", title: "GovTech to build GovHarness for government AI agents",
@@ -231,31 +232,37 @@
       id: "sf-declaration", kind: "group", date: "2026-11-15",
       title: "San Francisco Declaration (Pax Silica)",
       short: "San Francisco Declaration",
-      hub: "us", members: ["sg", "qa", "ae"],
+      hub: "us", members: ["sg", "qa", "ae", "in"],
       text: "Signed on 15 November 2026 at the Pax Silica founders' retreat in San Francisco, convened by US Under Secretary of State Jacob Helberg, by the United States, Australia, India, Israel, Japan, South Korea, Qatar, Singapore, the UAE and the United Kingdom. The declaration treats economic security as part of national security, defines the sensitive technologies and critical infrastructure (ports, energy, communications, data networks) behind AI supply chains, and sets up five working groups on innovation policy, AI adoption in key sectors, supply-chain coordination, supply-chain security hubs, and security and resilience.",
-      level: "corroborated",
+      level: "verified",
       sources: [
         S("ANI - US, India and 8 other nations sign San Francisco Declaration (16 Nov 2026)", "https://www.aninews.in/news/world/us/us-india-and-8-other-nations-sign-san-francisco-declaration-to-secure-super-intelligence-supply-chains-ahead-of-quad-summit20261116120000/"),
+        S("US Department of State - The San Francisco Declaration on the Secure Foundations of Enduring Prosperity (15 Nov 2026)", "https://www.state.gov/releases/office-of-the-spokesman/2026/11/the-san-francisco-declaration-on-the-secure-foundations-of-enduring-prosperity/"),
+        S("The National - UAE among nine US allies pledging to safeguard sensitive AI technology (16 Nov 2026)", "https://www.thenationalnews.com/future/technology/2026/11/16/uae-san-francisco-declaration-pax-silica/"),
         S("Investing.com - US, nine nations sign San Francisco declaration on AI security (16 Nov 2026)", "https://www.investing.com/news/world-news/us-nine-nations-sign-san-francisco-declaration-on-ai-security-5028448"),
       ],
-      note: "Both reports cite a US State Department press release that was not found online when checked. The earlier Pax Silica Declaration (December 2025 onward) is listed separately under Paraguay and Costa Rica.",
+      note: "The State Department published the text and the list of signatories after the first reports; it was read on 22 November 2026. The earlier Pax Silica Declaration (December 2025 onward) is listed separately.",
     },
   );
   addNews("qa", {
     date: "2026-11-15", title: "Qatar signs the San Francisco Declaration",
     summary: "Qatar was among ten governments signing the Pax Silica coalition's San Francisco Declaration on the Secure Foundations of Enduring Prosperity, which treats economic security as national security and sets up five working groups on innovation policy, AI adoption, supply-chain coordination, security hubs and resilience.",
-    level: "corroborated",
+    level: "verified",
     sources: [
       S("ANI - US, India and 8 other nations sign San Francisco Declaration (16 Nov 2026)", "https://www.aninews.in/news/world/us/us-india-and-8-other-nations-sign-san-francisco-declaration-to-secure-super-intelligence-supply-chains-ahead-of-quad-summit20261116120000/"),
+      S("US Department of State - The San Francisco Declaration on the Secure Foundations of Enduring Prosperity (15 Nov 2026)", "https://www.state.gov/releases/office-of-the-spokesman/2026/11/the-san-francisco-declaration-on-the-secure-foundations-of-enduring-prosperity/"),
+      S("The National - UAE among nine US allies pledging to safeguard sensitive AI technology (16 Nov 2026)", "https://www.thenationalnews.com/future/technology/2026/11/16/uae-san-francisco-declaration-pax-silica/"),
       S("Investing.com - US, nine nations sign San Francisco declaration on AI security (16 Nov 2026)", "https://www.investing.com/news/world-news/us-nine-nations-sign-san-francisco-declaration-on-ai-security-5028448"),
     ],
   });
   addNews("ae", {
     date: "2026-11-15", title: "UAE signs the San Francisco Declaration",
     summary: "The UAE was among ten governments signing the Pax Silica coalition's San Francisco Declaration on the Secure Foundations of Enduring Prosperity, which treats economic security as national security and sets up five working groups on innovation policy, AI adoption, supply-chain coordination, security hubs and resilience.",
-    level: "corroborated",
+    level: "verified",
     sources: [
       S("ANI - US, India and 8 other nations sign San Francisco Declaration (16 Nov 2026)", "https://www.aninews.in/news/world/us/us-india-and-8-other-nations-sign-san-francisco-declaration-to-secure-super-intelligence-supply-chains-ahead-of-quad-summit20261116120000/"),
+      S("US Department of State - The San Francisco Declaration on the Secure Foundations of Enduring Prosperity (15 Nov 2026)", "https://www.state.gov/releases/office-of-the-spokesman/2026/11/the-san-francisco-declaration-on-the-secure-foundations-of-enduring-prosperity/"),
+      S("The National - UAE among nine US allies pledging to safeguard sensitive AI technology (16 Nov 2026)", "https://www.thenationalnews.com/future/technology/2026/11/16/uae-san-francisco-declaration-pax-silica/"),
       S("Investing.com - US, nine nations sign San Francisco declaration on AI security (16 Nov 2026)", "https://www.investing.com/news/world-news/us-nine-nations-sign-san-francisco-declaration-on-ai-security-5028448"),
     ],
   });

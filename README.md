@@ -18,7 +18,7 @@ A dashboard on how countries outside the AI frontier use and govern AI.
 
 The site opens on Collaborations and is open to anyone.
 
-- **Collaborations.** 52 AI agreements between governments: 34 two-country deals and 18 groups (LUMI, the Council of Europe AI convention, GPAI, the Paris Call on AI safety, CARICOM's AI roadmap, the Pacific Islands Forum's AI principles and so on). A list sits beside a globe that draws each agreement as a route. Picking one, or letting the tour run, turns the globe to its countries and opens the description and sources. Each agreement has its own link, `#collab/<id>`. Company deals and aid projects are not included.
+- **Collaborations.** 55 AI agreements between governments: 35 two-country deals and 20 groups (LUMI, the Council of Europe AI convention, GPAI, the Paris Call on AI safety, CARICOM's AI roadmap, the Pacific Islands Forum's AI principles and so on). A list sits beside a globe that draws each agreement as a route. Picking one, or letting the tour run, turns the globe to its countries and opens the description and sources. Each agreement has its own link, `#collab/<id>`. Company deals and aid projects are not included.
 - **Nations.** A country finder, a map shaded by readiness rank or governance model, and links to the source datasets (Oxford Insights, Microsoft's AI Diffusion reports, the Stanford AI Index, OECD.AI, the OECD Digital Economy Policy Platform, the World Bank). Each nation page has a locator map, stat tiles, a readiness profile against the median, up to two key documents, an AI partners section, facts newest first (pre-2024 background behind a toggle) and news since 2024.
 - **News.** Everything since January 2024, with the preview image each source page publishes (hotlinked, linked back to the source page, listed in `data/news-images.js`). Items confirmed by two or more sources come first. Sort by date or by a relevance score, filter by region, nation or number of sources.
 - **Findings.** Six claims about what the data shows, counted live from the data, each opening to the nations behind it.
@@ -34,7 +34,7 @@ Online accounts are switched off for now: `ACCOUNTS_ON` in `app.js` is `false` a
 
 - **Accounts** use Supabase: an email and a password, stored hashed by Supabase. "Confirm email" is off in Supabase, so a new account is signed in at once. "Forgot your password?" emails a reset link that returns to the site, so its address must be in Supabase's redirect URLs. Each account's saved items and notes sit in one row of `atlas_profiles`, which only that account can read or write. Create the table once by running `supabase/schema.sql` in the Supabase SQL Editor. The browser keeps its own copy, and every sync merges the two, so notes are never lost. A browser-only profile that is signed in when someone signs into an account is merged into it. Snapshots, the backup file and "Download a copy" still work as before. Supabase's built-in mail, used only for reset links, reaches only members of the Supabase team and sends a few emails an hour; anyone else needs custom SMTP set up in Supabase.
 
-Data as of 16 November 2026 (seventh audit and news search). Earlier audits and the news cut-offs are listed in `METHODOLOGY.md`.
+Data as of 22 November 2026 (eighth audit and news search). Earlier audits and the news cut-offs are listed in `METHODOLOGY.md`.
 
 ## Run it
 
@@ -57,7 +57,7 @@ Then open http://localhost:8765. Opening `index.html` directly also works.
 | `data/nations.js` | First six nations, plus shared metadata and sources |
 | `data/nations-more.js` … `nations-more6.js` | The rest of the under-15M states, in the order they were added |
 | `data/nations-more7.js` | India, Indonesia, Pakistan, Nigeria, Brazil (added 5 November 2026) |
-| `data/updates-2026-11.js` | News, facts, agreements and documents found in the November 2026 search, pushed onto the nations they concern |
+| `data/updates-2026-11.js`, `updates-2026-11b.js` | News, facts, agreements and documents found in the two November 2026 searches (to 16 and to 22 November), pushed onto the nations they concern |
 | `data/documents.js` | Up to two key documents per nation |
 | `data/scope.js` | Who is left out and why, the exception, and the countries still to add |
 | `data/news-images.js` | Preview image for each news source page |

@@ -390,7 +390,7 @@
           text: "Firebird opened the AI factory in Hrazdan on 8 August 2026, with remarks from Prime Minister Nikol Pashinyan and NVIDIA's Jensen Huang. It plans to scale beyond 70,000 GPUs and 300 MW by the end of 2027.",
           level: "verified",
           sources: [
-            S("Morningstar / PR Newswire - Firebird opens the region's largest AI factory", "https://www.morningstar.com/news/pr-newswire/20260808ln22240/firebird-opens-the-regions-largest-ai-factory-and-announces-global-expansion"),
+            S("Prime Minister of Armenia - The Prime Minister attends the official opening of the Firebird AI factory (8 Aug 2026)", "https://primeminister.am/en/press-release/item/2026/08/08/Nikol-Pashinyan-visit-to-AI-factory"),
             S("The AI Insider - Firebird opens Armenia AI factory, plans 70,000-plus GPUs", "https://theaiinsider.tech/2026/08/09/firebird-opens-armenia-ai-factory-plans-70000-plus-nvidia-gpus-by-2027/"),
             S("Armenpress - 'The future is now,' Pashinyan says as Firebird opens AI megaproject (8 Aug 2026)", "https://armenpress.am/en/article/1257541"),
             S("ARKA - Firebird AI factory financed by Ardshinbank officially opens in Armenia", "https://arka.am/en/news/technology/firebird-ai-factory-financed-by-ardshinbank-officially-opens-in-armenia/"),
@@ -404,7 +404,7 @@
           summary: "Perplexity was named as an early customer. A second phase is valued at about $4 billion.",
           level: "verified",
           sources: [
-            S("Morningstar / PR Newswire", "https://www.morningstar.com/news/pr-newswire/20260808ln22240/firebird-opens-the-regions-largest-ai-factory-and-announces-global-expansion"),
+            S("Zawya - Firebird press release", "https://www.zawya.com/en/press-release/companies-news/firebird-opens-the-regions-largest-ai-factory-and-announces-global-expansion-425771"),
             S("The AI Insider", "https://theaiinsider.tech/2026/08/09/firebird-opens-armenia-ai-factory-plans-70000-plus-nvidia-gpus-by-2027/"),
             S("Armenpress", "https://armenpress.am/en/article/1257541"),
           ],

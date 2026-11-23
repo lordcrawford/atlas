@@ -5,6 +5,21 @@
 (function () {
   const A = (window.ATLAS = window.ATLAS || {});
   A.images = {
+    "https://technode.global/2026/11/18/singapore-launches-initiatives-to-support-national-ai-missions-for-financial-services/": "https://technode.global/wp-content/uploads/2026/10/MAS-Singapore-scaled.jpg",
+    "https://greekcitytimes.com/2026/11/22/ai-labour-bill/": "https://greekcitytimes.com/wp-content/uploads/2026/11/platform-delivery-scooter-athens.jpg",
+    "https://www.dnews.gr/eidhseis/news-in-english/624004/greece-moves-to-rein-in-ai-driven-workplace-decisions-strengthen-gig-worker-rights": "https://www.dnews.gr/media/k2/items/cache/54208b5a444e49da6a2ab9a1d26f44fc_L.jpg?t=20261122_050802",
+    "https://en.parapolitika.gr/politics/315399/new-ai-rules-at-work-what-changes-for-gig-workers-on-digital-platforms/": "https://en.parapolitika.gr/wp-content/uploads/2026/11/kerameos-texniti-noimosini.jpg",
+    "https://fijisun.com.fj/news/nation/govt-prepares-civil-service-for-ai": "https://images.fijisun.com.fj/media/3721bcad-fe15-47d6-8d4b-cbcde9e9eb2a",
+    "https://www.freepressjournal.in/tech/fiji-moves-to-regulate-ai-in-public-services-with-new-policy-competency-governance-frameworks": "https://media.assettype.com/freepressjournal/2026-05-29/81vrqa9r/AI-AI.jpg",
+    "https://www.diariolibre.com/politica/gobierno/2026/11/04/gobierno-dominicano-establece-controles-sobre-inteligencia-artificial/3711173": "https://resources.diariolibre.com/images/2024/12/13/designer-using-transparent-digital-tablet-screen-futuristic-technology--1-focus-0-0-1200-675_wam.jpg",
+    "https://www.infobae.com/republica-dominicana/2026/11/04/republica-dominicana-regula-el-uso-de-inteligencia-artificial-en-los-servicios-publicos/": "https://www.infobae.com/resizer/v2/ZRAMCEHZLNFSTMDHGO5XBVVIYU.jpg?auth=6e78b1924ee4a98f008b4b7babe323feaee33784ee6903139390d54bf6bd4fe6&smart=true&width=1200&height=630&quality=85",
+    "https://jamaica-star.com/article/news/20261115/ai-infrastructure-facilities-may-be-coming-jamaica-0": "https://jamaica-star.com/sites/default/files/styles/250px/public/articles/images/whatsapp_image_2026-11-15_at_3.00.22_pm.jpeg?itok=2TBfL0Od",
+    "https://www.caribbeannationalweekly.com/posts/holness-announces-plans-to-bring-artificial-intelligence-infrastructure-to-jamaica": "https://mspuvrxvxla8izul.public.blob.vercel-storage.com/Andrew-Holness-17.jpg",
+    "https://www.thenationalnews.com/future/technology/2026/11/16/uae-san-francisco-declaration-pax-silica/": "https://www.thenationalnews.com/resizer/v2/546JB75VRVCTNF5DE44OG7RHKE.jpg?auth=3359c13f3e60f008b62fceeadad45b9531fab93f7464e24433b6a260f212b13d&smart=true&width=1200&height=630",
+    "https://www.thenationalnews.com/news/uae/2026/11/22/uae-to-train-1-million-ai-coders-in-dominican-republic-under-digital-drive/": "https://www.thenationalnews.com/resizer/v2/DTU34LGPNJEOBF6RUP6JJFELNM.jpg?auth=33fe878299b33688dfafd27161e2c525cf4713f608efb1661e9368244ac42c09&smart=true&width=1200&height=630",
+    "https://hoy.com.do/el-pais/rd-firma-acuerdos-capacitar-inteligencia-artificial-acelerar-digitalizacion-educativa_1109365.html": "https://imagenes.hoy.com.do/files/og_thumbnail/files/fp/uploads/2026/11/20/6b0089962d6ce.r_d.360-640-16666.jpeg",
+    "https://dominicantoday.com/the-dominican-republic-signs-agreements-to-provide-training-in-artificial-intelligence-and-accelerate-educational-digitization/": "https://dominicantoday.com/wp-content/uploads/2026/11/6b0089962d6ce.r_d.360-640-16667-580x410.webp",
+    "https://www.zawya.com/en/press-release/companies-news/firebird-opens-the-regions-largest-ai-factory-and-announces-global-expansion-425771": "https://media.zawya.com/prod/images/gm_preview/e97d49bbb8f6-dsdd.jpg",
     "https://20more.lu/en/blog/luxembourg-ai-factory-meluxina-sme-access-guide-2026/": "https://20more.lu/blog/covers/luxembourg-ai-factory-meluxina-sme-access-guide-2026.webp",
     "https://ai.gov.rs/vest/en/1296/serbia-adopts-strategy-for-the-development-of-artificial-intelligence-for-the-period-20252030.php": "https://ai.gov.rs/static/en/0/279/img_279.png",
     "https://aifactory.lu/about/meluxina-ai": "https://stlxipuhot.blob.core.windows.net/staging/sharedmedia/ai/images-with-background/l-aif-website-(1).png",

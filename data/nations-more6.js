@@ -316,7 +316,7 @@
       news: [
         {
           date: "2026-05-20", title: "Draft national AI strategy reviewed",
-          summary: "Government institutions, national experts and UNDP specialists reviewed the key findings of the draft National AI Strategy for 2026–2028.",
+          summary: "Government institutions, national experts and UNDP specialists reviewed the key findings of the draft National AI Strategy.",
           level: "single",
           sources: [S("UNDP Turkmenistan", "https://www.undp.org/node/584666")],
         },
