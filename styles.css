@@ -808,3 +808,4 @@ a.cpill:hover { border-color: var(--accent); color: var(--ink); }
 .globe-stage .map-marker:hover circle { r: calc(6.5px * var(--u, 1)); }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .method .sr-only + .sourced { margin-top: 0; }
+.ia-ask { font-size: 13px; font-weight: 700; color: var(--ink); }

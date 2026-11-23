@@ -2614,13 +2614,16 @@
         m && m.status ? el("span", { class: `ia-state ia-state-${m.status}` }, MARKS[m.status].label) : null);
       const kids = [bar];
       if (editing) {
-        const ta = el("textarea", { class: "ia-note-input", rows: "3", placeholder: m && m.status === "sus" ? "What looks off? (wrong date, dead link, weak source…)" : "Your note", "aria-label": "Note" });
+        // Flagging something as suspicious asks for the reason straight away.
+        const sus = !!m && m.status === "sus";
+        const ask = sus ? el("label", { class: "ia-ask", for: `iaNote-${slug(key)}` }, "Why does this seem suspicious?") : null;
+        const ta = el("textarea", { class: "ia-note-input", id: `iaNote-${slug(key)}`, rows: "3", placeholder: sus ? "Wrong date, dead link, weak source…" : "Your note", "aria-label": sus ? "Why does this seem suspicious?" : "Note" });
         ta.value = (m && m.note) || "";
         const done = (keep) => { if (keep) Store.setMark(key, { note: ta.value.trim() }, snap); editing = false; draw(); };
         ta.addEventListener("keydown", (e) => { if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) done(true); if (e.key === "Escape") done(false); });
-        kids.push(el("div", { class: "ia-edit" }, ta,
+        kids.push(el("div", { class: "ia-edit" }, ask, ta,
           el("div", { class: "ia-edit-actions" },
-            el("button", { class: "acct-btn primary small", type: "button", onclick: () => done(true) }, "Save note"),
+            el("button", { class: "acct-btn primary small", type: "button", onclick: () => done(true) }, sus ? "Save reason" : "Save note"),
             el("button", { class: "acct-btn small", type: "button", onclick: () => done(false) }, "Cancel"))));
       } else if (m && m.note) kids.push(el("p", { class: `ia-note ia-note-${m.status || "plain"}` }, m.note));
       // Earlier versions of the note and mark, newest first, each restorable.
