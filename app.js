@@ -1970,52 +1970,85 @@
   const ext = (label, u) => el("a", { href: u, target: "_blank", rel: "noopener" }, label);
   function renderPrivacy() {
     const li = (...k) => el("li", {}, ...k);
-    legalPage("Privacy policy",
-      el("p", {}, "Atlas has no ads, no analytics and no tracking cookies. This page lists everything that is stored or sent when you use it."),
-      el("h2", {}, "Without an account"),
+    const b = (lead, text) => li(el("strong", {}, lead), " ", text);
+    const contact = (t) => el("a", { href: "#contact" }, t);
+    legalPage("Privacy Policy",
+      el("p", {}, "This Privacy Policy explains how Atlas (“Atlas”, “we”, “us” or “our”) collects, uses and shares information when you use this website (the “Service”). By using the Service, you agree to the collection and use of information as described in this policy."),
+      el("h2", {}, "1. Information We Collect"),
       el("ul", {},
-        li("Nothing about you is stored by Atlas on a server."),
-        li("Your browser keeps your theme and map choice, and any profile you create on this browser with the saved items and notes in it. A profile's password is stored as a salted hash. This stays on your device until you clear the site's data."),
-        li("If you turn on the backup file, the site writes your profile to a file you pick on your computer. The browser remembers which file, and nothing is uploaded.")),
-      el("h2", {}, "With an account"),
+        b("Account information.", "When you create an account, we collect your email address and a password. Passwords are stored in hashed form by our authentication provider. We never see or store your password in plain text."),
+        b("Content you save.", "When you are signed in, we store the items you save, the items you mark as read or flagged, and the notes you write."),
+        b("Communications.", "When you contact us through the contact form, we collect your email address and the content of your message."),
+        b("Log data.", "Our hosting and authentication providers automatically record standard technical information, such as your IP address, browser type, and the dates and times of requests and sign-ins."),
+        b("Information stored on your device.", "The Service uses your browser’s local storage to remember your preferences (such as theme and map view), to keep you signed in, and to hold a copy of your saved items and notes. A profile created on a browser without an account is stored only on that device. If you turn on the backup file feature, your data is written to a file you choose on your own device.")),
+      el("p", {}, "We do not use advertising or analytics cookies, and we do not track you across other websites."),
+      el("h2", {}, "2. How We Use Information"),
+      el("p", {}, "We use the information we collect to:"),
       el("ul", {},
-        li("Accounts run on Supabase. It stores your email address, your password as a hash, and sign-in records such as times and IP addresses."),
-        li("Your saved items, read and flag marks and notes are stored in one database row that only your account can read or change. A copy also stays in your browser so the site works offline."),
-        li("Your email is used only to sign you in and to send password reset links.")),
-      el("h2", {}, "Contact form"),
-      el("p", {}, "What you write in the contact form, and the email address you give, is sent through Web3Forms to Atlas's inbox and used only to reply to you."),
-      el("h2", {}, "Other services your browser talks to"),
+        li("provide, maintain and secure the Service;"),
+        li("create and manage your account, including sending password reset emails;"),
+        li("store your saved items and notes and sync them across your devices; and"),
+        li("respond to your messages and requests.")),
+      el("p", {}, "We do not use your information for advertising, and we do not sell your personal information."),
+      el("h2", {}, "3. How We Share Information"),
+      el("p", {}, "We do not share your personal information with third parties except as described below."),
       el("ul", {},
-        li(ext("Vercel", "https://vercel.com/legal/privacy-policy"), " hosts the site and keeps standard request logs, including IP addresses."),
-        li(ext("Supabase", "https://supabase.com/privacy"), " runs accounts and stores account data."),
-        li(ext("jsDelivr", "https://www.jsdelivr.com/terms/privacy-policy-jsdelivr-net"), " serves the code library used for signing in."),
-        li("Web3Forms delivers contact form messages."),
-        li("News pictures load straight from the news sites that published them, so those sites see your IP address and browser details when a picture is shown.")),
-      el("p", {}, "Atlas does not sell or share your information with anyone else."),
-      el("h2", {}, "Keeping and deleting it"),
+        b("Service providers.", el("span", {}, "We rely on third-party providers to operate the Service: ", ext("Vercel", "https://vercel.com/legal/privacy-policy"), " (hosting), ", ext("Supabase", "https://supabase.com/privacy"), " (authentication and database), ", ext("jsDelivr", "https://www.jsdelivr.com/terms/privacy-policy-jsdelivr-net"), " (delivery of a software library used for sign-in) and Web3Forms (delivery of contact form messages). These providers process information on our behalf and under their own privacy policies.")),
+        b("Third-party content.", "News preview images are loaded directly from the websites of the publishers that produced them. When an image is displayed, that publisher may receive your IP address and browser information. Links to external websites are governed by the privacy policies of those websites."),
+        b("Legal requirements.", "We may disclose information if required to do so by law or in response to a valid legal request.")),
+      el("h2", {}, "4. Data Retention"),
+      el("p", {}, "We retain your account information and saved content for as long as your account is active. When your account is deleted, we delete your email address, credentials and saved content from our systems, although residual copies may remain in backups for a limited period. Messages sent through the contact form are retained for as long as needed to respond to you and maintain our records."),
+      el("h2", {}, "5. Your Rights and Choices"),
       el("ul", {},
-        li("Account data is kept until you ask for the account to be deleted. Deleting it removes your email, password and stored notes."),
-        li("To delete your account, use the ", el("a", { href: "#contact" }, "contact form"), " from the email address on the account. Download a copy of your notes from the Saved page first if you want to keep them."),
-        li("Browser data can be removed at any time by clearing this site's data in your browser.")),
-      el("h2", {}, "Children"),
-      el("p", {}, "Atlas is not meant for children under 13, and they should not create an account."),
-      el("h2", {}, "Changes"),
-      el("p", {}, "If this policy changes, the date at the top changes with it. Questions go through the ", el("a", { href: "#contact" }, "contact form"), "."));
+        b("Access and portability.", "You can download a copy of your saved items and notes at any time from the Saved page."),
+        b("Deletion.", el("span", {}, "You can request deletion of your account and associated data through the ", contact("contact form"), ", using the email address associated with your account.")),
+        b("Device data.", "You can remove information stored on your device by clearing this site’s data in your browser settings.")),
+      el("p", {}, "Depending on where you live, you may have additional rights under applicable law, such as the right to access, correct or delete your personal information or to object to its processing. To exercise these rights, please contact us."),
+      el("h2", {}, "6. Security"),
+      el("p", {}, "We use reasonable technical measures to protect your information, including encryption in transit and access controls that restrict each account’s data to that account. However, no method of transmission or storage is completely secure, and we cannot guarantee absolute security."),
+      el("h2", {}, "7. Children’s Privacy"),
+      el("p", {}, "The Service is not directed to children under 13, and we do not knowingly collect personal information from them. If we learn that we have collected personal information from a child under 13, we will delete it."),
+      el("h2", {}, "8. International Data Transfers"),
+      el("p", {}, "Our service providers may process and store information in countries other than the one in which you live. By using the Service, you understand that your information may be transferred to and processed in those countries."),
+      el("h2", {}, "9. Changes to This Policy"),
+      el("p", {}, "We may update this Privacy Policy from time to time. When we do, we will revise the “Last updated” date at the top of this page. Your continued use of the Service after a change takes effect constitutes acceptance of the revised policy."),
+      el("h2", {}, "10. Contact Us"),
+      el("p", {}, "If you have questions about this Privacy Policy or our handling of your information, please reach us through the ", contact("contact form"), "."));
   }
   function renderTerms() {
+    const li = (...k) => el("li", {}, ...k);
     const contact = (t) => el("a", { href: "#contact" }, t);
-    legalPage("Terms of service",
-      el("p", {}, "Atlas is a free research site about how governments outside the AI frontier use and regulate AI. Using it means you accept these terms."),
-      el("h2", {}, "The research"),
-      el("p", {}, "Every claim links to its sources and was checked against them, but it can still be wrong or out of date. Treat it as a starting point, not legal or policy advice, and read the sources before you rely on something. If you spot a mistake, send it through the ", contact("contact form"), " and it will be checked."),
-      el("h2", {}, "Your account and notes"),
-      el("p", {}, "Use an email you can get into, and don't share your password. What you save and write is private to your account, and Atlas keeps it only so it can show it back to you."),
-      el("p", {}, "Don't try to get into other people's accounts, break the site, or flood the contact form. Accounts that do will be removed."),
-      el("h2", {}, "Other people's work"),
-      el("p", {}, "Articles, reports and news pictures belong to whoever published them. Pictures load from the publisher's own site and link back to the story. If something of yours is here and you want it taken down, ", contact("get in touch"), "."),
-      el("h2", {}, "No guarantees"),
-      el("p", {}, "Atlas may change, go offline or shut down, and it comes with no warranty. If you'd hate to lose your notes, download a copy from the Saved page. As far as the law allows, Atlas isn't responsible for losses from using it."),
-      el("p", {}, "If these terms change, the date above changes too. What data is kept is in the ", el("a", { href: "#privacy" }, "privacy policy"), "."));
+    legalPage("Terms of Service",
+      el("p", {}, "These Terms of Service (“Terms”) govern your access to and use of the Atlas website (the “Service”), operated by Atlas (“Atlas”, “we”, “us” or “our”). By accessing or using the Service, you agree to be bound by these Terms."),
+      el("h2", {}, "1. The Service"),
+      el("p", {}, "Atlas provides research summaries on how countries use and govern artificial intelligence, compiled from publicly available sources. The Service is provided free of charge. We may modify, suspend or discontinue the Service, or any part of it, at any time and without notice."),
+      el("h2", {}, "2. Informational Purposes Only"),
+      el("p", {}, "The content on the Service is provided for general informational purposes only and does not constitute legal, policy, financial or other professional advice. While we make reasonable efforts to verify content against the sources cited, we do not guarantee that it is accurate, complete or current. You should review the cited sources and verify information independently before relying on it."),
+      el("h2", {}, "3. Accounts"),
+      el("p", {}, "Some features require an account. You must be at least 13 years old to create one. You agree to provide a valid email address, to keep your password confidential, and to accept responsibility for all activity that occurs under your account. Please notify us promptly of any unauthorized use of your account."),
+      el("h2", {}, "4. Your Content"),
+      el("p", {}, "You retain ownership of the notes and other content you save to the Service (“Your Content”). You grant us a limited licence to store, process and display Your Content solely for the purpose of providing the Service to you. You are responsible for Your Content and agree that it will not violate any applicable law. We recommend keeping your own copy, which you can download from the Saved page."),
+      el("h2", {}, "5. Acceptable Use"),
+      el("p", {}, "You agree not to:"),
+      el("ul", {},
+        li("access or attempt to access another user’s account or data;"),
+        li("interfere with, disrupt or attempt to circumvent the security of the Service;"),
+        li("use automated means to create accounts or submit messages; or"),
+        li("use the Service for any unlawful purpose or to send spam.")),
+      el("h2", {}, "6. Intellectual Property"),
+      el("p", {}, "The Service, including its design, text and compilation of data, is owned by Atlas and protected by applicable intellectual property laws. You may access the Service and quote from it for personal and non-commercial purposes, provided you credit Atlas as the source."),
+      el("h2", {}, "7. Third-Party Content and Links"),
+      el("p", {}, "The Service links to third-party websites and documents and displays preview images loaded from publishers’ websites. This content belongs to its respective owners. We do not control or endorse third-party content and are not responsible for it. If you are a rights holder and would like content removed, please reach us through the ", contact("contact form"), "."),
+      el("h2", {}, "8. Termination"),
+      el("p", {}, "We may suspend or terminate your access to the Service at any time if you violate these Terms. You may stop using the Service at any time and may request deletion of your account through the ", contact("contact form"), "."),
+      el("h2", {}, "9. Disclaimer of Warranties"),
+      el("p", {}, "The Service is provided on an “as is” and “as available” basis, without warranties of any kind, whether express or implied, including implied warranties of merchantability, fitness for a particular purpose and non-infringement. We do not warrant that the Service will be uninterrupted, secure or error-free."),
+      el("h2", {}, "10. Limitation of Liability"),
+      el("p", {}, "To the fullest extent permitted by law, Atlas shall not be liable for any indirect, incidental, special, consequential or punitive damages, or for any loss of data, arising out of or relating to your use of, or inability to use, the Service."),
+      el("h2", {}, "11. Changes to These Terms"),
+      el("p", {}, "We may update these Terms from time to time. When we do, we will revise the “Last updated” date at the top of this page. Your continued use of the Service after a change takes effect constitutes acceptance of the revised Terms."),
+      el("h2", {}, "12. Contact Us"),
+      el("p", {}, "If you have questions about these Terms, please reach us through the ", contact("contact form"), ". Our ", el("a", { href: "#privacy" }, "Privacy Policy"), " explains how we handle your information."));
   }
   function renderContact() {
     const field = (lab, input) => el("div", { class: "acct-field" }, el("label", { class: "acct-label", for: input.id }, lab), input);
@@ -2682,8 +2715,8 @@
     else if (key === "findings") { renderFindings(); document.title = "Findings — Atlas"; }
     else if (key === "method") { renderMethod(); document.title = "Method — Atlas"; }
     else if (key === "saved") { renderSaved(); document.title = "Saved & reviewed — Atlas"; }
-    else if (key === "privacy") { renderPrivacy(); document.title = "Privacy policy — Atlas"; }
-    else if (key === "terms") { renderTerms(); document.title = "Terms of service — Atlas"; }
+    else if (key === "privacy") { renderPrivacy(); document.title = "Privacy Policy — Atlas"; }
+    else if (key === "terms") { renderTerms(); document.title = "Terms of Service — Atlas"; }
     else if (key === "contact") { renderContact(); document.title = "Contact — Atlas"; }
     // Collaborations is the landing page, and unknown addresses fall back to it.
     else { renderCollab(key.startsWith("collab/") ? key.slice(7) : ""); document.title = "Atlas"; }

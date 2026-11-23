@@ -788,3 +788,5 @@ a.cpill:hover { border-color: var(--accent); color: var(--ink); }
 .ct-form .acct-err { margin: 0; }
 .ct-trap { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
 .legal p + p { margin-top: var(--s3); }
+.legal ul + p, .legal p + ul { margin-top: var(--s3); }
+.legal li strong { color: var(--ink); }
