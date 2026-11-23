@@ -1962,7 +1962,7 @@
   const LEGAL_DATE = "22 November 2026";
   // Web3Forms access key: messages from the contact form are emailed to the address it was created with,
   // so the address itself never appears in the site. Create one at web3forms.com.
-  const W3F_KEY = "";
+  const W3F_KEY = "2d4717fa-70d8-447e-8418-3f71d5653db6";
   function legalPage(title, ...body) {
     view.replaceChildren(el("article", { class: "method legal" },
       pageHead("", title), el("p", { class: "legal-date" }, `Last updated ${LEGAL_DATE}`), ...body));
@@ -2300,7 +2300,7 @@
       },
       // Returns { msg } on failure or { sent: true } when a confirmation email is on its way.
       async signUp(email, pw) {
-        const { data, error } = await sb.auth.signUp({ email, password: pw, options: { emailRedirectTo: back() } });
+        const { data, error } = await sb.auth.signUp({ email, password: pw, options: { emailRedirectTo: back(), data: { terms_agreed: LEGAL_DATE, terms_agreed_at: new Date().toISOString() } } });
         if (error) return { msg: /already|registered|exists/i.test(error.message) ? "That email already has an account. Sign in instead."
           : /rate|too many|security purposes/i.test(error.message) ? "Too many attempts. Wait a few minutes and try again." : error.message };
         // An address that already has an account comes back with no identities and no email is sent.
@@ -2415,6 +2415,9 @@
       if (email) email.addEventListener("input", () => { typedEmail = email.value; });
       const pw = resetting ? null : el("input", { class: "acct-input", id: "acctPw", type: "password", autocomplete: creating || newpw ? "new-password" : "current-password", required: true });
       const pw2 = creating || newpw ? el("input", { class: "acct-input", id: "acctPw2", type: "password", autocomplete: "new-password", required: true }) : null;
+      // Creating an account needs this box ticked; the links open in a new tab so the form isn't lost.
+      const agree = creating ? el("input", { type: "checkbox", id: "acctAgree", required: true }) : null;
+      const doc = (lab, hash) => el("a", { href: hash, target: "_blank", rel: "noopener" }, lab);
       const label = creating ? "Create account" : resetting ? "Email me a reset link" : newpw ? "Save new password" : "Sign in";
       const submit = el("button", { class: "acct-btn primary acct-submit", type: "submit" }, label);
       const fail = (m) => { err.textContent = m; err.hidden = false; submit.disabled = false; submit.textContent = label; };
@@ -2428,6 +2431,7 @@
         if (email && !Cloud.validEmail(em)) return fail("Enter a valid email address.");
         if ((creating || newpw) && p.length < 8) return fail("Use a password of at least 8 characters.");
         if ((creating || newpw) && p !== pw2.value) return fail("The two passwords don't match.");
+        if (creating && !agree.checked) return fail("Tick the box to agree to the Terms and Privacy Policy.");
         submit.disabled = true; submit.textContent = "One moment…";
         if (resetting) {
           const m = await Cloud.sendReset(em);
@@ -2460,6 +2464,7 @@
         email ? field("Email", email) : null,
         pw ? field(newpw ? "New password" : "Password", pw) : null,
         pw2 ? field("Confirm password", pw2) : null,
+        agree ? el("label", { class: "acct-agree small", for: "acctAgree" }, agree, el("span", {}, "I agree to the ", doc("Terms of Service", "#terms"), " and ", doc("Privacy Policy", "#privacy"), ".")) : null,
         err,
         submit,
         mode === "signin" ? el("button", { class: "linklike small acct-forgot", type: "button", onclick: () => go("reset") }, "Forgot your password?")
