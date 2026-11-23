@@ -53,6 +53,8 @@ Then open http://localhost:8765. Opening `index.html` directly also works.
 | File | What it is |
 |---|---|
 | `index.html` | Page shell |
+| `vercel.json` | Security headers sent with every page: a Content-Security-Policy (scripts only from this site, no inline scripts, connections only to this site and Web3Forms), no framing by other sites, no MIME sniffing, HTTPS only |
+| `analytics.js` | Loads Vercel Web Analytics and Speed Insights (a file of its own so inline scripts can stay blocked) |
 | `gate.js` | SHA-256 helper for browser-only profiles |
 | `styles.css` | Styles, light and dark |
 | `app.js` | Rendering, routing, maps and charts (vanilla JS) |

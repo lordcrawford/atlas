@@ -2692,11 +2692,15 @@
     const d = Store.data();
     const TYPES = { collab: "Agreement", news: "News", doc: "Key document" };
     const body = el("div", { class: "section" });
+    // Entries come from the browser's storage or an imported backup file, so their links are checked before use:
+    // only addresses inside this site (#...) and ordinary web addresses are followed.
+    const inSite = (h) => (typeof h === "string" && /^#[\w./-]*$/.test(h) ? h : "#collab");
+    const webUrl = (u) => (typeof u === "string" && /^https?:\/\//i.test(u) ? u : null);
     const entry = (key, x) => el("article", { class: "sv-item" },
       el("div", { class: "sv-top" }, el("span", { class: "kd-kind" }, TYPES[x.type] || "Item"), el("span", { class: "muted small" }, x.sub)),
-      el("a", { class: "sv-title", href: x.href }, x.title),
-      x.ext ? el("a", { class: "src", href: x.ext, target: "_blank", rel: "noopener noreferrer" }, domain(x.ext), " ↗") : null,
-      itemActions(key, { type: x.type, title: x.title, sub: x.sub, href: x.href, ext: x.ext }));
+      el("a", { class: "sv-title", href: inSite(x.href) }, x.title),
+      webUrl(x.ext) ? el("a", { class: "src", href: webUrl(x.ext), target: "_blank", rel: "noopener noreferrer" }, domain(x.ext), " ↗") : null,
+      itemActions(key, { type: x.type, title: x.title, sub: x.sub, href: inSite(x.href), ext: webUrl(x.ext) }));
     // One list at a time, chosen with a toggle. Notes lists every item with a note, whether or not it is also marked.
     const draw = () => {
       const saved = Object.entries(d.saved).filter(([, v]) => !v.removed).sort((a, b) => b[1].at.localeCompare(a[1].at));
