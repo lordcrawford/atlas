@@ -56,15 +56,17 @@
   <script>
     // Vercel Web Analytics. Page views are sent from app.js; the script is skipped when running locally.
     window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
     if (location.protocol === "https:" && !/^(localhost|127\.0\.0\.1)$/.test(location.hostname)) {
       const s = document.createElement("script");
       s.defer = true; s.src = "/_vercel/insights/script.js"; s.dataset.disableAutoTrack = "1";
       document.head.appendChild(s);
+      // Vercel Speed Insights: page loading times.
+      const p = document.createElement("script");
+      p.defer = true; p.src = "/_vercel/speed-insights/script.js";
+      document.head.appendChild(p);
     }
   </script>
-  <!-- Vercel Web Analytics: cookieless visitor and page-view counts. Only loads on the Vercel deployment. -->
-  <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
-  <script defer src="/_vercel/insights/script.js"></script>
-  <script src="app.js?v=20261123c"></script>
+  <script src="app.js?v=20261123d"></script>
 </body>
 </html>
