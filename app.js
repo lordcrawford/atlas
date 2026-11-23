@@ -978,6 +978,8 @@
   // The opening of every page: a small label, the title, and a sentence or two of introduction.
   // The tab already names the page, so the heading carries no label above it.
   function pageHead(kicker, title, lede) {
+    // With no title, the page name stays as a heading for screen readers only.
+    if (!title) return el("h1", { class: "sr-only" }, kicker);
     return el("header", { class: "page-head" }, el("h1", {}, title), lede ? el("p", { class: "lede" }, lede) : null);
   }
   // The preview image one of a news item's sources publishes for link previews (data/news-images.js). It is
@@ -1368,7 +1370,7 @@
     levelSel.addEventListener("change", () => { level = levelSel.value; draw(); });
     draw();
     view.replaceChildren(
-      pageHead("News", "Latest developments"),
+      pageHead("News"),
       el("div", { class: "filter-bar nw-region" }, el("span", { class: "filter-label" }, "Region"), regionFilter(() => draw())),
       el("div", { class: "nw-controls" }, sortSeg, select, levelSel, count),
       themeRow, grid, more);
@@ -1862,7 +1864,7 @@
     const multi = of("bloc", "multi").map((n) => n.name);
 
     view.replaceChildren(el("article", { class: "findings" },
-      pageHead("Findings", "What the data shows"),
+      pageHead("Findings"),
       el("p", { class: "note fd-note" }, "Each nation is coded on four questions: what leads its AI policy, where its rules come from, where its compute comes from, and which outside power it is tied to. The codes are editorial readings of the sourced facts, the rules are in ", el("a", { href: "#method" }, "Method"), ", and every count below is recalculated from the data. “None on record” means this site has no sourced fact, which is not proof that nothing exists.", SCOPE.pending.length ? ` So far the site covers ${N.length} countries: all ${N.filter((n) => !isLarge(n)).length} with fewer than 15 million people and the ${N.filter(isLarge).length} largest of the rest. ${SCOPE.pending.length} more are still to be added, so these findings lean towards smaller states for now.` : ""),
 
       finding(1, "Few countries outside the frontier write their own AI rules.",
@@ -1914,7 +1916,7 @@
       ["10 Oct 2026", "First full audit. Every cited page fetched, every claim's dates, numbers and names checked against it, every mismatch reviewed by hand. About 50 dead links replaced; unconfirmed figures removed."],
     ];
     view.replaceChildren(el("article", { class: "method" },
-      pageHead("Method", "How this was researched and checked"),
+      pageHead("Method"),
       el("div", { class: "card sourced" },
         el("div", { class: "hero-figure" }, `${cnt("verified")} of ${claims.length}`),
         el("p", { class: "hero-cap" }, `claims across ${N.length} countries are confirmed by 3 or more independent sources (${srcCount} sources cited in total)`),
