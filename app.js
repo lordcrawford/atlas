@@ -1409,7 +1409,7 @@
     const show = c.kind === "bilateral" ? (from ? ps.filter((p) => p.key !== from) : ps) : ps.slice(0, 1);
     const extra = c.kind === "bilateral" ? 0 : ps.length - 1;
     const who = c.kind === "bilateral" ? (from ? `With ${show[0].name}` : `${ps[0].name} & ${ps[1].name}`) : c.short;
-    const what = c.kind === "bilateral" ? c.short : c.members.length ? `Group of ${countriesIn(c)} countries` : `Group hosted by ${ps[0].name}`;
+    const what = c.kind === "bilateral" ? c.short : c.members.length ? `${countriesIn(c)} countries shown` : `Group hosted by ${ps[0].name}`;
     return [
       el("span", { class: "cx-flags", "aria-hidden": "true" }, show.map((p) => el("span", {}, p.flag)), extra ? el("span", { class: "cx-more" }, `+${extra}`) : null),
       el("span", { class: "cx-row-text" }, el("span", { class: "cx-who" }, who), el("span", { class: "cx-what" }, what)),
@@ -2595,7 +2595,7 @@
     const draw = () => {
       const on = Store.isSaved(key);
       b.setAttribute("aria-pressed", String(on));
-      b.title = on ? "Saved. Click to remove" : "Save to your profile";
+      b.title = on ? "Saved. Click to remove" : "Save";
       b.setAttribute("aria-label", b.title);
       b.textContent = on ? "★" : "☆";
     };
@@ -2625,25 +2625,25 @@
         // Flagging something as suspicious asks for the reason straight away.
         const sus = !!m && m.status === "sus";
         const report = sus && !ownerMode() && !!W3F_KEY; // a visitor's reason is emailed to the site
-        const ask = sus ? el("label", { class: "ia-ask", for: `iaNote-${slug(key)}` }, "Why does this seem suspicious?", report ? el("span", { class: "ia-ask-sub" }, " Your reason is sent to Archipelago.") : null) : null;
+        const ask = sus ? el("label", { class: "ia-ask", for: `iaNote-${slug(key)}` }, "Why does this seem suspicious?", report ? el("span", { class: "ia-ask-sub" }, "Your reason will be emailed to the site host, with the item it is about. No name or email address is attached.") : null) : null;
         const ta = el("textarea", { class: "ia-note-input", id: `iaNote-${slug(key)}`, rows: "3", placeholder: sus ? "Wrong date, dead link, weak source…" : "Your note", "aria-label": sus ? "Why does this seem suspicious?" : "Note" });
         ta.value = (m && m.note) || "";
         const done = (keep) => {
           const text = ta.value.trim(), changed = text !== ((m && m.note) || "");
           if (keep) Store.setMark(key, { note: text }, snap);
           if (keep && report && text && changed) {
-            sent = "Sent. Thank you.";
+            sent = "Emailed to the site host. Thank you.";
             const link = snap.href ? location.origin + location.pathname + snap.href : location.href;
             fetch("https://api.web3forms.com/submit", { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" },
               body: JSON.stringify({ access_key: W3F_KEY, subject: "Archipelago: item flagged as suspicious", from_name: "Archipelago flag", item: snap.title || key, details: snap.sub || "", page: link, source: snap.ext || "", message: text }) })
-              .then((r) => { if (!r.ok) throw 0; }).catch(() => { sent = "Saved here, but it could not be sent."; draw(); });
+              .then((r) => { if (!r.ok) throw 0; }).catch(() => { sent = "Saved in this browser, but the email to the site host failed."; draw(); });
           }
           editing = false; draw();
         };
         ta.addEventListener("keydown", (e) => { if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) done(true); if (e.key === "Escape") done(false); });
         kids.push(el("div", { class: "ia-edit" }, ask, ta,
           el("div", { class: "ia-edit-actions" },
-            el("button", { class: "acct-btn primary small", type: "button", onclick: () => done(true) }, sus ? "Save reason" : "Save note"),
+            el("button", { class: "acct-btn primary small", type: "button", onclick: () => done(true) }, report ? "Email reason to host" : sus ? "Save reason" : "Save note"),
             el("button", { class: "acct-btn small", type: "button", onclick: () => done(false) }, "Cancel"))));
       } else if (m && m.note) kids.push(el("p", { class: `ia-note ia-note-${m.status || "plain"}` }, m.note));
       // Earlier versions of the note and mark, newest first, each restorable.
@@ -2691,8 +2691,8 @@
         ["saved", "Saved", saved, "Nothing saved yet. Use ☆ on an agreement, a news item or a key document."],
         ["vetted", "Read & vetted", marks.filter(([, m]) => m.status === "vetted"), "Nothing marked ✓ yet."],
         ["sus", "Seems suspicious", marks.filter(([, m]) => m.status === "sus"), "Nothing flagged ⚠ yet."],
-        ["note", "Notes", marks.filter(([, m]) => (m.note || "").trim() || (m.history || []).some((h) => h.note)), "No notes yet. A reason given when flagging ⚠ appears here."],
-      ];
+        ["note", "Notes", marks.filter(([, m]) => (m.note || "").trim() || (m.history || []).some((h) => h.note)), "No notes yet."],
+      ].filter(([k, , l]) => k !== "note" || l.length); // notes now come only from flag reasons, so the tab shows only when there are some
       if (!tabs.some(([k]) => k === state.savedTab)) state.savedTab = "saved";
       const [, , list, empty] = tabs.find(([k]) => k === state.savedTab);
       body.replaceChildren(
@@ -2751,7 +2751,7 @@
       el("h2", {}, "Backups"),
       el("p", { class: "muted small" }, Store.isCloud()
         ? "Notes are never deleted. Earlier versions are kept, and restores merge."
-        : "Notes are never deleted. Earlier versions are kept, and restores merge. This profile lives only in this browser, so keep a copy."),
+        : "Nothing here is ever deleted. Earlier versions are kept, and restores merge. This list lives only in this browser, so keep a copy."),
       Store.lastError() ? el("p", { class: "small bk-warn" }, Store.lastError()) : null,
       fileRow,
       el("div", { class: "acct-actions" },
