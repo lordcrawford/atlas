@@ -809,3 +809,7 @@ a.cpill:hover { border-color: var(--accent); color: var(--ink); }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .method .sr-only + .sourced { margin-top: 0; }
 .ia-ask { font-size: 13px; font-weight: 700; color: var(--ink); }
+.ia-ask-sub { font-weight: 500; color: var(--muted); }
+.ia-sent { color: var(--muted); margin-left: var(--s2); }
+.account { display: flex; gap: var(--s2); align-items: center; }
+a.acct-open { text-decoration: none; }

@@ -1988,23 +1988,24 @@
       el("h2", {}, "1. Information We Collect"),
       el("p", {}, "The Service does not offer user accounts, and we do not collect your name or a password."),
       el("ul", {},
-        b("Communications.", "When you contact us through the contact form, we collect your email address and the content of your message."),
+        b("Communications.", "When you contact us through the contact form, we collect your email address and the content of your message. When you flag an item as suspicious and give a reason, the reason and the item it concerns are sent to us; no name or email address is attached."),
         b("Log data.", "Our hosting provider automatically records standard technical information, such as your IP address, browser type, and the dates and times of requests."),
         b("Usage data.", "We use Vercel Web Analytics and Speed Insights to count visits and measure how fast pages load. They record the pages viewed, the referring website, and the approximate country, device type, operating system and browser of each visit. They do not use cookies, and visitors are counted using an anonymised identifier that is discarded after 24 hours, so they do not identify you or follow you across websites."),
-        b("Information stored on your device.", "The Service uses your browser\u2019s local storage to remember your preferences, such as theme and map view. This information stays on your device and is not sent to us.")),
+        b("Information stored on your device.", "The Service uses your browser\u2019s local storage to remember your preferences, such as theme and map view, and the items you save or mark. Apart from the reasons described above, this information stays on your device and is not sent to us.")),
       el("p", {}, "We do not use advertising or analytics cookies, and we do not track you across other websites."),
       el("h2", {}, "2. How We Use Information"),
       el("p", {}, "We use the information we collect to provide, maintain and secure the Service, to understand how it is used so we can improve it, and to respond to your messages and requests. We do not use your information for advertising, and we do not sell your personal information."),
       el("h2", {}, "3. How We Share Information"),
       el("p", {}, "We do not share your personal information with third parties except as described below."),
       el("ul", {},
-        b("Service providers.", el("span", {}, "We rely on third-party providers to operate the Service: ", ext("Vercel", "https://vercel.com/legal/privacy-policy"), " (hosting, visit analytics and performance measurement) and Web3Forms (delivery of contact form messages). These providers process information on our behalf and under their own privacy policies.")),
+        b("Service providers.", el("span", {}, "We rely on third-party providers to operate the Service: ", ext("Vercel", "https://vercel.com/legal/privacy-policy"), " (hosting, visit analytics and performance measurement) and Web3Forms (delivery of contact form messages and flag reasons). These providers process information on our behalf and under their own privacy policies.")),
         b("Third-party content.", "News preview images are loaded directly from the websites of the publishers that produced them. When an image is displayed, that publisher may receive your IP address and browser information. Links to external websites are governed by the privacy policies of those websites."),
         b("Legal requirements.", "We may disclose information if required to do so by law or in response to a valid legal request.")),
       el("h2", {}, "4. Data Retention"),
       el("p", {}, "Messages sent through the contact form are retained for as long as needed to respond to you and maintain our records. Information stored on your device remains there until you remove it."),
       el("h2", {}, "5. Your Rights and Choices"),
       el("ul", {},
+        b("Access and portability.", "You can download a copy of the items you have saved or marked from the Saved page."),
         b("Device data.", "You can remove information stored on your device by clearing this site’s data in your browser settings."),
         b("Messages.", el("span", {}, "You can ask us to delete a message you sent us through the ", contact("contact form"), "."))),
       el("p", {}, "Depending on where you live, you may have additional rights under applicable law, such as the right to access, correct or delete your personal information or to object to its processing. To exercise these rights, please contact us."),
@@ -2091,7 +2092,7 @@
   // `history`, emptied marks are kept (hidden) with that history, recent snapshots of the whole profile are kept,
   // and restores merge rather than replace. The profile can also be mirrored to a file on disk (see Backup).
   const Store = (() => {
-    const K_PROFILES = "atlas-profiles", K_USER = "atlas-user";
+    const K_PROFILES = "atlas-profiles", K_USER = "atlas-user", GUEST = "~guest";
     const read = (k, d) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch { return d; } };
     const write = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch { return false; } };
     const hash = (salt, pw) => window.atlasGate.sha256(`${salt}:${pw}`);
@@ -2221,10 +2222,18 @@
       payload: () => ({ saved: data.saved, marks: data.marks }),
       // With online accounts switched off, bring the notes of any account used on this browser into the
       // signed-in profile, so they stay reachable. The account's own copy is left as it is.
+      // A profile with no name or password, for saving and flagging without signing in. It lives in this browser.
+      isGuest: () => user === GUEST,
+      useGuest() {
+        if (user) return;
+        const all = read(K_PROFILES, {});
+        if (!all[GUEST]) { all[GUEST] = { name: "This browser", guest: true, created: now() }; if (!write(K_PROFILES, all)) return; }
+        user = GUEST; write(K_USER, user); load(); persist(); emit("auth");
+      },
       absorbCloud() {
-        if (!data || (user && user.startsWith("sb:"))) return;
+        if (!data || user === GUEST || (user && user.startsWith("sb:"))) return;
         const before = JSON.stringify(data);
-        for (const id of Object.keys(read(K_PROFILES, {}))) if (id.startsWith("sb:")) mergeInto(data, Object.assign({ saved: {}, marks: {} }, read(`atlas-data:${id}`, {})));
+        for (const id of Object.keys(read(K_PROFILES, {}))) if (id === GUEST || id.startsWith("sb:")) mergeInto(data, Object.assign({ saved: {}, marks: {} }, read(`atlas-data:${id}`, {})));
         if (JSON.stringify(data) !== before) { save(); emit("data"); }
       },
     };
@@ -2239,10 +2248,10 @@
   // Online accounts are switched off for now: profiles are browser-only. Set ACCOUNTS_ON to true and put the
   // supabase-js script tag back in index.html to turn them on again; the privacy policy and terms need updating too.
   const ACCOUNTS_ON = false;
-  // While accounts are off, sign-in and the save, mark and note icons are shown only on a browser that has opened
-  // the private address #signin once (or already has a profile signed in). Visitors see none of it.
+  // While accounts are off, everyone can save and flag without signing in (kept in their browser). The sign-in
+  // control is shown only on a browser that has opened the private address #signin once, or has a named profile.
   const K_OWNER = "atlas-owner";
-  const ownerMode = () => { if (ACCOUNTS_ON || Store.user()) return true; try { return localStorage.getItem(K_OWNER) === "1"; } catch { return false; } };
+  const ownerMode = () => { if (ACCOUNTS_ON || (Store.user() && !Store.isGuest())) return true; try { return localStorage.getItem(K_OWNER) === "1"; } catch { return false; } };
   const SB_URL = "https://nozgqlqanjwmoyigesep.supabase.co", SB_KEY = "sb_publishable_jo_3XTRCBFG04zIymzhM5Q_LiWVyF4I";
   const Cloud = (() => {
     const sb = ACCOUNTS_ON && window.supabase && window.supabase.createClient
@@ -2542,16 +2551,20 @@
   // A confirmation or reset link that couldn't sign in here says why.
   setTimeout(() => { const n = Cloud.linkNote(); if (n && !Store.isCloud()) accountDialog(null, "signin", n); }, 1200);
   // Run fn if signed in, otherwise ask for a profile first.
-  const needUser = (fn) => (Store.user() ? fn() : accountDialog(fn, "signin"));
+  // Run fn against a profile: the signed-in one, or this browser's no-name profile when nobody is signed in.
+  const needUser = (fn) => { if (!Store.user()) Store.useGuest(); return Store.user() ? fn() : accountDialog(fn, "signin"); };
 
   // Header account control: "Sign in", or the profile name with a small menu.
   const accountEl = document.getElementById("account");
   let acctCleanup = null;
   function renderAccount() {
     if (acctCleanup) { acctCleanup(); acctCleanup = null; }
-    if (!Store.user()) {
-      if (ownerMode()) accountEl.replaceChildren(el("button", { class: "acct-open", type: "button", onclick: () => accountDialog(null, "signin") }, "Sign in"));
-      else accountEl.replaceChildren();
+    if (!Store.user() || Store.isGuest()) {
+      const g = Store.isGuest() ? Store.data() : null;
+      const count = g ? Object.values(g.saved).filter((v) => !v.removed).length + Object.keys(g.marks).length : 0;
+      accountEl.replaceChildren(...[
+        count ? el("a", { class: "acct-open", href: "#saved" }, `Saved (${count})`) : null,
+        ownerMode() ? el("button", { class: "acct-open", type: "button", onclick: () => accountDialog(null, "signin") }, "Sign in") : null].filter(Boolean));
       return;
     }
     const d = Store.data();
@@ -2593,9 +2606,8 @@
   // Save star, review icons (✓ read & vetted, ⚠ seems suspicious) and the note they open.
   const MARKS = { vetted: { icon: "✓", label: "Read & vetted" }, sus: { icon: "⚠", label: "Seems suspicious" } };
   function itemActions(key, snap) {
-    if (!ownerMode()) return null;
     const box = el("div", { class: "ia" });
-    let editing = false, showHistory = false;
+    let editing = false, showHistory = false, sent = "";
     const draw = () => {
       const m = Store.mark(key);
       const markBtn = (k) => el("button", { class: `ia-btn ia-${k}`, type: "button", "aria-pressed": String(!!m && m.status === k), title: m && m.status === k ? `${MARKS[k].label}. Click to clear` : `Mark as ${MARKS[k].label.toLowerCase()}`,
@@ -2603,23 +2615,31 @@
           const cur = Store.mark(key);
           const off = cur && cur.status === k;
           Store.setMark(key, { status: off ? null : k }, snap);
-          editing = !off; draw();
+          editing = !off && k === "sus"; sent = ""; draw();
         }) }, MARKS[k].icon);
-      // A note can be added to any item, with or without a ✓ or ⚠.
-      const hasNote = !!(m && m.note);
-      const noteBtn = el("button", { class: "ia-btn ia-note-btn", type: "button", "aria-pressed": String(hasNote), "aria-expanded": String(editing),
-        title: hasNote ? "Edit your note" : "Add a note", "aria-label": hasNote ? "Edit your note" : "Add a note",
-        onclick: () => needUser(() => { editing = !editing; draw(); }) }, "✎");
-      const bar = el("div", { class: "ia-bar" }, saveBtn(key, snap), markBtn("vetted"), markBtn("sus"), noteBtn,
-        m && m.status ? el("span", { class: `ia-state ia-state-${m.status}` }, MARKS[m.status].label) : null);
+      const bar = el("div", { class: "ia-bar" }, saveBtn(key, snap), markBtn("vetted"), markBtn("sus"),
+        m && m.status ? el("span", { class: `ia-state ia-state-${m.status}` }, MARKS[m.status].label) : null,
+        sent ? el("span", { class: "ia-sent small", role: "status" }, sent) : null);
       const kids = [bar];
       if (editing) {
         // Flagging something as suspicious asks for the reason straight away.
         const sus = !!m && m.status === "sus";
-        const ask = sus ? el("label", { class: "ia-ask", for: `iaNote-${slug(key)}` }, "Why does this seem suspicious?") : null;
+        const report = sus && !ownerMode() && !!W3F_KEY; // a visitor's reason is emailed to the site
+        const ask = sus ? el("label", { class: "ia-ask", for: `iaNote-${slug(key)}` }, "Why does this seem suspicious?", report ? el("span", { class: "ia-ask-sub" }, " Your reason is sent to Archipelago.") : null) : null;
         const ta = el("textarea", { class: "ia-note-input", id: `iaNote-${slug(key)}`, rows: "3", placeholder: sus ? "Wrong date, dead link, weak source…" : "Your note", "aria-label": sus ? "Why does this seem suspicious?" : "Note" });
         ta.value = (m && m.note) || "";
-        const done = (keep) => { if (keep) Store.setMark(key, { note: ta.value.trim() }, snap); editing = false; draw(); };
+        const done = (keep) => {
+          const text = ta.value.trim(), changed = text !== ((m && m.note) || "");
+          if (keep) Store.setMark(key, { note: text }, snap);
+          if (keep && report && text && changed) {
+            sent = "Sent. Thank you.";
+            const link = snap.href ? location.origin + location.pathname + snap.href : location.href;
+            fetch("https://api.web3forms.com/submit", { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" },
+              body: JSON.stringify({ access_key: W3F_KEY, subject: "Archipelago: item flagged as suspicious", from_name: "Archipelago flag", item: snap.title || key, details: snap.sub || "", page: link, source: snap.ext || "", message: text }) })
+              .then((r) => { if (!r.ok) throw 0; }).catch(() => { sent = "Saved here, but it could not be sent."; draw(); });
+          }
+          editing = false; draw();
+        };
         ta.addEventListener("keydown", (e) => { if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) done(true); if (e.key === "Escape") done(false); });
         kids.push(el("div", { class: "ia-edit" }, ask, ta,
           el("div", { class: "ia-edit-actions" },
@@ -2628,7 +2648,7 @@
       } else if (m && m.note) kids.push(el("p", { class: `ia-note ia-note-${m.status || "plain"}` }, m.note));
       // Earlier versions of the note and mark, newest first, each restorable.
       const hist = (m && m.history) || [];
-      if (hist.length && !editing) {
+      if (hist.some((h) => h.note) && !editing) {
         kids.push(el("details", { class: "ia-history", open: showHistory || null, ontoggle: (e) => { showHistory = e.target.open; } },
           el("summary", {}, `Earlier versions (${hist.length})`),
           el("ol", {}, hist.map((h) => el("li", {},
@@ -2653,13 +2673,8 @@
 
   // #saved: the profile's saved items and review marks.
   function renderSaved() {
-    if (!Store.user()) {
-      view.replaceChildren(pageHead("Your list", "Saved & reviewed"),
-        el("div", { class: "section acct-actions" },
-          el("button", { class: "acct-btn primary", type: "button", onclick: () => accountDialog(null, "create") }, "Create an account"),
-          el("button", { class: "acct-btn", type: "button", onclick: () => accountDialog(null, "signin") }, "Sign in")));
-      return;
-    }
+    if (!Store.user()) Store.useGuest();
+    if (!Store.user()) { location.hash = "#collab"; return; }
     const d = Store.data();
     const TYPES = { collab: "Agreement", news: "News", doc: "Key document" };
     const body = el("div", { class: "section" });
@@ -2676,7 +2691,7 @@
         ["saved", "Saved", saved, "Nothing saved yet. Use ☆ on an agreement, a news item or a key document."],
         ["vetted", "Read & vetted", marks.filter(([, m]) => m.status === "vetted"), "Nothing marked ✓ yet."],
         ["sus", "Seems suspicious", marks.filter(([, m]) => m.status === "sus"), "Nothing flagged ⚠ yet."],
-        ["note", "Notes", marks.filter(([, m]) => (m.note || "").trim() || (m.history || []).some((h) => h.note)), "No notes yet. Use ✎ on any agreement, news item or key document."],
+        ["note", "Notes", marks.filter(([, m]) => (m.note || "").trim() || (m.history || []).some((h) => h.note)), "No notes yet. A reason given when flagging ⚠ appears here."],
       ];
       if (!tabs.some(([k]) => k === state.savedTab)) state.savedTab = "saved";
       const [, , list, empty] = tabs.find(([k]) => k === state.savedTab);
@@ -2765,12 +2780,12 @@
   function renderTabs(key) {
     const current = byId(key);
     const isNations = !!current || key === "nations" || key === "overview";
-    const isCollab = key === "collab" || (!isNations && !["news", "findings", "method", "privacy", "terms", "contact"].includes(key) && !(key === "saved" && ownerMode()));
+    const isCollab = key === "collab" || (!isNations && !["news", "findings", "method", "privacy", "terms", "contact"].includes(key) && !(key === "saved" && (Store.user() || ownerMode())));
     tabsEl.replaceChildren(
       el("a", { class: "tab", href: "#collab", "aria-current": isCollab ? "page" : null }, "Collaborations"),
       el("a", { class: "tab", href: "#news", "aria-current": key === "news" ? "page" : null }, "News"),
-      el("a", { class: "tab", href: "#findings", "aria-current": key === "findings" ? "page" : null }, "Findings"),
       el("a", { class: "tab", href: "#nations", "aria-current": isNations ? "page" : null }, "Nations"),
+      el("a", { class: "tab", href: "#findings", "aria-current": key === "findings" ? "page" : null }, "Findings"),
       el("a", { class: "tab", href: "#method", "aria-current": key === "method" ? "page" : null }, "Method"));
   }
   function route(keepScroll) {
@@ -2785,13 +2800,13 @@
     else if (key === "nations" || key === "overview") { renderNations(); document.title = "Nations — Archipelago"; }
     else if (key === "findings") { renderFindings(); document.title = "Findings — Archipelago"; }
     else if (key === "method") { renderMethod(); document.title = "Method — Archipelago"; }
-    else if (key === "saved" && ownerMode()) { renderSaved(); document.title = "Saved & reviewed — Archipelago"; }
+    else if (key === "saved" && (Store.user() || ownerMode())) { renderSaved(); document.title = "Saved & reviewed — Archipelago"; }
     // The private way in: marks this browser as the owner's and opens the sign-in dialog over the home page.
     else if (key === "signin" && !ACCOUNTS_ON) {
       try { localStorage.setItem(K_OWNER, "1"); } catch {}
       history.replaceState(null, "", location.pathname + "#collab");
       renderTabs("collab"); renderAccount(); renderCollab(""); document.title = "Archipelago";
-      if (!Store.user()) accountDialog(null, "signin");
+      if (!Store.user() || Store.isGuest()) accountDialog(null, "signin");
     }
     else if (key === "privacy") { renderPrivacy(); document.title = "Privacy Policy — Archipelago"; }
     else if (key === "terms") { renderTerms(); document.title = "Terms of Service — Archipelago"; }
